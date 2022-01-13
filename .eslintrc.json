@@ -5,12 +5,10 @@
   },
   "extends": [
     "plugin:react/recommended",
-    "airbnb",
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "prettier/@typescript-eslint", // not related to this problem but it helps
-    "prettier/react"
+    "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -21,5 +19,12 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint"],
-  "rules": {}
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }]
+  },
+  "settings": {
+    "react": {
+      "version": "17"
+    }
+  }
 }
