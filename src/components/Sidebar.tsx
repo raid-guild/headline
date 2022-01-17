@@ -7,7 +7,8 @@ import Icon from "components/Icon";
 
 import discord from "assets/discord.svg";
 import twitter from "assets/twitter.svg";
-import { TWITTER_URL, DISCORD_URL } from "constants";
+import TWITTER_URL from "constants";
+import DISCORD_URL from "constants";
 
 const SidebarContainer = styled.div`
   display: flex;
