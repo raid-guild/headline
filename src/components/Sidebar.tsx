@@ -13,12 +13,14 @@ const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 2rem;
+  margin-right: 2rem;
   height: 100%;
 `;
 
 const LogoContainer = styled.div`
   max-height: 18rem;
   height: 100%;
+  margin-top: 2rem;
 `;
 
 const MenuContainer = styled.div`
@@ -37,14 +39,22 @@ const BottomContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  padding-bottom: 2rem;
 `;
 
 const SocialMediaContainer = styled.div`
   display: flex;
+  margin: 1rem;
 `;
 
 const StyledIcon = styled(Icon)`
-  padding: 1.6rem 0rem 1.6rem 1.6rem;
+  padding: 0.4rem 0.6rem;
+`;
+
+const StyledLink = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Sidebar = () => {
@@ -74,12 +84,20 @@ const Sidebar = () => {
           <SidebarItem text="Guide" />
         </Link>
         <SocialMediaContainer>
-          <Link to={TWITTER_URL}>
+          <StyledLink
+            href={TWITTER_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <StyledIcon src={twitter} alt="twitter logo" size="lg" />
-          </Link>
-          <Link to={DISCORD_URL}>
+          </StyledLink>
+          <StyledLink
+            href={DISCORD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <StyledIcon src={discord} alt="discord logo" size="lg" />
-          </Link>
+          </StyledLink>
         </SocialMediaContainer>
       </BottomContainer>
     </SidebarContainer>

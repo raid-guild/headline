@@ -16,6 +16,10 @@ const GlobalStyle = createGlobalStyle`
 			 color: #000000;
     }
 
+		a {
+		  text-decoration: none;
+		}
+
 		#root {
 		  height: 100%;
 		}

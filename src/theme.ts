@@ -1,9 +1,35 @@
 const theme = {
+  buttons: {
+    size: {
+      xl: {
+        padding: "1.6rem 2.4rem",
+        height: "6.2rem",
+      },
+      lg: {
+        padding: ".9rem 2.4rem",
+        height: "4.8rem",
+      },
+      base: {
+        padding: "1.1rem 1.6rem",
+        height: "4.8rem",
+      },
+      sm: {
+        padding: ".4rem 1.6rem",
+        height: "2.6rem",
+      },
+    },
+  },
   colors: {
+    primary: "#6D9CF9",
+
+    backgroundGrey: "#F7F7F7",
+    almostWhite: "#FCFCFC",
     text: "#000000",
+    helpText: "#6C6C6B",
+    label: "#3A3A3A",
   },
   fonts: {
-    fontFamily: `'Inter', 'sans-serif'`,
+    fontFamily: `'Inter'`,
   },
   icons: {
     size: {
@@ -81,8 +107,10 @@ const theme = {
 };
 
 export type Theme = typeof theme;
+export type ThemeButtonSize = keyof Theme["buttons"]["size"];
 export type ThemeColors = keyof Theme["colors"];
 export type ThemeIconSize = keyof Theme["icons"]["size"];
 export type ThemeTextSize = keyof Theme["text"]["size"];
 export type ThemeTextWeight = keyof Theme["text"]["weight"];
+export type ThemeTitleSize = keyof Theme["title"];
 export default theme;

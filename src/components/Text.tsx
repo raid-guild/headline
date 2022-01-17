@@ -18,13 +18,14 @@ const StyledText = styled.p<Props>`
     color ? theme.colors[color] : theme.colors.text};
   margin: 0;
   font-size: ${({ size, theme }) => theme.text.size[size].fontSize};
-  font-weight: ${({ weight, theme }) => theme.text.weight[weight]};
+  font-weight: ${({ weight, theme }) =>
+    weight ? theme.text.weight[weight] : theme.text.weight.normal};
   line-height: ${({ size, theme }) => theme.text.size[size].lineHeight};
 `;
 
-const Text = ({ children, as, weight = "normal", ...rest }: Props) => {
+const Text = ({ children, as, ...rest }: Props) => {
   return (
-    <StyledText as={as} weight={weight} {...rest}>
+    <StyledText as={as} {...rest}>
       {children}
     </StyledText>
   );

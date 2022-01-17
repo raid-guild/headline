@@ -11,8 +11,7 @@ type Props = {
 
 const SidebarItemContainer = styled.div`
   display: flex;
-  padding: 1.6rem;
-  margin-bottom: 0.8rem;
+  padding: 2.4rem 1.6rem;
 `;
 
 const StyledCircleOutline = styled(Icon)`

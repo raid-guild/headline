@@ -1,5 +1,10 @@
 import React from "react";
-import { HashRouter, Route, Routes as RouteContainer } from "react-router-dom";
+import {
+  HashRouter,
+  Route,
+  Routes as RouteContainer,
+  Navigate,
+} from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
 
 const Routes = () => {
@@ -8,6 +13,7 @@ const Routes = () => {
       <RouteContainer>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>
     </HashRouter>
   );
