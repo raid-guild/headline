@@ -6,6 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
+import PublishPage from "./pages/PublishPage";
 
 const Routes = () => {
   return (
@@ -13,6 +14,7 @@ const Routes = () => {
       <RouteContainer>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/publish" element={<PublishPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>
     </HashRouter>

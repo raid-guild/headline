@@ -1,6 +1,5 @@
-import styled from "styled-components";
-
 import React from "react";
+import styled from "styled-components";
 import Button from "components/Button";
 import {
   Layout,
@@ -13,7 +12,7 @@ import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
 
-const DashboardContainer = styled.div`
+const PublishContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 44.5rem;
@@ -49,31 +48,33 @@ const BodyFooterContainer = styled.div`
   height: 100%;
 `;
 
-const DashboardPage = () => {
+const PublishPage = () => {
   return (
     <Layout>
       <HeaderContainer>
         <HeaderText size="md" weight="semibold" color="helpText">
-          Dashboard
+          Write
         </HeaderText>
       </HeaderContainer>
+
       <SidebarContainer>
         <Sidebar />
       </SidebarContainer>
       <BodyContainer>
-        <DashboardContainer>
+        <PublishContainer>
           <BodyTitleContainer>
-            <Title size="md">Your content, your reader.</Title>
+            <Title size="md">Publishing your content is easy.</Title>
             <Text size="md" color="label">
-              Writing & sending content right from here.
+              Engage your community & fans.
             </Text>
           </BodyTitleContainer>
           <BodyButtonContainer>
             <Text size="base">
-              Please connect your wallet to access the dashboard
+              Write as a blog or send it out as a newsletter, Websubstack covers
+              all.
             </Text>
             <div>
-              <Button size="xl">Connect wallet</Button>
+              <Button size="xl">Create my publication</Button>
             </div>
           </BodyButtonContainer>
           <BodyFooterContainer>
@@ -91,10 +92,10 @@ const DashboardPage = () => {
               .
             </Text>
           </BodyFooterContainer>
-        </DashboardContainer>
+        </PublishContainer>
       </BodyContainer>
     </Layout>
   );
 };
 
-export default DashboardPage;
+export default PublishPage;

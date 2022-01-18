@@ -12,6 +12,10 @@ type Props = {
 const SidebarItemContainer = styled.div`
   display: flex;
   padding: 2.4rem 1.6rem;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.almostWhite};
+  }
 `;
 
 const StyledCircleOutline = styled(Icon)`

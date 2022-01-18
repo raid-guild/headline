@@ -24,6 +24,12 @@ const StyledButton = styled(RButton)<Props>`
   background: ${({ theme }) => theme.colors.primary};
   border: none;
   cursor: pointer;
+
+  &:hover {
+    background: none;
+    border: ${({ theme }) => `.2rem solid ${theme.colors.primary}`};
+    color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const Button = ({ children, size, className, ...rest }: Props) => {
