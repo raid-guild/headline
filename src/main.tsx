@@ -5,11 +5,14 @@ import "./index.css";
 import Routes from "Routes";
 import GlobalStyle from "GlobalStyle";
 import theme from "theme";
+import { CeramicProvider } from "context/CeramicContext";
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Routes />
+      <CeramicProvider>
+        <Routes />
+      </CeramicProvider>
     </ThemeProvider>
     <GlobalStyle />
   </React.StrictMode>,

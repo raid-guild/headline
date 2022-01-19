@@ -13,6 +13,8 @@ import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
 
+import { useCermaic, CeramicContextType } from "context/CeramicContext";
+
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -49,7 +51,42 @@ const BodyFooterContainer = styled.div`
   height: 100%;
 `;
 
+const LoggedOutBody = ({ connect }: Pick<CeramicContextType, "connect">) => {
+  return (
+    <DashboardContainer>
+      <BodyTitleContainer>
+        <Title size="md">Your content, your reader.</Title>
+        <Text size="md" color="label">
+          Writing & sending content right from here.
+        </Text>
+      </BodyTitleContainer>
+      <BodyButtonContainer>
+        <Text size="base">
+          Please connect your wallet to access the dashboard
+        </Text>
+        <div>
+          <Button size="xl" onClick={connect}>
+            Connect wallet
+          </Button>
+        </div>
+      </BodyButtonContainer>
+      <BodyFooterContainer>
+        <Text size="base">
+          How does web3substack work? Check out our{" "}
+          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+            <Text as="span" size="base" weight="bold" color="primary">
+              Guide
+            </Text>
+          </a>
+          .
+        </Text>
+      </BodyFooterContainer>
+    </DashboardContainer>
+  );
+};
+
 const DashboardPage = () => {
+  const { connect, did } = useCermaic();
   return (
     <Layout>
       <HeaderContainer>
@@ -61,37 +98,7 @@ const DashboardPage = () => {
         <Sidebar />
       </SidebarContainer>
       <BodyContainer>
-        <DashboardContainer>
-          <BodyTitleContainer>
-            <Title size="md">Your content, your reader.</Title>
-            <Text size="md" color="label">
-              Writing & sending content right from here.
-            </Text>
-          </BodyTitleContainer>
-          <BodyButtonContainer>
-            <Text size="base">
-              Please connect your wallet to access the dashboard
-            </Text>
-            <div>
-              <Button size="xl">Connect wallet</Button>
-            </div>
-          </BodyButtonContainer>
-          <BodyFooterContainer>
-            <Text size="base">
-              How does web3substack work? Check out our{" "}
-              <a
-                href="www.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Text as="span" size="base" weight="bold" color="primary">
-                  Guide
-                </Text>
-              </a>
-              .
-            </Text>
-          </BodyFooterContainer>
-        </DashboardContainer>
+        {did ? <p>hi</p> : <LoggedOutBody connect={connect} />}
       </BodyContainer>
     </Layout>
   );
