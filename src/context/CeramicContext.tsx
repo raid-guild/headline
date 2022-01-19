@@ -27,7 +27,7 @@ const initialContext = {
 const CeramicContext = createContext<CeramicContextType>(initialContext);
 
 const ceramicNetwork = (process.env.REACT_APP_CERAMIC_NETWORK ||
-  "testnet-clay-gateway") as ConnectNetwork;
+  "testnet-clay") as ConnectNetwork;
 
 export const CeramicProvider = ({ children }: ProviderProps) => {
   const [did, setDid] = useState<DID | null>(null);
@@ -41,31 +41,33 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
       method: "wallet_switchEthereumChain",
       params: [{ chainId: "0x1" }],
     });
-    const address = window.ethereum.selectedAddressaddress;
+    const address = window.ethereum.selectedAddress;
 
     const authProvider = new EthereumAuthProvider(window.ethereum, address);
-    const client = new WebClient({
-      ceramic: "local",
+    const c = new WebClient({
+      ceramic: ceramicNetwork,
       connectNetwork: ceramicNetwork,
     });
-    let did = null;
+
+    let d = null;
     setIsConnecting(true);
     try {
-      did = await client.authenticate(authProvider, true);
+      d = await c.authenticate(authProvider, true);
 
       const link = await Caip10Link.fromAccount(
-        client.ceramic,
+        c.ceramic,
         `${address}@eip155:1`,
         {}
       );
-      if (!link.did || link.did !== did.id) {
-        await link.setDid(did, authProvider, {});
+      if (!link.did || link.did !== d.id) {
+        await link.setDid(d, authProvider, {});
       }
     } catch (err) {
       console.error(err);
     }
-    setDid(did);
-    setClient(client);
+
+    setDid(d);
+    setClient(c);
     setIsConnecting(false);
   };
 

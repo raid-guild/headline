@@ -98,7 +98,7 @@ const DashboardPage = () => {
         <Sidebar />
       </SidebarContainer>
       <BodyContainer>
-        {did ? <p>hi</p> : <LoggedOutBody connect={connect} />}
+        {did ? <h1>hi</h1> : <LoggedOutBody connect={connect} />}
       </BodyContainer>
     </Layout>
   );
