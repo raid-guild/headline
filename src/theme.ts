@@ -34,6 +34,7 @@ const theme = {
   },
   icons: {
     size: {
+      xl: "4.8rem",
       lg: "3.33rem",
       md: "2.67rem",
       sm: "2rem",

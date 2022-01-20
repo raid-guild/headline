@@ -10,7 +10,7 @@ type Props = {
 };
 
 const StyledImg = styled.img<Props>`
-  height: ${({ size, theme }) => theme.icons[size]};
+  height: ${({ size, theme }) => theme.icons.size[size]};
 `;
 
 const Icon = ({ size, alt, src, className }: Props) => {
