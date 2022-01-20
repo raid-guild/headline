@@ -5,6 +5,8 @@ import { ThemeButtonSize } from "theme";
 
 type LocalProps = {
   size: ThemeButtonSize;
+  loadingText?: string;
+  isLoading?: boolean;
   children?: ReactNode;
   className?: string;
 };
@@ -21,21 +23,26 @@ const StyledButton = styled(RButton)<Props>`
       ? theme.text.size.lg.fontSize
       : theme.text.size[size].fontSize};
   color: ${({ theme }) => theme.colors.almostWhite};
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme, isLoading }) =>
+    isLoading ? theme.colors.grey : theme.colors.primary};
   border: none;
   cursor: pointer;
 
   &:hover {
-    background: none;
-    border: ${({ theme }) => `.2rem solid ${theme.colors.primary}`};
-    color: ${({ theme }) => theme.colors.primary};
+    background: ${({ theme, isLoading }) =>
+      isLoading ? theme.colors.grey : `none`};
+    border: ${({ theme, isLoading }) =>
+      isLoading ? `none` : `.2rem solid ${theme.colors.primary}`};
+    color: ${({ theme, isLoading }) =>
+      isLoading ? theme.colors.almostWhite : theme.colors.primary};
   }
 `;
 
 const Button = ({ children, size, className, ...rest }: Props) => {
+  const loadingChild = rest?.loadingText || children;
   return (
     <StyledButton className={className} size={size} {...rest}>
-      {children}
+      {rest.isLoading ? loadingChild : children}
     </StyledButton>
   );
 };

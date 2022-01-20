@@ -27,6 +27,7 @@ const theme = {
     text: "#000000",
     helpText: "#6C6C6B",
     label: "#3A3A3A",
+    grey: "#A5A5A5",
   },
   fonts: {
     fontFamily: `'Inter'`,

@@ -1,6 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import Text from "components/Text";
+import { ThemeColors } from "theme";
+
+type BodyContainerProps = {
+  background?: ThemeColors;
+};
 
 export const Layout = styled.div`
   width: 100%;
@@ -23,12 +28,13 @@ export const HeaderContainer = styled.div`
   align-items: center;
 `;
 
-export const BodyContainer = styled.div`
+export const BodyContainer = styled.div<BodyContainerProps>`
   grid-area: body;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: ${({ theme }) => theme.colors.backgroundGrey};
+  background: ${({ theme, background }) =>
+    background ? theme.colors[background] : theme.colors.almostWhite};
 `;
 
 export const HeaderText = styled(Text)`
