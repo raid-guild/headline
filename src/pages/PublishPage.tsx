@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Button from "components/Button";
 import {
@@ -11,6 +12,8 @@ import {
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+
+import { CREATE_PUBLICATION_URI } from "constants";
 
 const PublishContainer = styled.div`
   display: flex;
@@ -49,6 +52,11 @@ const BodyFooterContainer = styled.div`
 `;
 
 const PublishPage = () => {
+  const navigate = useNavigate();
+  const goToCreatePublication = () => {
+    navigate(CREATE_PUBLICATION_URI);
+  };
+
   return (
     <Layout>
       <HeaderContainer>
@@ -74,7 +82,9 @@ const PublishPage = () => {
               all.
             </Text>
             <div>
-              <Button size="xl">Create my publication</Button>
+              <Button size="xl" onClick={goToCreatePublication}>
+                Create my publication
+              </Button>
             </div>
           </BodyButtonContainer>
           <BodyFooterContainer>

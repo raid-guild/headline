@@ -1,6 +1,7 @@
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
-import React from "react";
 import Button from "components/Button";
 import {
   Layout,
@@ -14,6 +15,7 @@ import Text from "components/Text";
 import Title from "components/Title";
 
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
+import { CREATE_PUBLICATION_URI } from "constants";
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -148,6 +150,10 @@ const LearnMoreContainer = styled.div`
 
 // in publication container
 const LoggedInBody = () => {
+  const navigate = useNavigate();
+  const goToCreatePublication = () => {
+    navigate(CREATE_PUBLICATION_URI);
+  };
   return (
     <LoggedInContainer>
       <WelcomeContainer>
@@ -165,7 +171,9 @@ const LoggedInBody = () => {
             </Text>
           </a>
         </PublicationCopyContainer>
-        <Button size="xl">Create my publication</Button>
+        <Button size="xl" onClick={goToCreatePublication}>
+          Create my publication
+        </Button>
       </PublicationContainer>
       <SubscriptionContainer>
         <SubscriptionContentContainer>

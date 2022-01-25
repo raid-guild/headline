@@ -14,6 +14,8 @@ type Props = {
 const StyledButton = styled(Button)`
   border: none;
   padding: 0rem;
+  background: none;
+  cursor: pointer;
 `;
 
 const BackButton = ({ size }: Props) => {

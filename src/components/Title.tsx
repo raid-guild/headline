@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { ThemeTitleSize } from "theme";
+import { ThemeColors, ThemeTitleSize } from "theme";
 
 type Props = {
   children: string | React.ReactNode;
   size: ThemeTitleSize;
+  color: ThemeColors;
 };
 
 const StyledH1 = styled.h1<Props>`
@@ -13,6 +14,8 @@ const StyledH1 = styled.h1<Props>`
   line-height: ${({ size, theme }) => theme.title[size].lineHeight};
   font-weight: ${({ size, theme }) => theme.title[size].fontWeight};
   margin: 0;
+  color: ${({ color, theme }) =>
+    color ? theme.colors[color] : theme.colors.text};
 `;
 
 const StyledH2 = styled.h2<Props>`
@@ -20,6 +23,8 @@ const StyledH2 = styled.h2<Props>`
   line-height: ${({ theme }) => theme.title.lg.lineHeight};
   font-weight: ${({ size, theme }) => theme.title[size].fontWeight};
   margin: 0;
+  color: ${({ color, theme }) =>
+    color ? theme.colors[color] : theme.colors.text};
 `;
 
 const StyledH3 = styled.h3<Props>`
@@ -27,6 +32,8 @@ const StyledH3 = styled.h3<Props>`
   line-height: ${({ theme }) => theme.title.lg.lineHeight};
   font-weight: ${({ size, theme }) => theme.title[size].fontWeight};
   margin: 0;
+  color: ${({ color, theme }) =>
+    color ? theme.colors[color] : theme.colors.text};
 `;
 
 const StyledH4 = styled.h4<Props>`
@@ -34,6 +41,8 @@ const StyledH4 = styled.h4<Props>`
   line-height: ${({ theme }) => theme.title.md.lineHeight};
   font-weight: ${({ size, theme }) => theme.title[size].fontWeight};
   margin: 0;
+  color: ${({ color, theme }) =>
+    color ? theme.colors[color] : theme.colors.text};
 `;
 
 const StyledH5 = styled.h5<Props>`
@@ -41,6 +50,8 @@ const StyledH5 = styled.h5<Props>`
   line-height: ${({ theme }) => theme.title.sm.lineHeight};
   font-weight: ${({ size, theme }) => theme.title[size].fontWeight};
   margin: 0;
+  color: ${({ color, theme }) =>
+    color ? theme.colors[color] : theme.colors.text};
 `;
 
 const Title = ({ children, size, ...rest }: Props) => {

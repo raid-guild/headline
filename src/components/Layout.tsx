@@ -28,6 +28,7 @@ export const HeaderContainer = styled.div`
   align-items: center;
 `;
 
+// override flex ddirection
 export const BodyContainer = styled.div<BodyContainerProps>`
   grid-area: body;
   display: flex;
