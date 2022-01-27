@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+
+import { useAppDispatch, useAppSelector } from "store";
+import { createPublication, Publication } from "services/publication/slice";
+
 import Button from "components/Button";
 import BackButton from "components/BackButton";
 import Icon from "components/Icon";
@@ -9,6 +13,8 @@ import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
 import Title from "components/Title";
 import Text from "components/Text";
 import FormTextArea from "components/FormTextArea";
+
+import { useCermaic } from "context/CeramicContext";
 
 import small_logo from "assets/small_logo.svg";
 
@@ -69,9 +75,21 @@ const CreatePublicationPage = () => {
     formState: { errors },
     handleSubmit,
   } = useForm();
-
-  const onSubmit = () => {
-    console.log("here");
+  const dispatch = useAppDispatch();
+  const { client } = useCermaic();
+  const publicationLoading = useAppSelector(
+    (state) => state.publication.loading
+  );
+  const onSubmit: SubmitHandler<Publication> = (data) => {
+    console.log("submitting");
+    console.log(data);
+    console.log("submitting 2");
+    dispatch(
+      createPublication({
+        name: data.name || "",
+        description: data.description || "",
+      })
+    );
   };
 
   return (
@@ -99,17 +117,23 @@ const CreatePublicationPage = () => {
             <Input
               title="Publication Name"
               errorMsg={errors?.publicationName}
-              {...register("publicationName")}
+              {...register("name")}
             />
             <FormTextArea
               title="Description"
               errorMsg={errors?.publicationName}
               {...register("description")}
             />
+            <StyledButton
+              type="submit"
+              size="xl"
+              color="primary"
+              isLoading={publicationLoading}
+              loadingText="Creating..."
+            >
+              Looks good, lets do it
+            </StyledButton>
           </CreateFormContainer>
-          <StyledButton size="xl" color="primary">
-            Looks good, lets do it
-          </StyledButton>
         </ContentContainer>
       </StyledBodyContainer>
     </StyledLayout>
