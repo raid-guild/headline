@@ -1,9 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-import { useForm, SubmitHandler } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  FieldValues,
+  Controller,
+} from "react-hook-form";
 
 import { useAppDispatch, useAppSelector } from "store";
-import { createPublication, Publication } from "services/publication/slice";
+import { createPublication } from "services/publication/slice";
 
 import Button from "components/Button";
 import BackButton from "components/BackButton";
@@ -13,8 +18,6 @@ import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
 import Title from "components/Title";
 import Text from "components/Text";
 import FormTextArea from "components/FormTextArea";
-
-import { useCermaic } from "context/CeramicContext";
 
 import small_logo from "assets/small_logo.svg";
 
@@ -71,16 +74,15 @@ const StyledButton = styled(Button)`
 
 const CreatePublicationPage = () => {
   const {
-    register,
     formState: { errors },
     handleSubmit,
+    control,
   } = useForm();
   const dispatch = useAppDispatch();
-  const { client } = useCermaic();
   const publicationLoading = useAppSelector(
     (state) => state.publication.loading
   );
-  const onSubmit: SubmitHandler<Publication> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log("submitting");
     console.log(data);
     console.log("submitting 2");
@@ -114,15 +116,28 @@ const CreatePublicationPage = () => {
             </Text>
           </BodyHeaderContainer>
           <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
-            <Input
-              title="Publication Name"
-              errorMsg={errors?.publicationName}
-              {...register("name")}
+            <Controller
+              name="name"
+              control={control}
+              rules={{ required: true }}
+              render={({ field }) => (
+                <Input
+                  title="Publication Name"
+                  errorMsg={errors?.publicationName}
+                  {...field}
+                />
+              )}
             />
-            <FormTextArea
-              title="Description"
-              errorMsg={errors?.publicationName}
-              {...register("description")}
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <FormTextArea
+                  title="Description"
+                  errorMsg={errors?.publicationName}
+                  {...field}
+                />
+              )}
             />
             <StyledButton
               type="submit"

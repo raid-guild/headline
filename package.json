@@ -1,13 +1,14 @@
 {
   "name": "web3-substack",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "typecheck": "tsc",
     "preview": "vite preview",
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
-    "schema": "node ./src/scripts/publishModals.js"
+    "schema": "node publishModals.js"
   },
   "dependencies": {
     "@ceramicnetwork/stream-caip10-link": "^1.2.9",
