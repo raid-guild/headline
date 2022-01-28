@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
 import {
   useForm,
@@ -7,6 +7,7 @@ import {
   Controller,
 } from "react-hook-form";
 
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store";
 import { createPublication } from "services/publication/slice";
 
@@ -20,6 +21,7 @@ import Text from "components/Text";
 import FormTextArea from "components/FormTextArea";
 
 import small_logo from "assets/small_logo.svg";
+import celebrateIcon from "assets/celebrate.svg";
 
 const StyledLayout = styled(Layout)`
   grid-template:
@@ -33,6 +35,10 @@ const StyledBodyContainer = styled(BodyContainer)`
 
 const StyledHeaderContainer = styled(HeaderContainer)`
   border-bottom: ${({ theme }) => `0.1rem solid ${theme.colors.lightGrey}`};
+`;
+
+const StyledIcon = styled(Icon)`
+  height: 8rem;
 `;
 
 const ContentContainer = styled(BodyContainer)`
@@ -72,17 +78,48 @@ const StyledButton = styled(Button)`
   width: 100%;
 `;
 
-const CreatePublicationPage = () => {
+const SuccessfullyCreatedPublication = ({ name }: { name: string }) => {
+  const navigate = useNavigate();
+  const goToPublish = () => {
+    navigate("/publish");
+  };
+  return (
+    <>
+      <BodyHeaderContainer>
+        <Title size="md" color="label">
+          You are all set!
+        </Title>
+        <Text size="md" color="label">
+          The {name} was successfully created.
+        </Text>
+      </BodyHeaderContainer>
+      <StyledIcon size="xl" src={celebrateIcon} alt="A celebration icon" />
+      <StyledButton size="xl" onClick={goToPublish}>
+        Start Writing
+      </StyledButton>
+      <Link to={"/dashboard"}>
+        <Text size="md" color="primary">
+          Return to dashboard
+        </Text>
+      </Link>
+    </>
+  );
+};
+
+const CreatePublicationForm = () => {
   const {
     formState: { errors },
     handleSubmit,
     control,
   } = useForm();
+  // const { isDirty, isValid } = useFormState({ control });
+  // console.log(isValid);
+  // console.log(isDirty);
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
     (state) => state.publication.loading
   );
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     console.log("submitting");
     console.log(data);
     console.log("submitting 2");
@@ -92,7 +129,61 @@ const CreatePublicationPage = () => {
         description: data.description || "",
       })
     );
-  };
+  }, []);
+
+  return (
+    <>
+      <BodyHeaderContainer>
+        <Title size="md" color="label">
+          Start writing & publishing
+        </Title>
+        <Text size="md" color="label">
+          Create the publication that is truly owned by you
+        </Text>
+      </BodyHeaderContainer>
+      <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          name="name"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <Input
+              title="Publication Name"
+              errorMsg={errors?.publicationName}
+              {...field}
+            />
+          )}
+        />
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <FormTextArea
+              title="Description"
+              errorMsg={errors?.publicationName}
+              {...field}
+            />
+          )}
+        />
+        <StyledButton
+          type="submit"
+          size="xl"
+          color="primary"
+          isLoading={publicationLoading}
+          loadingText="Creating..."
+        >
+          Looks good, lets do it
+        </StyledButton>
+      </CreateFormContainer>
+    </>
+  );
+};
+
+const CreatePublicationPage = () => {
+  const publication = useAppSelector(
+    (state) => state.publication.name // Name is required in the schema
+  );
+  console.log(publication);
 
   return (
     <StyledLayout>
@@ -107,48 +198,11 @@ const CreatePublicationPage = () => {
       </StyledHeaderContainer>
       <StyledBodyContainer>
         <ContentContainer>
-          <BodyHeaderContainer>
-            <Title size="md" color="label">
-              Start writing & publishing
-            </Title>
-            <Text size="md" color="label">
-              Create the publication that is truly owned by you
-            </Text>
-          </BodyHeaderContainer>
-          <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
-            <Controller
-              name="name"
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <Input
-                  title="Publication Name"
-                  errorMsg={errors?.publicationName}
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <FormTextArea
-                  title="Description"
-                  errorMsg={errors?.publicationName}
-                  {...field}
-                />
-              )}
-            />
-            <StyledButton
-              type="submit"
-              size="xl"
-              color="primary"
-              isLoading={publicationLoading}
-              loadingText="Creating..."
-            >
-              Looks good, lets do it
-            </StyledButton>
-          </CreateFormContainer>
+          {publication ? (
+            <SuccessfullyCreatedPublication name={publication} />
+          ) : (
+            <CreatePublicationForm />
+          )}
         </ContentContainer>
       </StyledBodyContainer>
     </StyledLayout>

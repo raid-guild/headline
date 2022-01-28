@@ -11,9 +11,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      util: require.resolve("rollup-plugin-node-polyfills"),
+      util: resolve("rollup-plugin-node-polyfills"),
 
-      process: require.resolve("process-es6"),
+      process: resolve("process-es6"),
     },
   },
 });

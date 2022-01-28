@@ -31,6 +31,17 @@ export const publicationSlice = createSlice({
     builder.addCase(createPublication.rejected, (state) => {
       state.loading = false;
     });
+    builder.addCase(fetchPublication.fulfilled, (state, action) => {
+      state.name = action.payload.name;
+      state.description = action.payload.description;
+      state.loading = false;
+    });
+    builder.addCase(fetchPublication.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchPublication.rejected, (state) => {
+      state.loading = false;
+    });
   },
 });
 
@@ -38,23 +49,13 @@ export const publicationSlice = createSlice({
 export const createPublication = createAsyncThunk(
   "publication/create",
   async (args: Publication, thunkAPI) => {
-    // A SelfID instance can only be created with an authenticated Ceramic instance
     const client = await getClient();
-    console.log("Here");
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLICATION_MODEL,
     });
-    console.log("Here 2");
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
-    // const self = new SelfID({ client, model });
-    console.log("Here");
     try {
-      console.log(args);
-      // const exampleNote = await model.loadTile("publication");
-      // console.log(exampleNote);
-      // const examplePub = await model.loadTile("publication");
-      // console.log(examplePub);
       const publication = {
         name: args.name,
         description: args.description,
@@ -63,7 +64,29 @@ export const createPublication = createAsyncThunk(
       await store.set("publication", publication);
       return publication;
     } catch (err) {
-      console.log(err);
+      return thunkAPI.rejectWithValue("Failed to save");
+    }
+  }
+);
+
+// async thunk that fetches a publication
+export const fetchPublication = createAsyncThunk(
+  "publication/fetch",
+  async (args, thunkAPI) => {
+    console.log("here");
+    const client = await getClient();
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLICATION_MODEL,
+    });
+    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    try {
+      console.log("here");
+      const publication = await store.get("publication");
+      console.log("Fetching");
+      console.log(publication);
+      return publication;
+    } catch (err) {
       return thunkAPI.rejectWithValue("Failed to fetch");
     }
   }
