@@ -1,7 +1,7 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import { Button as RButton, ButtonProps } from "reakit/Button";
 import styled from "styled-components";
-import { ThemeButtonSize } from "theme";
+import { ThemeButtonSize, ThemeColors } from "theme";
 
 type LocalProps = {
   size: ThemeButtonSize;
@@ -9,6 +9,8 @@ type LocalProps = {
   isLoading?: boolean;
   children?: ReactNode;
   className?: string;
+  color?: ThemeColors;
+  borderColor?: ThemeColors;
 };
 
 type Props = LocalProps & ButtonProps & HTMLAttributes<HTMLButtonElement>;
@@ -23,9 +25,10 @@ const StyledButton = styled(RButton)<Props>`
       ? theme.text.size.lg.fontSize
       : theme.text.size[size].fontSize};
   color: ${({ theme }) => theme.colors.almostWhite};
-  background: ${({ theme, isLoading }) =>
-    isLoading ? theme.colors.grey : theme.colors.primary};
-  border: none;
+  background: ${({ theme, isLoading, color }) =>
+    isLoading ? theme.colors.grey : theme.colors[color || "primary"]};
+  border: ${({ theme, borderColor }) =>
+    borderColor ? `.2rem solid ${theme.colors[borderColor]}` : "none"};
   cursor: pointer;
 
   &:hover {

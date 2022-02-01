@@ -8,6 +8,7 @@ import {
 import DashboardPage from "./pages/DashboardPage";
 import PublishPage from "./pages/PublishPage";
 import CreatePublicationPage from "./pages/CreatePublicationPage";
+import WritingPage from "pages/WritingPage";
 
 const Routes = () => {
   return (
@@ -17,6 +18,7 @@ const Routes = () => {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/publish" element={<PublishPage />} />
         <Route path="/publish/create" element={<CreatePublicationPage />} />
+        <Route path="/publish/write" element={<WritingPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>
     </HashRouter>

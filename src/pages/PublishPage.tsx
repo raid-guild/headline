@@ -18,7 +18,7 @@ import Text from "components/Text";
 import Title from "components/Title";
 
 import { useAppDispatch, useAppSelector } from "store";
-import { CREATE_PUBLICATION_URI } from "constants";
+import { CREATE_PUBLICATION_URI, WRITING_URI } from "constants";
 
 const PublishContainer = styled.div`
   display: flex;
@@ -126,6 +126,10 @@ const EntriesContainer = styled.div`
 
 const PublishBody = () => {
   const toolbar = useToolbarState();
+  const navigate = useNavigate();
+  const goToWritingPage = () => {
+    navigate(WRITING_URI);
+  };
 
   return (
     <StyledBodyContainer>
@@ -149,7 +153,7 @@ const PublishBody = () => {
         <Text size="md" color="label">
           Entries
         </Text>
-        <Button size="lg" color="primary">
+        <Button size="lg" color="primary" onClick={goToWritingPage}>
           Write a Post
         </Button>
       </EntriesHeader>
