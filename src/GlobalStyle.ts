@@ -23,6 +23,19 @@ const GlobalStyle = createGlobalStyle`
 		#root {
 		  height: 100%;
 		}
+
+		// remirror
+		.remirror-theme {
+		  width: 100%;
+		}
+
+		.remirror-editor-wrapper {
+		  height: 100%;
+		}
+
+		.remirror-editor {
+		  height: 100%;
+		}
 `;
 
 export default GlobalStyle;

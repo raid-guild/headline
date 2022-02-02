@@ -16,14 +16,14 @@ const StyledInput = styled(RInput)`
   margin: 0.3rem;
   background: ${({ theme }) => theme.colors.almostWhite};
   font-size: 1.6rem;
+  border: ${({ theme }) => `solid 0.1rem ${theme.colors.lightGrey}`};
+  border-radius: 0.8rem;
 `;
 
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-height: 7rem;
-  border: ${({ theme }) => `solid 0.1rem ${theme.colors.lightGrey}`};
-  border-radius: 0.8rem;
   height: 100%;
 `;
 

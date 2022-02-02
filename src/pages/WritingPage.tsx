@@ -3,18 +3,13 @@ import "@remirror/styles/all.css";
 import React from "react";
 import styled from "styled-components";
 
-import { MarkdownEditor } from "@remirror/react-editors/markdown";
-
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Button from "components/Button";
 import Icon from "components/Icon";
-import {
-  Layout,
-  BodyContainer,
-  HeaderContainer,
-  HeaderText,
-} from "components/Layout";
+import Input from "components/Input";
+import MarkdownEditor from "components/MarkdownEditor";
+import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 
 import profile from "assets/obsidian.png";
@@ -35,11 +30,13 @@ const StyledHeaderContainer = styled(HeaderContainer)`
 `;
 
 const StyledBody = styled(BodyContainer)`
-  width: 100%;
   align-items: flex-start;
   justify-content: flex-start;
   margin-left: 21.6rem;
   margin-right: 21.6rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 7rem;
 `;
 
 const LeftHeaderContainer = styled.div`
@@ -69,6 +66,21 @@ const StyledIcon = styled(Icon)`
   height: auto;
 `;
 
+const StyledInput = styled(Input)`
+  border: none;
+  font-size: ${({ theme }) => theme.title.md.fontSize};
+  line-height: ${({ theme }) => theme.title.md.lineHeight};
+  font-weight: ${({ theme }) => theme.title.md.fontWeight};
+  color: ${({ theme }) => theme.colors.grey};
+`;
+
+const StyledMarkdownEditor = styled(MarkdownEditor)`
+  width: 100%;
+  display: flex;
+  margin-top: 3.2rem;
+  height: 100%;
+`;
+
 const WritingPage = () => {
   return (
     <StyledLayout>
@@ -96,7 +108,8 @@ const WritingPage = () => {
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>
-        <MarkdownEditor placeholder="Start typing..."></MarkdownEditor>
+        <StyledInput title="" errorMsg="" placeholder="Enter title..." />
+        <StyledMarkdownEditor placeholder="Start typing..."></StyledMarkdownEditor>
       </StyledBody>
     </StyledLayout>
   );

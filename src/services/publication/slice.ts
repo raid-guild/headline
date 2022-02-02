@@ -32,8 +32,10 @@ export const publicationSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(fetchPublication.fulfilled, (state, action) => {
-      state.name = action.payload.name;
-      state.description = action.payload.description;
+      if (action.payload) {
+        state.name = action.payload.name;
+        state.description = action.payload.description;
+      }
       state.loading = false;
     });
     builder.addCase(fetchPublication.pending, (state) => {
