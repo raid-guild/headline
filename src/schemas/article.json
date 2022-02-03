@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Article",
+  "type": "object",
+  "definitions": {
+    "IPFSUrl": {
+      "type": "string",
+      "pattern": "^ipfs://.+",
+      "maxLength": 150
+    }
+  },
+  "properties": {
+    "publicationUrl": {
+      "$ref": "#/definitions/IPFSUrl"
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 256
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "enum": ["draft", "published"]
+    },
+    "previewImg": {
+      "$ref": "#/definitions/IPFSUrl"
+    },
+    "paid": {
+      "type": "boolean"
+    }
+  },
+  "required": ["publicationUrl", "title", "createdAt", "status"]
+}

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import {
   useForm,
@@ -9,7 +9,10 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store";
-import { createPublication } from "services/publication/slice";
+import {
+  createPublication,
+  fetchPublication,
+} from "services/publication/slice";
 
 import Button from "components/Button";
 import BackButton from "components/BackButton";
@@ -180,10 +183,15 @@ const CreatePublicationForm = () => {
 };
 
 const CreatePublicationPage = () => {
+  const dispatch = useAppDispatch();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
   console.log(publication);
+  useEffect(() => {
+    console.log("fetching");
+    dispatch(fetchPublication());
+  }, []);
 
   return (
     <StyledLayout>

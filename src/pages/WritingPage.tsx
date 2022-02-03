@@ -1,7 +1,7 @@
-import "@remirror/styles/all.css";
-
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import "@remirror/styles/all.css";
+import debounce from "lodash/fp/debounce";
 
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
@@ -81,7 +81,20 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   height: 100%;
 `;
 
+// auto save
+// Change saved to saving while saving
+// encrypt and store as a draft
+// should trigger save to publication
 const WritingPage = () => {
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const saveArticle = () => {
+    console.log("here");
+  };
+
+  const debouncedSaveArticle = () => {
+    debounce(500, saveArticle);
+  };
   return (
     <StyledLayout>
       <StyledHeaderContainer>

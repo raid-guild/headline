@@ -7,6 +7,7 @@ import { getResolver } from "key-did-resolver";
 import { fromString } from "uint8arrays";
 
 import publicationSchema from "./src/schemas/publication.json";
+import articleSchema from "./src/schemas/article.json";
 
 // The key must be provided as an environment variable
 const key = fromString(
@@ -32,11 +33,19 @@ const publicationSchemaID = await manager.createSchema(
   publicationSchema
 );
 
+const articleSchemaID = await manager.createSchema("Article", articleSchema);
+
 // Create the definition using the created schema ID
 await manager.createDefinition("publication", {
   name: "My publication",
   description: "A newsletter publication",
   schema: manager.getSchemaURL(publicationSchemaID),
+});
+
+await manager.createDefinition("article", {
+  name: "A unstack article",
+  description: "A newsletter article",
+  schema: manager.getSchemaURL(articleSchemaID),
 });
 
 await manager.createTile(
@@ -45,11 +54,19 @@ await manager.createTile(
   { schema: manager.getSchemaURL(publicationSchemaID) }
 );
 
+await manager.createTile(
+  "exampleArticle",
+  {
+    publicationUrl: "ipfs://hi",
+    title: "hi",
+    createdAt: "2019-10-12T07:20:50.52Z",
+    status: "draft",
+  },
+  { schema: manager.getSchemaURL(articleSchemaID) }
+);
+
 // Publish model to Ceramic node
 const model = await manager.toPublished();
 
 // Write published model to JSON file
-await writeFile(
-  "./src/schemas/published/publication.json",
-  JSON.stringify(model)
-);
+await writeFile("./src/schemas/published/models.json", JSON.stringify(model));

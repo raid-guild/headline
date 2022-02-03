@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { SelfID } from "@self.id/web";
 import { getClient } from "lib/ceramic";
-import { PUBLICATION_MODEL } from "constants";
+import { PUBLISHED_MODELS } from "constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 
@@ -28,10 +27,13 @@ export const publicationSlice = createSlice({
     builder.addCase(createPublication.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(createPublication.rejected, (state) => {
+    builder.addCase(createPublication.rejected, (state, action) => {
+      console.error(action);
       state.loading = false;
     });
     builder.addCase(fetchPublication.fulfilled, (state, action) => {
+      console.log("payload");
+      console.log(action.payload);
       if (action.payload) {
         state.name = action.payload.name;
         state.description = action.payload.description;
@@ -41,7 +43,8 @@ export const publicationSlice = createSlice({
     builder.addCase(fetchPublication.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchPublication.rejected, (state) => {
+    builder.addCase(fetchPublication.rejected, (state, action) => {
+      console.error(action);
       state.loading = false;
     });
   },
@@ -54,7 +57,7 @@ export const createPublication = createAsyncThunk(
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
-      model: PUBLICATION_MODEL,
+      model: PUBLISHED_MODELS,
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
@@ -64,6 +67,7 @@ export const createPublication = createAsyncThunk(
         articles: {},
       };
       await store.set("publication", publication);
+      console.log(publication);
       return publication;
     } catch (err) {
       return thunkAPI.rejectWithValue("Failed to save");
@@ -79,7 +83,7 @@ export const fetchPublication = createAsyncThunk(
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
-      model: PUBLICATION_MODEL,
+      model: PUBLISHED_MODELS,
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
@@ -89,6 +93,8 @@ export const fetchPublication = createAsyncThunk(
       console.log(publication);
       return publication;
     } catch (err) {
+      console.log("err");
+      console.error(err);
       return thunkAPI.rejectWithValue("Failed to fetch");
     }
   }
