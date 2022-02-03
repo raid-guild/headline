@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
+import { useRemirror, useHelpers } from "@remirror/react";
+import { useAppDispatch } from "store";
 
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
@@ -11,6 +13,7 @@ import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
+import { createArticle } from "services/article/slice";
 
 import profile from "assets/obsidian.png";
 import settings from "assets/settings.svg";
@@ -81,20 +84,48 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   height: 100%;
 `;
 
+const MarkdownSave = (title: string) => {
+  const { getMarkdown } = useHelpers(true);
+  const dispatch = useAppDispatch();
+  const saveArticle = (markdown: string, title: string) => {
+    console.log("here");
+    console.log("markdown");
+    console.log(markdown);
+    console.log(title);
+    dispatch(
+      createArticle({
+        article: {
+          title: title,
+          text: markdown,
+          createdAt: new Date(),
+          status: "draft",
+        },
+        encrypt: true,
+      })
+    );
+  };
+  const m = getMarkdown();
+  const debouncedSaveArticle = useCallback(debounce(500, saveArticle), []);
+  useEffect(() => {
+    debouncedSaveArticle(m, title);
+  }, [m, title]);
+
+  return <></>;
+};
+
 // auto save
 // Change saved to saving while saving
 // encrypt and store as a draft
 // should trigger save to publication
 const WritingPage = () => {
   const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const saveArticle = () => {
-    console.log("here");
+  const { state, onChange } = useRemirror({});
+
+  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setTitle(e.target.value);
   };
 
-  const debouncedSaveArticle = () => {
-    debounce(500, saveArticle);
-  };
   return (
     <StyledLayout>
       <StyledHeaderContainer>
@@ -121,8 +152,19 @@ const WritingPage = () => {
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>
-        <StyledInput title="" errorMsg="" placeholder="Enter title..." />
-        <StyledMarkdownEditor placeholder="Start typing..."></StyledMarkdownEditor>
+        <StyledInput
+          title=""
+          errorMsg=""
+          placeholder="Enter title..."
+          onChange={onTitleChange}
+        />
+        <StyledMarkdownEditor
+          placeholder="Start typing..."
+          state={state}
+          onChange={onChange}
+        >
+          <MarkdownSave {...title} />
+        </StyledMarkdownEditor>
       </StyledBody>
     </StyledLayout>
   );

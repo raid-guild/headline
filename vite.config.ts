@@ -11,15 +11,19 @@ const externalPlugin = viteExternalsPlugin({
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    sourcemap: true,
+    commonjsOptions: {
+      include: /node_modules/,
+      transformMixedEsModules: true,
+    },
+  },
   plugins: [
     react(),
     tsconfigPaths(),
     nodePolyfills({ include: ["stream", "url"] }),
     externalPlugin,
   ],
-  define: {
-    process: { env: {}, browser: true },
-  },
   optimizeDeps: {
     exclude: ["rollup-pluginutils", "rollup-plugin-inject"],
   },

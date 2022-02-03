@@ -26,7 +26,7 @@ const initialContext = {
 
 const CeramicContext = createContext<CeramicContextType>(initialContext);
 
-const ceramicNetwork = (process.env.REACT_APP_CERAMIC_NETWORK ||
+const ceramicNetwork = (import.meta.env.REACT_APP_CERAMIC_NETWORK ||
   "testnet-clay") as ConnectNetwork;
 
 export const CeramicProvider = ({ children }: ProviderProps) => {

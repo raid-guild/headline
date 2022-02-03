@@ -4,9 +4,9 @@ export const getIPFSClient = () => {
   const auth =
     "Basic " +
     Buffer.from(
-      process.env.REACT_APP_INFURA_PROJECT_ID +
+      import.meta.env.REACT_APP_INFURA_PROJECT_ID +
         ":" +
-        process.env.REACT_APP_INFURA_PROJECT_SECRET
+        import.meta.env.REACT_APP_INFURA_PROJECT_SECRET
     ).toString("base64");
   const ipfs = create({
     host: "ipfs.infura.io",

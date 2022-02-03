@@ -31,9 +31,18 @@ import {
   ToolbarItemUnion,
   useRemirror,
 } from "@remirror/react";
+import {
+  EditorState,
+  RemirrorEventListener,
+  GetSchema,
+  Extension,
+} from "@remirror/core";
+
 import { AllStyledComponent } from "@remirror/styles/emotion";
 
 export interface MarkdownEditorProps {
+  state: EditorState<GetSchema<Extension>>;
+  onChange: RemirrorEventListener<Extension>;
   placeholder?: string;
   initialContent?: string;
   className?: string;
@@ -45,6 +54,8 @@ export interface MarkdownEditorProps {
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   placeholder,
   initialContent,
+  state,
+  onChange,
   className,
   children,
 }) => {

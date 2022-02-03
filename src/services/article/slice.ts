@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { SelfID } from "@self.id/web";
 import { getClient } from "lib/ceramic";
-import { PUBLISHED_MODELS } from "constants";
+import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { encryptText } from "lib/ceramic";
@@ -33,6 +32,7 @@ export const articleSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createArticle.fulfilled, (state, action) => {
+      console.log("Success");
       state.publicationUrl = action.payload.publicationUrl;
       state.title = action.payload.title;
       state.createdAt = new Date(action.payload.createdAt);
@@ -43,7 +43,9 @@ export const articleSlice = createSlice({
     builder.addCase(createArticle.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(createArticle.rejected, (state) => {
+    builder.addCase(createArticle.rejected, (state, action) => {
+      console.log(action);
+      console.log("Err");
       state.loading = false;
     });
   },
@@ -55,26 +57,31 @@ export const createArticle = createAsyncThunk(
     args: { article: Article; encrypt?: boolean; sharedDids?: string[] },
     thunkAPI
   ) => {
+    console.log("Thunk");
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    console.log("Create Store");
     try {
       let publicationUrl;
       if (args.encrypt && client.ceramic.did) {
+        console.log("IPFS");
         publicationUrl = `ipfs://${await encryptText(
           client.ceramic?.did,
           args.article.text,
           args.sharedDids || []
         )}`;
+        console.log(publicationUrl);
       } else {
         const ipfs = getIPFSClient();
         const cid = await ipfs.dag.put(args.article.text);
         publicationUrl = `ipfs://${cid}`;
       }
 
+      console.log("Create Article");
       const article = {
         publicationUrl: publicationUrl,
         title: args.article.title,
@@ -84,8 +91,10 @@ export const createArticle = createAsyncThunk(
         paid: args.article.paid || null,
       };
       await store.set("article", article);
+      console.log("Article Saved");
       return article;
     } catch (err) {
+      console.log(err);
       return thunkAPI.rejectWithValue("Failed to save");
     }
   }

@@ -18,7 +18,7 @@ import Text from "components/Text";
 import Title from "components/Title";
 
 import { useAppDispatch, useAppSelector } from "store";
-import { CREATE_PUBLICATION_URI, WRITING_URI } from "constants";
+import { CREATE_PUBLICATION_URI, WRITING_URI } from "../constants";
 
 const PublishContainer = styled.div`
   display: flex;

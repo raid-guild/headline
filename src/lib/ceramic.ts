@@ -22,7 +22,12 @@ export const encryptText = async (
   sharedDids: string[]
 ) => {
   // encrypt the cleartext object
-  const jwe = await did.createDagJWE({ text }, sharedDids);
+  console.log("Create jwe");
+  console.log(did);
+  console.log(sharedDids);
+  const jwe = await did.createDagJWE({ text }, sharedDids || [did.id]);
+  console.log("Created client");
+  console.log(jwe);
   const ipfs = getIPFSClient();
 
   // put the JWE into the ipfs dag
@@ -31,6 +36,7 @@ export const encryptText = async (
     storeCodec: "dag-jose",
     hashAlg: "sha2-256",
   });
+  console.log("Store encrypted");
 
   return jweCid;
 };
