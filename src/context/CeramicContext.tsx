@@ -59,7 +59,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
         `${address}@eip155:1`,
         {}
       );
-      if (!link.did || link.did !== d.id) {
+      if (!link.did || link.did !== did?.id) {
         await link.setDid(d, authProvider, {});
       }
     } catch (err) {
