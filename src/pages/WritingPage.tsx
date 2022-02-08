@@ -3,7 +3,7 @@ import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
 import { useRemirror, useHelpers } from "@remirror/react";
-import { useAppDispatch } from "store";
+import { useAppSelector, useAppDispatch } from "store";
 
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
@@ -84,9 +84,10 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   height: 100%;
 `;
 
-const MarkdownSave = (title: string) => {
+const MarkdownSave = ({ title }: { title: string }) => {
   const { getMarkdown } = useHelpers(true);
   const dispatch = useAppDispatch();
+
   const saveArticle = (markdown: string, title: string) => {
     console.log("here");
     console.log("markdown");
@@ -104,11 +105,11 @@ const MarkdownSave = (title: string) => {
       })
     );
   };
-  const m = getMarkdown();
+  const m = getMarkdown() || "";
   const debouncedSaveArticle = useCallback(debounce(500, saveArticle), []);
   useEffect(() => {
     debouncedSaveArticle(m, title);
-  }, [m, title]);
+  }, [m]);
 
   return <></>;
 };
@@ -120,6 +121,9 @@ const MarkdownSave = (title: string) => {
 const WritingPage = () => {
   const [title, setTitle] = useState("");
   const { state, onChange } = useRemirror({});
+  const articleLoading = useAppSelector((state) => state.article.loading);
+  console.log("articleLoading");
+  console.log(articleLoading);
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -143,7 +147,7 @@ const WritingPage = () => {
         </LeftHeaderContainer>
         <RightHeaderContainer>
           <Text size="sm" color="helpText">
-            Saved
+            {articleLoading ? "Saving..." : "Saved"}
           </Text>
           <StyledIconButton size="sm" color="almostWhite" borderColor="primary">
             <StyledIcon size="md" src={settings} alt="settings button" />
@@ -163,7 +167,7 @@ const WritingPage = () => {
           state={state}
           onChange={onChange}
         >
-          <MarkdownSave {...title} />
+          <MarkdownSave title={title} />
         </StyledMarkdownEditor>
       </StyledBody>
     </StyledLayout>

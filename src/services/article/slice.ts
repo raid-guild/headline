@@ -5,11 +5,12 @@ import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { encryptText } from "lib/ceramic";
 import { getIPFSClient } from "lib/ipfs";
+import { CID } from "ipfs-http-client";
 
 export type CeramicArticle = {
   publicationUrl: string;
   title: string;
-  createdAt: Date;
+  createdAt: string;
   status: "draft" | "published";
   previewImg?: string;
   paid?: boolean;
@@ -23,7 +24,7 @@ export const articleSlice = createSlice({
   initialState: {
     publicationUrl: "",
     title: "",
-    createdAt: new Date(),
+    createdAt: "",
     status: "draft",
     paid: false,
     previewImg: "",
@@ -35,13 +36,16 @@ export const articleSlice = createSlice({
       console.log("Success");
       state.publicationUrl = action.payload.publicationUrl;
       state.title = action.payload.title;
-      state.createdAt = new Date(action.payload.createdAt);
+      state.createdAt = action.payload.createdAt;
       state.status = action.payload.status;
       state.paid = action.payload?.paid || false;
       state.previewImg = action.payload?.previewImg || "";
+      state.loading = false;
+      console.log(state);
     });
     builder.addCase(createArticle.pending, (state) => {
       state.loading = true;
+      console.log("Pending");
     });
     builder.addCase(createArticle.rejected, (state, action) => {
       console.log(action);
@@ -77,20 +81,39 @@ export const createArticle = createAsyncThunk(
         console.log(publicationUrl);
       } else {
         const ipfs = getIPFSClient();
-        const cid = await ipfs.dag.put(args.article.text);
-        publicationUrl = `ipfs://${cid}`;
+        // const obj = {
+        //   Data: new TextEncoder().encode("some text"),
+        //   Links: [],
+        // };
+        // console.log(obj);=
+        console.log({ content: args.article.text });
+        if (args.article.text) {
+          const cid = await ipfs.add(
+            { content: args.article.text },
+            {
+              cidVersion: 1,
+              hashAlg: "sha2-256",
+            }
+          );
+          console.log(cid);
+          await ipfs.pin.add(CID.parse(cid.path));
+          publicationUrl = `ipfs://${cid.path}`;
+        }
       }
 
       console.log("Create Article");
       const article = {
         publicationUrl: publicationUrl,
-        title: args.article.title,
+        title: args.article.title || "",
         createdAt: args.article.createdAt,
         status: args.article.status,
-        previewImg: args.article?.previewImg || null,
-        paid: args.article.paid || null,
+        // previewImg: args.article?.previewImg,
+        paid: args.article.paid || false,
       };
-      await store.set("article", article);
+      console.log(article);
+      if (publicationUrl) {
+        await store.set("article", article);
+      }
       console.log("Article Saved");
       return article;
     } catch (err) {
