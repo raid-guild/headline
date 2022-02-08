@@ -1,6 +1,9 @@
 import { create } from "ipfs-http-client";
+import { Buffer } from "buffer";
 
 export const getIPFSClient = () => {
+  console.log("ID");
+  console.log(import.meta.env.REACT_APP_INFURA_PROJECT_ID);
   const auth =
     "Basic " +
     Buffer.from(

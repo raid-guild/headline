@@ -41,11 +41,19 @@ const StyledButton = styled(RButton)<Props>`
   }
 `;
 
-const Button = ({ children, size, className, ...rest }: Props) => {
-  const loadingChild = rest?.loadingText || children;
+const Button = ({
+  children,
+  size,
+  className,
+  borderColor,
+  isLoading,
+  loadingText,
+  ...rest
+}: Props) => {
+  const loadingChild = loadingText || children;
   return (
     <StyledButton className={className} size={size} {...rest}>
-      {rest.isLoading ? loadingChild : children}
+      {isLoading ? loadingChild : children}
     </StyledButton>
   );
 };

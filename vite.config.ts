@@ -5,8 +5,14 @@ import { resolve } from "path";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 import { viteExternalsPlugin } from "vite-plugin-externals";
 
+const externals = {
+  electron: "electron",
+  "electron-fetch": "electron-fetch",
+  stream: "readable-stream",
+};
+
 const externalPlugin = viteExternalsPlugin({
-  ...{ electron: "electron", "electron-fetch": "electron-fetch" },
+  ...externals,
 });
 
 // https://vitejs.dev/config/
@@ -21,10 +27,14 @@ export default defineConfig({
   plugins: [
     react(),
     tsconfigPaths(),
-    nodePolyfills({ include: ["stream", "url"] }),
+    nodePolyfills({ include: ["url", "buffer"] }),
     externalPlugin,
   ],
-  optimizeDeps: {
-    exclude: ["rollup-pluginutils", "rollup-plugin-inject"],
+  resolve: {
+    preserveSymlinks: true,
+    mainFields: ["module", "main", "browser"],
+    alias: {
+      "~~": resolve(__dirname, "src"),
+    },
   },
 });

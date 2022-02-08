@@ -6,7 +6,7 @@ import { ThemeColors, ThemeTitleSize } from "theme";
 type Props = {
   children: string | React.ReactNode;
   size: ThemeTitleSize;
-  color: ThemeColors;
+  color?: ThemeColors;
 };
 
 const StyledH1 = styled.h1<Props>`

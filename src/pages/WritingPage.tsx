@@ -100,7 +100,7 @@ const MarkdownSave = (title: string) => {
           createdAt: new Date(),
           status: "draft",
         },
-        encrypt: true,
+        encrypt: false, // TODO change to true
       })
     );
   };
