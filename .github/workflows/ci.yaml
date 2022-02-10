@@ -1,4 +1,4 @@
-name: Deploy to Skynet
+name: Ci branch
 
 on:
   pull_request:
