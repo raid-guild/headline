@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { fetchPublication } from "services/publication/slice";
+import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import Button from "components/Button";
 import { Button as RButton } from "reakit/Button";
 import {
@@ -145,6 +146,7 @@ const EmtptyEntriesMessage = () => {
   );
 };
 const PublishBody = () => {
+  const dispatch = useAppDispatch();
   const toolbar = useToolbarState();
   const params = useParams();
   const [active, setActive] = useState("content");
@@ -154,6 +156,11 @@ const PublishBody = () => {
     setActive(params.menu);
   }, [params.menu]);
   console.log(active);
+
+  // fetch registry display top 5
+  useEffect(() => {
+    dispatch(fetchArticleRegistry());
+  }, []);
 
   const navigate = useNavigate();
   const goToWritingPage = () => {

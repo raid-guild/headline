@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
@@ -6,6 +6,8 @@ import { DIDDataStore } from "@glazed/did-datastore";
 import { encryptText } from "lib/ceramic";
 import { getIPFSClient } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
+
+import { addRegistryArticle } from "services/articleRegistry/slice";
 
 export type CeramicArticle = {
   publicationUrl: string;
@@ -18,7 +20,7 @@ export type CeramicArticle = {
 export type Article = {
   text: string;
   streamId?: string;
-} & Omit<CeramicArticle, "publicationUrl">;
+} & CeramicArticle;
 
 export const articleSlice = createSlice({
   name: "article",
@@ -31,20 +33,34 @@ export const articleSlice = createSlice({
     previewImg: "",
     loading: false,
     streamId: "",
+    text: "",
   },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(createArticle.fulfilled, (state, action) => {
-      console.log("Success");
-      state.publicationUrl = action.payload.publicationUrl;
+  reducers: {
+    create(state, action: PayloadAction<Article>) {
       state.title = action.payload.title;
       state.createdAt = action.payload.createdAt;
       state.status = action.payload.status;
       state.paid = action.payload?.paid || false;
       state.previewImg = action.payload?.previewImg || "";
-      state.loading = false;
       state.streamId = action.payload?.streamId || "";
+      state.text = action.payload?.text;
+    },
+  },
+});
+
+export const articleActions = articleSlice.actions;
+
+export const createArticleSlice = createSlice({
+  name: "createArticle",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(createArticle.fulfilled, (state, action) => {
+      console.log("Success");
       console.log(state);
+      state.loading = false;
     });
     builder.addCase(createArticle.pending, (state) => {
       state.loading = true;
@@ -61,7 +77,11 @@ export const articleSlice = createSlice({
 export const createArticle = createAsyncThunk(
   "article/create",
   async (
-    args: { article: Article; encrypt?: boolean; sharedDids?: string[] },
+    args: {
+      article: Omit<Article, "publicationUrl">;
+      encrypt?: boolean;
+      sharedDids?: string[];
+    },
     thunkAPI
   ) => {
     console.log("Thunk");
@@ -105,7 +125,7 @@ export const createArticle = createAsyncThunk(
       }
 
       console.log("Create Article");
-      let article = {
+      const article = {
         publicationUrl: publicationUrl,
         title: args.article.title || "",
         createdAt: args.article.createdAt,
@@ -115,16 +135,31 @@ export const createArticle = createAsyncThunk(
       };
       console.log(article);
       if (publicationUrl) {
-        const stream = await store.set("article", article);
-        article = {
-          ...article,
-          streamId: stream.toString(),
+        const baseArticle = {
+          publicationUrl: publicationUrl,
+          title: args.article.title || "",
+          createdAt: args.article.createdAt,
+          status: args.article.status,
+          // previewImg: args.article?.previewImg,
+          paid: args.article.paid || false,
         };
+
+        const stream = await store.set("article", baseArticle);
+        const streamId = stream.toString();
+        const article = {
+          ...baseArticle,
+          streamId: streamId,
+          text: args.article.text,
+        };
+        thunkAPI.dispatch(articleActions.create(article));
+        thunkAPI.dispatch(addRegistryArticle(streamId));
+        // save to registry
+        console.log("Article Saved");
+        return article;
       }
-      thunkAPI.dispatch(addPublicationArticle(stream.toString()));
+      // thunkAPI.dispatch(addPublicationArticle(stream.toString()));
       // save stream on article
-      console.log("Article Saved");
-      return article;
+      return;
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("Failed to save");

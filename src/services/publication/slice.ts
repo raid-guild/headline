@@ -1,8 +1,4 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  PayloadActrion,
-} from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
@@ -21,13 +17,17 @@ export const publicationSlice = createSlice({
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
-      state.name = "";
+      console.log(action);
+      state.name = action.payload.name;
+      state.description = action.payload.description;
     },
   },
 });
 
-export const publicationFetchSlice = createSlice({
-  name: "publication/fetch",
+export const publicationActions = publicationSlice.actions;
+
+export const fetchPublicationSlice = createSlice({
+  name: "fetchPublication",
   initialState: {
     loading: false,
   },
@@ -45,8 +45,8 @@ export const publicationFetchSlice = createSlice({
   },
 });
 
-export const publicationCreateSlice = createSlice({
-  name: "publication/create",
+export const createPublicationSlice = createSlice({
+  name: "createPublication",
   initialState: {
     loading: false,
   },
@@ -81,7 +81,7 @@ export const createPublication = createAsyncThunk(
         description: args.description,
       };
       await store.set("publication", publication);
-      console.log(publication);
+      thunkAPI.dispatch(publicationActions.create(publication));
       return publication;
     } catch (err) {
       return thunkAPI.rejectWithValue("Failed to save");
@@ -105,6 +105,9 @@ export const fetchPublication = createAsyncThunk(
       const publication = await store.get("publication");
       console.log("Fetching");
       console.log(publication);
+      if (publication) {
+        thunkAPI.dispatch(publicationActions.create(publication));
+      }
       return publication;
     } catch (err) {
       console.log("err");
@@ -114,27 +117,27 @@ export const fetchPublication = createAsyncThunk(
   }
 );
 
-export const addArticle = createAsyncThunk(
-  "publication/add_article",
-  async (args, thunkAPI) => {
-    const client = await getClient();
-    const model = new DataModel({
-      ceramic: client.ceramic,
-      model: PUBLISHED_MODELS,
-    });
-    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
-    try {
-      console.log("here");
-      await store.merge(args.streamId, args.streamId);
-      // store in article redux store
-      return publication;
-    } catch (err) {
-      console.log("err");
-      console.error(err);
-      return thunkAPI.rejectWithValue("Failed to fetch");
-    }
-  }
-);
+// export const addArticle = createAsyncThunk(
+//   "publication/add_article",
+//   async (args, thunkAPI) => {
+//     const client = await getClient();
+//     const model = new DataModel({
+//       ceramic: client.ceramic,
+//       model: PUBLISHED_MODELS,
+//     });
+//     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+//     try {
+//       console.log("here");
+//       await store.merge(args.streamId, args.streamId);
+//       // store in article redux store
+//       return publication;
+//     } catch (err) {
+//       console.log("err");
+//       console.error(err);
+//       return thunkAPI.rejectWithValue("Failed to fetch");
+//     }
+//   }
+// );
 
 // Action creators are generated for each case reducer function
 // export const { increment, decrement, incrementByAmount } =

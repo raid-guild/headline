@@ -79,7 +79,8 @@ await manager.createTile(
 await manager.createTile(
   "exampleArticleRegistry",
   {
-    example: "example",
+    k2t6wyfsu4pfxcjnx1gg5q37xywk5gihcjwrdrbohacqr25emxg4p05mpjvnkc:
+      "k2t6wyfsu4pfxcjnx1gg5q37xywk5gihcjwrdrbohacqr25emxg4p05mpjvnkc",
   },
   { schema: manager.getSchemaURL(articleRegistrySchemaID) }
 );

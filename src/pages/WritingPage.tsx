@@ -90,6 +90,7 @@ const MarkdownSave = ({ title }: { title: string }) => {
   const dispatch = useAppDispatch();
 
   const saveArticle = (markdown: string, title: string) => {
+    console.log("Calling debounce");
     console.log("here");
     console.log("markdown");
     console.log(markdown);
@@ -107,10 +108,10 @@ const MarkdownSave = ({ title }: { title: string }) => {
     );
   };
   const m = getMarkdown() || "";
-  const debouncedSaveArticle = useCallback(debounce(500, saveArticle), []);
+  const debouncedSaveArticle = useCallback(debounce(1000, saveArticle), []);
   useEffect(() => {
     debouncedSaveArticle(m, title);
-  }, [m]);
+  }, [m, title]);
 
   return <></>;
 };
@@ -122,7 +123,10 @@ const MarkdownSave = ({ title }: { title: string }) => {
 const WritingPage = () => {
   const [title, setTitle] = useState("");
   const { state, onChange } = useRemirror({});
-  const articleLoading = useAppSelector((state) => state.article.loading);
+  const articleLoading = useAppSelector((state) => state.createArticle.loading);
+  const addRegistryLoading = useAppSelector(
+    (state) => state.addArticle.loading
+  );
   const streamId = useAppSelector((state) => state.article.streamId);
   const navigate = useNavigate();
   const params = useParams();
@@ -132,7 +136,7 @@ const WritingPage = () => {
 
   useEffect(() => {
     if (streamId !== params.streamId) {
-      navigate(streamId);
+      navigate(`/publish/write/${streamId}`);
     }
   }, [streamId, params.streamId]);
 
@@ -165,7 +169,7 @@ const WritingPage = () => {
         </LeftHeaderContainer>
         <RightHeaderContainer>
           <Text size="sm" color="helpText">
-            {articleLoading ? "Saving..." : "Saved"}
+            {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
           <StyledIconButton size="sm" color="almostWhite" borderColor="primary">
             <StyledIcon size="md" src={settings} alt="settings button" />

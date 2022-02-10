@@ -115,12 +115,9 @@ const CreatePublicationForm = () => {
     handleSubmit,
     control,
   } = useForm();
-  // const { isDirty, isValid } = useFormState({ control });
-  // console.log(isValid);
-  // console.log(isDirty);
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
-    (state) => state.publication.loading
+    (state) => state.createPublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     console.log("submitting");
