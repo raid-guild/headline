@@ -81,16 +81,27 @@ export const fetchArticleRegistry = createAsyncThunk(
         console.log("Iterating");
         const doc = await TileDocument.load(client.ceramic, streamId);
         const ceramicArticle = doc.content as CeramicArticle;
-        const text = await fetch(
+        const resp = await fetch(
           `https://ipfs.infura.io:5001/api/v0/cat?arg=${ceramicArticle.publicationUrl
             .split("/")
             .at(-1)}`
         );
-        console.log("doc");
-        console.log(text);
+        const readableStream = resp?.body?.getReader();
+        console.log(readableStream);
+        if (!readableStream) {
+          return;
+        }
+        const encodedText = await readableStream.read();
+        const articleText = new TextDecoder().decode(encodedText.value);
         // Fetch text
         // dispatch to store
-        return;
+        return thunkAPI.dispatch(
+          articleRegistryActions.add({
+            ...ceramicArticle,
+            text: articleText,
+            streamId: streamId,
+          })
+        );
       }
     } catch (err) {
       return thunkAPI.rejectWithValue("Failed to save");

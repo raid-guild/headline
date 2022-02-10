@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -18,6 +19,7 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { Article } from "services/article/slice";
 
 import { useAppDispatch, useAppSelector } from "store";
 import { CREATE_PUBLICATION_URI, WRITING_URI } from "../constants";
@@ -145,11 +147,35 @@ const EmtptyEntriesMessage = () => {
     </div>
   );
 };
+
+const ArticleEntries = (articleRegistry: { [key: string]: Article }) => {
+  console.log(articleRegistry);
+  return (
+    <>
+      {Object.values(articleRegistry.articleRegistry).map((value: Article) => {
+        return (
+          <Link to={`/publish/write/${value.streamId}`}>
+            <div key={value.streamId || ""}>
+              <Title size="md">{value.title}</Title>
+              <Text size="md">{value.text}</Text>
+            </div>
+          </Link>
+        );
+      })}
+    </>
+  );
+};
 const PublishBody = () => {
   const dispatch = useAppDispatch();
   const toolbar = useToolbarState();
   const params = useParams();
   const [active, setActive] = useState("content");
+  const articleRegistry = useAppSelector(
+    (state) => state.articleRegistry // Name is required in the schema
+  );
+  console.log("articleRegistry");
+  console.log(articleRegistry);
+  console.log(articleRegistry.length);
   console.log(toolbar);
 
   useEffect(() => {
@@ -220,7 +246,11 @@ const PublishBody = () => {
           </Button>
         </EntriesHeader>
         <div>
-          <EmtptyEntriesMessage />
+          {Object.keys(articleRegistry).length ? (
+            <ArticleEntries articleRegistry={articleRegistry} />
+          ) : (
+            <EmtptyEntriesMessage />
+          )}
         </div>
       </EntriesContainer>
     </StyledBodyContainer>
