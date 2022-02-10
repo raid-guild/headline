@@ -22,6 +22,7 @@ export default defineConfig({
     alias: {
       stream: resolve("./node_modules/stream-browserify"),
       url: resolve("./node_modules/url-polyfill"),
+      fs: resolve("./node_modules/path-browserify"),
     },
   },
 });

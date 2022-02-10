@@ -182,7 +182,6 @@ const PublishBody = () => {
         <Toolbar {...toolbar} aria-label="publish subnav">
           <ToolbarItem
             {...toolbar}
-            as={RButton}
             onClick={() => handleClick("content")}
             active={active === "content"}
           >
@@ -190,7 +189,6 @@ const PublishBody = () => {
           </ToolbarItem>
           <ToolbarItem
             {...toolbar}
-            as={RButton}
             onClick={() => handleClick("stats")}
             active={active === "stats"}
           >
@@ -198,7 +196,6 @@ const PublishBody = () => {
           </ToolbarItem>
           <ToolbarItem
             {...toolbar}
-            as={RButton}
             onClick={() => handleClick("membership")}
             active={active === "membership"}
           >
@@ -206,7 +203,6 @@ const PublishBody = () => {
           </ToolbarItem>
           <ToolbarItem
             {...toolbar}
-            as={RButton}
             onClick={() => handleClick("settings")}
             active={active === "settings"}
           >
