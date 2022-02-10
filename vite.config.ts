@@ -14,15 +14,13 @@ const externalPlugin = viteExternalsPlugin({
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  build: {
-    minify: "terser",
-  },
   plugins: [react(), tsconfigPaths(), externalPlugin],
   resolve: {
     alias: {
       stream: resolve("./node_modules/stream-browserify"),
       url: resolve("./node_modules/url-polyfill"),
       fs: resolve("./node_modules/path-browserify"),
+      buffer: resolve("./node_modules/buffer-es6"),
     },
   },
 });

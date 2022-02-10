@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "buildDirty": "vite build",
+    "buildDirty": "vite build --mode development",
     "typecheck": "tsc",
     "preview": "vite preview",
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
@@ -58,6 +58,8 @@
     "@typescript-eslint/parser": "^5.9.0",
     "@vitejs/plugin-react": "^1.0.7",
     "@zondax/filecoin-signing-tools": "^0.19.0",
+    "buffer": "^6.0.3",
+    "buffer-es6": "^4.9.3",
     "child_process": "^1.0.2",
     "crypto-browserify": "^3.12.0",
     "dotenv": "^14.3.2",
