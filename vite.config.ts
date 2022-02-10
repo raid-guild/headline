@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { resolve } from "path";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 import { viteExternalsPlugin } from "vite-plugin-externals";
-
+import inject from "@rollup/plugin-inject";
 const externalPlugin = viteExternalsPlugin({
   ...{
     electron: "electron",
@@ -15,12 +15,28 @@ const externalPlugin = viteExternalsPlugin({
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), externalPlugin],
+  // build: {
+  //   sourcemap: true,
+  //   commonjsOptions: {
+  //     include: /node_modules/,
+  //     transformMixedEsModules: true,
+  //     ignoreTryCatch: false,
+  //   },
+  // },
   resolve: {
     alias: {
-      stream: resolve("./node_modules/stream-browserify"),
-      url: resolve("./node_modules/url-polyfill"),
-      fs: resolve("./node_modules/path-browserify"),
-      buffer: resolve("./node_modules/buffer-es6"),
+      stream: "stream-browserify",
+      url: "url-polyfill",
+      // fs: resolve("./node_modules/path-browserify"),
+      http: "http-browserify",
+      https: "http-browserify",
+      process: "process-es6",
+      "~~": resolve(__dirname, "src"),
+    },
+  },
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
     },
   },
 });
