@@ -49,7 +49,7 @@ const SidebarItem = ({ text, icon }: Props) => {
     <SidebarItemContainer>
       <StyledCircleOutline
         size="sm"
-        src={getIcon(circle)}
+        src={getIcon()}
         alt="circle outline with cross"
       />
       <Text size="md" weight="semibold">

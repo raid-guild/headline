@@ -153,7 +153,7 @@ const PublishBody = () => {
   console.log(toolbar);
 
   useEffect(() => {
-    setActive(params.menu);
+    setActive(params.menu || "content");
   }, [params.menu]);
   console.log(active);
 
