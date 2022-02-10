@@ -1,4 +1,8 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSlice,
+  PayloadActrion,
+} from "@reduxjs/toolkit";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
@@ -14,35 +18,47 @@ export const publicationSlice = createSlice({
   initialState: {
     name: "",
     description: "",
+  },
+  reducers: {
+    create(state, action: PayloadAction<Publication>) {
+      state.name = "";
+    },
+  },
+});
+
+export const publicationFetchSlice = createSlice({
+  name: "publication/fetch",
+  initialState: {
     loading: false,
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createPublication.fulfilled, (state, action) => {
-      state.name = action.payload.name;
-      state.description = action.payload.description;
-      state.loading = false;
-    });
-    builder.addCase(createPublication.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(createPublication.rejected, (state, action) => {
-      console.error(action);
-      state.loading = false;
-    });
     builder.addCase(fetchPublication.fulfilled, (state, action) => {
-      console.log("payload");
-      console.log(action.payload);
-      if (action.payload) {
-        state.name = action.payload.name;
-        state.description = action.payload.description;
-      }
       state.loading = false;
     });
     builder.addCase(fetchPublication.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(fetchPublication.rejected, (state, action) => {
+      state.loading = false;
+    });
+  },
+});
+
+export const publicationCreateSlice = createSlice({
+  name: "publication/create",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(createPublication.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(createPublication.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(createPublication.rejected, (state, action) => {
       console.error(action);
       state.loading = false;
     });
