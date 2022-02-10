@@ -66,22 +66,22 @@ const Sidebar = () => {
         </LogoContainer>
         <MenuContainer>
           <Link to={"/dashboard"}>
-            <SidebarItem text="Dashboard" />
+            <SidebarItem text="Dashboard" icon="dashboard" />
           </Link>
           <Link to={"/inbox"}>
-            <SidebarItem text="Inbox" />
+            <SidebarItem text="Inbox" icon="create" />
           </Link>
           <Link to={"/publish"}>
-            <SidebarItem text="Publish" />
+            <SidebarItem text="Publish" icon="mail" />
           </Link>
           <Link to={"/profile"}>
-            <SidebarItem text="My Profile" />
+            <SidebarItem text="My Profile" icon="profile" />
           </Link>
         </MenuContainer>
       </TopContainer>
       <BottomContainer>
         <Link to={"/guide"}>
-          <SidebarItem text="Guide" />
+          <SidebarItem text="Guide" icon="library_book" />
         </Link>
         <SocialMediaContainer>
           <StyledLink

@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
@@ -98,7 +99,7 @@ const MarkdownSave = ({ title }: { title: string }) => {
         article: {
           title: title,
           text: markdown,
-          createdAt: new Date(),
+          createdAt: new Date().toISOString(),
           status: "draft",
         },
         encrypt: false, // TODO change to true
@@ -122,8 +123,25 @@ const WritingPage = () => {
   const [title, setTitle] = useState("");
   const { state, onChange } = useRemirror({});
   const articleLoading = useAppSelector((state) => state.article.loading);
+  const streamId = useAppSelector((state) => state.article.streamId);
+  const navigate = useNavigate();
+  const params = useParams();
+  // get stream id if exists and load content
   console.log("articleLoading");
   console.log(articleLoading);
+
+  useEffect(() => {
+    if (streamId !== params.streamId) {
+      navigate(streamId);
+    }
+  }, [streamId, params.streamId]);
+
+  useEffect(() => {
+    if (streamId && !params.streamId) {
+      // fetch
+      console.log("fetching Article");
+    }
+  }, [streamId, params.streamId]);
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();

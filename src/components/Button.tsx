@@ -52,7 +52,12 @@ const Button = ({
 }: Props) => {
   const loadingChild = loadingText || children;
   return (
-    <StyledButton className={className} size={size} {...rest}>
+    <StyledButton
+      className={className}
+      size={size}
+      isLoading={isLoading}
+      {...rest}
+    >
       {isLoading ? loadingChild : children}
     </StyledButton>
   );

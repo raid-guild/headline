@@ -17,6 +17,7 @@ export type CeramicArticle = {
 };
 export type Article = {
   text: string;
+  streamId?: string;
 } & Omit<CeramicArticle, "publicationUrl">;
 
 export const articleSlice = createSlice({
@@ -29,6 +30,7 @@ export const articleSlice = createSlice({
     paid: false,
     previewImg: "",
     loading: false,
+    streamId: "",
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -41,6 +43,7 @@ export const articleSlice = createSlice({
       state.paid = action.payload?.paid || false;
       state.previewImg = action.payload?.previewImg || "";
       state.loading = false;
+      state.streamId = action.payload?.streamId || "";
       console.log(state);
     });
     builder.addCase(createArticle.pending, (state) => {
@@ -102,7 +105,7 @@ export const createArticle = createAsyncThunk(
       }
 
       console.log("Create Article");
-      const article = {
+      let article = {
         publicationUrl: publicationUrl,
         title: args.article.title || "",
         createdAt: args.article.createdAt,
@@ -112,8 +115,14 @@ export const createArticle = createAsyncThunk(
       };
       console.log(article);
       if (publicationUrl) {
-        await store.set("article", article);
+        const stream = await store.set("article", article);
+        article = {
+          ...article,
+          streamId: stream.toString(),
+        };
       }
+      thunkAPI.dispatch(addPublicationArticle(stream.toString()));
+      // save stream on article
       console.log("Article Saved");
       return article;
     } catch (err) {

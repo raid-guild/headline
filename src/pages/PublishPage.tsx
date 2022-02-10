@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { useToolbarState, Toolbar, ToolbarItem } from "reakit/Toolbar";
-import { useNavigate } from "react-router-dom";
+import React, { useCallback, useEffect, useState } from "react";
+import { useToolbarState, Toolbar } from "reakit/Toolbar";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { fetchPublication } from "services/publication/slice";
@@ -13,6 +13,7 @@ import {
   HeaderText,
   SidebarContainer,
 } from "components/Layout";
+import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
@@ -117,47 +118,108 @@ const EntriesHeader = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-top: 2.5rem;
 `;
 
 const EntriesContainer = styled.div`
   display: flex;
+  flex-direction: column;
   height: 100%;
+  width: 100%;
 `;
 
+const StyledToolbarItem = styled(ToolbarItem)`
+  border: none;
+  background: transparent;
+  padding: 2.3rem;
+  cursor: pointer;
+`;
+
+const EmtptyEntriesMessage = () => {
+  return (
+    <div>
+      <Text size="base" color="helpText">
+        You havent written any posts yet
+      </Text>
+    </div>
+  );
+};
 const PublishBody = () => {
   const toolbar = useToolbarState();
+  const params = useParams();
+  const [active, setActive] = useState("content");
+  console.log(toolbar);
+
+  useEffect(() => {
+    setActive(params.menu);
+  }, [params.menu]);
+  console.log(active);
+
   const navigate = useNavigate();
   const goToWritingPage = () => {
     navigate(WRITING_URI);
   };
 
+  const handleClick = useCallback(
+    (toolItem) => {
+      if (params.menu !== toolItem) {
+        navigate(`/publish/${toolItem}`);
+      }
+    },
+    [params.menu]
+  );
+
   return (
     <StyledBodyContainer>
       <ToolbarContainer>
         <Toolbar {...toolbar} aria-label="publish subnav">
-          <ToolbarItem {...toolbar} as={RButton}>
-            Here
+          <ToolbarItem
+            {...toolbar}
+            as={RButton}
+            onClick={() => handleClick("content")}
+            active={active === "content"}
+          >
+            <Text size="base">Content</Text>
           </ToolbarItem>
-          <ToolbarItem {...toolbar} as={RButton}>
-            Stats
+          <ToolbarItem
+            {...toolbar}
+            as={RButton}
+            onClick={() => handleClick("stats")}
+            active={active === "stats"}
+          >
+            <Text size="base">Stats</Text>
           </ToolbarItem>
-          <ToolbarItem {...toolbar} as={RButton}>
-            Membership
+          <ToolbarItem
+            {...toolbar}
+            as={RButton}
+            onClick={() => handleClick("membership")}
+            active={active === "membership"}
+          >
+            <Text size="base">Membership</Text>
           </ToolbarItem>
-          <ToolbarItem {...toolbar} as={RButton}>
-            Settings
+          <ToolbarItem
+            {...toolbar}
+            as={RButton}
+            onClick={() => handleClick("settings")}
+            active={active === "settings"}
+          >
+            <Text size="base">Settings</Text>
           </ToolbarItem>
         </Toolbar>
       </ToolbarContainer>
-      <EntriesHeader>
-        <Text size="md" color="label">
-          Entries
-        </Text>
-        <Button size="lg" color="primary" onClick={goToWritingPage}>
-          Write a Post
-        </Button>
-      </EntriesHeader>
-      <EntriesContainer></EntriesContainer>
+      <EntriesContainer>
+        <EntriesHeader>
+          <Text size="md" color="label">
+            Entries
+          </Text>
+          <Button size="lg" color="primary" onClick={goToWritingPage}>
+            Write a Post
+          </Button>
+        </EntriesHeader>
+        <div>
+          <EmtptyEntriesMessage />
+        </div>
+      </EntriesContainer>
     </StyledBodyContainer>
   );
 };

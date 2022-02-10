@@ -12,11 +12,6 @@
       "type": "string",
       "title": "description",
       "maxLength": 1000
-    },
-    "articles": {
-      "type": "object",
-      "title": "articles",
-      "additionalProperties": { "type": "string" }
     }
   }
 }

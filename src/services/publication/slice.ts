@@ -14,7 +14,6 @@ export const publicationSlice = createSlice({
   initialState: {
     name: "",
     description: "",
-    articles: {},
     loading: false,
   },
   reducers: {},
@@ -64,7 +63,6 @@ export const createPublication = createAsyncThunk(
       const publication = {
         name: args.name,
         description: args.description,
-        articles: {},
       };
       await store.set("publication", publication);
       console.log(publication);
@@ -91,6 +89,28 @@ export const fetchPublication = createAsyncThunk(
       const publication = await store.get("publication");
       console.log("Fetching");
       console.log(publication);
+      return publication;
+    } catch (err) {
+      console.log("err");
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to fetch");
+    }
+  }
+);
+
+export const addArticle = createAsyncThunk(
+  "publication/add_article",
+  async (args, thunkAPI) => {
+    const client = await getClient();
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLISHED_MODELS,
+    });
+    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    try {
+      console.log("here");
+      await store.merge(args.streamId, args.streamId);
+      // store in article redux store
       return publication;
     } catch (err) {
       console.log("err");

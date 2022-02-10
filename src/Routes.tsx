@@ -17,8 +17,10 @@ const Routes = () => {
         <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/publish" element={<PublishPage />} />
+        <Route path="/publish/:menu" element={<PublishPage />} />
         <Route path="/publish/create" element={<CreatePublicationPage />} />
         <Route path="/publish/write" element={<WritingPage />} />
+        <Route path="/publish/write/:stremId" element={<WritingPage />} />
         <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>
     </HashRouter>

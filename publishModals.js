@@ -8,6 +8,7 @@ import { fromString } from "uint8arrays";
 
 import publicationSchema from "./src/schemas/publication.json";
 import articleSchema from "./src/schemas/article.json";
+import articleRegistrySchema from "./src/schemas/articleRegistry.json";
 
 // The key must be provided as an environment variable
 const key = fromString(
@@ -34,6 +35,10 @@ const publicationSchemaID = await manager.createSchema(
 );
 
 const articleSchemaID = await manager.createSchema("Article", articleSchema);
+const articleRegistrySchemaID = await manager.createSchema(
+  "ArticleRegistry",
+  articleRegistrySchema
+);
 
 // Create the definition using the created schema ID
 await manager.createDefinition("publication", {
@@ -46,6 +51,12 @@ await manager.createDefinition("article", {
   name: "A unstack article",
   description: "A newsletter article",
   schema: manager.getSchemaURL(articleSchemaID),
+});
+
+await manager.createDefinition("articleRegistry", {
+  name: "Article registry",
+  description: "A registry of all unstack articles for a given publication",
+  schema: manager.getSchemaURL(articleRegistrySchemaID),
 });
 
 await manager.createTile(
@@ -63,6 +74,14 @@ await manager.createTile(
     status: "draft",
   },
   { schema: manager.getSchemaURL(articleSchemaID) }
+);
+
+await manager.createTile(
+  "exampleArticleRegistry",
+  {
+    example: "example",
+  },
+  { schema: manager.getSchemaURL(articleRegistrySchemaID) }
 );
 
 // Publish model to Ceramic node
