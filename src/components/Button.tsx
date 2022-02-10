@@ -1,12 +1,16 @@
 import React, { HTMLAttributes, ReactNode } from "react";
 import { Button as RButton, ButtonProps } from "reakit/Button";
 import styled from "styled-components";
-import { ThemeButtonSize } from "theme";
+import { ThemeButtonSize, ThemeColors } from "theme";
 
 type LocalProps = {
   size: ThemeButtonSize;
+  loadingText?: string;
+  isLoading?: boolean;
   children?: ReactNode;
   className?: string;
+  color?: ThemeColors;
+  borderColor?: ThemeColors;
 };
 
 type Props = LocalProps & ButtonProps & HTMLAttributes<HTMLButtonElement>;
@@ -21,15 +25,40 @@ const StyledButton = styled(RButton)<Props>`
       ? theme.text.size.lg.fontSize
       : theme.text.size[size].fontSize};
   color: ${({ theme }) => theme.colors.almostWhite};
-  background: ${({ theme }) => theme.colors.primary};
-  border: none;
+  background: ${({ theme, isLoading, color }) =>
+    isLoading ? theme.colors.grey : theme.colors[color || "primary"]};
+  border: ${({ theme, borderColor }) =>
+    borderColor ? `.2rem solid ${theme.colors[borderColor]}` : "none"};
   cursor: pointer;
+
+  &:hover {
+    background: ${({ theme, isLoading }) =>
+      isLoading ? theme.colors.grey : `none`};
+    border: ${({ theme, isLoading }) =>
+      isLoading ? `none` : `.2rem solid ${theme.colors.primary}`};
+    color: ${({ theme, isLoading }) =>
+      isLoading ? theme.colors.almostWhite : theme.colors.primary};
+  }
 `;
 
-const Button = ({ children, size, className, ...rest }: Props) => {
+const Button = ({
+  children,
+  size,
+  className,
+  borderColor,
+  isLoading,
+  loadingText,
+  ...rest
+}: Props) => {
+  const loadingChild = loadingText || children;
   return (
-    <StyledButton className={className} size={size} {...rest}>
-      {children}
+    <StyledButton
+      className={className}
+      size={size}
+      isLoading={isLoading}
+      {...rest}
+    >
+      {isLoading ? loadingChild : children}
     </StyledButton>
   );
 };

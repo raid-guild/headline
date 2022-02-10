@@ -27,12 +27,15 @@ const theme = {
     text: "#000000",
     helpText: "#6C6C6B",
     label: "#3A3A3A",
+    grey: "#A5A5A5",
+    lightGrey: "#DEDEDE",
   },
   fonts: {
     fontFamily: `'Inter'`,
   },
   icons: {
     size: {
+      xl: "4.8rem",
       lg: "3.33rem",
       md: "2.67rem",
       sm: "2rem",
