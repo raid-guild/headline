@@ -51,6 +51,9 @@ const web3modalOptions = {
   theme: "dark",
 };
 
+const client = new LitJsSdk.LitNodeClient();
+client.connect();
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

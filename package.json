@@ -34,6 +34,7 @@
     "electron": "^17.0.0",
     "electron-fetch": "^1.7.4",
     "ipfs-http-client": "56.0.0",
+    "lit-js-sdk": "^1.1.121",
     "lodash": "^4.17.21",
     "near-api-js": "^0.44.2",
     "react": "^17.0.2",
