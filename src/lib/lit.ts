@@ -1,5 +1,6 @@
 import LitJsSdk from "@alexkeating/lit-js-sdk";
 import uint8arrayFromString from "uint8arrays/from-string";
+import uint8arrayToString from "uint8arrays/to-string";
 
 import { chains } from "../constants";
 import { ChainName } from "types";
@@ -23,10 +24,13 @@ export type AccessControl = {
   parameters: string[];
   returnValueTest: Comparator;
 };
+export type Operator = {
+  operator: string;
+};
 
 export type LitAccess = {
   encryptedSymmetricKey: string;
-  accessControlConditions: AccessControl[];
+  accessControlConditions: (AccessControl | Operator)[];
 };
 
 export const litClient = getClient();
@@ -35,20 +39,35 @@ export const singleAddressAccessControl = (
   address: string
 ): AccessControl[] => {
   const accessControls = [];
-  for (const idx in chains) {
-    accessControls.push({
+  // for (const idx in chains) {
+  //   if (idx !== "0") {
+  //     accessControls.push({ operator: "or" });
+  //   }
+  //   accessControls.push({
+  //     contractAddress: "",
+  //     standardContractType: "",
+  //     chain: chains[idx],
+  //     method: "",
+  //     parameters: [":userAddress"],
+  //     returnValueTest: {
+  //       comparator: "=",
+  //       value: address,
+  //     },
+  //   });
+  // }
+  return [
+    {
       contractAddress: "",
       standardContractType: "",
-      chain: chains[idx],
+      chain: "ethereum",
       method: "",
       parameters: [":userAddress"],
       returnValueTest: {
         comparator: "=",
         value: address,
       },
-    });
-  }
-  return accessControls;
+    },
+  ];
 };
 
 // Pulled from Lit
@@ -90,10 +109,41 @@ export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
   return encryptedString;
 }
 
+// Pulled from the Lit sdk and modified to take string
+export async function decryptStringWithKey(str: string, symmKey: Uint8Array) {
+  const SYMM_KEY_ALGO_PARAMS = {
+    name: "AES-CBC",
+    length: 256,
+  };
+  const key = await crypto.subtle.importKey(
+    "raw",
+    symmKey,
+    SYMM_KEY_ALGO_PARAMS,
+    false,
+    ["decrypt"]
+  );
+
+  console.log("inner decrypting");
+  const decryptedStringArrayBuffer = await LitJsSdk.decryptWithSymmetricKey(
+    key,
+    new Blob([str])
+  );
+  console.log("inner decrypted");
+
+  return uint8arrayToString(new Uint8Array(decryptedStringArrayBuffer), "utf8");
+}
+
 export const encryptText = async (text: string, symmKey: Uint8Array) => {
   const encryptedString = await encryptStringWithKey(text, symmKey);
 
   return encryptedString;
+};
+
+export const decryptText = async (text: string, symmKey: Uint8Array) => {
+  const x = uint8arrayFromString(text, "utf8");
+  const decryptedString = await LitJsSdk.decryptString(new Blob(x), symmKey);
+
+  return decryptedString;
 };
 
 export const getEncryptionKey = async (

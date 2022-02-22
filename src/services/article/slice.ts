@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
-import { DIDDataStore } from "@glazed/did-datastore";
 import { getIPFSClient } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
 
@@ -91,7 +90,6 @@ export const createArticle = createAsyncThunk(
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
     });
-    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     let content = args.article.text;
     try {
       let publicationUrl;
@@ -149,8 +147,8 @@ export const createArticle = createAsyncThunk(
           paid: args.article.paid || false,
         };
 
-        const stream = await store.set("article", baseArticle);
-        const streamId = stream.toString();
+        const doc = await model.createTile("Article", baseArticle);
+        const streamId = doc.id.toString();
         const article = {
           ...baseArticle,
           streamId: streamId,
