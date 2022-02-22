@@ -1,4 +1,15 @@
-export const networks = {
+import { ChainName } from "types";
+
+type Network = {
+  chainId: number;
+  name: string;
+  litName: ChainName;
+  symbol: string;
+  explorer: string;
+  rpc: string;
+};
+
+export const networks: { [key: number]: Network } = {
   1: {
     chainId: 1,
     name: "Mainnet",
