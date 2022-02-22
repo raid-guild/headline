@@ -188,6 +188,9 @@ const PublishBody = () => {
 
   // fetch registry display top 5
   useEffect(() => {
+    if (!chainId) {
+      return;
+    }
     dispatch(fetchArticleRegistry({ chainName: networks[chainId]?.litName }));
   }, []);
 

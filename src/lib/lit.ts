@@ -141,7 +141,7 @@ export const encryptText = async (text: string, symmKey: Uint8Array) => {
 
 export const decryptText = async (text: string, symmKey: Uint8Array) => {
   const x = uint8arrayFromString(text, "utf8");
-  const decryptedString = await LitJsSdk.decryptString(new Blob(x), symmKey);
+  const decryptedString = await LitJsSdk.decryptString(new Blob([x]), symmKey);
 
   return decryptedString;
 };
@@ -149,7 +149,7 @@ export const decryptText = async (text: string, symmKey: Uint8Array) => {
 export const getEncryptionKey = async (
   chain: ChainName,
   encryptedSymmetricKey: string,
-  accessControlConditions: AccessControl[]
+  accessControlConditions: (AccessControl | Operator)[]
 ): Promise<Uint8Array> => {
   const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain });
   const symmetricKey = await litClient.getEncryptionKey({
