@@ -37,17 +37,22 @@ export type AccessControl = {
   returnValueTest: Comparator;
 };
 
+export type LitAccess = {
+  encryptedSymmetricKey: string;
+  accessControlConditions: AccessControl[];
+};
+
 export const litClient = getClient();
 
 export const singleAddressAccessControl = (
   address: string
 ): AccessControl[] => {
   const accessControls = [];
-  for (const chain in chains) {
+  for (const idx in chains) {
     accessControls.push({
       contractAddress: "",
       standardContractType: "",
-      chain: chain as ChainName,
+      chain: chains[idx],
       method: "",
       parameters: [":userAddress"],
       returnValueTest: {
@@ -69,40 +74,55 @@ export async function generateSymmetricKey() {
     "encrypt",
     "decrypt",
   ]);
-  return symmKey;
+  const exportedSymmKey = new Uint8Array(
+    await crypto.subtle.exportKey("raw", symmKey)
+  );
+  return exportedSymmKey;
 }
 
 // Pulled from the Lit sdk and modified to take string
-export async function encryptStringWithKey(str: string, symmKey: string) {
+export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
   const encodedString = uint8arrayFromString(str, "utf8");
-
-  const encryptedString = await LitJsSdk.encryptWithSymmetricKey(
+  console.log(encodedString);
+  console.log(symmKey);
+  const SYMM_KEY_ALGO_PARAMS = {
+    name: "AES-CBC",
+    length: 256,
+  };
+  const key = await crypto.subtle.importKey(
+    "raw",
     symmKey,
+    SYMM_KEY_ALGO_PARAMS,
+    false,
+    ["encrypt"]
+  );
+
+  console.log(key);
+  const encryptedString = await LitJsSdk.encryptWithSymmetricKey(
+    key,
     encodedString.buffer
   );
 
   return encryptedString;
 }
 
-export const encryptText = async (text: string, symmKey: string) => {
-  const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "ethereum" });
-  const encryptedString = await LitJsSdk.encryptStringWithKey(text, symmKey);
+export const encryptText = async (text: string, symmKey: Uint8Array) => {
+  const encryptedString = await encryptStringWithKey(text, symmKey);
 
-  return { encryptedString, authSig };
+  return encryptedString;
 };
 
-export const saveEncryptionKey = async (
-  accessControlConditions: string,
-  symmetricKey: string,
-  authSig: string,
-  chain: { chain: string }
-) => {
-  const encryptedSymmetricKey = await litClient.saveEncryptionKey({
+export const getEncryptionKey = async (
+  chain: ChainName,
+  encryptedSymmetricKey: string,
+  accessControlConditions: AccessControl[]
+): Promise<Uint8Array> => {
+  const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain });
+  const symmetricKey = await litClient.getEncryptionKey({
     accessControlConditions,
-    symmetricKey,
-    authSig,
+    toDecrypt: encryptedSymmetricKey,
     chain,
+    authSig,
   });
-  console.log(encryptedSymmetricKey);
-  console.log(accessControlConditions);
+  return symmetricKey;
 };

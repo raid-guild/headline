@@ -9,11 +9,17 @@ import {
   litClient,
   singleAddressAccessControl,
   generateSymmetricKey,
+  LitAccess,
+  AccessControl,
+  getEncryptionKey,
 } from "lib/lit";
+import { ChainName } from "types";
 
 export type Publication = {
   name: string;
   description: string;
+  draftAccess: LitAccess;
+  publishAccess: LitAccess;
 };
 
 export const publicationSlice = createSlice({
@@ -21,12 +27,22 @@ export const publicationSlice = createSlice({
   initialState: {
     name: "",
     description: "",
+    draftAccess: {
+      encryptedSymmetricKey: "",
+      accessControlConditions: [] as AccessControl[],
+    },
+    publishAccess: {
+      encryptedSymmetricKey: "",
+      accessControlConditions: [] as AccessControl[],
+    },
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
       console.log(action);
       state.name = action.payload.name;
       state.description = action.payload.description;
+      state.draftAccess = action.payload.draftAccess;
+      state.publishAccess = action.payload.publishAccess;
     },
   },
 });
@@ -76,7 +92,11 @@ export const createPublicationSlice = createSlice({
 export const createPublication = createAsyncThunk(
   "publication/create",
   async (
-    args: { publication: Publication; address: string; chainName: string },
+    args: {
+      publication: Omit<Publication, "draftAccess" | "publishAccess">;
+      address: string;
+      chainName: string;
+    },
     thunkAPI
   ) => {
     if (!args.address) {
@@ -109,6 +129,13 @@ export const createPublication = createAsyncThunk(
         chain: args.chainName,
       });
 
+      const symmKey = await getEncryptionKey(
+        args.chainName as ChainName,
+        LitJsSdk.uint8arrayToString(draftEncryptedSymmetricKey, "base16"),
+        addressAccessControls
+      );
+      debugger;
+
       const publishKey = await generateSymmetricKey();
       const publishEncryptedSymmetricKey = await litClient.saveEncryptionKey({
         accessControlConditions: addressAccessControls,
@@ -117,18 +144,22 @@ export const createPublication = createAsyncThunk(
         chain: args.chainName,
       });
 
+      console.log(draftEncryptedSymmetricKey);
+      console.log(publishEncryptedSymmetricKey);
       const publication = {
         name: pub.name,
         description: pub.description,
         draftAccess: {
-          encryptedSymmetricKey: new TextDecoder().decode(
-            draftEncryptedSymmetricKey
+          encryptedSymmetricKey: LitJsSdk.uint8arrayToString(
+            draftEncryptedSymmetricKey,
+            "base16"
           ),
           accessControlConditions: addressAccessControls,
         },
         publishAccess: {
-          encryptedSymmetricKey: new TextDecoder().decode(
-            publishEncryptedSymmetricKey
+          encryptedSymmetricKey: LitJsSdk.uint8arrayToString(
+            publishEncryptedSymmetricKey,
+            "base16"
           ),
           accessControlConditions: addressAccessControls,
         },

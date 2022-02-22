@@ -3,12 +3,13 @@ import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
-import { encryptText } from "lib/ceramic";
 import { getIPFSClient } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
 
 import { addRegistryArticle } from "services/articleRegistry/slice";
-import { singleAddressAccessControl } from "lib/lit";
+import { getEncryptionKey, encryptText } from "lib/lit";
+import { RootState } from "store";
+import { ChainName } from "types";
 
 export type CeramicArticle = {
   publicationUrl: string;
@@ -81,7 +82,7 @@ export const createArticle = createAsyncThunk(
     args: {
       article: Omit<Article, "publicationUrl">;
       encrypt?: boolean;
-      accessControlRules?: string[];
+      chainName?: ChainName;
     },
     thunkAPI
   ) => {
@@ -93,38 +94,44 @@ export const createArticle = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     console.log("Create Store");
+    let content = args.article.text;
     try {
       let publicationUrl;
-      if (args.encrypt && client.ceramic.did) {
-        console.log("IPFS");
-        publicationUrl = `ipfs://${await encryptText(
-          client.ceramic?.did,
-          args.article.text,
-          args.sharedDids || []
-        )}`;
-        console.log(publicationUrl);
-        // encrypt
-        // pass in encryption rules
-      } else {
-        const ipfs = getIPFSClient();
-        // const obj = {
-        //   Data: new TextEncoder().encode("some text"),
-        //   Links: [],
-        // };
-        // console.log(obj);=
-        console.log({ content: args.article.text });
-        if (args.article.text) {
-          const cid = await ipfs.add(
-            { content: args.article.text },
-            {
-              cidVersion: 1,
-              hashAlg: "sha2-256",
-            }
-          );
-          console.log(cid);
-          await ipfs.pin.add(CID.parse(cid.path));
-          publicationUrl = `ipfs://${cid.path}`;
+      if (args.encrypt) {
+        if (!args.article.status) {
+          throw Error("Missing encrypt type");
         }
+        if (!args.chainName) {
+          throw Error("Missing chain name");
+        }
+        const { publication } = thunkAPI.getState() as RootState;
+        const access =
+          args.article.status === "draft"
+            ? publication.draftAccess
+            : publication.publishAccess;
+        console.log("publication");
+        console.log(publication);
+        console.log(args.chainName);
+        const symmetricKey = await getEncryptionKey(
+          args.chainName,
+          access.encryptedSymmetricKey,
+          access.accessControlConditions
+        );
+        content = await encryptText(content, symmetricKey);
+      }
+      const ipfs = getIPFSClient();
+      console.log({ content: args.article.text });
+      if (args.article.text) {
+        const cid = await ipfs.add(
+          { content: content },
+          {
+            cidVersion: 1,
+            hashAlg: "sha2-256",
+          }
+        );
+        console.log(cid);
+        await ipfs.pin.add(CID.parse(cid.path));
+        publicationUrl = `ipfs://${cid.path}`;
       }
 
       console.log("Create Article");

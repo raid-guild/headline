@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
+import { useWallet } from "@raidguild/quiver";
 import { useRemirror, useHelpers } from "@remirror/react";
 import { useAppSelector, useAppDispatch } from "store";
 
@@ -14,6 +15,7 @@ import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
+import { networks } from "lib/networks";
 import { createArticle } from "services/article/slice";
 
 import profile from "assets/obsidian.png";
@@ -87,6 +89,7 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
 
 const MarkdownSave = ({ title }: { title: string }) => {
   const { getMarkdown } = useHelpers(true);
+  const { chainId } = useWallet();
   const dispatch = useAppDispatch();
 
   const saveArticle = (markdown: string, title: string) => {
@@ -95,6 +98,9 @@ const MarkdownSave = ({ title }: { title: string }) => {
     console.log("markdown");
     console.log(markdown);
     console.log(title);
+    if (!chainId) {
+      return;
+    }
     dispatch(
       createArticle({
         article: {
@@ -103,7 +109,8 @@ const MarkdownSave = ({ title }: { title: string }) => {
           createdAt: new Date().toISOString(),
           status: "draft",
         },
-        encrypt: false, // TODO change to true
+        encrypt: true, // TODO change to true
+        chainName: networks[chainId].litName,
       })
     );
   };
