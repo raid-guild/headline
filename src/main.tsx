@@ -17,22 +17,7 @@ import { WalletProvider } from "@raidguild/quiver";
 import WalletConnectProvider from "@walletconnect/ethereum-provider";
 import { IProviderOptions } from "web3modal";
 
-const networks = {
-  1: {
-    chainId: 1,
-    name: "Mainnet",
-    symbol: "ETH",
-    explorer: "https://etherscan.io",
-    rpc: "https://mainnet.infura.io/v3/<your infura project id>",
-  },
-  4: {
-    chainId: 4,
-    name: "Rinkeby",
-    symbol: "ETH",
-    explorer: "https://rinkeby.etherscan.io",
-    rpc: "https://rinkeby.infura.io/v3/<your infura project id>",
-  },
-};
+import { networks } from "lib/networks";
 
 const providerOptions: IProviderOptions = {
   walletconnect: {

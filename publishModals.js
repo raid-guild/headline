@@ -58,10 +58,29 @@ await manager.createDefinition("articleRegistry", {
   description: "A registry of all unstack articles for a given publication",
   schema: manager.getSchemaURL(articleRegistrySchemaID),
 });
+const accessControlConditions = [
+  {
+    contractAddress: "",
+    standardContractType: "",
+    chain: "xdai",
+    method: "",
+    parameters: [":userAddress"],
+    returnValueTest: {
+      comparator: "=",
+      value: "0x50e2dac5e78B5905CB09495547452cEE64426db2",
+    },
+  },
+];
 
 await manager.createTile(
   "examplePublication",
-  { name: "Example", about: "Example publication", articles: {} },
+  {
+    name: "Example",
+    about: "Example publication",
+
+    draftAccess: { encryptedSymmetricKey: "key", accessControlConditions },
+    publishAccess: { encryptedSymmetricKey: "key", accessControlConditions },
+  },
   { schema: manager.getSchemaURL(publicationSchemaID) }
 );
 
