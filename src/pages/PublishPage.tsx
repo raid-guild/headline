@@ -163,8 +163,6 @@ const ArticleEntries = ({
 }: {
   articleRegistry: { [key: string]: Article };
 }) => {
-  console.log("entries");
-  console.log(articleRegistry);
   return (
     <>
       {Object.values(articleRegistry).map((value) => {
@@ -180,18 +178,13 @@ const PublishBody = () => {
   const toolbar = useToolbarState();
   const params = useParams();
   const [active, setActive] = useState("content");
-  console.log(toolbar);
   const articleRegistry = useAppSelector(
     (state) => state.articleRegistry // Name is required in the schema
   );
-  console.log("articleRegistry");
-  console.log(articleRegistry);
-  console.log(Object.keys(articleRegistry).length);
 
   useEffect(() => {
     setActive(params.menu || "content");
   }, [params.menu]);
-  console.log(active);
 
   // fetch registry display top 5
   useEffect(() => {
