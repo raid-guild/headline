@@ -1,8 +1,15 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import LitJsSdk from "@alexkeating/lit-js-sdk";
+
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
+import {
+  litClient,
+  singleAddressAccessControl,
+  generateSymmetricKey,
+} from "lib/lit";
 
 export type Publication = {
   name: string;
@@ -68,7 +75,14 @@ export const createPublicationSlice = createSlice({
 // async thunk that creates a publication
 export const createPublication = createAsyncThunk(
   "publication/create",
-  async (args: Publication, thunkAPI) => {
+  async (
+    args: { publication: Publication; address: string; chainName: string },
+    thunkAPI
+  ) => {
+    if (!args.address) {
+      return;
+    }
+    const pub = args.publication;
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -76,14 +90,54 @@ export const createPublication = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
+      const authSig = await LitJsSdk.checkAndSignAuthMessage({
+        chain: args.chainName,
+      });
+      const draftKey = await generateSymmetricKey();
+      const addressAccessControls = singleAddressAccessControl(args.address);
+      console.log(draftKey);
+      console.log({
+        addressAccessControls,
+        draftKey,
+        authSig,
+        chainName: args.chainName,
+      });
+      const draftEncryptedSymmetricKey = await litClient.saveEncryptionKey({
+        accessControlConditions: addressAccessControls,
+        symmetricKey: draftKey,
+        authSig,
+        chain: args.chainName,
+      });
+
+      const publishKey = await generateSymmetricKey();
+      const publishEncryptedSymmetricKey = await litClient.saveEncryptionKey({
+        accessControlConditions: addressAccessControls,
+        symmetricKey: publishKey,
+        authSig,
+        chain: args.chainName,
+      });
+
       const publication = {
-        name: args.name,
-        description: args.description,
+        name: pub.name,
+        description: pub.description,
+        draftAccess: {
+          encryptedSymmetricKey: new TextDecoder().decode(
+            draftEncryptedSymmetricKey
+          ),
+          accessControlConditions: addressAccessControls,
+        },
+        publishAccess: {
+          encryptedSymmetricKey: new TextDecoder().decode(
+            publishEncryptedSymmetricKey
+          ),
+          accessControlConditions: addressAccessControls,
+        },
       };
       await store.set("publication", publication);
       thunkAPI.dispatch(publicationActions.create(publication));
       return publication;
     } catch (err) {
+      console.error(err);
       return thunkAPI.rejectWithValue("Failed to save");
     }
   }

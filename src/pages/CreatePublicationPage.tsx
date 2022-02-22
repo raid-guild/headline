@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
+import { useWallet } from "@raidguild/quiver";
 import {
   useForm,
   SubmitHandler,
@@ -22,6 +23,7 @@ import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
 import Title from "components/Title";
 import Text from "components/Text";
 import FormTextArea from "components/FormTextArea";
+import { networks } from "lib/networks";
 
 import small_logo from "assets/small_logo.svg";
 import celebrateIcon from "assets/celebrate.svg";
@@ -116,6 +118,7 @@ const CreatePublicationForm = () => {
     control,
   } = useForm();
   const dispatch = useAppDispatch();
+  const { address, chainId } = useWallet();
   const publicationLoading = useAppSelector(
     (state) => state.createPublication.loading
   );
@@ -123,10 +126,18 @@ const CreatePublicationForm = () => {
     console.log("submitting");
     console.log(data);
     console.log("submitting 2");
+    if (!chainId) {
+      console.error("Chain Id is falsey");
+      return;
+    }
     dispatch(
       createPublication({
-        name: data.name || "",
-        description: data.description || "",
+        publication: {
+          name: data.name || "",
+          description: data.description || "",
+        },
+        address: address || "",
+        chainName: networks[chainId]?.litName,
       })
     );
   }, []);

@@ -8,6 +8,7 @@ import { getIPFSClient } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
 
 import { addRegistryArticle } from "services/articleRegistry/slice";
+import { singleAddressAccessControl } from "lib/lit";
 
 export type CeramicArticle = {
   publicationUrl: string;
@@ -80,7 +81,7 @@ export const createArticle = createAsyncThunk(
     args: {
       article: Omit<Article, "publicationUrl">;
       encrypt?: boolean;
-      sharedDids?: string[];
+      accessControlRules?: string[];
     },
     thunkAPI
   ) => {
@@ -102,6 +103,8 @@ export const createArticle = createAsyncThunk(
           args.sharedDids || []
         )}`;
         console.log(publicationUrl);
+        // encrypt
+        // pass in encryption rules
       } else {
         const ipfs = getIPFSClient();
         // const obj = {
