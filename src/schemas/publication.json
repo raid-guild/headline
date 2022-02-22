@@ -37,6 +37,14 @@
         }
       }
     },
+    "Operator": {
+      "type": "object",
+      "properties": {
+        "operator": {
+          "enum": ["and", "or"]
+        }
+      }
+    },
     "LitAccess": {
       "type": "object",
       "properties": {
@@ -46,7 +54,10 @@
         "accessControlConditions": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/AccessControlCondition"
+            "anyOf": [
+              { "$ref": "#/definitions/AccessControlCondition" },
+              { "$ref": "#/definitions/Operator" }
+            ]
           }
         }
       }

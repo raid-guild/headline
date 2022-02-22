@@ -11,9 +11,8 @@ import {
   generateSymmetricKey,
   LitAccess,
   AccessControl,
-  getEncryptionKey,
+  Operator,
 } from "lib/lit";
-import { ChainName } from "types";
 
 export type Publication = {
   name: string;
@@ -29,11 +28,11 @@ export const publicationSlice = createSlice({
     description: "",
     draftAccess: {
       encryptedSymmetricKey: "",
-      accessControlConditions: [] as AccessControl[],
+      accessControlConditions: [] as (AccessControl | Operator)[],
     },
     publishAccess: {
       encryptedSymmetricKey: "",
-      accessControlConditions: [] as AccessControl[],
+      accessControlConditions: [] as (AccessControl | Operator)[],
     },
   },
   reducers: {

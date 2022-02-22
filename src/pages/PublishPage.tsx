@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useWallet } from "@raidguild/quiver";
+import { Link } from "react-router-dom";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -7,6 +9,7 @@ import { fetchPublication } from "services/publication/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import Button from "components/Button";
 import { Button as RButton } from "reakit/Button";
+import ArticleCard from "components/ArticleCard";
 import {
   Layout,
   BodyContainer,
@@ -18,6 +21,8 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { Article } from "services/article/slice";
+import { networks } from "lib/networks";
 
 import { useAppDispatch, useAppSelector } from "store";
 import { CREATE_PUBLICATION_URI, WRITING_URI } from "../constants";
@@ -136,6 +141,13 @@ const StyledToolbarItem = styled(ToolbarItem)`
   cursor: pointer;
 `;
 
+const CardContainer = styled.div`
+  margin-top: 1.6rem;
+  gap: 1.2rem;
+  display: flex;
+  flex-direction: column;
+`;
+
 const EmtptyEntriesMessage = () => {
   return (
     <div>
@@ -145,21 +157,41 @@ const EmtptyEntriesMessage = () => {
     </div>
   );
 };
+
+const ArticleEntries = ({
+  articleRegistry,
+}: {
+  articleRegistry: { [key: string]: Article };
+}) => {
+  return (
+    <>
+      {Object.values(articleRegistry).map((value) => {
+        return <ArticleCard key={value.streamId} article={value} />;
+      })}
+    </>
+  );
+};
+
 const PublishBody = () => {
   const dispatch = useAppDispatch();
+  const { address, chainId } = useWallet();
   const toolbar = useToolbarState();
   const params = useParams();
   const [active, setActive] = useState("content");
-  console.log(toolbar);
+  const articleRegistry = useAppSelector(
+    (state) => state.articleRegistry // Name is required in the schema
+  );
 
   useEffect(() => {
     setActive(params.menu || "content");
   }, [params.menu]);
-  console.log(active);
 
   // fetch registry display top 5
   useEffect(() => {
-    dispatch(fetchArticleRegistry());
+    if (!chainId) {
+      return;
+    }
+    dispatch(fetchArticleRegistry({ chainName: networks[chainId]?.litName }));
   }, []);
 
   const navigate = useNavigate();
@@ -219,9 +251,13 @@ const PublishBody = () => {
             Write a Post
           </Button>
         </EntriesHeader>
-        <div>
-          <EmtptyEntriesMessage />
-        </div>
+        <CardContainer>
+          {Object.keys(articleRegistry).length ? (
+            <ArticleEntries articleRegistry={articleRegistry} />
+          ) : (
+            <EmtptyEntriesMessage />
+          )}
+        </CardContainer>
       </EntriesContainer>
     </StyledBodyContainer>
   );

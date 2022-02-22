@@ -134,11 +134,11 @@ const WritingPage = () => {
   const params = useParams();
   // get stream id if exists and load content
 
-  useEffect(() => {
-    if (streamId !== params.streamId) {
-      navigate(`/publish/write/${streamId}`);
-    }
-  }, [streamId, params.streamId]);
+  // useEffect(() => {
+  //   if (streamId !== params.streamId) {
+  //     navigate(`/publish/write/${streamId}`);
+  //   }
+  // }, [streamId, params.streamId]);
 
   useEffect(() => {
     if (streamId && !params.streamId) {
