@@ -1399,10 +1399,10 @@
   resolved "https://registry.npmjs.org/@protobufjs/utf8/-/utf8-1.1.0.tgz"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
-"@raidguild/quiver@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.npmjs.org/@raidguild/quiver/-/quiver-0.5.0.tgz"
-  integrity sha512-FERNVorV3e1MkCcWtw0KEauC5FmxeXh3CBASTK7wx1EWbjpUpCytI7LpNHKlNJYEcbh6HQa0Fk9JN51iw+v7oA==
+"@raidguild/quiver@0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@raidguild/quiver/-/quiver-0.9.0.tgz#4bed26e49d74ac4750c86ed8437bddff87c9d385"
+  integrity sha512-mTJ30KVN0QrZontRL4ffZnwU24QiBdLaAgcnFsrNOdsd+1vu/Ghh6gsu0EoWZNOqGI2ky8xovEfiATGoDtQSmw==
   dependencies:
     "@ethersproject/abstract-signer" "^5.5.0"
     "@ethersproject/bignumber" "^5.5.0"

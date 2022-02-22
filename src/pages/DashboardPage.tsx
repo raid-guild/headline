@@ -1,4 +1,5 @@
 import React from "react";
+import { useWallet } from "@raidguild/quiver";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -56,7 +57,7 @@ const BodyFooterContainer = styled.div`
 const LoggedOutBody = ({
   connect,
   isConnecting,
-}: Pick<CeramicContextType, "connect" | "isConnecting">) => {
+}: Pick<CeramicContextType, "connect"> & { isConnecting: boolean }) => {
   return (
     <DashboardContainer>
       <BodyTitleContainer>
@@ -209,7 +210,13 @@ const LoggedInBody = () => {
 // Add loading to button
 
 const DashboardPage = () => {
-  const { connect, did, isConnecting } = useCermaic();
+  const { connect, did, isCeramicConnecting } = useCermaic();
+  const { connectWallet, isConnecting } = useWallet();
+
+  const connectToServices = async () => {
+    await connectWallet();
+    await connect();
+  };
   return (
     <Layout>
       <HeaderContainer>
@@ -224,7 +231,10 @@ const DashboardPage = () => {
         {did ? (
           <LoggedInBody />
         ) : (
-          <LoggedOutBody connect={connect} isConnecting={isConnecting} />
+          <LoggedOutBody
+            connect={connectToServices}
+            isConnecting={isConnecting || isCeramicConnecting}
+          />
         )}
       </BodyContainer>
     </Layout>

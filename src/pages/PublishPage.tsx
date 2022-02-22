@@ -215,16 +215,9 @@ const PublishBody = () => {
           <ToolbarItem
             {...toolbar}
             onClick={() => handleClick("content")}
-            active={active === "content"}
+            active={active === "content" || !active}
           >
             <Text size="base">Content</Text>
-          </ToolbarItem>
-          <ToolbarItem
-            {...toolbar}
-            onClick={() => handleClick("stats")}
-            active={active === "stats"}
-          >
-            <Text size="base">Stats</Text>
           </ToolbarItem>
           <ToolbarItem
             {...toolbar}
