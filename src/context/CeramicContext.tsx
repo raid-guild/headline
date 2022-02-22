@@ -10,7 +10,7 @@ export type CeramicContextType = {
   client: WebClient | null;
   connect: () => Promise<void>;
   disconnect: () => Promise<void>;
-  isConnecting: boolean;
+  isCeramicConnecting: boolean;
 };
 
 type ProviderProps = {
@@ -22,7 +22,7 @@ const initialContext = {
   client: null,
   connect: async () => undefined,
   disconnect: async () => undefined,
-  isConnecting: false,
+  isCeramicConnecting: false,
 };
 
 const CeramicContext = createContext<CeramicContextType>(initialContext);
@@ -96,7 +96,13 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
 
   return (
     <CeramicContext.Provider
-      value={{ did, connect, client, isConnecting, disconnect }}
+      value={{
+        did,
+        connect,
+        client,
+        isCeramicConnecting: isConnecting,
+        disconnect,
+      }}
     >
       {children}
     </CeramicContext.Provider>

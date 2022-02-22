@@ -4,11 +4,25 @@ import {
   Route,
   Routes as RouteContainer,
   Navigate,
+  useLocation,
 } from "react-router-dom";
+
+import { useCermaic } from "context/CeramicContext";
 import DashboardPage from "./pages/DashboardPage";
 import PublishPage from "./pages/PublishPage";
 import CreatePublicationPage from "./pages/CreatePublicationPage";
 import WritingPage from "pages/WritingPage";
+
+const RequireAuth = ({ children }: { children: JSX.Element }) => {
+  const { did } = useCermaic();
+  const location = useLocation();
+
+  if (!did) {
+    return <Navigate to="/dashboard" state={{ from: location }} replace />;
+  }
+
+  return children;
+};
 
 const Routes = () => {
   return (
@@ -16,11 +30,46 @@ const Routes = () => {
       <RouteContainer>
         <Route path="/" element={<DashboardPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/publish" element={<PublishPage />} />
-        <Route path="/publish/:menu" element={<PublishPage />} />
-        <Route path="/publish/create" element={<CreatePublicationPage />} />
-        <Route path="/publish/write" element={<WritingPage />} />
-        <Route path="/publish/write/:stremId" element={<WritingPage />} />
+        <Route
+          path="/publish"
+          element={
+            <RequireAuth>
+              <PublishPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/publish/:menu"
+          element={
+            <RequireAuth>
+              <PublishPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/publish/create"
+          element={
+            <RequireAuth>
+              <CreatePublicationPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/publish/write"
+          element={
+            <RequireAuth>
+              <WritingPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/publish/write/:stremId"
+          element={
+            <RequireAuth>
+              <WritingPage />
+            </RequireAuth>
+          }
+        />
         <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>
     </HashRouter>

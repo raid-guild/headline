@@ -24,8 +24,8 @@ const providerOptions: IProviderOptions = {
     package: WalletConnectProvider,
     options: {
       rpc: {
-        1: networks[1].rpc,
-        4: networks[4].rpc,
+        "0x1": networks["0x1"].rpc,
+        "0x4": networks["0x4"].rpc,
       },
     },
   },
@@ -42,7 +42,7 @@ ReactDOM.render(
       <WalletProvider
         web3modalOptions={web3modalOptions}
         networks={networks}
-        defaultNetwork={1}
+        defaultChainId={"0x1"}
         // Optional but useful to handle events.
         handleModalEvents={(eventName, error) => {
           if (error) {
