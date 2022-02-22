@@ -10,19 +10,6 @@ const getClient = () => {
   return client;
 };
 
-// const accessControlConditions = [
-//   {
-//     contractAddress: "",
-//     standardContractType: "",
-//     chain,
-//     method: "",
-//     parameters: [":userAddress"],
-//     returnValueTest: {
-//       comparator: "=",
-//       value: "0x50e2dac5e78B5905CB09495547452cEE64426db2",
-//     },
-//   },
-// ];
 export type Comparator = {
   comparator: string;
   value: string;
@@ -83,8 +70,6 @@ export async function generateSymmetricKey() {
 // Pulled from the Lit sdk and modified to take string
 export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
   const encodedString = uint8arrayFromString(str, "utf8");
-  console.log(encodedString);
-  console.log(symmKey);
   const SYMM_KEY_ALGO_PARAMS = {
     name: "AES-CBC",
     length: 256,
@@ -97,7 +82,6 @@ export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
     ["encrypt"]
   );
 
-  console.log(key);
   const encryptedString = await LitJsSdk.encryptWithSymmetricKey(
     key,
     encodedString.buffer

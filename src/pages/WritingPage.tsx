@@ -93,11 +93,6 @@ const MarkdownSave = ({ title }: { title: string }) => {
   const dispatch = useAppDispatch();
 
   const saveArticle = (markdown: string, title: string) => {
-    console.log("Calling debounce");
-    console.log("here");
-    console.log("markdown");
-    console.log(markdown);
-    console.log(title);
     if (!chainId) {
       return;
     }
@@ -138,8 +133,6 @@ const WritingPage = () => {
   const navigate = useNavigate();
   const params = useParams();
   // get stream id if exists and load content
-  console.log("articleLoading");
-  console.log(articleLoading);
 
   useEffect(() => {
     if (streamId !== params.streamId) {

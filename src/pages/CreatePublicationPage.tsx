@@ -123,9 +123,6 @@ const CreatePublicationForm = () => {
     (state) => state.createPublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    console.log("submitting");
-    console.log(data);
-    console.log("submitting 2");
     if (!chainId) {
       console.error("Chain Id is falsey");
       return;
@@ -195,9 +192,7 @@ const CreatePublicationPage = () => {
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
-  console.log(publication);
   useEffect(() => {
-    console.log("fetching");
     dispatch(fetchPublication());
   }, []);
 

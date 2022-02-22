@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { resolve } from "path";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import { NodeGlobalsPolyfillPlugin } from "@esbuild-plugins/node-globals-polyfill";
 import { viteExternalsPlugin } from "vite-plugin-externals";
 import inject from "@rollup/plugin-inject";
 const externalPlugin = viteExternalsPlugin({

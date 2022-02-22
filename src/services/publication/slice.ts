@@ -38,7 +38,6 @@ export const publicationSlice = createSlice({
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
-      console.log(action);
       state.name = action.payload.name;
       state.description = action.payload.description;
       state.draftAccess = action.payload.draftAccess;
@@ -115,26 +114,12 @@ export const createPublication = createAsyncThunk(
       });
       const draftKey = await generateSymmetricKey();
       const addressAccessControls = singleAddressAccessControl(args.address);
-      console.log(draftKey);
-      console.log({
-        addressAccessControls,
-        draftKey,
-        authSig,
-        chainName: args.chainName,
-      });
       const draftEncryptedSymmetricKey = await litClient.saveEncryptionKey({
         accessControlConditions: addressAccessControls,
         symmetricKey: draftKey,
         authSig,
         chain: args.chainName,
       });
-
-      const symmKey = await getEncryptionKey(
-        args.chainName as ChainName,
-        LitJsSdk.uint8arrayToString(draftEncryptedSymmetricKey, "base16"),
-        addressAccessControls
-      );
-      debugger;
 
       const publishKey = await generateSymmetricKey();
       const publishEncryptedSymmetricKey = await litClient.saveEncryptionKey({
@@ -144,8 +129,6 @@ export const createPublication = createAsyncThunk(
         chain: args.chainName,
       });
 
-      console.log(draftEncryptedSymmetricKey);
-      console.log(publishEncryptedSymmetricKey);
       const publication = {
         name: pub.name,
         description: pub.description,
@@ -178,7 +161,6 @@ export const createPublication = createAsyncThunk(
 export const fetchPublication = createAsyncThunk(
   "publication/fetch",
   async (args, thunkAPI) => {
-    console.log("here");
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -186,46 +168,16 @@ export const fetchPublication = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
-      console.log("here");
       const publication = await store.get("publication");
-      console.log("Fetching");
       console.log(publication);
       if (publication) {
         thunkAPI.dispatch(publicationActions.create(publication));
       }
       return publication;
     } catch (err) {
-      console.log("err");
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to fetch");
     }
   }
 );
-
-// export const addArticle = createAsyncThunk(
-//   "publication/add_article",
-//   async (args, thunkAPI) => {
-//     const client = await getClient();
-//     const model = new DataModel({
-//       ceramic: client.ceramic,
-//       model: PUBLISHED_MODELS,
-//     });
-//     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
-//     try {
-//       console.log("here");
-//       await store.merge(args.streamId, args.streamId);
-//       // store in article redux store
-//       return publication;
-//     } catch (err) {
-//       console.log("err");
-//       console.error(err);
-//       return thunkAPI.rejectWithValue("Failed to fetch");
-//     }
-//   }
-// );
-
-// Action creators are generated for each case reducer function
-// export const { increment, decrement, incrementByAmount } =
-// publicationSlice.actions;
-
 export default publicationSlice.reducer;

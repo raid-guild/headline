@@ -86,14 +86,12 @@ export const createArticle = createAsyncThunk(
     },
     thunkAPI
   ) => {
-    console.log("Thunk");
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
-    console.log("Create Store");
     let content = args.article.text;
     try {
       let publicationUrl;
@@ -109,9 +107,6 @@ export const createArticle = createAsyncThunk(
           args.article.status === "draft"
             ? publication.draftAccess
             : publication.publishAccess;
-        console.log("publication");
-        console.log(publication);
-        console.log(args.chainName);
         const symmetricKey = await getEncryptionKey(
           args.chainName,
           access.encryptedSymmetricKey,
@@ -176,56 +171,3 @@ export const createArticle = createAsyncThunk(
     }
   }
 );
-
-//// async thunk that creates a publication
-//export const createPublication = createAsyncThunk(
-//  "publication/create",
-//  async (args: Publication, thunkAPI) => {
-//    const client = await getClient();
-//    const model = new DataModel({
-//      ceramic: client.ceramic,
-//      model: PUBLICATION_MODEL,
-//    });
-//    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
-//    try {
-//      const publication = {
-//        name: args.name,
-//        description: args.description,
-//        articles: {},
-//      };
-//      await store.set("publication", publication);
-//      return publication;
-//    } catch (err) {
-//      return thunkAPI.rejectWithValue("Failed to save");
-//    }
-//  }
-//);
-//
-//// async thunk that fetches a publication
-//export const fetchPublication = createAsyncThunk(
-//  "publication/fetch",
-//  async (args, thunkAPI) => {
-//    console.log("here");
-//    const client = await getClient();
-//    const model = new DataModel({
-//      ceramic: client.ceramic,
-//      model: PUBLICATION_MODEL,
-//    });
-//    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
-//    try {
-//      console.log("here");
-//      const publication = await store.get("publication");
-//      console.log("Fetching");
-//      console.log(publication);
-//      return publication;
-//    } catch (err) {
-//      return thunkAPI.rejectWithValue("Failed to fetch");
-//    }
-//  }
-//);
-//
-//// Action creators are generated for each case reducer function
-//// export const { increment, decrement, incrementByAmount } =
-//// publicationSlice.actions;
-//
-//export default publicationSlice.reducer;
