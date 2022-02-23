@@ -20,6 +20,7 @@ import BackButton from "components/BackButton";
 import Icon from "components/Icon";
 import Input from "components/Input";
 import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
+import PublicationForm from "components/PublicationForm";
 import Title from "components/Title";
 import Text from "components/Text";
 import FormTextArea from "components/FormTextArea";
@@ -69,14 +70,6 @@ const BodyHeaderContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-`;
-
-const CreateFormContainer = styled.form`
-  max-width: 48rem;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
 `;
 
 const StyledButton = styled(Button)`
@@ -149,30 +142,7 @@ const CreatePublicationForm = () => {
           Create the publication that is truly owned by you
         </Text>
       </BodyHeaderContainer>
-      <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
-        <Controller
-          name="name"
-          control={control}
-          rules={{ required: true }}
-          render={({ field }) => (
-            <Input
-              title="Publication Name"
-              errorMsg={errors?.publicationName}
-              {...field}
-            />
-          )}
-        />
-        <Controller
-          name="description"
-          control={control}
-          render={({ field }) => (
-            <FormTextArea
-              title="Description"
-              errorMsg={errors?.publicationName}
-              {...field}
-            />
-          )}
-        />
+      <PublicationForm onSubmit={onSubmit}>
         <StyledButton
           type="submit"
           size="xl"
@@ -182,7 +152,7 @@ const CreatePublicationForm = () => {
         >
           Looks good, lets do it
         </StyledButton>
-      </CreateFormContainer>
+      </PublicationForm>
     </>
   );
 };

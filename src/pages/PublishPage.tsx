@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@raidguild/quiver";
-import { Link } from "react-router-dom";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 import { fetchPublication } from "services/publication/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
-import Button from "components/Button";
-import { Button as RButton } from "reakit/Button";
 import ArticleCard from "components/ArticleCard";
+import Button from "components/Button";
+import PublicationSettings from "components/PublicationSettings";
 import {
   Layout,
   BodyContainer,
@@ -134,13 +133,6 @@ const EntriesContainer = styled.div`
   width: 100%;
 `;
 
-const StyledToolbarItem = styled(ToolbarItem)`
-  border: none;
-  background: transparent;
-  padding: 2.3rem;
-  cursor: pointer;
-`;
-
 const CardContainer = styled.div`
   margin-top: 1.6rem;
   gap: 1.2rem;
@@ -172,15 +164,42 @@ const ArticleEntries = ({
   );
 };
 
-const PublishBody = () => {
-  const dispatch = useAppDispatch();
-  const { address, chainId } = useWallet();
-  const toolbar = useToolbarState();
-  const params = useParams();
-  const [active, setActive] = useState("content");
+const Articles = () => {
   const articleRegistry = useAppSelector(
     (state) => state.articleRegistry // Name is required in the schema
   );
+  const navigate = useNavigate();
+  const goToWritingPage = () => {
+    navigate(WRITING_URI);
+  };
+  return (
+    <EntriesContainer>
+      <EntriesHeader>
+        <Text size="md" color="label">
+          Entries
+        </Text>
+        <Button size="lg" color="primary" onClick={goToWritingPage}>
+          Write a Post
+        </Button>
+      </EntriesHeader>
+      <CardContainer>
+        {Object.keys(articleRegistry).length ? (
+          <ArticleEntries articleRegistry={articleRegistry} />
+        ) : (
+          <EmtptyEntriesMessage />
+        )}
+      </CardContainer>
+    </EntriesContainer>
+  );
+};
+
+const PublishBody = () => {
+  const dispatch = useAppDispatch();
+  const { chainId } = useWallet();
+  const toolbar = useToolbarState();
+  const params = useParams();
+  const navigate = useNavigate();
+  const [active, setActive] = useState("content");
 
   useEffect(() => {
     setActive(params.menu || "content");
@@ -194,11 +213,6 @@ const PublishBody = () => {
     dispatch(fetchArticleRegistry({ chainName: networks[chainId]?.litName }));
   }, []);
 
-  const navigate = useNavigate();
-  const goToWritingPage = () => {
-    navigate(WRITING_URI);
-  };
-
   const handleClick = useCallback(
     (toolItem) => {
       if (params.menu !== toolItem) {
@@ -207,6 +221,17 @@ const PublishBody = () => {
     },
     [params.menu]
   );
+
+  const selectBody = () => {
+    switch (active) {
+      case "content":
+        return <Articles />;
+      case "settings":
+        return <PublicationSettings />;
+      default:
+        return <Articles />;
+    }
+  };
 
   return (
     <StyledBodyContainer>
@@ -235,23 +260,7 @@ const PublishBody = () => {
           </ToolbarItem>
         </Toolbar>
       </ToolbarContainer>
-      <EntriesContainer>
-        <EntriesHeader>
-          <Text size="md" color="label">
-            Entries
-          </Text>
-          <Button size="lg" color="primary" onClick={goToWritingPage}>
-            Write a Post
-          </Button>
-        </EntriesHeader>
-        <CardContainer>
-          {Object.keys(articleRegistry).length ? (
-            <ArticleEntries articleRegistry={articleRegistry} />
-          ) : (
-            <EmtptyEntriesMessage />
-          )}
-        </CardContainer>
-      </EntriesContainer>
+      {selectBody()}
     </StyledBodyContainer>
   );
 };

@@ -179,4 +179,46 @@ export const fetchPublication = createAsyncThunk(
     }
   }
 );
+//
+// async thunk that creates a publication
+export const updatePublication = createAsyncThunk(
+  "publication/create",
+  async (
+    args: {
+      publication: {
+        update: "name" | "decription";
+        value: [keyof Omit<Publication, "draftAccess" | "publishAccess">];
+      };
+      address: string;
+      chainName: string;
+    },
+    thunkAPI
+  ) => {
+    if (!args.address) {
+      return;
+    }
+    const pub = args.publication;
+    const client = await getClient();
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLISHED_MODELS,
+    });
+    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    try {
+      const { publication } = thunkAPI.getState();
+      const updatedPublication = {
+        ...publication,
+        name: pub.name,
+        description: pub.description,
+      };
+      await store.set("publication", publication);
+      thunkAPI.dispatch(publicationActions.create(publication));
+      return publication;
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to save");
+    }
+  }
+);
+
 export default publicationSlice.reducer;
