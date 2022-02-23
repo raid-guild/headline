@@ -1,11 +1,12 @@
 import React, { HTMLAttributes } from "react";
 import styled from "styled-components";
 import { InputProps, Input as RInput } from "reakit/Input";
+import { FieldError } from "react-hook-form";
 import Text from "components/Text";
 
 type LocalProps = {
   title: string;
-  errorMsg: string;
+  errorMsg: FieldError;
   className?: string;
 };
 
@@ -34,13 +35,24 @@ const StyledLabel = styled.label`
 
 type Props = LocalProps & InputProps & HTMLAttributes<HTMLInputElement>;
 
+const ErrorText = styled(Text)`
+  padding-left: 0.8rem;
+  color: red;
+`;
+
 // Might need to rename to Form input
 const Input = ({ className, title, errorMsg, ...rest }: Props) => {
   return (
     <InputContainer>
       <StyledLabel>{title}</StyledLabel>
       <StyledInput className={className} {...rest} />
-      {errorMsg && <Text size="sm">{errorMsg}</Text>}
+      {errorMsg && (
+        <ErrorText size="sm" color="grey">
+          {errorMsg.type === "required"
+            ? `${errorMsg.ref?.name} is a required field`
+            : "Failed validation"}
+        </ErrorText>
+      )}
     </InputContainer>
   );
 };

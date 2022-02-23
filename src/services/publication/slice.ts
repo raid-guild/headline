@@ -189,7 +189,6 @@ export const fetchPublication = createAsyncThunk(
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       const publication = await store.get("publication");
-      console.log(publication);
       if (publication) {
         thunkAPI.dispatch(publicationActions.create(publication));
       }

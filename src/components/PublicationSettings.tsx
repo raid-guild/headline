@@ -74,21 +74,17 @@ const PublicationSettings = () => {
         </Title>
         <PublicationInputsContainer>
           <PublicationForm onSubmit={onSubmit}>
-            <ButtonContainer>
-              <StyledButton size="lg" variant="outlined" color="secondary">
-                Cancel
-              </StyledButton>
-              <StyledButton
-                size="lg"
-                type="submit"
-                color="primary"
-                variant="contained"
-                isLoading={publicationLoading}
-                loadingText="Updating..."
-              >
-                Submit
-              </StyledButton>
-            </ButtonContainer>
+            <StyledButton
+              size="lg"
+              type="submit"
+              color="primary"
+              variant="contained"
+              isLoading={publicationLoading}
+              loadingText="Updating..."
+              onClick={() => console.log("Clicking")}
+            >
+              Submit
+            </StyledButton>
           </PublicationForm>
         </PublicationInputsContainer>
       </PublicationInfoContainer>

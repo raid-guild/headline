@@ -32,6 +32,8 @@ const PublicationForm = ({ onSubmit, children }: Props) => {
     handleSubmit,
     control,
   } = useForm();
+  console.log("Error");
+  console.log(errors);
   const { chainId } = useWallet();
   const dispatch = useAppDispatch();
   const publication = useAppSelector(
@@ -53,23 +55,19 @@ const PublicationForm = ({ onSubmit, children }: Props) => {
         name="name"
         control={control}
         rules={{ required: true }}
+        defaultValue={publication.name}
         render={({ field }) => (
-          <Input
-            title="Publication Name"
-            defaultValue={publication.name}
-            errorMsg={errors?.publicationName}
-            {...field}
-          />
+          <Input title="Publication Name" errorMsg={errors?.name} {...field} />
         )}
       />
       <Controller
         name="description"
         control={control}
+        defaultValue={publication.description}
         render={({ field }) => (
           <FormTextArea
             title="Description"
-            defaultValue={publication.description}
-            errorMsg={errors?.publicationName}
+            errorMsg={errors?.description}
             {...field}
           />
         )}
