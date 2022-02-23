@@ -100,23 +100,23 @@ export const fetchArticleRegistry = createAsyncThunk(
 
         // Having trouble decrypting Lit's docs bad
         // decrypt text
-        // if (ceramicArticle.status === "draft" || ceramicArticle.paid) {
-        //   const { publication } = thunkAPI.getState() as RootState;
-        //   const access =
-        //     ceramicArticle.status === "draft"
-        //       ? publication.draftAccess
-        //       : publication.publishAccess;
+        if (ceramicArticle.status === "draft" || ceramicArticle.paid) {
+          const { publication } = thunkAPI.getState() as RootState;
+          const access =
+            ceramicArticle.status === "draft"
+              ? publication.draftAccess
+              : publication.publishAccess;
 
-        //   const symmetricKey = await getEncryptionKey(
-        //     args.chainName,
-        //     access.encryptedSymmetricKey,
-        //     access.accessControlConditions
-        //   );
-        //   console.log("Decrypting");
-        //   const a = decryptText(articleText, symmetricKey);
-        //   console.log("Deecrypted");
-        //   console.log(a);
-        // }
+          const symmetricKey = await getEncryptionKey(
+            args.chainName,
+            access.encryptedSymmetricKey,
+            access.accessControlConditions
+          );
+          console.log("Decrypting");
+          const a = decryptText(articleText, symmetricKey);
+          console.log("Deecrypted");
+          console.log(a);
+        }
         articleText =
           "Electron is an API for writing services and mobile application framework sorts out the exact class of common host environment. Test-Driven Development. It has some strict properties. Ember is a community-driven attempt at explaining the concept. Singleton Pattern is a JavaScript.";
         thunkAPI.dispatch(

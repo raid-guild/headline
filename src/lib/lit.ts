@@ -109,30 +109,6 @@ export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
   return encryptedString;
 }
 
-// Pulled from the Lit sdk and modified to take string
-export async function decryptStringWithKey(str: string, symmKey: Uint8Array) {
-  const SYMM_KEY_ALGO_PARAMS = {
-    name: "AES-CBC",
-    length: 256,
-  };
-  const key = await crypto.subtle.importKey(
-    "raw",
-    symmKey,
-    SYMM_KEY_ALGO_PARAMS,
-    false,
-    ["decrypt"]
-  );
-
-  console.log("inner decrypting");
-  const decryptedStringArrayBuffer = await LitJsSdk.decryptWithSymmetricKey(
-    key,
-    new Blob([str])
-  );
-  console.log("inner decrypted");
-
-  return uint8arrayToString(new Uint8Array(decryptedStringArrayBuffer), "utf8");
-}
-
 export const encryptText = async (text: string, symmKey: Uint8Array) => {
   const encryptedString = await encryptStringWithKey(text, symmKey);
 
@@ -140,8 +116,11 @@ export const encryptText = async (text: string, symmKey: Uint8Array) => {
 };
 
 export const decryptText = async (text: string, symmKey: Uint8Array) => {
-  const x = uint8arrayFromString(text, "utf8");
-  const decryptedString = await LitJsSdk.decryptString(new Blob([x]), symmKey);
+  // const x = uint8arrayFromString(text, "utf8");
+  const decryptedString = await LitJsSdk.decryptString(
+    new Blob([text]),
+    symmKey
+  );
 
   return decryptedString;
 };
