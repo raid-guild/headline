@@ -10,8 +10,8 @@ import Separator from "components/Separator";
 import Title from "components/Title";
 
 import { networks } from "lib/networks";
-import { createPublication } from "services/publication/slice";
-import { useAppDispatch } from "store";
+import { updatePublication } from "services/publication/slice";
+import { useAppSelector, useAppDispatch } from "store";
 
 const PublicationInfoContainer = styled.div`
   background: ${({ theme }) => theme.colors.backgroundGrey};
@@ -44,13 +44,16 @@ const StyledButton = styled(Button)`
 const PublicationSettings = () => {
   const { address, chainId } = useWallet();
   const dispatch = useAppDispatch();
+  const publicationLoading = useAppSelector(
+    (state) => state.updatePublication.loading
+  );
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     if (!chainId) {
       console.error("Chain Id is falsey");
       return;
     }
     dispatch(
-      createPublication({
+      updatePublication({
         publication: {
           name: data.name || "",
           description: data.description || "",
@@ -73,7 +76,15 @@ const PublicationSettings = () => {
           <PublicationForm onSubmit={onSubmit}>
             <ButtonContainer>
               <StyledButton size="lg">Cancel</StyledButton>
-              <StyledButton size="lg" type="submit" color="primary" isLoading={publicationLoading loadingText="Updating..."}>Submit</StyledButton>
+              <StyledButton
+                size="lg"
+                type="submit"
+                color="primary"
+                isLoading={publicationLoading}
+                loadingText="Updating..."
+              >
+                Submit
+              </StyledButton>
             </ButtonContainer>
           </PublicationForm>
         </PublicationInputsContainer>
