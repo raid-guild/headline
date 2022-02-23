@@ -75,11 +75,14 @@ const PublicationSettings = () => {
         <PublicationInputsContainer>
           <PublicationForm onSubmit={onSubmit}>
             <ButtonContainer>
-              <StyledButton size="lg">Cancel</StyledButton>
+              <StyledButton size="lg" variant="outlined" color="secondary">
+                Cancel
+              </StyledButton>
               <StyledButton
                 size="lg"
                 type="submit"
                 color="primary"
+                variant="contained"
                 isLoading={publicationLoading}
                 loadingText="Updating..."
               >

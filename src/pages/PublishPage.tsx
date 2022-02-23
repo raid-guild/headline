@@ -85,7 +85,12 @@ const CreatePublicationView = () => {
             all.
           </Text>
           <div>
-            <Button size="xl" onClick={goToCreatePublication}>
+            <Button
+              size="xl"
+              color="primary"
+              variant="contained"
+              onClick={goToCreatePublication}
+            >
               Create my publication
             </Button>
           </div>
@@ -178,7 +183,12 @@ const Articles = () => {
         <Text size="md" color="label">
           Entries
         </Text>
-        <Button size="lg" color="primary" onClick={goToWritingPage}>
+        <Button
+          size="lg"
+          color="primary"
+          variant="contained"
+          onClick={goToWritingPage}
+        >
           Write a Post
         </Button>
       </EntriesHeader>

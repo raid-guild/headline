@@ -92,7 +92,12 @@ const SuccessfullyCreatedPublication = ({ name }: { name: string }) => {
         </Text>
       </BodyHeaderContainer>
       <StyledIcon size="xl" src={celebrateIcon} alt="A celebration icon" />
-      <StyledButton size="xl" onClick={goToPublish}>
+      <StyledButton
+        color="primary"
+        variant="contained"
+        size="xl"
+        onClick={goToPublish}
+      >
         Start Writing
       </StyledButton>
       <Link to={"/dashboard"}>
@@ -147,6 +152,7 @@ const CreatePublicationForm = () => {
           type="submit"
           size="xl"
           color="primary"
+          variant="contained"
           isLoading={publicationLoading}
           loadingText="Creating..."
         >
