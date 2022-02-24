@@ -83,7 +83,7 @@ const PublicationSettings = () => {
               loadingText="Updating..."
               onClick={() => console.log("Clicking")}
             >
-              Submit
+              Save
             </StyledButton>
           </PublicationForm>
         </PublicationInputsContainer>

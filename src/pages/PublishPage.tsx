@@ -8,6 +8,7 @@ import { fetchPublication } from "services/publication/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import ArticleCard from "components/ArticleCard";
 import Button from "components/Button";
+import EmailSettings from "components/EmailSettings";
 import PublicationSettings from "components/PublicationSettings";
 import {
   Layout,
@@ -203,6 +204,16 @@ const Articles = () => {
   );
 };
 
+const SettingsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3.2rem;
+  width: 100%;
+  height: 100%;
+  padding: 3.2rem;
+  max-width: 90rem;
+`;
+
 const PublishBody = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
@@ -237,7 +248,12 @@ const PublishBody = () => {
       case "content":
         return <Articles />;
       case "settings":
-        return <PublicationSettings />;
+        return (
+          <SettingsContainer>
+            <PublicationSettings />
+            <EmailSettings />
+          </SettingsContainer>
+        );
       default:
         return <Articles />;
     }
