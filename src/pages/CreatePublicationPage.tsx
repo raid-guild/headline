@@ -194,6 +194,12 @@ const CreatePublicationPage = () => {
   );
   useEffect(() => {
     dispatch(fetchPublication());
+    const x = async () => {
+      const y = new Blob(["testing string conversion"]);
+      const z = await y.text();
+      console.log(`TYest ${z}`);
+    };
+    x();
   }, []);
 
   return (

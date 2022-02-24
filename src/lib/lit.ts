@@ -87,7 +87,10 @@ export async function generateSymmetricKey() {
 }
 
 // Pulled from the Lit sdk and modified to take string
-export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
+export async function encryptStringWithKey(
+  str: string,
+  symmKey: Uint8Array
+): Promise<Blob> {
   const encodedString = uint8arrayFromString(str, "utf8");
   const SYMM_KEY_ALGO_PARAMS = {
     name: "AES-CBC",
@@ -98,7 +101,7 @@ export async function encryptStringWithKey(str: string, symmKey: Uint8Array) {
     symmKey,
     SYMM_KEY_ALGO_PARAMS,
     false,
-    ["encrypt"]
+    ["encrypt", "decrypt"]
   );
 
   const encryptedString = await LitJsSdk.encryptWithSymmetricKey(
@@ -117,8 +120,12 @@ export const encryptText = async (text: string, symmKey: Uint8Array) => {
 
 export const decryptText = async (text: string, symmKey: Uint8Array) => {
   // const x = uint8arrayFromString(text, "utf8");
+  console.log(
+    `Text DB ${new Blob([text], { type: "application/octet-stream" }).size}`
+  );
+  console.log(`Text D ${text}`);
   const decryptedString = await LitJsSdk.decryptString(
-    new Blob([text]),
+    new Blob([text], { type: "application/octet-stream" }),
     symmKey
   );
 

@@ -110,7 +110,12 @@ export const createArticle = createAsyncThunk(
           access.encryptedSymmetricKey,
           access.accessControlConditions
         );
-        content = await encryptText(content, symmetricKey);
+        const blob = await encryptText(content, symmetricKey);
+        content = await blob.text();
+        console.log(`Text EB ${blob.size}`);
+        console.log(`Text EB ${blob.type}`);
+        console.log(`Text E ${content}`);
+        console.log(content);
       }
       const ipfs = getIPFSClient();
       console.log({ content: args.article.text });
