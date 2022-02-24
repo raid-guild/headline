@@ -182,7 +182,6 @@ const WritingPage = () => {
       <StyledBody>
         <StyledInput
           title=""
-          errorMsg=""
           placeholder="Enter title..."
           onChange={onTitleChange}
         />

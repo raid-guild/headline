@@ -32,11 +32,6 @@ const PublicationSettingsContainer = styled.div`
   padding: 2.4rem;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
 const StyledButton = styled(Button)`
   width: 100%;
 `;

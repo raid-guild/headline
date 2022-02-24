@@ -46,9 +46,6 @@ const PublicationForm = ({ onSubmit, children }: Props) => {
     }
   }, []);
 
-  // fetch publication
-  // set as default
-
   return (
     <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
       <Controller

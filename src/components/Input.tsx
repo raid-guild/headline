@@ -6,7 +6,7 @@ import Text from "components/Text";
 
 type LocalProps = {
   title: string;
-  errorMsg: FieldError;
+  errorMsg?: FieldError;
   className?: string;
 };
 

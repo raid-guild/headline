@@ -41,20 +41,7 @@ const EmailDialogContainer = styled.div`
 
 const EmailSettings = () => {
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    // if (!chainId) {
-    //   console.error("Chain Id is falsey");
-    //   return;
-    // }
-    // dispatch(
-    //   updatePublication({
-    //     publication: {
-    //       name: data.name || "",
-    //       description: data.description || "",
-    //     },
-    //     address: address || "",
-    //     chainName: networks[chainId]?.litName,
-    //   })
-    // );
+    console.log("To do");
   }, []);
 
   return (
@@ -63,8 +50,8 @@ const EmailSettings = () => {
         Email Service
       </Title>
       <Text size="base" color="label">
-        Currently we support sengrid to send emails and it's required to have a
-        sendgrid account in order to start mailing to your subscribers.
+        Currently we support sengrid to send emails and it&#39;s required to
+        have a sendgrid account in order to start mailing to your subscribers.
       </Text>
       <ConfigureButtonContainer>
         <Dialog
