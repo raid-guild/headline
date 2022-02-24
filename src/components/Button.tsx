@@ -21,7 +21,8 @@ const customStyles = {
       color: ${({ theme }) => theme.colors.almostWhite};
       background: ${({ theme, isLoading, color }) =>
         isLoading ? theme.colors.grey : theme.colors[color || "primary"]};
-      border: none;
+      border: ${({ theme, isLoading }) =>
+        isLoading ? `none` : `.2rem solid ${theme.colors.primary}`};
 
       color: ${({ theme }) => theme.colors.white};
       background-color: ${({ theme, isLoading }) =>
@@ -30,8 +31,6 @@ const customStyles = {
       &:hover {
         background: ${({ theme, isLoading }) =>
           isLoading ? theme.colors.grey : `none`};
-        border: ${({ theme, isLoading }) =>
-          isLoading ? `none` : `.2rem solid ${theme.colors.primary}`};
         color: ${({ theme, isLoading }) =>
           isLoading ? theme.colors.almostWhite : theme.colors.primary};
       }
@@ -47,7 +46,6 @@ const customStyles = {
 
       &:hover {
         background: ${({ theme }) => theme.colors.grey};
-        border: none;
         color: ${({ theme }) => theme.colors.almostWhite};
       }
     `,

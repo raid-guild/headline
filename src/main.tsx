@@ -8,6 +8,7 @@ import theme from "theme";
 import { CeramicProvider } from "context/CeramicContext";
 import { store } from "store";
 import { Provider } from "react-redux";
+import { Provider as ReakitProvider } from "reakit";
 
 import { WalletProvider } from "@raidguild/quiver";
 
@@ -54,7 +55,9 @@ ReactDOM.render(
       >
         <ThemeProvider theme={theme}>
           <CeramicProvider>
-            <Routes />
+            <ReakitProvider>
+              <Routes />
+            </ReakitProvider>
           </CeramicProvider>
         </ThemeProvider>
         <GlobalStyle />
