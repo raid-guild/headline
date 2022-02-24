@@ -72,6 +72,8 @@ const LoggedOutBody = ({
         </Text>
         <div>
           <Button
+            color="primary"
+            variant="contained"
             size="xl"
             onClick={connect}
             isLoading={isConnecting}
@@ -172,7 +174,12 @@ const LoggedInBody = () => {
             </Text>
           </a>
         </PublicationCopyContainer>
-        <Button size="xl" onClick={goToCreatePublication}>
+        <Button
+          color="primary"
+          variant="contained"
+          size="xl"
+          onClick={goToCreatePublication}
+        >
           Create my publication
         </Button>
       </PublicationContainer>
@@ -197,7 +204,9 @@ const LoggedInBody = () => {
             </Text>
             <Title size="sm">Tips for you from the Unlock team</Title>
           </div>
-          <Button size="xl">Subscribe</Button>
+          <Button size="xl" color="primary" variant="contained">
+            Subscribe
+          </Button>
         </LearnMoreContainer>
       </SubscriptionContainer>
     </LoggedInContainer>

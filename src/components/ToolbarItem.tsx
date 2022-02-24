@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ToolbarItem as ToolbarItemR, ToolbarItemProps } from "reakit/Toolbar";
 
 type Props = {
-  active?: boolean;
+  active: boolean;
   children?: string | React.ReactNode;
 } & ToolbarItemProps;
 

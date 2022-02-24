@@ -13,6 +13,7 @@ import {
   AccessControl,
   Operator,
 } from "lib/lit";
+import { RootState } from "store";
 
 export type Publication = {
   name: string;
@@ -73,13 +74,33 @@ export const createPublicationSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createPublication.fulfilled, (state, action) => {
+    builder.addCase(createPublication.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(createPublication.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(createPublication.rejected, (state, action) => {
+      console.error(action);
+      state.loading = false;
+    });
+  },
+});
+
+export const updatePublicationSlice = createSlice({
+  name: "updatePublication",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(updatePublication.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updatePublication.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updatePublication.rejected, (state, action) => {
       console.error(action);
       state.loading = false;
     });
@@ -168,7 +189,6 @@ export const fetchPublication = createAsyncThunk(
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       const publication = await store.get("publication");
-      console.log(publication);
       if (publication) {
         thunkAPI.dispatch(publicationActions.create(publication));
       }
@@ -179,4 +199,43 @@ export const fetchPublication = createAsyncThunk(
     }
   }
 );
+
+// async thunk that creates a publication
+export const updatePublication = createAsyncThunk(
+  "publication/update",
+  async (
+    args: {
+      publication: Omit<Publication, "draftAccess" | "publishAccess">;
+      address: string;
+      chainName: string;
+    },
+    thunkAPI
+  ) => {
+    if (!args.address) {
+      return;
+    }
+    const pub = args.publication;
+    const client = await getClient();
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLISHED_MODELS,
+    });
+    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    try {
+      const { publication } = thunkAPI.getState() as RootState;
+      const updatedPublication = {
+        ...publication,
+        name: pub.name,
+        description: pub.description,
+      };
+      await store.set("publication", updatedPublication);
+      thunkAPI.dispatch(publicationActions.create(updatedPublication));
+      return publication;
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to update publication");
+    }
+  }
+);
+
 export default publicationSlice.reducer;
