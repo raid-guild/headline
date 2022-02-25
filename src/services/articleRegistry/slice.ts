@@ -1,3 +1,4 @@
+import { Base64 } from "js-base64";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { DataModel } from "@glazed/datamodel";
@@ -8,6 +9,7 @@ import { PUBLISHED_MODELS } from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
+import uint8arrayFromString from "uint8arrays/from-string";
 
 import { getIPFSClient } from "lib/ipfs";
 
@@ -113,7 +115,12 @@ export const fetchArticleRegistry = createAsyncThunk(
             access.accessControlConditions
           );
           console.log("Decrypting");
-          const a = decryptText(articleText, symmetricKey);
+          console.log(articleText);
+          console.log(symmetricKey);
+          const a = await decryptText(
+            uint8arrayFromString(articleText, "base64"),
+            symmetricKey
+          ).catch((e) => console.error(e));
           console.log("Deecrypted");
           console.log(a);
         }

@@ -125,7 +125,7 @@ export const decryptText = async (text: string, symmKey: Uint8Array) => {
   );
   console.log(`Text D ${text}`);
   const decryptedString = await LitJsSdk.decryptString(
-    new Blob([text], { type: "application/octet-stream" }),
+    new Blob([text]),
     symmKey
   );
 

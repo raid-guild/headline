@@ -1,9 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Base64 } from "js-base64";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { getIPFSClient } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
+import uint8arrayToString from "uint8arrays/to-string";
 
 import { addRegistryArticle } from "services/articleRegistry/slice";
 import { getEncryptionKey, encryptText } from "lib/lit";
@@ -110,8 +112,12 @@ export const createArticle = createAsyncThunk(
           access.encryptedSymmetricKey,
           access.accessControlConditions
         );
+        console.log(access.encryptedSymmetricKey);
         const blob = await encryptText(content, symmetricKey);
-        content = await blob.text();
+        content = uint8arrayToString(
+          new Uint8Array(await blob.arrayBuffer()),
+          "base64"
+        );
         console.log(`Text EB ${blob.size}`);
         console.log(`Text EB ${blob.type}`);
         console.log(`Text E ${content}`);
