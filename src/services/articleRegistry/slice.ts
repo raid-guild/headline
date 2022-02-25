@@ -10,6 +10,7 @@ import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
 import uint8arrayFromString from "uint8arrays/from-string";
+import { createSelector } from "@reduxjs/toolkit";
 
 import { getIPFSClient } from "lib/ipfs";
 
@@ -22,10 +23,29 @@ export const articleRegistrySlice = createSlice({
         state[action.payload.streamId] = action.payload;
       }
     },
+    update(state, action: PayloadAction<Article>) {
+      if (action.payload.streamId) {
+        state[action.payload.streamId] = action.payload;
+      }
+    },
   },
 });
 
 export const articleRegistryActions = articleRegistrySlice.actions;
+
+export const articleRegistrySelectors = {
+  getArticleByStreamId: createSelector(
+    [
+      // Usual first input - extract value from `state`
+      (state) => state.articleRegistry,
+      // Take the second arg, `category`, and forward to the output selector
+      (state, streamId) => streamId,
+    ],
+    (articleRegistry, streamId) => {
+      return articleRegistry[streamId];
+    }
+  ),
+};
 
 export const addArticleSlice = createSlice({
   name: "addArticle",
@@ -121,11 +141,10 @@ export const fetchArticleRegistry = createAsyncThunk(
             uint8arrayFromString(articleText, "base64"),
             symmetricKey
           ).catch((e) => console.error(e));
+          articleText = a || "error";
           console.log("Deecrypted");
           console.log(a);
         }
-        articleText =
-          "Electron is an API for writing services and mobile application framework sorts out the exact class of common host environment. Test-Driven Development. It has some strict properties. Ember is a community-driven attempt at explaining the concept. Singleton Pattern is a JavaScript.";
         thunkAPI.dispatch(
           articleRegistryActions.add({
             ...ceramicArticle,

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Base64 } from "js-base64";
+import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
@@ -7,7 +7,10 @@ import { getIPFSClient } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
 import uint8arrayToString from "uint8arrays/to-string";
 
-import { addRegistryArticle } from "services/articleRegistry/slice";
+import {
+  addRegistryArticle,
+  articleRegistryActions,
+} from "services/articleRegistry/slice";
 import { getEncryptionKey, encryptText } from "lib/lit";
 import { RootState } from "store";
 import { ChainName } from "types";
@@ -165,6 +168,7 @@ export const createArticle = createAsyncThunk(
           streamId: streamId,
           text: args.article.text,
         };
+        // TODO: Is this necessary with the article registry
         thunkAPI.dispatch(articleActions.create(article));
         thunkAPI.dispatch(addRegistryArticle(streamId));
         // save to registry
@@ -177,6 +181,100 @@ export const createArticle = createAsyncThunk(
     } catch (err) {
       console.log(err);
       return thunkAPI.rejectWithValue("Failed to save");
+    }
+  }
+);
+
+export const updateArticle = createAsyncThunk(
+  "article/update",
+  async (
+    args: {
+      article: Omit<Article, "publicationUrl">;
+      streamId: string;
+      encrypt?: boolean;
+      chainName?: ChainName;
+    },
+    thunkAPI
+  ) => {
+    const client = await getClient();
+    let content = args.article.text;
+    try {
+      let publicationUrl;
+      if (args.encrypt) {
+        if (!args.article.status) {
+          throw Error("Missing encrypt type");
+        }
+        if (!args.chainName) {
+          throw Error("Missing chain name");
+        }
+        const { publication } = thunkAPI.getState() as RootState;
+        const access =
+          args.article.status === "draft"
+            ? publication.draftAccess
+            : publication.publishAccess;
+        const symmetricKey = await getEncryptionKey(
+          args.chainName,
+          access.encryptedSymmetricKey,
+          access.accessControlConditions
+        );
+        console.log(access.encryptedSymmetricKey);
+        const blob = await encryptText(content, symmetricKey);
+        content = uint8arrayToString(
+          new Uint8Array(await blob.arrayBuffer()),
+          "base64"
+        );
+      }
+      const ipfs = getIPFSClient();
+      if (args.article.text) {
+        const cid = await ipfs.add(
+          { content: content },
+          {
+            cidVersion: 1,
+            hashAlg: "sha2-256",
+          }
+        );
+        console.log(cid);
+        await ipfs.pin.add(CID.parse(cid.path));
+        publicationUrl = `ipfs://${cid.path}`;
+      }
+
+      const article = {
+        publicationUrl: publicationUrl,
+        title: args.article.title || "",
+        createdAt: args.article.createdAt,
+        status: args.article.status,
+        // previewImg: args.article?.previewImg,
+        paid: args.article.paid || false,
+      };
+      console.log(article);
+      if (publicationUrl) {
+        const baseArticle = {
+          publicationUrl: publicationUrl,
+          title: args.article.title || "",
+          createdAt: args.article.createdAt,
+          status: args.article.status,
+          // previewImg: args.article?.previewImg,
+          paid: args.article.paid || false,
+        };
+
+        const doc = await TileDocument.load(client.ceramic, args.streamId);
+
+        await doc.update(baseArticle);
+        thunkAPI.dispatch(
+          articleRegistryActions.update({
+            ...baseArticle,
+            streamId: args.streamId,
+            text: args.article.text,
+          })
+        );
+        // save to registry
+        console.log("Article Updated");
+        return baseArticle;
+      }
+      return;
+    } catch (err) {
+      console.log(err);
+      return thunkAPI.rejectWithValue("Failed to update");
     }
   }
 );
