@@ -5,6 +5,7 @@ import {
   publicationSlice,
   createPublicationSlice,
   fetchPublicationSlice,
+  updatePublicationSlice,
 } from "services/publication/slice";
 import {
   articleRegistrySlice,
@@ -18,6 +19,7 @@ export const store = configureStore({
     [createArticleSlice.name]: createArticleSlice.reducer,
     [createPublicationSlice.name]: createPublicationSlice.reducer,
     [fetchPublicationSlice.name]: fetchPublicationSlice.reducer,
+    [updatePublicationSlice.name]: updatePublicationSlice.reducer,
     [addArticleSlice.name]: addArticleSlice.reducer,
     [articleRegistrySlice.name]: articleRegistrySlice.reducer,
   },

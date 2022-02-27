@@ -188,17 +188,18 @@ const WritingPage = () => {
           <Text size="sm" color="helpText">
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
-          <StyledIconButton size="sm" color="almostWhite" borderColor="primary">
+          <StyledIconButton size="sm" color="primary" variant="contained">
             <StyledIcon size="md" src={settings} alt="settings button" />
           </StyledIconButton>
-          <Button size="base">Published</Button>
+          <Button size="base" color="primary" variant="contained">
+            Published
+          </Button>
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>
         <StyledInput
           title=""
           defaultValue={article?.title || "Untitled"}
-          errorMsg=""
           placeholder="Enter title..."
           onChange={onTitleChange}
         />
