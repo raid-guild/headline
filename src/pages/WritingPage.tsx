@@ -105,7 +105,6 @@ const MarkdownSave = ({ title }: { title: string }) => {
           article: {
             title: title,
             text: markdown,
-            createdAt: "",
             status: "draft",
           },
           streamId: localStreamId,
@@ -207,14 +206,14 @@ const WritingPage = () => {
       <StyledBody>
         <StyledInput
           title=""
-          defaultValue={article.title}
+          defaultValue={article?.title || "Untitled"}
           errorMsg=""
           placeholder="Enter title..."
           onChange={onTitleChange}
         />
         <StyledMarkdownEditor
           placeholder="Start typing..."
-          initialContent={article.text}
+          initialContent={article?.text || ""}
           state={state}
           onChange={onChange}
         >

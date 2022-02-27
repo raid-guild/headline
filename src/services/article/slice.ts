@@ -189,7 +189,7 @@ export const updateArticle = createAsyncThunk(
   "article/update",
   async (
     args: {
-      article: Omit<Article, "publicationUrl">;
+      article: Omit<Article, "publicationUrl" | "createdAt">;
       streamId: string;
       encrypt?: boolean;
       chainName?: ChainName;
@@ -198,6 +198,8 @@ export const updateArticle = createAsyncThunk(
   ) => {
     const client = await getClient();
     let content = args.article.text;
+    const { articleRegistry } = thunkAPI.getState() as RootState;
+    const existingArticle = articleRegistry[args.streamId];
     try {
       let publicationUrl;
       if (args.encrypt) {
@@ -241,7 +243,6 @@ export const updateArticle = createAsyncThunk(
       const article = {
         publicationUrl: publicationUrl,
         title: args.article.title || "",
-        createdAt: args.article.createdAt,
         status: args.article.status,
         // previewImg: args.article?.previewImg,
         paid: args.article.paid || false,
@@ -251,22 +252,19 @@ export const updateArticle = createAsyncThunk(
         const baseArticle = {
           publicationUrl: publicationUrl,
           title: args.article.title || "",
-          createdAt: args.article.createdAt,
           status: args.article.status,
           // previewImg: args.article?.previewImg,
           paid: args.article.paid || false,
         };
 
         const doc = await TileDocument.load(client.ceramic, args.streamId);
-
-        await doc.update(baseArticle);
-        thunkAPI.dispatch(
-          articleRegistryActions.update({
-            ...baseArticle,
-            streamId: args.streamId,
-            text: args.article.text,
-          })
-        );
+        const updatedArticle = {
+          ...existingArticle,
+          ...baseArticle,
+        };
+        console.log(updatedArticle);
+        await doc.update(updatedArticle);
+        thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
         // save to registry
         console.log("Article Updated");
         return baseArticle;

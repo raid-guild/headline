@@ -145,6 +145,8 @@ export const fetchArticleRegistry = createAsyncThunk(
           console.log("Deecrypted");
           console.log(a);
         }
+        console.log("Fetched Article");
+        console.log(ceramicArticle);
         thunkAPI.dispatch(
           articleRegistryActions.add({
             ...ceramicArticle,
