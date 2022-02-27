@@ -63,86 +63,75 @@ export const createArticleSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(createArticle.fulfilled, (state, action) => {
-      console.log("Success");
-      console.log(state);
+    builder.addCase(createArticle.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(createArticle.pending, (state) => {
       state.loading = true;
-      console.log("Pending");
     });
-    builder.addCase(createArticle.rejected, (state, action) => {
-      console.log(action);
-      console.log("Err");
+    builder.addCase(createArticle.rejected, (state) => {
       state.loading = false;
     });
   },
 });
 
-export const createArticle = createAsyncThunk(
-  "article/create",
-  async (
-    args: {
-      article: Omit<Article, "publicationUrl">;
-      encrypt?: boolean;
-      chainName?: ChainName;
-    },
-    thunkAPI
-  ) => {
-    const client = await getClient();
-    const model = new DataModel({
-      ceramic: client.ceramic,
-      model: PUBLISHED_MODELS,
-    });
-    let content = args.article.text;
-    try {
-      let publicationUrl;
-      if (args.encrypt) {
-        if (!args.article.status) {
-          throw Error("Missing encrypt type");
-        }
-        if (!args.chainName) {
-          throw Error("Missing chain name");
-        }
-        const { publication } = thunkAPI.getState() as RootState;
-        const access =
-          args.article.status === "draft"
-            ? publication.draftAccess
-            : publication.publishAccess;
-        const symmetricKey = await getEncryptionKey(
-          args.chainName,
-          access.encryptedSymmetricKey,
-          access.accessControlConditions
-        );
-        console.log(access.encryptedSymmetricKey);
-        const blob = await encryptText(content, symmetricKey);
-        content = uint8arrayToString(
-          new Uint8Array(await blob.arrayBuffer()),
-          "base64"
-        );
-        console.log(`Text EB ${blob.size}`);
-        console.log(`Text EB ${blob.type}`);
-        console.log(`Text E ${content}`);
-        console.log(content);
+export const createArticle = createAsyncThunk<
+  Article | null,
+  {
+    article: Omit<Article, "publicationUrl">;
+    encrypt?: boolean;
+    chainName?: ChainName;
+  },
+  {
+    rejectValue: Error;
+  }
+>("article/create", async (args, thunkAPI) => {
+  const client = await getClient();
+  const model = new DataModel({
+    ceramic: client.ceramic,
+    model: PUBLISHED_MODELS,
+  });
+  let content = args.article.text;
+  try {
+    let publicationUrl;
+    if (args.encrypt) {
+      if (!args.article.status) {
+        throw Error("Missing encrypt type");
       }
-      const ipfs = getIPFSClient();
-      console.log({ content: args.article.text });
-      if (args.article.text) {
-        const cid = await ipfs.add(
-          { content: content },
-          {
-            cidVersion: 1,
-            hashAlg: "sha2-256",
-          }
-        );
-        console.log(cid);
-        await ipfs.pin.add(CID.parse(cid.path));
-        publicationUrl = `ipfs://${cid.path}`;
+      if (!args.chainName) {
+        throw Error("Missing chain name");
       }
+      const { publication } = thunkAPI.getState() as RootState;
+      const access =
+        args.article.status === "draft"
+          ? publication.draftAccess
+          : publication.publishAccess;
+      const symmetricKey = await getEncryptionKey(
+        args.chainName,
+        access.encryptedSymmetricKey,
+        access.accessControlConditions
+      );
+      const blob = await encryptText(content, symmetricKey);
+      content = uint8arrayToString(
+        new Uint8Array(await blob.arrayBuffer()),
+        "base64"
+      );
+    }
+    const ipfs = getIPFSClient();
+    if (args.article.text) {
+      const cid = await ipfs.add(
+        { content: content },
+        {
+          cidVersion: 1,
+          hashAlg: "sha2-256",
+        }
+      );
+      await ipfs.pin.add(CID.parse(cid.path));
+      publicationUrl = `ipfs://${cid.path}`;
+    }
 
-      console.log("Create Article");
-      const article = {
+    if (publicationUrl) {
+      const baseArticle = {
         publicationUrl: publicationUrl,
         title: args.article.title || "",
         createdAt: args.article.createdAt,
@@ -150,40 +139,26 @@ export const createArticle = createAsyncThunk(
         // previewImg: args.article?.previewImg,
         paid: args.article.paid || false,
       };
-      console.log(article);
-      if (publicationUrl) {
-        const baseArticle = {
-          publicationUrl: publicationUrl,
-          title: args.article.title || "",
-          createdAt: args.article.createdAt,
-          status: args.article.status,
-          // previewImg: args.article?.previewImg,
-          paid: args.article.paid || false,
-        };
 
-        const doc = await model.createTile("Article", baseArticle);
-        const streamId = doc.id.toString();
-        const article = {
-          ...baseArticle,
-          streamId: streamId,
-          text: args.article.text,
-        };
-        // TODO: Is this necessary with the article registry
-        thunkAPI.dispatch(articleActions.create(article));
-        thunkAPI.dispatch(addRegistryArticle(streamId));
-        // save to registry
-        console.log("Article Saved");
-        return article;
-      }
-      // thunkAPI.dispatch(addPublicationArticle(stream.toString()));
-      // save stream on article
-      return;
-    } catch (err) {
-      console.log(err);
-      return thunkAPI.rejectWithValue("Failed to save");
+      const doc = await model.createTile("Article", baseArticle);
+      const streamId = doc.id.toString();
+      const article = {
+        ...baseArticle,
+        streamId: streamId,
+        text: args.article.text,
+      };
+      // TODO: Is this necessary with the article registry
+      thunkAPI.dispatch(articleActions.create(article));
+      thunkAPI.dispatch(addRegistryArticle(streamId));
+      // save to registry
+      return article;
     }
+    return null;
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err as Error);
   }
-);
+});
 
 export const updateArticle = createAsyncThunk(
   "article/update",
@@ -219,7 +194,6 @@ export const updateArticle = createAsyncThunk(
           access.encryptedSymmetricKey,
           access.accessControlConditions
         );
-        console.log(access.encryptedSymmetricKey);
         const blob = await encryptText(content, symmetricKey);
         content = uint8arrayToString(
           new Uint8Array(await blob.arrayBuffer()),
@@ -235,7 +209,6 @@ export const updateArticle = createAsyncThunk(
             hashAlg: "sha2-256",
           }
         );
-        console.log(cid);
         await ipfs.pin.add(CID.parse(cid.path));
         publicationUrl = `ipfs://${cid.path}`;
       }
@@ -247,7 +220,6 @@ export const updateArticle = createAsyncThunk(
         // previewImg: args.article?.previewImg,
         paid: args.article.paid || false,
       };
-      console.log(article);
       if (publicationUrl) {
         const baseArticle = {
           publicationUrl: publicationUrl,
@@ -262,16 +234,13 @@ export const updateArticle = createAsyncThunk(
           ...existingArticle,
           ...baseArticle,
         };
-        console.log(updatedArticle);
         await doc.update(updatedArticle);
         thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
-        // save to registry
-        console.log("Article Updated");
         return baseArticle;
       }
       return;
     } catch (err) {
-      console.log(err);
+      console.error(err);
       return thunkAPI.rejectWithValue("Failed to update");
     }
   }

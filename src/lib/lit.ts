@@ -1,8 +1,6 @@
 import LitJsSdk from "@alexkeating/lit-js-sdk";
 import uint8arrayFromString from "uint8arrays/from-string";
-import uint8arrayToString from "uint8arrays/to-string";
 
-import { chains } from "../constants";
 import { ChainName } from "types";
 
 const getClient = () => {
@@ -118,12 +116,7 @@ export const encryptText = async (text: string, symmKey: Uint8Array) => {
   return encryptedString;
 };
 
-export const decryptText = async (text: string, symmKey: Uint8Array) => {
-  // const x = uint8arrayFromString(text, "utf8");
-  console.log(
-    `Text DB ${new Blob([text], { type: "application/octet-stream" }).size}`
-  );
-  console.log(`Text D ${text}`);
+export const decryptText = async (text: Uint8Array, symmKey: Uint8Array) => {
   const decryptedString = await LitJsSdk.decryptString(
     new Blob([text]),
     symmKey

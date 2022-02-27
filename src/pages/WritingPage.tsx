@@ -16,7 +16,7 @@ import MarkdownEditor from "components/MarkdownEditor";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
-import { createArticle, updateArticle } from "services/article/slice";
+import { Article, createArticle, updateArticle } from "services/article/slice";
 import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
 import profile from "assets/obsidian.png";
@@ -113,7 +113,7 @@ const MarkdownSave = ({ title }: { title: string }) => {
         })
       );
     } else {
-      const x = async () => {
+      const create = async () => {
         const createdArticle = await dispatch(
           createArticle({
             article: {
@@ -126,9 +126,15 @@ const MarkdownSave = ({ title }: { title: string }) => {
             chainName: networks[chainId].litName,
           })
         );
-        setLocalStreamId(createdArticle.streamId);
+        if (
+          createdArticle &&
+          createdArticle.payload &&
+          "streamId" in createdArticle.payload
+        ) {
+          setLocalStreamId(createdArticle.payload.streamId);
+        }
       };
-      x();
+      create();
     }
   };
   const m = getMarkdown() || "";
@@ -153,25 +159,10 @@ const WritingPage = () => {
     (state) => state.addArticle.loading
   );
   const article = useAppSelector((state) =>
-    articleRegistrySelectors.getArticleByStreamId(state, streamId)
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
 
   console.log(article);
-  const navigate = useNavigate();
-  // get stream id if exists and load content
-
-  // useEffect(() => {
-  //   if (streamId !== params.streamId) {
-  //     navigate(`/publish/write/${streamId}`);
-  //   }
-  // }, [streamId, params.streamId]);
-
-  // useEffect(() => {
-  //   if (streamId && !params.streamId) {
-  //     // fetch
-  //     console.log("fetching Article");
-  //   }
-  // }, [streamId, params.streamId]);
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();

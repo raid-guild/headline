@@ -12,11 +12,11 @@ import { ChainName } from "types";
 import uint8arrayFromString from "uint8arrays/from-string";
 import { createSelector } from "@reduxjs/toolkit";
 
-import { getIPFSClient } from "lib/ipfs";
+type ArticleRegistry = { [key: string]: Article };
 
 export const articleRegistrySlice = createSlice({
   name: "articleRegistry",
-  initialState: {} as { [key: string]: Article },
+  initialState: {} as ArticleRegistry,
   reducers: {
     add(state, action: PayloadAction<Article>) {
       if (action.payload.streamId) {
@@ -36,12 +36,10 @@ export const articleRegistryActions = articleRegistrySlice.actions;
 export const articleRegistrySelectors = {
   getArticleByStreamId: createSelector(
     [
-      // Usual first input - extract value from `state`
-      (state) => state.articleRegistry,
-      // Take the second arg, `category`, and forward to the output selector
-      (state, streamId) => streamId,
+      (state: RootState) => state.articleRegistry,
+      (state: RootState, streamId: string) => streamId,
     ],
-    (articleRegistry, streamId) => {
+    (articleRegistry: ArticleRegistry, streamId: string) => {
       return articleRegistry[streamId];
     }
   ),
@@ -54,7 +52,7 @@ export const addArticleSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(addRegistryArticle.fulfilled, (state, action) => {
+    builder.addCase(addRegistryArticle.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(addRegistryArticle.pending, (state) => {
@@ -76,7 +74,6 @@ export const addRegistryArticle = createAsyncThunk(
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
     });
-    console.log("Adding to registry");
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       await store.merge("articleRegistry", {
@@ -99,12 +96,8 @@ export const fetchArticleRegistry = createAsyncThunk(
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       const articleRegistry = await store.get("articleRegistry");
-      console.log("articleRegistry");
-      console.log(articleRegistry);
-      const ipfs = getIPFSClient();
       for (const streamId in articleRegistry) {
         // load streams
-        console.log("Iterating");
         const doc = await TileDocument.load(client.ceramic, streamId);
         const ceramicArticle = doc.content as CeramicArticle;
         const resp = await fetch(
@@ -113,7 +106,6 @@ export const fetchArticleRegistry = createAsyncThunk(
             .at(-1)}`
         );
         const readableStream = resp?.body?.getReader();
-        console.log(readableStream);
         if (!readableStream) {
           return;
         }
@@ -134,19 +126,12 @@ export const fetchArticleRegistry = createAsyncThunk(
             access.encryptedSymmetricKey,
             access.accessControlConditions
           );
-          console.log("Decrypting");
-          console.log(articleText);
-          console.log(symmetricKey);
           const a = await decryptText(
             uint8arrayFromString(articleText, "base64"),
             symmetricKey
           ).catch((e) => console.error(e));
           articleText = a || "error";
-          console.log("Deecrypted");
-          console.log(a);
         }
-        console.log("Fetched Article");
-        console.log(ceramicArticle);
         thunkAPI.dispatch(
           articleRegistryActions.add({
             ...ceramicArticle,
