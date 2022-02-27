@@ -16,7 +16,8 @@ import MarkdownEditor from "components/MarkdownEditor";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
-import { createArticle } from "services/article/slice";
+import { Article, createArticle, updateArticle } from "services/article/slice";
+import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
 import profile from "assets/obsidian.png";
 import settings from "assets/settings.svg";
@@ -90,24 +91,51 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
 const MarkdownSave = ({ title }: { title: string }) => {
   const { getMarkdown } = useHelpers(true);
   const { chainId } = useWallet();
+  const { streamId } = useParams();
+  const [localStreamId, setLocalStreamId] = useState(streamId);
   const dispatch = useAppDispatch();
 
   const saveArticle = (markdown: string, title: string) => {
     if (!chainId) {
       return;
     }
-    dispatch(
-      createArticle({
-        article: {
-          title: title,
-          text: markdown,
-          createdAt: new Date().toISOString(),
-          status: "draft",
-        },
-        encrypt: true, // TODO change to true
-        chainName: networks[chainId].litName,
-      })
-    );
+    if (localStreamId) {
+      dispatch(
+        updateArticle({
+          article: {
+            title: title,
+            text: markdown,
+            status: "draft",
+          },
+          streamId: localStreamId,
+          encrypt: true, // TODO change to true
+          chainName: networks[chainId].litName,
+        })
+      );
+    } else {
+      const create = async () => {
+        const createdArticle = await dispatch(
+          createArticle({
+            article: {
+              title: title,
+              text: markdown,
+              createdAt: new Date().toISOString(),
+              status: "draft",
+            },
+            encrypt: true, // TODO change to true
+            chainName: networks[chainId].litName,
+          })
+        );
+        if (
+          createdArticle &&
+          createdArticle.payload &&
+          "streamId" in createdArticle.payload
+        ) {
+          setLocalStreamId(createdArticle.payload.streamId);
+        }
+      };
+      create();
+    }
   };
   const m = getMarkdown() || "";
   const debouncedSaveArticle = useCallback(debounce(1000, saveArticle), []);
@@ -124,28 +152,17 @@ const MarkdownSave = ({ title }: { title: string }) => {
 // should trigger save to publication
 const WritingPage = () => {
   const [title, setTitle] = useState("");
+  const { streamId } = useParams();
   const { state, onChange } = useRemirror({});
   const articleLoading = useAppSelector((state) => state.createArticle.loading);
   const addRegistryLoading = useAppSelector(
     (state) => state.addArticle.loading
   );
-  const streamId = useAppSelector((state) => state.article.streamId);
-  const navigate = useNavigate();
-  const params = useParams();
-  // get stream id if exists and load content
+  const article = useAppSelector((state) =>
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
+  );
 
-  // useEffect(() => {
-  //   if (streamId !== params.streamId) {
-  //     navigate(`/publish/write/${streamId}`);
-  //   }
-  // }, [streamId, params.streamId]);
-
-  useEffect(() => {
-    if (streamId && !params.streamId) {
-      // fetch
-      console.log("fetching Article");
-    }
-  }, [streamId, params.streamId]);
+  console.log(article);
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -182,11 +199,13 @@ const WritingPage = () => {
       <StyledBody>
         <StyledInput
           title=""
+          defaultValue={article?.title || "Untitled"}
           placeholder="Enter title..."
           onChange={onTitleChange}
         />
         <StyledMarkdownEditor
           placeholder="Start typing..."
+          initialContent={article?.text || ""}
           state={state}
           onChange={onChange}
         >

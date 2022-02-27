@@ -63,7 +63,7 @@ const Routes = () => {
           }
         />
         <Route
-          path="/publish/write/:stremId"
+          path="/publish/write/:streamId"
           element={
             <RequireAuth>
               <WritingPage />

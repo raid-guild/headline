@@ -1,3 +1,4 @@
+import { Base64 } from "js-base64";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { DataModel } from "@glazed/datamodel";
@@ -8,14 +9,21 @@ import { PUBLISHED_MODELS } from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
+import uint8arrayFromString from "uint8arrays/from-string";
+import { createSelector } from "@reduxjs/toolkit";
 
-import { getIPFSClient } from "lib/ipfs";
+type ArticleRegistry = { [key: string]: Article };
 
 export const articleRegistrySlice = createSlice({
   name: "articleRegistry",
-  initialState: {} as { [key: string]: Article },
+  initialState: {} as ArticleRegistry,
   reducers: {
     add(state, action: PayloadAction<Article>) {
+      if (action.payload.streamId) {
+        state[action.payload.streamId] = action.payload;
+      }
+    },
+    update(state, action: PayloadAction<Article>) {
       if (action.payload.streamId) {
         state[action.payload.streamId] = action.payload;
       }
@@ -25,6 +33,18 @@ export const articleRegistrySlice = createSlice({
 
 export const articleRegistryActions = articleRegistrySlice.actions;
 
+export const articleRegistrySelectors = {
+  getArticleByStreamId: createSelector(
+    [
+      (state: RootState) => state.articleRegistry,
+      (state: RootState, streamId: string) => streamId,
+    ],
+    (articleRegistry: ArticleRegistry, streamId: string) => {
+      return articleRegistry[streamId];
+    }
+  ),
+};
+
 export const addArticleSlice = createSlice({
   name: "addArticle",
   initialState: {
@@ -32,7 +52,7 @@ export const addArticleSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(addRegistryArticle.fulfilled, (state, action) => {
+    builder.addCase(addRegistryArticle.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(addRegistryArticle.pending, (state) => {
@@ -54,7 +74,6 @@ export const addRegistryArticle = createAsyncThunk(
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
     });
-    console.log("Adding to registry");
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       await store.merge("articleRegistry", {
@@ -77,12 +96,8 @@ export const fetchArticleRegistry = createAsyncThunk(
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       const articleRegistry = await store.get("articleRegistry");
-      console.log("articleRegistry");
-      console.log(articleRegistry);
-      const ipfs = getIPFSClient();
       for (const streamId in articleRegistry) {
         // load streams
-        console.log("Iterating");
         const doc = await TileDocument.load(client.ceramic, streamId);
         const ceramicArticle = doc.content as CeramicArticle;
         const resp = await fetch(
@@ -91,7 +106,6 @@ export const fetchArticleRegistry = createAsyncThunk(
             .at(-1)}`
         );
         const readableStream = resp?.body?.getReader();
-        console.log(readableStream);
         if (!readableStream) {
           return;
         }
@@ -100,25 +114,24 @@ export const fetchArticleRegistry = createAsyncThunk(
 
         // Having trouble decrypting Lit's docs bad
         // decrypt text
-        // if (ceramicArticle.status === "draft" || ceramicArticle.paid) {
-        //   const { publication } = thunkAPI.getState() as RootState;
-        //   const access =
-        //     ceramicArticle.status === "draft"
-        //       ? publication.draftAccess
-        //       : publication.publishAccess;
+        if (ceramicArticle.status === "draft" || ceramicArticle.paid) {
+          const { publication } = thunkAPI.getState() as RootState;
+          const access =
+            ceramicArticle.status === "draft"
+              ? publication.draftAccess
+              : publication.publishAccess;
 
-        //   const symmetricKey = await getEncryptionKey(
-        //     args.chainName,
-        //     access.encryptedSymmetricKey,
-        //     access.accessControlConditions
-        //   );
-        //   console.log("Decrypting");
-        //   const a = decryptText(articleText, symmetricKey);
-        //   console.log("Deecrypted");
-        //   console.log(a);
-        // }
-        articleText =
-          "Electron is an API for writing services and mobile application framework sorts out the exact class of common host environment. Test-Driven Development. It has some strict properties. Ember is a community-driven attempt at explaining the concept. Singleton Pattern is a JavaScript.";
+          const symmetricKey = await getEncryptionKey(
+            args.chainName,
+            access.encryptedSymmetricKey,
+            access.accessControlConditions
+          );
+          const a = await decryptText(
+            uint8arrayFromString(articleText, "base64"),
+            symmetricKey
+          ).catch((e) => console.error(e));
+          articleText = a || "error";
+        }
         thunkAPI.dispatch(
           articleRegistryActions.add({
             ...ceramicArticle,

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 
 import { Article } from "services/article/slice";
@@ -25,6 +26,8 @@ const DetailsContainer = styled.div`
   gap: 1.6rem;
 `;
 
+// TODO: Renders markdown, but should preview a description of the
+// text
 const ArticleCard = ({ article }: { article: Article }) => {
   const date = new Date(article.createdAt);
   return (
@@ -33,7 +36,9 @@ const ArticleCard = ({ article }: { article: Article }) => {
         <MissingImg />
         <DetailsContainer>
           <Title size="md">{article.title}</Title>
-          <Text size="md">{article.text}</Text>
+          <Text size="md">
+            <ReactMarkdown>{article.text}</ReactMarkdown>
+          </Text>
           <Text size="md">{`${date.toDateString()}`}</Text>
         </DetailsContainer>
       </Container>
