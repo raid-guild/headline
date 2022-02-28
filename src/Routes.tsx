@@ -10,6 +10,7 @@ import {
 import { useCermaic } from "context/CeramicContext";
 import DashboardPage from "./pages/DashboardPage";
 import PublishPage from "./pages/PublishPage";
+import ProfilePage from "./pages/ProfilePage";
 import CreatePublicationPage from "./pages/CreatePublicationPage";
 import WritingPage from "pages/WritingPage";
 
@@ -67,6 +68,14 @@ const Routes = () => {
           element={
             <RequireAuth>
               <WritingPage />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth>
+              <ProfilePage />
             </RequireAuth>
           }
         />
