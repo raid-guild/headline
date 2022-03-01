@@ -1,6 +1,7 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { articleSlice, createArticleSlice } from "services/article/slice";
+import { fetchProfileSlice, profileSlice } from "services/profile/slice";
 import {
   publicationSlice,
   createPublicationSlice,
@@ -22,6 +23,8 @@ export const store = configureStore({
     [updatePublicationSlice.name]: updatePublicationSlice.reducer,
     [addArticleSlice.name]: addArticleSlice.reducer,
     [articleRegistrySlice.name]: articleRegistrySlice.reducer,
+    [profileSlice.name]: profileSlice.reducer,
+    [fetchProfileSlice.name]: fetchProfileSlice.reducer,
   },
 });
 

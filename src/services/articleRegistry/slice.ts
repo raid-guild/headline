@@ -1,4 +1,3 @@
-import { Base64 } from "js-base64";
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { DataModel } from "@glazed/datamodel";

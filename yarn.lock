@@ -556,7 +556,7 @@
 
 "@datamodels/identity-profile-basic@^0.1.2":
   version "0.1.2"
-  resolved "https://registry.npmjs.org/@datamodels/identity-profile-basic/-/identity-profile-basic-0.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/@datamodels/identity-profile-basic/-/identity-profile-basic-0.1.2.tgz#4eb78b5493950f1a8b3cbca87ec56dd6d26eba4e"
   integrity sha512-bV+71JP5ykYB2s77LJkGxUzcWYRyYMGSkhtpn+oN/bAgRAKjlp7UYnivM7XVK5NXAVcI7RPlTQt7YHk3R5Wj4A==
   dependencies:
     "@glazed/types" "^0.1.3"

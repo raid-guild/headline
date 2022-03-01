@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { BasicProfile } from "@datamodels/identity-profile-basic";
+import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
 import Button from "components/Button";
@@ -13,6 +15,8 @@ import SettingsInboxForm from "components/SettingsInboxForm";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { fetchBasicProfile } from "services/profile/slice";
+import { useAppSelector, useAppDispatch } from "store";
 
 // Two views
 // Has no self.id page
@@ -50,9 +54,9 @@ const InboxContainer = styled.div`
   flex-direction: column;
 `;
 
-const BasicProfileCard = () => {
+const EmptyProfileCard = () => {
   return (
-    <BasicProfileCardContainer>
+    <>
       <Title size="sm" color="helpText">
         Basic
       </Title>
@@ -74,11 +78,32 @@ const BasicProfileCard = () => {
           Get started
         </GetStartedButton>
       </a>
+    </>
+  );
+};
+
+const FilledProfileCard = () => {
+  return "HI";
+};
+
+const BasicProfileCard = () => {
+  const dispatch = useAppDispatch();
+  const { address } = useWallet();
+  const profile = useAppSelector((state) => state.profile);
+
+  useEffect(() => {
+    dispatch(fetchBasicProfile(address || ""));
+  }, [address]);
+  return (
+    <BasicProfileCardContainer>
+      {profile.name ? <FilledProfileCard /> : <EmptyProfileCard />}
     </BasicProfileCardContainer>
   );
 };
 
 const SubscriptionInbox = () => {
+  // fetch profile
+  // show loader while loading
   return (
     <BasicProfileCardContainer>
       <Title size="sm" color="helpText">
