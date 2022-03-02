@@ -10,8 +10,9 @@ export const profileSlice = createSlice({
       if (Object.keys(action.payload).length >= 0) {
         console.log("Payload");
         console.log(action.payload);
-        state.name = action.payload?.name;
+        state = action.payload;
         console.log(state);
+        return state;
       }
     },
   },

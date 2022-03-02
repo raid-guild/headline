@@ -3,7 +3,11 @@ import { BasicProfile } from "@datamodels/identity-profile-basic";
 import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
+import github from "assets/github.svg";
+import twitter from "assets/twitter.svg";
+import Avatar from "components/Avatar";
 import Button from "components/Button";
+import Icon from "components/Icon";
 import {
   Layout,
   HeaderContainer,
@@ -18,6 +22,8 @@ import Title from "components/Title";
 import { fetchBasicProfile } from "services/profile/slice";
 import { useAppSelector, useAppDispatch } from "store";
 
+import { getProfileImg } from "lib/ipfs";
+
 // Two views
 // Has no self.id page
 //
@@ -29,6 +35,8 @@ const ProfilePageBodyContainer = styled(BodyContainer)`
   max-width: 100rem;
   align-items: flex-start;
   justify-content: flex-start;
+  margin-right: 2rem;
+  gap: 3.2rem;
 `;
 
 const BasicProfileCardContainer = styled.div`
@@ -37,6 +45,8 @@ const BasicProfileCardContainer = styled.div`
   background: ${({ theme }) => theme.colors.backgroundGrey};
   gap: 3.2rem;
   padding: 4rem;
+  width: 100%;
+  max-length: 90rem;
 `;
 
 const GetStartedButton = styled(Button)`
@@ -47,6 +57,7 @@ const ProfileTextContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  width: 100%;
 `;
 
 const InboxContainer = styled.div`
@@ -82,8 +93,79 @@ const EmptyProfileCard = () => {
   );
 };
 
-const FilledProfileCard = () => {
-  return "HI";
+const UrlContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const SocialMediaContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const ProfileContentContainer = styled.div`
+  display: flex;
+  gap: 3.2rem;
+`;
+
+const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
+  console.log("profile 2");
+  console.log(profile);
+  const src = getProfileImg(profile.image);
+  return (
+    <>
+      <Title size="sm" color="helpText">
+        Basic
+      </Title>
+      <ProfileContentContainer>
+        <Avatar src={src} alt="Profile picture" size="xxl" />
+        <ProfileTextContainer>
+          <Title size="md">{profile?.name || ""}</Title>
+          <Text size="base">{profile?.description || ""}</Text>
+          <UrlContainer>
+            {profile.url && (
+              <a href={profile.url} target="_blank" rel="noopener noreferrer">
+                <Text as="span" size="base" weight="bold" color="primary">
+                  {profile?.url}
+                </Text>
+              </a>
+            )}
+            <SocialMediaContainer>
+              {profile.twitter && (
+                <a
+                  href={profile?.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon src={twitter} alt="twitter logo" size="lg" />
+                </a>
+              )}
+              {profile.github && (
+                <a
+                  href={profile?.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon src={github} alt="github logo" size="lg" />
+                </a>
+              )}
+            </SocialMediaContainer>
+          </UrlContainer>
+        </ProfileTextContainer>
+      </ProfileContentContainer>
+      <a href="https://self.id/" target="_blank" rel="noopener noreferrer">
+        <GetStartedButton
+          size="md"
+          color="primary"
+          variant="outlined"
+          icon="link"
+        >
+          Edit
+        </GetStartedButton>
+      </a>
+    </>
+  );
 };
 
 const BasicProfileCard = () => {
@@ -94,9 +176,15 @@ const BasicProfileCard = () => {
   useEffect(() => {
     dispatch(fetchBasicProfile(address || ""));
   }, [address]);
+  console.log("Basic card");
+  console.log(profile);
   return (
     <BasicProfileCardContainer>
-      {profile.name ? <FilledProfileCard /> : <EmptyProfileCard />}
+      {Object.keys(profile).length > 0 ? (
+        <FilledProfileCard profile={profile} />
+      ) : (
+        <EmptyProfileCard />
+      )}
     </BasicProfileCardContainer>
   );
 };

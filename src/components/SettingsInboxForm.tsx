@@ -16,8 +16,8 @@ type Props = {
 const InboxContainer = styled.form`
   width: 100%;
   display: flex;
-  flex-direction: column;
   gap: 2rem;
+  align-items: flex-end;
 `;
 
 const SettingsInboxForm = ({ onSubmit, children }: Props) => {
