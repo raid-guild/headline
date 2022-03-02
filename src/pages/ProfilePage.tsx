@@ -105,16 +105,20 @@ const ProfileContentContainer = styled.div`
 `;
 
 const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
-  console.log("profile 2");
-  console.log(profile);
-  const src = getProfileImg(profile.image);
+  const [src, setSrc] = useState<string | null>(null);
+  useEffect(() => {
+    if (profile?.image) {
+      const img = getProfileImg(profile.image);
+      setSrc(img);
+    }
+  }, []);
   return (
     <>
       <Title size="sm" color="helpText">
         Basic
       </Title>
       <ProfileContentContainer>
-        <Avatar src={src} alt="Profile picture" size="xxl" />
+        <Avatar src={src || ""} alt="Profile picture" size="xxl" />
         <ProfileTextContainer>
           <Title size="md">{profile?.name || ""}</Title>
           <Text size="base">{profile?.description || ""}</Text>
@@ -129,7 +133,7 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
             <SocialMediaContainer>
               {profile.twitter && (
                 <a
-                  href={profile?.twitter}
+                  href={profile.twitter as string}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -138,7 +142,7 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
               )}
               {profile.github && (
                 <a
-                  href={profile?.github}
+                  href={profile.github as string}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

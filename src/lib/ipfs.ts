@@ -1,6 +1,6 @@
 import { create } from "ipfs-http-client";
 import { Buffer } from "buffer";
-import { ImageSource } from "@datamodels/identity-profile-basic";
+import { ImageSources } from "@datamodels/identity-profile-basic";
 
 export const getIPFSClient = () => {
   const auth =
@@ -21,7 +21,7 @@ export const getIPFSClient = () => {
   return ipfs;
 };
 
-export const getProfileImg = ({ original }: ImageSource) => {
+export const getProfileImg = ({ original }: ImageSources) => {
   const src = original.src.slice(7);
 
   return `https://dweb.link/ipfs/${src}`;
