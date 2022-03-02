@@ -191,7 +191,7 @@ const WritingPage = () => {
           <StyledIconButton size="sm" color="primary" variant="contained">
             <StyledIcon size="md" src={settings} alt="settings button" />
           </StyledIconButton>
-          <Button size="base" color="primary" variant="contained">
+          <Button size="md" color="primary" variant="contained">
             Published
           </Button>
         </RightHeaderContainer>

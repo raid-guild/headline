@@ -18,7 +18,7 @@ const SidebarContainer = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  max-height: 18rem;
+  max-height: 12rem;
   height: 100%;
   margin-top: 2rem;
 `;
@@ -67,9 +67,6 @@ const Sidebar = () => {
         <MenuContainer>
           <Link to={"/dashboard"}>
             <SidebarItem text="Dashboard" icon="dashboard" />
-          </Link>
-          <Link to={"/inbox"}>
-            <SidebarItem text="Inbox" icon="create" />
           </Link>
           <Link to={"/publish"}>
             <SidebarItem text="Publish" icon="mail" />

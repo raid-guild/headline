@@ -9,7 +9,7 @@ const theme = {
         padding: ".9rem 2.4rem",
         height: "4.8rem",
       },
-      base: {
+      md: {
         padding: "1.1rem 1.6rem",
         height: "4.8rem",
       },

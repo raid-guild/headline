@@ -58,7 +58,7 @@ const EmailSettings = () => {
           baseId="email-settings"
           backdrop={true}
           disclosure={
-            <Button color="primary" variant="contained" size="base">
+            <Button color="primary" variant="contained" size="md">
               Email Settings
             </Button>
           }
@@ -84,7 +84,7 @@ const EmailSettings = () => {
                 </a>
               </Text>
               <EmailCrendentialsForm onSubmit={onSubmit}>
-                <Button size="base" color="primary" variant="contained">
+                <Button size="md" color="primary" variant="contained">
                   Save
                 </Button>
               </EmailCrendentialsForm>
