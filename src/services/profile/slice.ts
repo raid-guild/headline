@@ -8,10 +8,7 @@ export const profileSlice = createSlice({
   reducers: {
     create(state, action: PayloadAction<BasicProfile>) {
       if (Object.keys(action.payload).length >= 0) {
-        console.log("Payload");
-        console.log(action.payload);
         state = action.payload;
-        console.log(state);
         return state;
       }
     },
@@ -45,9 +42,6 @@ export const fetchBasicProfile = createAsyncThunk(
   async (address: string, thunkAPI) => {
     try {
       const profile = await fetchProfile(address);
-      console.log("profile");
-      console.log(profile);
-      console.log(address);
       if (profile) {
         thunkAPI.dispatch(profileActions.create(profile));
       }

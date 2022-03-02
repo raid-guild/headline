@@ -24,11 +24,6 @@ import { useAppSelector, useAppDispatch } from "store";
 
 import { getProfileImg } from "lib/ipfs";
 
-// Two views
-// Has no self.id page
-//
-// Has a self.id page
-
 const ProfilePageBodyContainer = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
@@ -190,8 +185,6 @@ const BasicProfileCard = () => {
 };
 
 const SubscriptionInbox = () => {
-  // fetch profile
-  // show loader while loading
   return (
     <BasicProfileCardContainer>
       <Title size="sm" color="helpText">
