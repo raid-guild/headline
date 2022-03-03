@@ -1,8 +1,10 @@
 import { ChainName } from "types";
 
+type ChainLabel = "Mainnet" | "Rinkeby";
+
 type Network = {
   chainId: string;
-  name: string;
+  name: ChainLabel;
   litName: ChainName;
   symbol: string;
   explorer: string;
@@ -26,4 +28,15 @@ export const networks: { [key: string]: Network } = {
     explorer: "https://rinkeby.etherscan.io",
     rpc: "https://rinkeby.infura.io/v3/9166d5f9c2ea4c39831453b0e6040aa3",
   },
+};
+
+export const chainOptions = [
+  { value: "Mainnet", label: "0x1" },
+  { value: "Rinkeby", label: "0x4" },
+];
+
+export const getChainIdByName = (chainName: ChainLabel) => {
+  return chainOptions.filter((option) => {
+    return option.value === chainName;
+  });
 };

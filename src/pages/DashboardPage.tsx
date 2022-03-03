@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Button from "components/Button";
+import ExternalLink from "components/ExternalLink";
 import {
   Layout,
   BodyContainer,
@@ -86,11 +87,11 @@ const LoggedOutBody = ({
       <BodyFooterContainer>
         <Text size="base">
           How does web3substack work? Check out our{" "}
-          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+          <ExternalLink href="www.google.com">
             <Text as="span" size="base" weight="bold" color="primary">
               Guide
             </Text>
-          </a>
+          </ExternalLink>
           .
         </Text>
       </BodyFooterContainer>
@@ -168,11 +169,11 @@ const LoggedInBody = () => {
             Your content, your reader.
           </Text>
           <Title size="sm">Start writing on webs3substack</Title>
-          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+          <ExternalLink href="www.google.com">
             <Text size="sm" weight="semibold" color="primary">
               Dismiss
             </Text>
-          </a>
+          </ExternalLink>
         </PublicationCopyContainer>
         <Button
           color="primary"
@@ -191,11 +192,11 @@ const LoggedInBody = () => {
           <Text size="sm" color="helpText">
             Subscribe now
           </Text>
-          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+          <ExternalLink href="www.google.com">
             <Text size="sm" weight="semibold" color="primary">
               Discover now
             </Text>
-          </a>
+          </ExternalLink>
         </SubscriptionContentContainer>
         <LearnMoreContainer>
           <div>

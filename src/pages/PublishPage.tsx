@@ -1,14 +1,19 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@raidguild/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
+import lock_example from "assets/lock_example.svg";
 import { fetchPublication } from "services/publication/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import ArticleCard from "components/ArticleCard";
 import Button from "components/Button";
+import { Dialog, DialogContainer } from "components/Dialog";
+import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
+import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
 import {
   Layout,
@@ -99,11 +104,11 @@ const CreatePublicationView = () => {
         <BodyFooterContainer>
           <Text size="base">
             How does web3substack work? Check out our{" "}
-            <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+            <ExternalLink href="www.google.com">
               <Text as="span" size="base" weight="bold" color="primary">
                 Guide
               </Text>
-            </a>
+            </ExternalLink>
             .
           </Text>
         </BodyFooterContainer>
@@ -146,13 +151,45 @@ const CardContainer = styled.div`
   flex-direction: column;
 `;
 
+const EmtptyCardContainer = styled.div`
+  padding: 4rem;
+  border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
+  gap: 1.6rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 const EmtptyEntriesMessage = () => {
   return (
-    <div>
-      <Text size="base" color="helpText">
+    <EmtptyCardContainer>
+      <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
-    </div>
+      <Link to="/publish/write">
+        <Text size="sm" color="primary" weight="semibold">
+          Write a new post
+        </Text>
+      </Link>
+    </EmtptyCardContainer>
+  );
+};
+
+const EmtptyLocksMessage = () => {
+  return (
+    <EmtptyCardContainer>
+      <Text size="base" color="helpText" weight="semibold">
+        You havent written any posts yet
+      </Text>
+      <Text size="sm" color="helpText">
+        Create different membership options for your readers
+      </Text>
+      <Link to="/publish/write">
+        <Text size="sm" color="primary" weight="semibold">
+          Create Now
+        </Text>
+      </Link>
+    </EmtptyCardContainer>
   );
 };
 
@@ -181,7 +218,7 @@ const Articles = () => {
   return (
     <EntriesContainer>
       <EntriesHeader>
-        <Text size="md" color="label">
+        <Text size="md" color="label" weight="semibold">
           Entries
         </Text>
         <Button
@@ -199,6 +236,77 @@ const Articles = () => {
         ) : (
           <EmtptyEntriesMessage />
         )}
+      </CardContainer>
+    </EntriesContainer>
+  );
+};
+
+const Locks = () => {
+  // const articleRegistry = useAppSelector(
+  //   (state) => state.articleRegistry // Name is required in the schema
+  // );
+  // const navigate = useNavigate();
+  // const goToWritingPage = () => {
+  //   navigate(WRITING_URI);
+  // };
+  const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
+    console.log("Here");
+    console.log(data);
+  }, []);
+
+  return (
+    <EntriesContainer>
+      <EntriesHeader>
+        <Text size="md" color="label" weight="semibold">
+          Membership Options
+        </Text>
+        <Dialog
+          baseId="lock-verification"
+          backdrop={true}
+          disclosure={
+            <Button
+              size="lg"
+              color="primary"
+              variant="contained"
+              onClick={() => console.log("Hero")}
+            >
+              Create
+            </Button>
+          }
+        >
+          <DialogContainer>
+            <Text size="base" color="helpText">
+              Create membership
+            </Text>
+            <Text size="base" color="label">
+              We are powered by Unlock Protocol, please head over to the{" "}
+              <ExternalLink href="https://app.unlock-protocol.com/dashboard">
+                <Text as="span" size="base" color="priamry" weight="semibold">
+                  dashboard
+                </Text>
+              </ExternalLink>{" "}
+              & create a membership first.
+            </Text>
+            <img
+              src={lock_example}
+              alt="tutorial on how to create a lock in Unlock"
+            />
+            <LockVerificationForm onSubmit={onSubmit}>
+              <Button
+                type="submit"
+                size="lg"
+                color="primary"
+                variant="contained"
+                onClick={() => console.log("Hello")}
+              >
+                Submit
+              </Button>
+            </LockVerificationForm>
+          </DialogContainer>
+        </Dialog>
+      </EntriesHeader>
+      <CardContainer>
+        <EmtptyLocksMessage />
       </CardContainer>
     </EntriesContainer>
   );
@@ -247,6 +355,8 @@ const PublishBody = () => {
     switch (active) {
       case "content":
         return <Articles />;
+      case "membership":
+        return <Locks />;
       case "settings":
         return (
           <SettingsContainer>
@@ -299,8 +409,6 @@ const PublishPage = () => {
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
-  console.log("publication");
-  console.log(publication);
   useEffect(() => {
     dispatch(fetchPublication());
   }, []);

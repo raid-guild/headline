@@ -10,6 +10,7 @@ import { store } from "store";
 import { Provider } from "react-redux";
 import { Provider as ReakitProvider } from "reakit";
 
+import "@reach/combobox/styles.css";
 import { WalletProvider } from "@raidguild/quiver";
 
 // If using Portis provider

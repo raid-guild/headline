@@ -17,7 +17,7 @@ type Props = LocalProps & DialogProps;
 
 const StyledDialog = styled(BaseDialog)`
   position: fixed;
-  top: 25%;
+  top: 5%;
   left: 50%;
   background: ${({ theme }) => theme.colors.backgroundGrey};
   transform: translateX(-50%);
@@ -40,7 +40,7 @@ const StyledDialogBackdrop = styled(DialogBackdrop)`
   z-index: 1000;
 `;
 
-const Dialog = ({ disclosure, backdrop, ...props }: Props) => {
+export const Dialog = ({ disclosure, backdrop, ...props }: Props) => {
   const dialog = useDialogState();
   return (
     <>
@@ -58,4 +58,11 @@ const Dialog = ({ disclosure, backdrop, ...props }: Props) => {
   );
 };
 
-export default Dialog;
+export const DialogContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  gap: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  background: ${({ theme }) => theme.colors.almostWhite};
+`;
