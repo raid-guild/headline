@@ -79,6 +79,12 @@
     },
     "publishAccess": {
       "$ref": "#/definitions/LitAccess"
+    },
+    "locks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     }
   },
   "required": ["draftAccess", "publishAccess"]

@@ -6,9 +6,7 @@ import {
   FieldValues,
   Controller,
 } from "react-hook-form";
-import Combobox from "components/Combobox";
 import Input from "components/Input";
-import { chainOptions, getChainIdByName } from "lib/networks";
 
 type Props = {
   onSubmit: SubmitHandler<FieldValues>;
@@ -61,7 +59,6 @@ const LockVerificationForm = ({ onSubmit, children }: Props) => {
     control,
     register,
   } = useForm();
-  console.log(errors);
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>

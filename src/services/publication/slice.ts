@@ -20,6 +20,7 @@ export type Publication = {
   description: string;
   draftAccess: LitAccess;
   publishAccess: LitAccess;
+  locks?: string[];
 };
 
 export const publicationSlice = createSlice({
@@ -35,6 +36,7 @@ export const publicationSlice = createSlice({
       encryptedSymmetricKey: "",
       accessControlConditions: [] as (AccessControl | Operator)[],
     },
+    locks: [] as string[],
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
@@ -42,6 +44,7 @@ export const publicationSlice = createSlice({
       state.description = action.payload.description;
       state.draftAccess = action.payload.draftAccess;
       state.publishAccess = action.payload.publishAccess;
+      state.locks = action.payload.locks || [];
     },
   },
 });
@@ -204,17 +207,10 @@ export const fetchPublication = createAsyncThunk(
 export const updatePublication = createAsyncThunk(
   "publication/update",
   async (
-    args: {
-      publication: Omit<Publication, "draftAccess" | "publishAccess">;
-      address: string;
-      chainName: string;
-    },
+    publication: Omit<Publication, "draftAccess" | "publishAccess">,
     thunkAPI
   ) => {
-    if (!args.address) {
-      return;
-    }
-    const pub = args.publication;
+    const pub = publication;
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -227,6 +223,7 @@ export const updatePublication = createAsyncThunk(
         ...publication,
         name: pub.name,
         description: pub.description,
+        locks: pub.locks,
       };
       await store.set("publication", updatedPublication);
       thunkAPI.dispatch(publicationActions.create(updatedPublication));

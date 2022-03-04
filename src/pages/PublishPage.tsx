@@ -6,8 +6,7 @@ import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
 import lock_example from "assets/lock_example.svg";
-import { fetchPublication } from "services/publication/slice";
-import { fetchArticleRegistry } from "services/articleRegistry/slice";
+import { useUnlock } from "context/UnlockContext";
 import ArticleCard from "components/ArticleCard";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
@@ -26,7 +25,10 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { fetchPublication } from "services/publication/slice";
+import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
+import { verifyLock } from "services/lock/slice";
 import { networks } from "lib/networks";
 
 import { useAppDispatch, useAppSelector } from "store";
@@ -242,16 +244,32 @@ const Articles = () => {
 };
 
 const Locks = () => {
-  // const articleRegistry = useAppSelector(
-  //   (state) => state.articleRegistry // Name is required in the schema
-  // );
-  // const navigate = useNavigate();
-  // const goToWritingPage = () => {
-  //   navigate(WRITING_URI);
-  // };
+  const dispatch = useAppDispatch();
+  const verifyLoading = useAppSelector(
+    (state) => state.verifyLock.loading // Name is required in the schema
+  );
+  const updatePublicationLoading = useAppSelector(
+    (state) => state.updatePublication.loading // Name is required in the schema
+  );
+
+  const locks = useAppSelector(
+    (state) => state.locks // Name is required in the schema
+  );
+  const { web3Service } = useUnlock();
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
+    // verify locks and if verified then
+    // add to a ceramic doc
     console.log("Here");
     console.log(data);
+    if (web3Service) {
+      dispatch(
+        verifyLock({
+          address: data.lockAddress,
+          chainId: data.lockChain,
+          web3Service,
+        })
+      );
+    }
   }, []);
 
   return (
@@ -297,6 +315,8 @@ const Locks = () => {
                 size="lg"
                 color="primary"
                 variant="contained"
+                isLoading={verifyLoading || updatePublicationLoading}
+                loadingText="Verifying..."
                 onClick={() => console.log("Hello")}
               >
                 Submit
@@ -306,7 +326,11 @@ const Locks = () => {
         </Dialog>
       </EntriesHeader>
       <CardContainer>
-        <EmtptyLocksMessage />
+        {Object.values(locks || {}).length ? (
+          <h1>J</h1>
+        ) : (
+          <EmtptyLocksMessage />
+        )}
       </CardContainer>
     </EntriesContainer>
   );
@@ -428,5 +452,4 @@ const PublishPage = () => {
     </Layout>
   );
 };
-
 export default PublishPage;
