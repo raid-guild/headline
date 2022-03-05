@@ -6,6 +6,7 @@ import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
 import lock_example from "assets/lock_example.svg";
+import checkmark from "assets/checkmark.svg";
 import { useUnlock } from "context/UnlockContext";
 import ArticleCard from "components/ArticleCard";
 import Button from "components/Button";
@@ -28,7 +29,7 @@ import Title from "components/Title";
 import { fetchPublication } from "services/publication/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
-import { verifyLock } from "services/lock/slice";
+import { verifyLock, lockSelectors } from "services/lock/slice";
 import { networks } from "lib/networks";
 
 import { useAppDispatch, useAppSelector } from "store";
@@ -243,34 +244,151 @@ const Articles = () => {
   );
 };
 
+const SuccessMsgContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const SuccessCardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
+
 const Locks = () => {
   const dispatch = useAppDispatch();
+  const { provider } = useWallet();
+  const [submitted, setSubmitted] = useState(false);
+  const [lockAddress, setLockAddress] = useState("");
+  const [hideModal, setHideModal] = useState(false);
+
   const verifyLoading = useAppSelector(
     (state) => state.verifyLock.loading // Name is required in the schema
   );
   const updatePublicationLoading = useAppSelector(
     (state) => state.updatePublication.loading // Name is required in the schema
   );
-
-  const locks = useAppSelector(
-    (state) => state.locks // Name is required in the schema
+  const verifyError = useAppSelector(
+    (state) => state.verifyLock.error // Name is required in the schema
   );
+
+  const lock = useAppSelector((state) =>
+    lockSelectors.getLockByAddress(state, lockAddress)
+  );
+
+  const locks = useAppSelector((state) => state.lock);
   const { web3Service } = useUnlock();
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     // verify locks and if verified then
     // add to a ceramic doc
     console.log("Here");
     console.log(data);
-    if (web3Service) {
+    if (web3Service && provider) {
       dispatch(
         verifyLock({
           address: data.lockAddress,
           chainId: data.lockChain,
           web3Service,
+          provider,
         })
       );
+      setSubmitted(true);
+      setLockAddress(data.lockAddress);
     }
   }, []);
+
+  const verificationModal = () => {
+    return (
+      <>
+        <Text size="base" color="label">
+          We are powered by Unlock Protocol, please head over to the{" "}
+          <ExternalLink href="https://app.unlock-protocol.com/dashboard">
+            <Text as="span" size="base" color="primary" weight="semibold">
+              dashboard
+            </Text>
+          </ExternalLink>{" "}
+          & create a membership first.
+        </Text>
+        <img
+          src={lock_example}
+          alt="tutorial on how to create a lock in Unlock"
+        />
+        <LockVerificationForm onSubmit={onSubmit}>
+          {verifyError && (
+            <Text size="sm" color="success">
+              {verifyError}
+            </Text>
+          )}
+          <Button
+            type="submit"
+            size="lg"
+            color="primary"
+            variant="contained"
+            isLoading={verifyLoading || updatePublicationLoading}
+            loadingText="Verifying..."
+            onClick={() => console.log("Hello")}
+          >
+            Submit
+          </Button>
+        </LockVerificationForm>
+      </>
+    );
+  };
+
+  console.log("Locks");
+  console.log(lock);
+  console.log(locks);
+  const successModal = useCallback(() => {
+    return (
+      <>
+        <SuccessMsgContainer>
+          <img src={checkmark} alt="success checkmark" />
+          <Text size="base" color="label">
+            Membership key has been successfully imported
+          </Text>
+        </SuccessMsgContainer>
+        <SuccessCardContainer>
+          <Title size="sm" color="label">
+            {lock.name}
+          </Title>
+          <div>
+            <SuccessMsgContainer>
+              <Text size="base" color="grey">
+                Price
+              </Text>
+              <Text size="base" color="label">
+                {lock.keyPriceSimple} {lock.keyTokenSymbol}
+              </Text>
+            </SuccessMsgContainer>
+            <SuccessMsgContainer>
+              <Text size="base" color="grey">
+                Duration
+              </Text>
+              <Text size="base" color="label">
+                {lock.expiration / 60 / 60} Days
+              </Text>
+            </SuccessMsgContainer>
+            <SuccessMsgContainer>
+              <Text size="base" color="grey">
+                Quantity
+              </Text>
+              <Text size="base" color="label">
+                {lock.maxNumber === -1 ? "Infinite" : lock.maxNumber}
+              </Text>
+            </SuccessMsgContainer>
+          </div>
+        </SuccessCardContainer>
+        <Button
+          size="lg"
+          color="success"
+          variant="contained"
+          onClick={() => setHideModal(true)}
+        >
+          All Done
+        </Button>
+      </>
+    );
+  }, [lock]);
 
   return (
     <EntriesContainer>
@@ -281,12 +399,18 @@ const Locks = () => {
         <Dialog
           baseId="lock-verification"
           backdrop={true}
+          hideOnEsc={true}
+          hideOnClickOutside={true}
+          hideModal={hideModal}
           disclosure={
             <Button
               size="lg"
               color="primary"
               variant="contained"
-              onClick={() => console.log("Hero")}
+              onClick={() => {
+                setHideModal(false);
+                setSubmitted(false);
+              }}
             >
               Create
             </Button>
@@ -296,32 +420,7 @@ const Locks = () => {
             <Text size="base" color="helpText">
               Create membership
             </Text>
-            <Text size="base" color="label">
-              We are powered by Unlock Protocol, please head over to the{" "}
-              <ExternalLink href="https://app.unlock-protocol.com/dashboard">
-                <Text as="span" size="base" color="priamry" weight="semibold">
-                  dashboard
-                </Text>
-              </ExternalLink>{" "}
-              & create a membership first.
-            </Text>
-            <img
-              src={lock_example}
-              alt="tutorial on how to create a lock in Unlock"
-            />
-            <LockVerificationForm onSubmit={onSubmit}>
-              <Button
-                type="submit"
-                size="lg"
-                color="primary"
-                variant="contained"
-                isLoading={verifyLoading || updatePublicationLoading}
-                loadingText="Verifying..."
-                onClick={() => console.log("Hello")}
-              >
-                Submit
-              </Button>
-            </LockVerificationForm>
+            {(!verifyLoading && submitted ? successModal : verificationModal)()}
           </DialogContainer>
         </Dialog>
       </EntriesHeader>

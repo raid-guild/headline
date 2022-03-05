@@ -21,7 +21,6 @@ const theme = {
   },
   colors: {
     primary: "#6D9CF9",
-
     backgroundGrey: "#F7F7F7",
     almostWhite: "#FCFCFC",
     text: "#000000",
@@ -29,6 +28,7 @@ const theme = {
     label: "#3A3A3A",
     grey: "#A5A5A5",
     lightGrey: "#DEDEDE",
+    success: "#8ACA89",
   },
   fonts: {
     fontFamily: `'Inter'`,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import {
   useDialogState,
@@ -11,6 +11,7 @@ import {
 type LocalProps = {
   disclosure: React.FunctionComponentElement<unknown>;
   backdrop?: boolean;
+  hideModal?: boolean;
 };
 
 type Props = LocalProps & DialogProps;
@@ -40,8 +41,20 @@ const StyledDialogBackdrop = styled(DialogBackdrop)`
   z-index: 1000;
 `;
 
-export const Dialog = ({ disclosure, backdrop, ...props }: Props) => {
+export const Dialog = ({
+  disclosure,
+  backdrop,
+  hideModal,
+  ...props
+}: Props) => {
   const dialog = useDialogState();
+
+  useEffect(() => {
+    if (hideModal) {
+      dialog.hide();
+    }
+  }, [hideModal]);
+
   return (
     <>
       <DialogDisclosure {...dialog} ref={disclosure.ref} {...disclosure.props}>
