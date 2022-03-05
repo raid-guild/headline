@@ -15,12 +15,17 @@ import {
 } from "lib/lit";
 import { RootState } from "store";
 
+type PublicationLock = {
+  chainId: string;
+  address: string;
+};
+
 export type Publication = {
   name: string;
   description: string;
   draftAccess: LitAccess;
   publishAccess: LitAccess;
-  locks?: string[];
+  locks?: PublicationLock[];
 };
 
 export const publicationSlice = createSlice({
@@ -36,7 +41,7 @@ export const publicationSlice = createSlice({
       encryptedSymmetricKey: "",
       accessControlConditions: [] as (AccessControl | Operator)[],
     },
-    locks: [] as string[],
+    locks: [] as PublicationLock[],
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {

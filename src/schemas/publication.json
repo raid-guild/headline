@@ -61,6 +61,17 @@
           }
         }
       }
+    },
+    "Lock": {
+      "type": "object",
+      "properties": {
+        "chainId": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
     }
   },
   "properties": {
@@ -83,7 +94,7 @@
     "locks": {
       "type": "array",
       "items": {
-        "type": "string"
+        "$ref": "#/definitions/Lock"
       }
     }
   },

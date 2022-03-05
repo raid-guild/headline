@@ -142,7 +142,10 @@ export const verifyLock = createAsyncThunk(
           updatePublication({
             description: publication.description,
             name: publication.name,
-            locks: [...publication.locks, args.address],
+            locks: [
+              ...publication.locks,
+              { address: args.address, chainId: args.chainId },
+            ],
           })
         );
       }
