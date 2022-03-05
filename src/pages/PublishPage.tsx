@@ -13,6 +13,7 @@ import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
+import { LockCards, LockData } from "components/LockCard";
 import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
 import {
@@ -276,7 +277,7 @@ const Locks = () => {
     lockSelectors.getLockByAddress(state, lockAddress)
   );
 
-  const locks = useAppSelector((state) => state.lock);
+  const locks = useAppSelector((state) => lockSelectors.listLocks(state));
   const { web3Service } = useUnlock();
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     // verify locks and if verified then
@@ -348,35 +349,7 @@ const Locks = () => {
           </Text>
         </SuccessMsgContainer>
         <SuccessCardContainer>
-          <Title size="sm" color="label">
-            {lock.name}
-          </Title>
-          <div>
-            <SuccessMsgContainer>
-              <Text size="base" color="grey">
-                Price
-              </Text>
-              <Text size="base" color="label">
-                {lock.keyPriceSimple} {lock.keyTokenSymbol}
-              </Text>
-            </SuccessMsgContainer>
-            <SuccessMsgContainer>
-              <Text size="base" color="grey">
-                Duration
-              </Text>
-              <Text size="base" color="label">
-                {lock.expiration / 60 / 60} Days
-              </Text>
-            </SuccessMsgContainer>
-            <SuccessMsgContainer>
-              <Text size="base" color="grey">
-                Quantity
-              </Text>
-              <Text size="base" color="label">
-                {lock.maxNumber === -1 ? "Infinite" : lock.maxNumber}
-              </Text>
-            </SuccessMsgContainer>
-          </div>
+          <LockData lock={lock} />
         </SuccessCardContainer>
         <Button
           size="lg"
@@ -426,7 +399,7 @@ const Locks = () => {
       </EntriesHeader>
       <CardContainer>
         {Object.values(locks || {}).length ? (
-          <h1>J</h1>
+          <LockCards locks={locks} />
         ) : (
           <EmtptyLocksMessage />
         )}

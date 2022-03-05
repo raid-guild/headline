@@ -12,7 +12,7 @@ import { getTokenSymbolAndNumber } from "lib/token";
 import { updatePublication } from "services/publication/slice";
 import { RootState } from "store";
 
-type Lock = {
+export type Lock = {
   name: string;
   keyPrice: string;
   expiration: number;
@@ -66,6 +66,14 @@ export const lockSelectors = {
     ],
     (lockRegistry: LockRegistry, address: string) => {
       return lockRegistry[address.toLowerCase()];
+    }
+  ),
+  listLocks: createSelector(
+    [(state: RootState) => state.lock],
+    (lockRegistry: LockRegistry) => {
+      return Object.values(lockRegistry).sort(
+        (a, b) => a.keyPriceSimple - b.keyPriceSimple
+      );
     }
   ),
 };
