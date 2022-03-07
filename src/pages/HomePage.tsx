@@ -11,6 +11,7 @@ const StyledLayout = styled(Layout)`
     "header" 9.6rem
     "body" 1fr
     / 1fr;
+  margin-top: 2rem;
   /* background-color: red; */
 `;
 const StyledBodyContainer = styled(BodyContainer)`
@@ -23,15 +24,14 @@ const HomeHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  margin: 0 2rem; ;
+  align-items: flex-start;
+  margin: 0 2rem;
 `;
 
 const HeroContainer = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: blue; */
 `;
 
 const HeroCTAContainer = styled.div`
@@ -40,7 +40,6 @@ const HeroCTAContainer = styled.div`
   margin: 0rem 15rem;
   justify-content: center;
   align-items: center;
-  /* background-color: green; */
 `;
 
 const HeroHeading = styled.h2`
@@ -69,9 +68,10 @@ const HeroButton = styled(Button)`
 `;
 
 const LogoContainer = styled.div`
-  max-height: 12rem;
-  height: 100%;
-  margin-top: 2rem;
+  direction: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const InternalLink = styled.a`
