@@ -61,9 +61,11 @@ const Sidebar = () => {
   return (
     <SidebarContainer>
       <TopContainer>
-        <LogoContainer>
-          <FullLogo />
-        </LogoContainer>
+        <Link to="/">
+          <LogoContainer>
+            <FullLogo />
+          </LogoContainer>
+        </Link>
         <MenuContainer>
           <Link to={"/dashboard"}>
             <SidebarItem text="Dashboard" icon="dashboard" />

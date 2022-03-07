@@ -17,6 +17,9 @@ import theme from "theme";
 
 import "./index.css";
 
+// import Inter globally from fontsource
+import "@fontsource/inter/latin.css";
+
 const providerOptions: IProviderOptions = {
   walletconnect: {
     package: WalletConnectProvider,
