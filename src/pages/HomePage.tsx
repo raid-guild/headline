@@ -1,14 +1,17 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "components/Button";
 import { Layout, BodyContainer } from "components/Layout";
 import FullLogo from "components/FullLogo";
+import { DASHBOARD_URI } from "../constants";
 
 const StyledLayout = styled(Layout)`
   grid-template:
     "header" 9.6rem
     "body" 1fr
     / 1fr;
+  margin-top: 2rem;
   /* background-color: red; */
 `;
 const StyledBodyContainer = styled(BodyContainer)`
@@ -21,15 +24,14 @@ const HomeHeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
-  padding: 3.2rem;
+  align-items: flex-start;
+  margin: 0 2rem;
 `;
 
 const HeroContainer = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* background-color: blue; */
 `;
 
 const HeroCTAContainer = styled.div`
@@ -38,7 +40,6 @@ const HeroCTAContainer = styled.div`
   margin: 0rem 15rem;
   justify-content: center;
   align-items: center;
-  /* background-color: green; */
 `;
 
 const HeroHeading = styled.h2`
@@ -67,13 +68,10 @@ const HeroButton = styled(Button)`
 `;
 
 const LogoContainer = styled.div`
-  display: flex;
+  direction: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-height: 12rem;
-  height: 100%;
-  margin-top: 2rem;
 `;
 
 const InternalLink = styled.a`
@@ -103,9 +101,11 @@ const HomePage = () => {
           <InternalLink as="a" href="#">
             How it works
           </InternalLink>
-          <Button color="primary" variant="contained" size="md">
-            Get Started
-          </Button>
+          <Link to={DASHBOARD_URI}>
+            <Button color="primary" variant="contained" size="md">
+              Get Started
+            </Button>
+          </Link>
         </ActionContainer>
       </HomeHeaderContainer>
       <StyledBodyContainer>
@@ -113,9 +113,11 @@ const HomePage = () => {
           <HeroCTAContainer>
             <HeroHeading>The Decentralized Newsletter.</HeroHeading>
             <HeroTagline>Your Content, Your Readers.</HeroTagline>
-            <HeroButton color="primary" variant="contained" size="xl">
-              Get Started
-            </HeroButton>
+            <Link to={DASHBOARD_URI}>
+              <HeroButton color="primary" variant="contained" size="xl">
+                Get Started
+              </HeroButton>
+            </Link>
           </HeroCTAContainer>
         </HeroContainer>
       </StyledBodyContainer>
