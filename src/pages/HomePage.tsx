@@ -1,77 +1,123 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
 import Button from "components/Button";
-import BackButton from "components/BackButton";
-import Icon from "components/Icon";
-import Input from "components/Input";
-import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
-import Title from "components/Title";
-import Text from "components/Text";
-import small_logo from "assets/small_logo.svg";
-import celebrateIcon from "assets/celebrate.svg";
+import { Layout, BodyContainer } from "components/Layout";
+import FullLogo from "components/FullLogo";
 
 const StyledLayout = styled(Layout)`
   grid-template:
     "header" 9.6rem
     "body" 1fr
     / 1fr;
+  /* background-color: red; */
 `;
 const StyledBodyContainer = styled(BodyContainer)`
-  align-items: flex-start;
+  grid-area: body;
+  /* background-color: red; */
 `;
 
-const StyledHeaderContainer = styled(HeaderContainer)`
-  border-bottom: ${({ theme }) => `0.1rem solid ${theme.colors.lightGrey}`};
+const HomeHeaderContainer = styled.div`
+  grid-area: header;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3.2rem;
 `;
 
-const StyledIcon = styled(Icon)`
-  height: 8rem;
-`;
-
-const ContentContainer = styled(BodyContainer)`
+const HeroContainer = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
-  max-width: 48rem;
-  width: 100%;
-  height: 100%;
-  max-height: 40rem;
-  justify-content: space-evenly;
+  justify-content: center;
+  /* background-color: blue; */
 `;
 
-const LeftHeaderContainer = styled.div`
+const HeroCTAContainer = styled.div`
   display: flex;
-  gap: 1rem;
-  margin-left: 6rem;
+  flex-direction: column;
+  margin: 0rem 15rem;
+  justify-content: center;
   align-items: center;
+  /* background-color: green; */
 `;
 
-const BodyHeaderContainer = styled.div`
+const HeroHeading = styled.h2`
+  font-size: 96px;
+  line-height: 102px;
+  font-weight: 900;
+  text-align: center;
+  color: black;
+  margin-bottom: 3.2rem;
+  margin-top: 0px;
+`;
+
+const HeroTagline = styled.span`
+  font-size: 32px;
+  line-height: 38px;
+  font-weight: 600;
+  text-align: center;
+  color: black;
+  margin-bottom: 5.6rem;
+`;
+
+const HeroButton = styled(Button)`
+  border-radius: 8px;
+  width: 26.5rem;
+  height: 6.2rem;
+`;
+
+const LogoContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  max-height: 12rem;
+  height: 100%;
+  margin-top: 2rem;
 `;
 
-const StyledButton = styled(Button)`
-  width: 100%;
+const InternalLink = styled.a`
+  font-size: 16px;
+  line-height: 22px;
+  align: center;
+  background: transparent;
+  color: #000000;
+`;
+
+const ActionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2.4rem;
 `;
 
 const HomePage = () => {
   return (
     <StyledLayout>
-      <StyledHeaderContainer>
-        <LeftHeaderContainer>
-          <BackButton size="md" />
-          <Icon size="xl" src={small_logo} alt="Unlock logo" />
-          <Text size="md" weight="semibold" color="helpText">
-            Create Publication
-          </Text>
-        </LeftHeaderContainer>
-      </StyledHeaderContainer>
+      <HomeHeaderContainer>
+        <LogoContainer>
+          <FullLogo />
+        </LogoContainer>
+        <ActionContainer>
+          <InternalLink as="a" href="#">
+            How it works
+          </InternalLink>
+          <Button color="primary" variant="contained" size="md">
+            Get Started
+          </Button>
+        </ActionContainer>
+      </HomeHeaderContainer>
       <StyledBodyContainer>
-        <ContentContainer>Content</ContentContainer>
+        <HeroContainer>
+          <HeroCTAContainer>
+            <HeroHeading>The Decentralized Newsletter.</HeroHeading>
+            <HeroTagline>Your Content, Your Readers.</HeroTagline>
+            <HeroButton color="primary" variant="contained" size="xl">
+              Get Started
+            </HeroButton>
+          </HeroCTAContainer>
+        </HeroContainer>
       </StyledBodyContainer>
     </StyledLayout>
   );
