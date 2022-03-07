@@ -20,6 +20,7 @@
     "@datamodels/identity-profile-basic": "^0.1.2",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@fontsource/inter": "^4.5.4",
     "@raidguild/quiver": "0.9.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@remirror/pm": "^1.0.11",

@@ -20,6 +20,9 @@ import { IProviderOptions } from "web3modal";
 
 import { networks } from "lib/networks";
 
+// import Inter globally from fontsource
+import "@fontsource/inter/latin.css";
+
 const providerOptions: IProviderOptions = {
   walletconnect: {
     package: WalletConnectProvider,
