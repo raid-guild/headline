@@ -24,7 +24,7 @@ const HomeHeaderContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 3.2rem;
+  margin: 0 2rem; ;
 `;
 
 const HeroContainer = styled(BodyContainer)`
@@ -69,10 +69,6 @@ const HeroButton = styled(Button)`
 `;
 
 const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   max-height: 12rem;
   height: 100%;
   margin-top: 2rem;
