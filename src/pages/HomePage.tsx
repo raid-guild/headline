@@ -17,9 +17,11 @@ const StyledLayout = styled(Layout)`
     "header" 9.6rem
     "body" 1fr
     / 1fr;
+  background-color: red;
 `;
 const StyledBodyContainer = styled(BodyContainer)`
-  align-items: flex-start;
+  grid-area: body;
+  background-color: red;
 `;
 
 const HomeHeaderContainer = styled.div`
@@ -35,14 +37,44 @@ const StyledIcon = styled(Icon)`
   height: 8rem;
 `;
 
-const ContentContainer = styled(BodyContainer)`
+const HeroContainer = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
-  max-width: 48rem;
-  width: 100%;
-  height: 100%;
-  max-height: 40rem;
-  justify-content: space-evenly;
+  justify-content: center;
+  /* max-width: 48rem; */
+
+  background-color: blue;
+`;
+
+const HeroCTAContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: 0rem 15rem;
+  justify-content: center;
+  align-items: center;
+  background-color: green;
+`;
+
+const HeroHeading = styled.h2`
+  font-size: 96px;
+  line-height: 102px;
+  font-weight: 900;
+  text-align: center;
+  color: black;
+  margin-bottom: 3.2rem;
+`;
+
+const HeroTagline = styled.span`
+  font-size: 32px;
+  line-height: 38px;
+  font-weight: 600;
+  text-align: center;
+  color: black;
+  margin-bottom: 5.6rem;
+`;
+
+const HeroButton = styled(Button)`
+  border-radius: 8px;
 `;
 
 const LogoContainer = styled.div`
@@ -88,7 +120,15 @@ const HomePage = () => {
         </ActionContainer>
       </HomeHeaderContainer>
       <StyledBodyContainer>
-        <ContentContainer>Content</ContentContainer>
+        <HeroContainer>
+          <HeroCTAContainer>
+            <HeroHeading>The Decentralized Newsletter.</HeroHeading>
+            <HeroTagline>Your Content, Your Readers.</HeroTagline>
+            <HeroButton color="primary" variant="contained" size="lg">
+              Get Started
+            </HeroButton>
+          </HeroCTAContainer>
+        </HeroContainer>
       </StyledBodyContainer>
     </StyledLayout>
   );
