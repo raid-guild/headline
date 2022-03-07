@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "components/Button";
 import { Layout, BodyContainer } from "components/Layout";
 import FullLogo from "components/FullLogo";
+import { DASHBOARD_URI } from "../constants";
 
 const StyledLayout = styled(Layout)`
   grid-template:
@@ -103,9 +105,11 @@ const HomePage = () => {
           <InternalLink as="a" href="#">
             How it works
           </InternalLink>
-          <Button color="primary" variant="contained" size="md">
-            Get Started
-          </Button>
+          <Link to={DASHBOARD_URI}>
+            <Button color="primary" variant="contained" size="md">
+              Get Started
+            </Button>
+          </Link>
         </ActionContainer>
       </HomeHeaderContainer>
       <StyledBodyContainer>
@@ -113,9 +117,11 @@ const HomePage = () => {
           <HeroCTAContainer>
             <HeroHeading>The Decentralized Newsletter.</HeroHeading>
             <HeroTagline>Your Content, Your Readers.</HeroTagline>
-            <HeroButton color="primary" variant="contained" size="xl">
-              Get Started
-            </HeroButton>
+            <Link to={DASHBOARD_URI}>
+              <HeroButton color="primary" variant="contained" size="xl">
+                Get Started
+              </HeroButton>
+            </Link>
           </HeroCTAContainer>
         </HeroContainer>
       </StyledBodyContainer>
