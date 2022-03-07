@@ -33,7 +33,8 @@ const Routes = () => {
   return (
     <HashRouter>
       <RouteContainer>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/" element={<HomePage />} />
+        {/* <Route path="/" element={<DashboardPage />} /> */}
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route
           path="/publish"
@@ -84,7 +85,6 @@ const Routes = () => {
           }
         />
         <Route path="*" element={<Navigate to="/" />} />
-        <Route path="/home" element={<HomePage />} />
       </RouteContainer>
     </HashRouter>
   );
