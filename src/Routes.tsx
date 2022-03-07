@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import { useCermaic } from "context/CeramicContext";
+import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
 import PublishPage from "./pages/PublishPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -29,7 +30,7 @@ const Routes = () => {
   return (
     <HashRouter>
       <RouteContainer>
-        <Route path="/" element={<DashboardPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route
           path="/publish"
