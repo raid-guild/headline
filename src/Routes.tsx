@@ -26,9 +26,6 @@ const RequireAuth = ({ children }: { children: JSX.Element }) => {
   return children;
 };
 
-// change back the main route to DashboardPage after making HomePage --
-// need to move the auth piece to this
-
 const Routes = () => {
   return (
     <HashRouter>

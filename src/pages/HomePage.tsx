@@ -48,6 +48,7 @@ const HeroHeading = styled.h2`
   text-align: center;
   color: black;
   margin-bottom: 3.2rem;
+  margin-top: 0px;
 `;
 
 const HeroTagline = styled.span`
@@ -61,6 +62,8 @@ const HeroTagline = styled.span`
 
 const HeroButton = styled(Button)`
   border-radius: 8px;
+  width: 26.5rem;
+  height: 6.2rem;
 `;
 
 const LogoContainer = styled.div`
@@ -110,7 +113,7 @@ const HomePage = () => {
           <HeroCTAContainer>
             <HeroHeading>The Decentralized Newsletter.</HeroHeading>
             <HeroTagline>Your Content, Your Readers.</HeroTagline>
-            <HeroButton color="primary" variant="contained" size="lg">
+            <HeroButton color="primary" variant="contained" size="xl">
               Get Started
             </HeroButton>
           </HeroCTAContainer>
