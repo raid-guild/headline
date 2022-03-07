@@ -1,15 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Link, useNavigate } from "react-router-dom";
 import Button from "components/Button";
-import BackButton from "components/BackButton";
 import Icon from "components/Icon";
-import Input from "components/Input";
-import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
-import Title from "components/Title";
-import Text from "components/Text";
-import small_logo from "assets/small_logo.svg";
-import celebrateIcon from "assets/celebrate.svg";
+import { Layout, BodyContainer } from "components/Layout";
 import FullLogo from "components/FullLogo";
 
 const StyledLayout = styled(Layout)`
@@ -17,11 +10,11 @@ const StyledLayout = styled(Layout)`
     "header" 9.6rem
     "body" 1fr
     / 1fr;
-  background-color: red;
+  /* background-color: red; */
 `;
 const StyledBodyContainer = styled(BodyContainer)`
   grid-area: body;
-  background-color: red;
+  /* background-color: red; */
 `;
 
 const HomeHeaderContainer = styled.div`
@@ -33,17 +26,11 @@ const HomeHeaderContainer = styled.div`
   padding: 3.2rem;
 `;
 
-const StyledIcon = styled(Icon)`
-  height: 8rem;
-`;
-
 const HeroContainer = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  /* max-width: 48rem; */
-
-  background-color: blue;
+  /* background-color: blue; */
 `;
 
 const HeroCTAContainer = styled.div`
@@ -52,7 +39,7 @@ const HeroCTAContainer = styled.div`
   margin: 0rem 15rem;
   justify-content: center;
   align-items: center;
-  background-color: green;
+  /* background-color: green; */
 `;
 
 const HeroHeading = styled.h2`
