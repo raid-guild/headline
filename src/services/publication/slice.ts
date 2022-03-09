@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import LitJsSdk from "@alexkeating/lit-js-sdk";
+import { ethers } from "ethers";
+import { Web3Service } from "@unlock-protocol/unlock-js";
 
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
@@ -13,13 +15,20 @@ import {
   AccessControl,
   Operator,
 } from "lib/lit";
+import { fetchLocks } from "services/lock/slice";
 import { RootState } from "store";
+
+type PublicationLock = {
+  chainId: string;
+  address: string;
+};
 
 export type Publication = {
   name: string;
   description: string;
   draftAccess: LitAccess;
   publishAccess: LitAccess;
+  locks?: PublicationLock[];
 };
 
 export const publicationSlice = createSlice({
@@ -35,6 +44,7 @@ export const publicationSlice = createSlice({
       encryptedSymmetricKey: "",
       accessControlConditions: [] as (AccessControl | Operator)[],
     },
+    locks: [] as PublicationLock[],
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
@@ -42,6 +52,7 @@ export const publicationSlice = createSlice({
       state.description = action.payload.description;
       state.draftAccess = action.payload.draftAccess;
       state.publishAccess = action.payload.publishAccess;
+      state.locks = action.payload.locks || [];
     },
   },
 });
@@ -180,7 +191,10 @@ export const createPublication = createAsyncThunk(
 // async thunk that fetches a publication
 export const fetchPublication = createAsyncThunk(
   "publication/fetch",
-  async (args, thunkAPI) => {
+  async (
+    args: { provider: ethers.providers.Provider; web3Service: Web3Service },
+    thunkAPI
+  ) => {
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -191,6 +205,13 @@ export const fetchPublication = createAsyncThunk(
       const publication = await store.get("publication");
       if (publication) {
         thunkAPI.dispatch(publicationActions.create(publication));
+        thunkAPI.dispatch(
+          fetchLocks({
+            provider: args.provider,
+            web3Service: args.web3Service,
+            publication,
+          })
+        );
       }
       return publication;
     } catch (err) {
@@ -204,17 +225,10 @@ export const fetchPublication = createAsyncThunk(
 export const updatePublication = createAsyncThunk(
   "publication/update",
   async (
-    args: {
-      publication: Omit<Publication, "draftAccess" | "publishAccess">;
-      address: string;
-      chainName: string;
-    },
+    publication: Omit<Publication, "draftAccess" | "publishAccess">,
     thunkAPI
   ) => {
-    if (!args.address) {
-      return;
-    }
-    const pub = args.publication;
+    const pub = publication;
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -227,6 +241,7 @@ export const updatePublication = createAsyncThunk(
         ...publication,
         name: pub.name,
         description: pub.description,
+        locks: pub.locks,
       };
       await store.set("publication", updatedPublication);
       thunkAPI.dispatch(publicationActions.create(updatedPublication));

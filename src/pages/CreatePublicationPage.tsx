@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { useWallet } from "@raidguild/quiver";
+import { useUnlock } from "context/UnlockContext";
 import {
   useForm,
   SubmitHandler,
@@ -165,11 +166,15 @@ const CreatePublicationForm = () => {
 
 const CreatePublicationPage = () => {
   const dispatch = useAppDispatch();
+  const { web3Service } = useUnlock();
+  const { provider } = useWallet();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
   useEffect(() => {
-    dispatch(fetchPublication());
+    if (provider && web3Service) {
+      dispatch(fetchPublication({ provider, web3Service }));
+    }
   }, []);
 
   return (

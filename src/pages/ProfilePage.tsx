@@ -7,6 +7,7 @@ import github from "assets/github.svg";
 import twitter from "assets/twitter.svg";
 import Avatar from "components/Avatar";
 import Button from "components/Button";
+import ExternalLink from "components/ExternalLink";
 import Icon from "components/Icon";
 import {
   Layout,
@@ -74,7 +75,7 @@ const EmptyProfileCard = () => {
           your profile on self.id
         </Text>
       </ProfileTextContainer>
-      <a href="https://self.id/" target="_blank" rel="noopener noreferrer">
+      <ExternalLink href="https://self.id/">
         <GetStartedButton
           size="md"
           color="primary"
@@ -83,7 +84,7 @@ const EmptyProfileCard = () => {
         >
           Get started
         </GetStartedButton>
-      </a>
+      </ExternalLink>
     </>
   );
 };
@@ -124,36 +125,28 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
           <Text size="base">{profile?.description || ""}</Text>
           <UrlContainer>
             {profile.url && (
-              <a href={profile.url} target="_blank" rel="noopener noreferrer">
+              <ExternalLink href={profile.url}>
                 <Text as="span" size="base" weight="bold" color="primary">
                   {profile?.url}
                 </Text>
-              </a>
+              </ExternalLink>
             )}
             <SocialMediaContainer>
               {profile.twitter && (
-                <a
-                  href={profile.twitter as string}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href={profile.twitter as string}>
                   <Icon src={twitter} alt="twitter logo" size="lg" />
-                </a>
+                </ExternalLink>
               )}
               {profile.github && (
-                <a
-                  href={profile.github as string}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href={profile.github as string}>
                   <Icon src={github} alt="github logo" size="lg" />
-                </a>
+                </ExternalLink>
               )}
             </SocialMediaContainer>
           </UrlContainer>
         </ProfileTextContainer>
       </ProfileContentContainer>
-      <a href="https://self.id/" target="_blank" rel="noopener noreferrer">
+      <ExternalLink href="https://self.id/">
         <GetStartedButton
           size="md"
           color="primary"
@@ -162,7 +155,7 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
         >
           Edit
         </GetStartedButton>
-      </a>
+      </ExternalLink>
     </>
   );
 };

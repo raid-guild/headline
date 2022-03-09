@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import {
   useDialogState,
@@ -11,13 +11,14 @@ import {
 type LocalProps = {
   disclosure: React.FunctionComponentElement<unknown>;
   backdrop?: boolean;
+  hideModal?: boolean;
 };
 
 type Props = LocalProps & DialogProps;
 
 const StyledDialog = styled(BaseDialog)`
   position: fixed;
-  top: 25%;
+  top: 5%;
   left: 50%;
   background: ${({ theme }) => theme.colors.backgroundGrey};
   transform: translateX(-50%);
@@ -40,8 +41,20 @@ const StyledDialogBackdrop = styled(DialogBackdrop)`
   z-index: 1000;
 `;
 
-const Dialog = ({ disclosure, backdrop, ...props }: Props) => {
+export const Dialog = ({
+  disclosure,
+  backdrop,
+  hideModal,
+  ...props
+}: Props) => {
   const dialog = useDialogState();
+
+  useEffect(() => {
+    if (hideModal) {
+      dialog.hide();
+    }
+  }, [hideModal]);
+
   return (
     <>
       <DialogDisclosure {...dialog} ref={disclosure.ref} {...disclosure.props}>
@@ -58,4 +71,11 @@ const Dialog = ({ disclosure, backdrop, ...props }: Props) => {
   );
 };
 
-export default Dialog;
+export const DialogContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  gap: 3.2rem;
+  display: flex;
+  flex-direction: column;
+  background: ${({ theme }) => theme.colors.almostWhite};
+`;

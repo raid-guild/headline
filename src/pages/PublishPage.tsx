@@ -1,14 +1,20 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@raidguild/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
-import { fetchPublication } from "services/publication/slice";
-import { fetchArticleRegistry } from "services/articleRegistry/slice";
+import lock_example from "assets/lock_example.svg";
+import checkmark from "assets/checkmark.svg";
+import { useUnlock } from "context/UnlockContext";
 import ArticleCard from "components/ArticleCard";
 import Button from "components/Button";
+import { Dialog, DialogContainer } from "components/Dialog";
+import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
+import { LockCards, LockData } from "components/LockCard";
+import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
 import {
   Layout,
@@ -21,7 +27,9 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
+import { verifyLock, lockSelectors } from "services/lock/slice";
 import { networks } from "lib/networks";
 
 import { useAppDispatch, useAppSelector } from "store";
@@ -99,11 +107,11 @@ const CreatePublicationView = () => {
         <BodyFooterContainer>
           <Text size="base">
             How does web3substack work? Check out our{" "}
-            <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+            <ExternalLink href="www.google.com">
               <Text as="span" size="base" weight="bold" color="primary">
                 Guide
               </Text>
-            </a>
+            </ExternalLink>
             .
           </Text>
         </BodyFooterContainer>
@@ -146,13 +154,45 @@ const CardContainer = styled.div`
   flex-direction: column;
 `;
 
+const EmtptyCardContainer = styled.div`
+  padding: 4rem;
+  border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
+  gap: 1.6rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`;
+
 const EmtptyEntriesMessage = () => {
   return (
-    <div>
-      <Text size="base" color="helpText">
+    <EmtptyCardContainer>
+      <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
-    </div>
+      <Link to="/publish/write">
+        <Text size="sm" color="primary" weight="semibold">
+          Write a new post
+        </Text>
+      </Link>
+    </EmtptyCardContainer>
+  );
+};
+
+const EmtptyLocksMessage = () => {
+  return (
+    <EmtptyCardContainer>
+      <Text size="base" color="helpText" weight="semibold">
+        You havent written any posts yet
+      </Text>
+      <Text size="sm" color="helpText">
+        Create different membership options for your readers
+      </Text>
+      <Link to="/publish/write">
+        <Text size="sm" color="primary" weight="semibold">
+          Create Now
+        </Text>
+      </Link>
+    </EmtptyCardContainer>
   );
 };
 
@@ -181,7 +221,7 @@ const Articles = () => {
   return (
     <EntriesContainer>
       <EntriesHeader>
-        <Text size="md" color="label">
+        <Text size="md" color="label" weight="semibold">
           Entries
         </Text>
         <Button
@@ -198,6 +238,157 @@ const Articles = () => {
           <ArticleEntries articleRegistry={articleRegistry} />
         ) : (
           <EmtptyEntriesMessage />
+        )}
+      </CardContainer>
+    </EntriesContainer>
+  );
+};
+
+const SuccessMsgContainer = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const SuccessCardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+`;
+
+const Locks = () => {
+  const dispatch = useAppDispatch();
+  const { provider } = useWallet();
+  const [submitted, setSubmitted] = useState(false);
+  const [lockAddress, setLockAddress] = useState("");
+  const [hideModal, setHideModal] = useState(false);
+
+  const verifyLoading = useAppSelector((state) => state.verifyLock.loading);
+  const updatePublicationLoading = useAppSelector(
+    (state) => state.updatePublication.loading
+  );
+  const verifyError = useAppSelector((state) => state.verifyLock.error);
+
+  const lock = useAppSelector((state) =>
+    lockSelectors.getLockByAddress(state, lockAddress)
+  );
+
+  const locks = useAppSelector((state) => lockSelectors.listLocks(state));
+  const { web3Service } = useUnlock();
+  const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
+    if (web3Service && provider) {
+      dispatch(
+        verifyLock({
+          address: data.lockAddress,
+          chainId: data.lockChain,
+          web3Service,
+          provider,
+        })
+      );
+      setSubmitted(true);
+      setLockAddress(data.lockAddress);
+    }
+  }, []);
+
+  const verificationModal = () => {
+    return (
+      <>
+        <Text size="base" color="label">
+          We are powered by Unlock Protocol, please head over to the{" "}
+          <ExternalLink href="https://app.unlock-protocol.com/dashboard">
+            <Text as="span" size="base" color="primary" weight="semibold">
+              dashboard
+            </Text>
+          </ExternalLink>{" "}
+          & create a membership first.
+        </Text>
+        <img
+          src={lock_example}
+          alt="tutorial on how to create a lock in Unlock"
+        />
+        <LockVerificationForm onSubmit={onSubmit}>
+          {verifyError && (
+            <Text size="sm" color="success">
+              {verifyError}
+            </Text>
+          )}
+          <Button
+            type="submit"
+            size="lg"
+            color="primary"
+            variant="contained"
+            isLoading={verifyLoading || updatePublicationLoading}
+            loadingText="Verifying..."
+          >
+            Submit
+          </Button>
+        </LockVerificationForm>
+      </>
+    );
+  };
+
+  const successModal = useCallback(() => {
+    return (
+      <>
+        <SuccessMsgContainer>
+          <img src={checkmark} alt="success checkmark" />
+          <Text size="base" color="label">
+            Membership key has been successfully imported
+          </Text>
+        </SuccessMsgContainer>
+        <SuccessCardContainer>
+          <LockData lock={lock} />
+        </SuccessCardContainer>
+        <Button
+          size="lg"
+          color="success"
+          variant="contained"
+          onClick={() => setHideModal(true)}
+        >
+          All Done
+        </Button>
+      </>
+    );
+  }, [lock]);
+
+  return (
+    <EntriesContainer>
+      <EntriesHeader>
+        <Text size="md" color="label" weight="semibold">
+          Membership Options
+        </Text>
+        <Dialog
+          baseId="lock-verification"
+          backdrop={true}
+          hideOnEsc={true}
+          hideOnClickOutside={true}
+          hideModal={hideModal}
+          disclosure={
+            <Button
+              size="lg"
+              color="primary"
+              variant="contained"
+              onClick={() => {
+                setHideModal(false);
+                setSubmitted(false);
+              }}
+            >
+              Create
+            </Button>
+          }
+        >
+          <DialogContainer>
+            <Text size="base" color="helpText">
+              Create membership
+            </Text>
+            {(!verifyLoading && submitted ? successModal : verificationModal)()}
+          </DialogContainer>
+        </Dialog>
+      </EntriesHeader>
+      <CardContainer>
+        {Object.values(locks || {}).length ? (
+          <LockCards locks={locks} />
+        ) : (
+          <EmtptyLocksMessage />
         )}
       </CardContainer>
     </EntriesContainer>
@@ -247,6 +438,8 @@ const PublishBody = () => {
     switch (active) {
       case "content":
         return <Articles />;
+      case "membership":
+        return <Locks />;
       case "settings":
         return (
           <SettingsContainer>
@@ -294,16 +487,9 @@ const PublishBody = () => {
 // If there is a publication show
 // If not then show writing view
 const PublishPage = () => {
-  const dispatch = useAppDispatch();
-
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
-  console.log("publication");
-  console.log(publication);
-  useEffect(() => {
-    dispatch(fetchPublication());
-  }, []);
 
   return (
     <Layout>
@@ -320,5 +506,4 @@ const PublishPage = () => {
     </Layout>
   );
 };
-
 export default PublishPage;

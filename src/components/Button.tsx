@@ -9,7 +9,7 @@ import Icon from "components/Icon";
 type LocalProps = {
   size: ThemeButtonSize;
   variant: "contained" | "outlined";
-  color: "primary" | "secondary";
+  color: "primary" | "secondary" | "success";
   icon?: "link";
   loadingText?: string;
   isLoading?: boolean;
@@ -56,6 +56,31 @@ const customStyles = {
         background: ${({ theme }) => theme.colors.grey};
         color: ${({ theme }) => theme.colors.almostWhite};
       }
+    `,
+  },
+  success: {
+    contained: css<Props>`
+      color: ${({ theme }) => theme.colors.almostWhite};
+      background: ${({ theme, isLoading }) =>
+        isLoading ? theme.colors.grey : theme.colors.success};
+      border: ${({ theme, isLoading }) =>
+        isLoading ? `none` : `.2rem solid ${theme.colors.success}`};
+
+      color: ${({ theme }) => theme.colors.white};
+      background-color: ${({ theme, isLoading }) =>
+        isLoading ? theme.colors.grey : theme.colors.success};
+
+      &:hover {
+        background: ${({ theme, isLoading }) =>
+          isLoading ? theme.colors.grey : `none`};
+        color: ${({ theme, isLoading }) =>
+          isLoading ? theme.colors.almostWhite : theme.colors.primary};
+      }
+    `,
+    outlined: css`
+      color: ${({ theme }) => theme.colors.success};
+      background: none;
+      border: ${({ theme }) => `.2rem solid ${theme.colors.success}`};
     `,
   },
 };

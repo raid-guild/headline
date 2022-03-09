@@ -32,6 +32,7 @@ const TopContainer = styled.div`
   flex: 2 2 auto;
   display: flex;
   flex-direction: column;
+  gap: 10rem;
 `;
 
 const BottomContainer = styled.div`

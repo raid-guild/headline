@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useWallet } from "@raidguild/quiver";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import Button from "components/Button";
+import ExternalLink from "components/ExternalLink";
 import {
   Layout,
   BodyContainer,
@@ -15,7 +16,11 @@ import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
 
+import { fetchPublication } from "services/publication/slice";
+import { useAppDispatch } from "store";
+
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
+import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
 
 const DashboardContainer = styled.div`
@@ -86,11 +91,11 @@ const LoggedOutBody = ({
       <BodyFooterContainer>
         <Text size="base">
           How does web3substack work? Check out our{" "}
-          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+          <ExternalLink href="www.google.com">
             <Text as="span" size="base" weight="bold" color="primary">
               Guide
             </Text>
-          </a>
+          </ExternalLink>
           .
         </Text>
       </BodyFooterContainer>
@@ -168,11 +173,11 @@ const LoggedInBody = () => {
             Your content, your reader.
           </Text>
           <Title size="sm">Start writing on webs3substack</Title>
-          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+          <ExternalLink href="www.google.com">
             <Text size="sm" weight="semibold" color="primary">
               Dismiss
             </Text>
-          </a>
+          </ExternalLink>
         </PublicationCopyContainer>
         <Button
           color="primary"
@@ -191,11 +196,11 @@ const LoggedInBody = () => {
           <Text size="sm" color="helpText">
             Subscribe now
           </Text>
-          <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+          <ExternalLink href="www.google.com">
             <Text size="sm" weight="semibold" color="primary">
               Discover now
             </Text>
-          </a>
+          </ExternalLink>
         </SubscriptionContentContainer>
         <LearnMoreContainer>
           <div>
@@ -220,12 +225,19 @@ const LoggedInBody = () => {
 
 const DashboardPage = () => {
   const { connect, did, isCeramicConnecting } = useCermaic();
-  const { connectWallet, isConnecting } = useWallet();
+  const { web3Service } = useUnlock();
+  const { connectWallet, isConnecting, provider } = useWallet();
+  const dispatch = useAppDispatch();
 
-  const connectToServices = async () => {
+  const connectToServices = useCallback(async () => {
     await connectWallet();
     await connect();
-  };
+
+    // fetch key pieces of data
+    if (web3Service && provider) {
+      dispatch(fetchPublication({ provider, web3Service }));
+    }
+  }, [provider]);
   return (
     <Layout>
       <HeaderContainer>

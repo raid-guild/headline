@@ -61,6 +61,17 @@
           }
         }
       }
+    },
+    "Lock": {
+      "type": "object",
+      "properties": {
+        "chainId": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
     }
   },
   "properties": {
@@ -79,6 +90,12 @@
     },
     "publishAccess": {
       "$ref": "#/definitions/LitAccess"
+    },
+    "locks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Lock"
+      }
     }
   },
   "required": ["draftAccess", "publishAccess"]

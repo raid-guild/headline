@@ -2,6 +2,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { articleSlice, createArticleSlice } from "services/article/slice";
 import { fetchProfileSlice, profileSlice } from "services/profile/slice";
+import { verifyLockSlice, lockSlice } from "services/lock/slice";
 import {
   publicationSlice,
   createPublicationSlice,
@@ -25,6 +26,8 @@ export const store = configureStore({
     [articleRegistrySlice.name]: articleRegistrySlice.reducer,
     [profileSlice.name]: profileSlice.reducer,
     [fetchProfileSlice.name]: fetchProfileSlice.reducer,
+    [lockSlice.name]: lockSlice.reducer,
+    [verifyLockSlice.name]: verifyLockSlice.reducer,
   },
 });
 

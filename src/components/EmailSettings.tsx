@@ -3,7 +3,8 @@ import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
 import Button from "components/Button";
-import Dialog from "components/Dialog";
+import { Dialog, DialogContainer } from "components/Dialog";
+import ExternalLink from "components/ExternalLink";
 import Text from "components/Text";
 import Title from "components/Title";
 import EmailCrendentialsForm from "./EmailCredentialsForm";
@@ -30,15 +31,6 @@ const SettingsContainer = styled.div`
   gap: 1.6rem;
 `;
 
-const EmailDialogContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  gap: 3.2rem;
-  display: flex;
-  flex-direction: column;
-  background: ${({ theme }) => theme.colors.almostWhite};
-`;
-
 const EmailSettings = () => {
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     console.log("To do");
@@ -63,7 +55,7 @@ const EmailSettings = () => {
             </Button>
           }
         >
-          <EmailDialogContainer>
+          <DialogContainer>
             <Text size="base" color="helpText">
               Email Service
             </Text>
@@ -73,15 +65,11 @@ const EmailSettings = () => {
               </Title>
               <Text size="sm" color="label" as="span">
                 Having issues setting up?{" "}
-                <a
-                  href="www.google.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <ExternalLink href="www.google.com">
                   <Text size="sm" color="primary" as="span">
                     Read guide
                   </Text>
-                </a>
+                </ExternalLink>
               </Text>
               <EmailCrendentialsForm onSubmit={onSubmit}>
                 <Button size="md" color="primary" variant="contained">
@@ -89,13 +77,13 @@ const EmailSettings = () => {
                 </Button>
               </EmailCrendentialsForm>
             </SettingsContainer>
-          </EmailDialogContainer>
+          </DialogContainer>
         </Dialog>
-        <a href="www.google.com" target="_blank" rel="noopener noreferrer">
+        <ExternalLink href="www.google.com">
           <Text size="md" color="primary">
             Learn more
           </Text>
-        </a>
+        </ExternalLink>
       </ConfigureButtonContainer>
     </EmailSettingsContainer>
   );

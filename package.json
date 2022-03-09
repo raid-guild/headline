@@ -13,7 +13,7 @@
     "test": "node --experimental-json-modules example.js"
   },
   "dependencies": {
-    "@alexkeating/lit-js-sdk": "^1.5.3",
+    "@alexkeating/lit-js-sdk": "1.1.143",
     "@ceramicnetwork/stream-caip10-link": "^1.2.9",
     "@datamodels/identity-accounts-crypto": "^0.1.2",
     "@datamodels/identity-accounts-web": "^0.1.2",
@@ -29,6 +29,7 @@
     "@self.id/web": "^0.2.0",
     "@types/react-redux": "^7.1.22",
     "@types/styled-components": "^5.1.20",
+    "@unlock-protocol/unlock-js": "^0.21.2",
     "@walletconnect/ethereum-provider": "^1.7.1",
     "authereum": "^0.1.14",
     "borsh": "^0.7.0",
@@ -82,7 +83,6 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "http-browserify": "^1.7.0",
     "key-did-provider-ed25519": "^1.1.0",
-    "lit-js-sdk": "^1.1.130",
     "path-browserify": "^1.0.1",
     "prettier": "^2.5.1",
     "process-es6": "^0.11.6",
