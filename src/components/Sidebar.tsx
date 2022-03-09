@@ -10,7 +10,7 @@ import discord from "assets/discord.svg";
 import twitter from "assets/twitter.svg";
 import { TWITTER_URL, DISCORD_URL } from "../constants";
 
-const SidebarContainer = styled.div<{ active: boolean }>`
+const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 2rem;
