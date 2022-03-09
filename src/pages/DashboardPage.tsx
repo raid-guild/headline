@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useWallet } from "@raidguild/quiver";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -16,7 +16,11 @@ import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
 
+import { fetchPublication } from "services/publication/slice";
+import { useAppDispatch } from "store";
+
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
+import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
 
 const DashboardContainer = styled.div`
@@ -221,12 +225,17 @@ const LoggedInBody = () => {
 
 const DashboardPage = () => {
   const { connect, did, isCeramicConnecting } = useCermaic();
-  const { connectWallet, isConnecting } = useWallet();
+  const { web3Service } = useUnlock();
+  const { connectWallet, isConnecting, provider } = useWallet();
+  const dispatch = useAppDispatch();
 
-  const connectToServices = async () => {
+  const connectToServices = useCallback(async () => {
     await connectWallet();
     await connect();
-  };
+
+    // fetch key pieces of data
+    dispatch(fetchPublication({ provider, web3Service }));
+  }, [provider]);
   return (
     <Layout>
       <HeaderContainer>

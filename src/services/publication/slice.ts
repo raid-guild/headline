@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import LitJsSdk from "@alexkeating/lit-js-sdk";
+import { ethers } from "ethers";
+import { Web3Service } from "@unlock-protocol/unlock-js";
 
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
@@ -13,6 +15,7 @@ import {
   AccessControl,
   Operator,
 } from "lib/lit";
+import { fetchLocks } from "services/lock/slice";
 import { RootState } from "store";
 
 type PublicationLock = {
@@ -188,7 +191,10 @@ export const createPublication = createAsyncThunk(
 // async thunk that fetches a publication
 export const fetchPublication = createAsyncThunk(
   "publication/fetch",
-  async (args, thunkAPI) => {
+  async (
+    args: { provider: ethers.providers.Provider; web3Service: Web3Service },
+    thunkAPI
+  ) => {
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -199,6 +205,13 @@ export const fetchPublication = createAsyncThunk(
       const publication = await store.get("publication");
       if (publication) {
         thunkAPI.dispatch(publicationActions.create(publication));
+        thunkAPI.dispatch(
+          fetchLocks({
+            provider: args.provider,
+            web3Service: args.web3Service,
+            publication,
+          })
+        );
       }
       return publication;
     } catch (err) {

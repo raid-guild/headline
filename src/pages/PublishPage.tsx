@@ -27,7 +27,6 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
-import { fetchPublication } from "services/publication/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
@@ -500,14 +499,9 @@ const PublishBody = () => {
 // If there is a publication show
 // If not then show writing view
 const PublishPage = () => {
-  const dispatch = useAppDispatch();
-
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
-  useEffect(() => {
-    dispatch(fetchPublication());
-  }, []);
 
   return (
     <Layout>

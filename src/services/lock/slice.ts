@@ -9,7 +9,7 @@ import { RawLock, Web3Service } from "@unlock-protocol/unlock-js";
 
 import { networks } from "lib/networks";
 import { getTokenSymbolAndNumber } from "lib/token";
-import { updatePublication } from "services/publication/slice";
+import { updatePublication, Publication } from "services/publication/slice";
 import { RootState } from "store";
 
 export type Lock = {
@@ -150,6 +150,62 @@ export const verifyLock = createAsyncThunk(
         );
       }
       return lock;
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to verify");
+    }
+  }
+);
+
+export const fetchLocks = createAsyncThunk(
+  "lock/verify",
+  async (
+    args: {
+      web3Service: Web3Service;
+      provider: ethers.providers.Provider;
+      publication: Publication;
+    },
+    thunkAPI
+  ) => {
+    try {
+      // get from Ceramic object
+      // then use unlock and create for each
+      const publication = args.publication;
+      console.log("Locks");
+      console.log(publication.locks);
+      console.log(publication);
+      console.log("Publication");
+      for (const idx in publication.locks) {
+        const lockMeta = publication.locks[idx];
+        console.log(lockMeta);
+        console.log(idx);
+        const chain = networks[lockMeta.chainId].chainNumber;
+
+        console.log(args.web3Service);
+        const lock = await args.web3Service.getLock(lockMeta.address, chain);
+        console.log(lock);
+        if (lock) {
+          const { symbol, num } = await getTokenSymbolAndNumber(
+            lock.keyPrice,
+            lock.currencyContractAddress,
+            args.provider,
+            lockMeta.chainId
+          );
+          console.log("Stuff");
+          console.log(num);
+          console.log(symbol);
+          const { publication } = thunkAPI.getState() as RootState;
+          thunkAPI.dispatch(
+            lockActions.create({
+              ...lock,
+              lockAddress: lockMeta.address.toLowerCase(),
+              keyPriceSimple: num,
+              keyTokenSymbol: symbol,
+            })
+          );
+        }
+        return lock;
+      }
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to verify");

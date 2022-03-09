@@ -25,12 +25,12 @@ const LockDataContainer = styled.div`
 const LockDataRowContainer = styled.div`
   display: flex;
   gap: 1rem;
-  max-width: 15rem;
+  max-width: 17rem;
 `;
 
 const StyledText = styled(Text)`
   flex: 1 1 auto;
-  max-width: 6.5rem;
+  max-width: 7.5rem;
 `;
 
 const LockMemberContainer = styled.div`
@@ -41,8 +41,6 @@ const LockMemberContainer = styled.div`
 `;
 
 export const LockData = ({ lock }: { lock: Lock }) => {
-  console.log("LockData");
-  console.log(lock);
   return (
     <>
       <Title size="sm" color="label">
