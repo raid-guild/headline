@@ -262,15 +262,11 @@ const Locks = () => {
   const [lockAddress, setLockAddress] = useState("");
   const [hideModal, setHideModal] = useState(false);
 
-  const verifyLoading = useAppSelector(
-    (state) => state.verifyLock.loading // Name is required in the schema
-  );
+  const verifyLoading = useAppSelector((state) => state.verifyLock.loading);
   const updatePublicationLoading = useAppSelector(
-    (state) => state.updatePublication.loading // Name is required in the schema
+    (state) => state.updatePublication.loading
   );
-  const verifyError = useAppSelector(
-    (state) => state.verifyLock.error // Name is required in the schema
-  );
+  const verifyError = useAppSelector((state) => state.verifyLock.error);
 
   const lock = useAppSelector((state) =>
     lockSelectors.getLockByAddress(state, lockAddress)
@@ -279,10 +275,6 @@ const Locks = () => {
   const locks = useAppSelector((state) => lockSelectors.listLocks(state));
   const { web3Service } = useUnlock();
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    // verify locks and if verified then
-    // add to a ceramic doc
-    console.log("Here");
-    console.log(data);
     if (web3Service && provider) {
       dispatch(
         verifyLock({
@@ -326,7 +318,6 @@ const Locks = () => {
             variant="contained"
             isLoading={verifyLoading || updatePublicationLoading}
             loadingText="Verifying..."
-            onClick={() => console.log("Hello")}
           >
             Submit
           </Button>
@@ -335,9 +326,6 @@ const Locks = () => {
     );
   };
 
-  console.log("Locks");
-  console.log(lock);
-  console.log(locks);
   const successModal = useCallback(() => {
     return (
       <>

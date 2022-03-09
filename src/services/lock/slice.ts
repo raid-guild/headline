@@ -114,11 +114,7 @@ export const verifyLock = createAsyncThunk(
   ) => {
     try {
       const chain = networks[args.chainId].chainNumber;
-      console.log(args.address);
-      console.log(chain);
-      console.log(args.web3Service);
       const lock = await args.web3Service.getLock(args.address, chain);
-      console.log(lock);
       if (lock) {
         const { symbol, num } = await getTokenSymbolAndNumber(
           lock.keyPrice,
@@ -126,9 +122,6 @@ export const verifyLock = createAsyncThunk(
           args.provider,
           args.chainId
         );
-        console.log("Stuff");
-        console.log(num);
-        console.log(symbol);
         const { publication } = thunkAPI.getState() as RootState;
         thunkAPI.dispatch(
           lockActions.create({
@@ -171,19 +164,11 @@ export const fetchLocks = createAsyncThunk(
       // get from Ceramic object
       // then use unlock and create for each
       const publication = args.publication;
-      console.log("Locks");
-      console.log(publication.locks);
-      console.log(publication);
-      console.log("Publication");
       for (const idx in publication.locks) {
         const lockMeta = publication.locks[idx];
-        console.log(lockMeta);
-        console.log(idx);
         const chain = networks[lockMeta.chainId].chainNumber;
 
-        console.log(args.web3Service);
         const lock = await args.web3Service.getLock(lockMeta.address, chain);
-        console.log(lock);
         if (lock) {
           const { symbol, num } = await getTokenSymbolAndNumber(
             lock.keyPrice,
@@ -191,9 +176,6 @@ export const fetchLocks = createAsyncThunk(
             args.provider,
             lockMeta.chainId
           );
-          console.log("Stuff");
-          console.log(num);
-          console.log(symbol);
           const { publication } = thunkAPI.getState() as RootState;
           thunkAPI.dispatch(
             lockActions.create({
