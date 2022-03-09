@@ -29,6 +29,7 @@ const theme = {
     grey: "#A5A5A5",
     lightGrey: "#DEDEDE",
     success: "#8ACA89",
+    error: "#FF6771",
   },
   fonts: {
     fontFamily: `'Inter'`,

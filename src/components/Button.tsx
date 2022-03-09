@@ -9,7 +9,7 @@ import Icon from "components/Icon";
 type LocalProps = {
   size: ThemeButtonSize;
   variant: "contained" | "outlined";
-  color: "primary" | "secondary" | "success";
+  color: "primary" | "secondary" | "success" | "error";
   icon?: "link";
   loadingText?: string;
   isLoading?: boolean;
@@ -81,6 +81,31 @@ const customStyles = {
       color: ${({ theme }) => theme.colors.success};
       background: none;
       border: ${({ theme }) => `.2rem solid ${theme.colors.success}`};
+    `,
+  },
+  error: {
+    contained: css<Props>`
+      color: ${({ theme }) => theme.colors.almostWhite};
+      background: ${({ theme, isLoading }) =>
+        isLoading ? theme.colors.grey : theme.colors.error};
+      border: ${({ theme, isLoading }) =>
+        isLoading ? `none` : `.2rem solid ${theme.colors.error}`};
+
+      color: ${({ theme }) => theme.colors.white};
+      background-color: ${({ theme, isLoading }) =>
+        isLoading ? theme.colors.grey : theme.colors.error};
+
+      &:hover {
+        background: ${({ theme, isLoading }) =>
+          isLoading ? theme.colors.grey : `none`};
+        color: ${({ theme, isLoading }) =>
+          isLoading ? theme.colors.almostWhite : theme.colors.error};
+      }
+    `,
+    outlined: css`
+      color: ${({ theme }) => theme.colors.error};
+      background: none;
+      border: ${({ theme }) => `.2rem solid ${theme.colors.error}`};
     `,
   },
 };

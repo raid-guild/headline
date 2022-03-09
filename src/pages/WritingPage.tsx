@@ -7,9 +7,11 @@ import { useWallet } from "@raidguild/quiver";
 import { useRemirror, useHelpers } from "@remirror/react";
 import { useAppSelector, useAppDispatch } from "store";
 
+import { ArticleSettings } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Button from "components/Button";
+import { Dialog, DialogContainer } from "components/Dialog";
 import Icon from "components/Icon";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
@@ -188,9 +190,19 @@ const WritingPage = () => {
           <Text size="sm" color="helpText">
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
-          <StyledIconButton size="sm" color="primary" variant="outlined">
-            <StyledIcon size="md" src={settings} alt="settings button" />
-          </StyledIconButton>
+          <Dialog
+            baseId="article-settings"
+            backdrop={true}
+            disclosure={
+              <StyledIconButton size="sm" color="primary" variant="outlined">
+                <StyledIcon size="md" src={settings} alt="settings button" />
+              </StyledIconButton>
+            }
+          >
+            <DialogContainer>
+              <ArticleSettings />
+            </DialogContainer>
+          </Dialog>
           <Button size="md" color="primary" variant="contained">
             Published
           </Button>
