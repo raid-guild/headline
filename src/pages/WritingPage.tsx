@@ -188,7 +188,7 @@ const WritingPage = () => {
           <Text size="sm" color="helpText">
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
-          <StyledIconButton size="sm" color="primary" variant="contained">
+          <StyledIconButton size="sm" color="primary" variant="outlined">
             <StyledIcon size="md" src={settings} alt="settings button" />
           </StyledIconButton>
           <Button size="md" color="primary" variant="contained">

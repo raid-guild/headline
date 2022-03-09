@@ -13,14 +13,17 @@ import library_book from "assets/library_books.svg";
 type Props = {
   text: string;
   icon?: "dashboard" | "create" | "mail" | "profile" | "library_book";
+  active?: boolean;
 };
 
-const SidebarItemContainer = styled.div`
+const SidebarItemContainer = styled.div<Pick<Props, "active">>`
   display: flex;
   padding: 2.4rem 1.6rem;
+  background: ${({ theme, active }) =>
+    active ? theme.colors.backgroundGrey : "none"};
 
   &:hover {
-    background: ${({ theme }) => theme.colors.almostWhite};
+    background: ${({ theme }) => theme.colors.backgroundGrey};
   }
 `;
 
@@ -28,7 +31,7 @@ const StyledCircleOutline = styled(Icon)`
   margin-right: 1.8rem;
 `;
 
-const SidebarItem = ({ text, icon }: Props) => {
+const SidebarItem = ({ text, icon, active }: Props) => {
   const getIcon = () => {
     switch (icon) {
       case "dashboard":
@@ -46,7 +49,7 @@ const SidebarItem = ({ text, icon }: Props) => {
     }
   };
   return (
-    <SidebarItemContainer>
+    <SidebarItemContainer active={active}>
       <StyledCircleOutline
         size="sm"
         src={getIcon()}
