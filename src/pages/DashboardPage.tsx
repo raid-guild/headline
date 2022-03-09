@@ -17,7 +17,8 @@ import Text from "components/Text";
 import Title from "components/Title";
 
 import { fetchPublication } from "services/publication/slice";
-import { useAppDispatch } from "store";
+import { fetchBasicProfile } from "services/profile/slice";
+import { useAppDispatch, useAppSelector } from "store";
 
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
@@ -108,16 +109,15 @@ const LoggedInContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-
+  gap: 3.2rem;
   padding: 6.4rem;
 `;
 
 const PublicationContainer = styled.div`
   display: flex;
-  flex: 2 2 auto;
   align-items: center;
   justify-content: space-between;
-  padding: 4rem;
+  padding: 3.2rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
 `;
 
@@ -141,13 +141,6 @@ const PublicationCopyContainer = styled.div`
   gap: 0.5rem;
 `;
 
-const SubscriptionContentContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 4rem;
-`;
-
 const LearnMoreContainer = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -159,49 +152,58 @@ const LearnMoreContainer = styled.div`
 // in publication container
 const LoggedInBody = () => {
   const navigate = useNavigate();
+  const publication = useAppSelector(
+    (state) => state.publication.name // Name is required in the schema
+  );
+
   const goToCreatePublication = () => {
     navigate(CREATE_PUBLICATION_URI);
   };
+  const noPublication = (
+    <>
+      <PublicationCopyContainer>
+        <Text size="md" weight="semibold">
+          Your content, your reader.
+        </Text>
+        <Title size="sm">Start writing on webs3substack</Title>
+        <ExternalLink href="www.google.com">
+          <Text size="sm" weight="semibold" color="primary">
+            Dismiss
+          </Text>
+        </ExternalLink>
+      </PublicationCopyContainer>
+      <Button
+        color="primary"
+        variant="contained"
+        size="xl"
+        onClick={goToCreatePublication}
+      >
+        Create my publication
+      </Button>
+    </>
+  );
+  const hasPublication = (
+    <PublicationCopyContainer>
+      <Text size="md" weight="semibold">
+        Something very cool is coming here, join us to craft HEADLINE better.
+      </Text>
+      <ExternalLink href="https://www.google.com">
+        <Text size="sm" color="primary" weight="semibold">
+          Send feedback
+        </Text>
+      </ExternalLink>
+    </PublicationCopyContainer>
+  );
+
   return (
     <LoggedInContainer>
       <WelcomeContainer>
-        <Title size="md">Welcome</Title>
+        <Title size="md">Hello there,</Title>
       </WelcomeContainer>
       <PublicationContainer>
-        <PublicationCopyContainer>
-          <Text size="md" weight="semibold">
-            Your content, your reader.
-          </Text>
-          <Title size="sm">Start writing on webs3substack</Title>
-          <ExternalLink href="www.google.com">
-            <Text size="sm" weight="semibold" color="primary">
-              Dismiss
-            </Text>
-          </ExternalLink>
-        </PublicationCopyContainer>
-        <Button
-          color="primary"
-          variant="contained"
-          size="xl"
-          onClick={goToCreatePublication}
-        >
-          Create my publication
-        </Button>
+        {Object.keys(publication).length > 0 ? hasPublication : noPublication}
       </PublicationContainer>
       <SubscriptionContainer>
-        <SubscriptionContentContainer>
-          <Text size="md" color="helpText" weight="semibold">
-            You have no subscriptions yet
-          </Text>
-          <Text size="sm" color="helpText">
-            Subscribe now
-          </Text>
-          <ExternalLink href="www.google.com">
-            <Text size="sm" weight="semibold" color="primary">
-              Discover now
-            </Text>
-          </ExternalLink>
-        </SubscriptionContentContainer>
         <LearnMoreContainer>
           <div>
             <Text size="md" weight="semibold">
@@ -218,15 +220,10 @@ const LoggedInBody = () => {
   );
 };
 
-// Add first time view for dashboard
-// Fetch first time
-// Build first time view
-// Add loading to button
-
 const DashboardPage = () => {
   const { connect, did, isCeramicConnecting } = useCermaic();
   const { web3Service } = useUnlock();
-  const { connectWallet, isConnecting, provider } = useWallet();
+  const { connectWallet, isConnecting, provider, address } = useWallet();
   const dispatch = useAppDispatch();
 
   const connectToServices = useCallback(async () => {
@@ -237,6 +234,7 @@ const DashboardPage = () => {
     if (web3Service && provider) {
       dispatch(fetchPublication({ provider, web3Service }));
     }
+    dispatch(fetchBasicProfile(address || ""));
   }, [provider]);
   return (
     <Layout>

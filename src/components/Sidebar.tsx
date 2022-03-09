@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { useLocation } from "react-router";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import SidebarItem from "components/SidebarItem";
@@ -9,7 +10,7 @@ import discord from "assets/discord.svg";
 import twitter from "assets/twitter.svg";
 import { TWITTER_URL, DISCORD_URL } from "../constants";
 
-const SidebarContainer = styled.div`
+const SidebarContainer = styled.div<{ active: boolean }>`
   display: flex;
   flex-direction: column;
   margin-left: 2rem;
@@ -59,6 +60,7 @@ const StyledLink = styled.a`
 `;
 
 const Sidebar = () => {
+  const location = useLocation();
   return (
     <SidebarContainer>
       <TopContainer>
@@ -69,13 +71,25 @@ const Sidebar = () => {
         </Link>
         <MenuContainer>
           <Link to={"/dashboard"}>
-            <SidebarItem text="Dashboard" icon="dashboard" />
+            <SidebarItem
+              text="Dashboard"
+              icon="dashboard"
+              active={location.pathname.includes("dashboard")}
+            />
           </Link>
           <Link to={"/publish"}>
-            <SidebarItem text="Publish" icon="mail" />
+            <SidebarItem
+              text="Publish"
+              icon="mail"
+              active={location.pathname.includes("publish")}
+            />
           </Link>
           <Link to={"/profile"}>
-            <SidebarItem text="My Profile" icon="profile" />
+            <SidebarItem
+              text="My Profile"
+              icon="profile"
+              active={location.pathname.includes("profile")}
+            />
           </Link>
         </MenuContainer>
       </TopContainer>
