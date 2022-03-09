@@ -165,7 +165,7 @@ export const fetchLocks = createAsyncThunk(
       // then use unlock and create for each
       const publication = args.publication;
       for (const idx in publication.locks) {
-        const lockMeta = publication.locks[idx];
+        const lockMeta = publication.locks[parseInt(idx) || 0];
         const chain = networks[lockMeta.chainId].chainNumber;
 
         const lock = await args.web3Service.getLock(lockMeta.address, chain);

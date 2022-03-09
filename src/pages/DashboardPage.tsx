@@ -234,7 +234,9 @@ const DashboardPage = () => {
     await connect();
 
     // fetch key pieces of data
-    dispatch(fetchPublication({ provider, web3Service }));
+    if (web3Service && provider) {
+      dispatch(fetchPublication({ provider, web3Service }));
+    }
   }, [provider]);
   return (
     <Layout>
