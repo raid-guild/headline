@@ -108,16 +108,11 @@ export const ArticleSettings = ({
   const [description, setDescription] = useState(article?.description || "");
   const [hide, setHide] = useState(false);
 
-  console.log("Description");
-  console.log(description);
-
   useEffect(() => {
     const x = async () => {
       if (article?.previewImg) {
         const b = await fetchIPFS(article.previewImg);
         if (b) {
-          console.log(b);
-          // setPreviewImg(new File([arr.value.buffer], "previewImg.jpeg"));
           setPreviewImg(new File([b], "previewImg.jpeg"));
         }
       }
@@ -138,13 +133,10 @@ export const ArticleSettings = ({
         if (!file) {
           return;
         }
-        console.log(file);
-        console.log(e.target);
         // validImage =
         //   file.type === "image/jpeg" ||
         //   file.type === "image/png" ||
         //   file.type === "image/svg+xml";
-        console.log("Upload image");
         setPreviewImg(file);
       }
     },
@@ -160,7 +152,6 @@ export const ArticleSettings = ({
       radio.state !== "free"
     );
     setHide(true);
-    console.log(hide);
   }, [description, article, previewImg, radio.state]);
 
   const deleteArticle = useCallback(async () => {

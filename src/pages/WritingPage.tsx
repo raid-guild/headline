@@ -108,10 +108,6 @@ const MarkdownSave = ({
   return <></>;
 };
 
-// auto save
-// Change saved to saving while saving
-// encrypt and store as a draft
-// should trigger save to publication
 const WritingPage = () => {
   const { streamId } = useParams();
   const { chainId } = useWallet();
@@ -126,8 +122,6 @@ const WritingPage = () => {
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
   const [title, setTitle] = useState(article?.title || "Untitled");
-
-  console.log(article);
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -149,14 +143,10 @@ const WritingPage = () => {
       previewImg?: string | undefined;
       paid?: boolean;
     };
-    console.log("In save");
-    console.log(description);
     if (description) {
       otherParams["description"] = description;
     }
     if (previewImg) {
-      console.log("preview img");
-      console.log(previewImg);
       if (typeof previewImg === "string") {
         otherParams["previewImg"] = previewImg;
       } else {
@@ -168,7 +158,6 @@ const WritingPage = () => {
     if (paid) {
       otherParams["paid"] = paid;
     }
-    console.log(otherParams);
     if (localStreamId) {
       dispatch(
         updateArticle({

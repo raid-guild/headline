@@ -27,8 +27,6 @@ const DetailsContainer = styled.div`
   gap: 1.6rem;
 `;
 
-// TODO: Renders markdown, but should preview a description of the
-// text
 const ArticleCard = ({ article }: { article: Article }) => {
   const date = new Date(article.createdAt);
   const [previewImg, setPreviewImg] = useState("");
@@ -37,8 +35,6 @@ const ArticleCard = ({ article }: { article: Article }) => {
       if (article?.previewImg) {
         const b = await fetchIPFS(article.previewImg);
         if (b) {
-          console.log(b);
-          // setPreviewImg(new File([arr.value.buffer], "previewImg.jpeg"));
           setPreviewImg(URL.createObjectURL(b));
         }
       }

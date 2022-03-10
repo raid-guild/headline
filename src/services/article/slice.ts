@@ -45,8 +45,6 @@ export const articleSlice = createSlice({
   },
   reducers: {
     create(state, action: PayloadAction<Article>) {
-      console.log("Payload");
-      console.log(action.payload);
       state.title = action.payload.title;
       state.createdAt = action.payload.createdAt;
       state.status = action.payload.status;
@@ -143,7 +141,6 @@ export const createArticle = createAsyncThunk<
         streamId: streamId,
         text: args.article.text,
       } as Article;
-      console.log(args.article.previewImg);
       if (args.article.previewImg) {
         article = { ...article, previewImg: args.article.previewImg };
       }
