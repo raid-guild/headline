@@ -3,7 +3,7 @@ import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
-import { getIPFSClient } from "lib/ipfs";
+import { getIPFSClient, storeIpfs } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
 import uint8arrayToString from "uint8arrays/to-string";
 
@@ -22,6 +22,7 @@ export type CeramicArticle = {
   status: "draft" | "published";
   previewImg?: string;
   paid?: boolean;
+  description?: string;
 };
 export type Article = {
   text: string;
@@ -40,6 +41,7 @@ export const articleSlice = createSlice({
     loading: false,
     streamId: "",
     text: "",
+    description: "",
   },
   reducers: {
     create(state, action: PayloadAction<Article>) {
@@ -50,6 +52,7 @@ export const articleSlice = createSlice({
       state.previewImg = action.payload?.previewImg || "";
       state.streamId = action.payload?.streamId || "";
       state.text = action.payload?.text;
+      state.description = action.payload?.description || "";
     },
   },
 });
@@ -92,8 +95,8 @@ export const createArticle = createAsyncThunk<
     model: PUBLISHED_MODELS,
   });
   let content = args.article.text;
+  let publicationUrl;
   try {
-    let publicationUrl;
     if (args.encrypt) {
       if (!args.article.status) {
         throw Error("Missing encrypt type");
@@ -117,43 +120,32 @@ export const createArticle = createAsyncThunk<
         "base64"
       );
     }
-    const ipfs = getIPFSClient();
-    if (args.article.text) {
-      const cid = await ipfs.add(
-        { content: content },
-        {
-          cidVersion: 1,
-          hashAlg: "sha2-256",
-        }
-      );
-      await ipfs.pin.add(CID.parse(cid.path));
-      publicationUrl = `ipfs://${cid.path}`;
-    }
+    publicationUrl = await storeIpfs({ content });
 
-    if (publicationUrl) {
-      const baseArticle = {
-        publicationUrl: publicationUrl,
-        title: args.article.title || "",
-        createdAt: args.article.createdAt,
-        status: args.article.status,
-        // previewImg: args.article?.previewImg,
-        paid: args.article.paid || false,
-      };
+    const baseArticle = {
+      publicationUrl: publicationUrl,
+      title: args.article.title || "",
+      createdAt: args.article.createdAt,
+      status: args.article.status,
+      description: args.article.description || "",
+      paid: args.article.paid || false,
+    };
 
-      const doc = await model.createTile("Article", baseArticle);
-      const streamId = doc.id.toString();
-      const article = {
-        ...baseArticle,
-        streamId: streamId,
-        text: args.article.text,
-      };
-      // TODO: Is this necessary with the article registry
-      thunkAPI.dispatch(articleActions.create(article));
-      thunkAPI.dispatch(addRegistryArticle(streamId));
-      // save to registry
-      return article;
+    const doc = await model.createTile("Article", baseArticle);
+    const streamId = doc.id.toString();
+    let article = {
+      ...baseArticle,
+      streamId: streamId,
+      text: args.article.text,
+    } as Article;
+    if (args.article.previewImg) {
+      article = { ...article, previewImg: args.article.previewImg };
     }
-    return null;
+    // TODO: Is this necessary with the article registry
+    thunkAPI.dispatch(articleActions.create(article));
+    thunkAPI.dispatch(addRegistryArticle(streamId));
+    // save to registry
+    return article;
   } catch (err) {
     console.log(err);
     return thunkAPI.rejectWithValue(err as Error);
@@ -172,11 +164,11 @@ export const updateArticle = createAsyncThunk(
     thunkAPI
   ) => {
     const client = await getClient();
-    let content = args.article.text;
+    let content = args.article.text || "";
     const { articleRegistry } = thunkAPI.getState() as RootState;
     const existingArticle = articleRegistry[args.streamId];
+    let publicationUrl;
     try {
-      let publicationUrl;
       if (args.encrypt) {
         if (!args.article.status) {
           throw Error("Missing encrypt type");
@@ -201,44 +193,33 @@ export const updateArticle = createAsyncThunk(
         );
       }
       const ipfs = getIPFSClient();
-      if (args.article.text) {
-        const cid = await ipfs.add(
-          { content: content },
-          {
-            cidVersion: 1,
-            hashAlg: "sha2-256",
-          }
-        );
-        await ipfs.pin.add(CID.parse(cid.path));
-        publicationUrl = `ipfs://${cid.path}`;
-      }
+      const cid = await ipfs.add(
+        { content: content },
+        {
+          cidVersion: 1,
+          hashAlg: "sha2-256",
+        }
+      );
+      await ipfs.pin.add(CID.parse(cid.path));
+      publicationUrl = `ipfs://${cid.path}`;
 
-      const article = {
+      const baseArticle = {
         publicationUrl: publicationUrl,
         title: args.article.title || "",
         status: args.article.status,
-        // previewImg: args.article?.previewImg,
+        previewImg: args.article.previewImg,
         paid: args.article.paid || false,
+        description: args.article.description,
       };
-      if (publicationUrl) {
-        const baseArticle = {
-          publicationUrl: publicationUrl,
-          title: args.article.title || "",
-          status: args.article.status,
-          // previewImg: args.article?.previewImg,
-          paid: args.article.paid || false,
-        };
 
-        const doc = await TileDocument.load(client.ceramic, args.streamId);
-        const updatedArticle = {
-          ...existingArticle,
-          ...baseArticle,
-        };
-        await doc.update(updatedArticle);
-        thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
-        return baseArticle;
-      }
-      return;
+      const doc = await TileDocument.load(client.ceramic, args.streamId);
+      const updatedArticle = {
+        ...existingArticle,
+        ...baseArticle,
+      };
+      await doc.update(updatedArticle);
+      thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      return baseArticle;
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to update");

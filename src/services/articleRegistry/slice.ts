@@ -4,6 +4,7 @@ import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { getClient } from "lib/ceramic";
 import { getEncryptionKey, decryptText } from "lib/lit";
+import { fetchIPFS } from "lib/ipfs";
 import { PUBLISHED_MODELS } from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
@@ -25,6 +26,11 @@ export const articleRegistrySlice = createSlice({
     update(state, action: PayloadAction<Article>) {
       if (action.payload.streamId) {
         state[action.payload.streamId] = action.payload;
+      }
+    },
+    remove(state, action: PayloadAction<string>) {
+      if (action.payload) {
+        delete state[action.payload];
       }
     },
   },
@@ -64,6 +70,26 @@ export const addArticleSlice = createSlice({
   },
 });
 
+export const removeArticleSlice = createSlice({
+  name: "removeArticle",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(removeRegistryArticle.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(removeRegistryArticle.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(removeRegistryArticle.rejected, (state, action) => {
+      console.error(action);
+      state.loading = false;
+    });
+  },
+});
+
 // async thunk that creates a publication
 export const addRegistryArticle = createAsyncThunk(
   "articleRegistry/add",
@@ -80,6 +106,28 @@ export const addRegistryArticle = createAsyncThunk(
       });
     } catch (err) {
       return thunkAPI.rejectWithValue("Failed to save");
+    }
+  }
+);
+
+// async thunk that creates a publication
+export const removeRegistryArticle = createAsyncThunk(
+  "articleRegistry/add",
+  async (streamId: string, thunkAPI) => {
+    const client = await getClient();
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLISHED_MODELS,
+    });
+    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    try {
+      const registry = await store.get("articleRegistry");
+      delete registry[streamId];
+      await store.set("articleRegistry", registry);
+      thunkAPI.dispatch(articleRegistryActions.remove(streamId));
+      return true;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Failed to delete");
     }
   }
 );
@@ -102,7 +150,10 @@ export const fetchArticleRegistry = createAsyncThunk(
         const resp = await fetch(
           `https://ipfs.infura.io:5001/api/v0/cat?arg=${ceramicArticle.publicationUrl
             .split("/")
-            .at(-1)}`
+            .at(-1)}`,
+          {
+            method: "post",
+          }
         );
         const readableStream = resp?.body?.getReader();
         if (!readableStream) {
@@ -111,8 +162,6 @@ export const fetchArticleRegistry = createAsyncThunk(
         const encodedText = await readableStream.read();
         let articleText = new TextDecoder().decode(encodedText.value);
 
-        // Having trouble decrypting Lit's docs bad
-        // decrypt text
         if (ceramicArticle.status === "draft" || ceramicArticle.paid) {
           const { publication } = thunkAPI.getState() as RootState;
           const access =
@@ -129,7 +178,7 @@ export const fetchArticleRegistry = createAsyncThunk(
             uint8arrayFromString(articleText, "base64"),
             symmetricKey
           ).catch((e) => console.error(e));
-          articleText = a || "error";
+          articleText = a || "";
         }
         thunkAPI.dispatch(
           articleRegistryActions.add({
