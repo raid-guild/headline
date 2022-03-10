@@ -4,6 +4,7 @@ import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { getClient } from "lib/ceramic";
 import { getEncryptionKey, decryptText } from "lib/lit";
+import { fetchIPFS } from "lib/ipfs";
 import { PUBLISHED_MODELS } from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
@@ -19,6 +20,8 @@ export const articleRegistrySlice = createSlice({
   reducers: {
     add(state, action: PayloadAction<Article>) {
       if (action.payload.streamId) {
+        console.log("Article Registry");
+        console.log(action.payload);
         state[action.payload.streamId] = action.payload;
       }
     },

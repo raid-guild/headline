@@ -27,9 +27,13 @@ export const getProfileImg = ({ original }: ImageSources) => {
   return `https://dweb.link/ipfs/${src}`;
 };
 
-export const storeIpfs = async (content: {
-  content: string | ReadableStream;
-}) => {
+export const storeIpfs = async (
+  content:
+    | {
+        content: string;
+      }
+    | ArrayBuffer
+) => {
   const ipfs = getIPFSClient();
   const cid = await ipfs.add(content, {
     cidVersion: 1,
@@ -39,4 +43,15 @@ export const storeIpfs = async (content: {
   console.log("Pin request");
   console.log(resp);
   return `ipfs://${cid.path}`;
+};
+
+export const fetchIPFS = async (ipfsHash: string) => {
+  const resp = await fetch(
+    `https://ipfs.infura.io:5001/api/v0/cat?arg=${ipfsHash.split("/").at(-1)}`,
+    {
+      method: "post",
+    }
+  );
+  const blob = await resp?.blob();
+  return blob;
 };

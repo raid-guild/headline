@@ -22,7 +22,7 @@ import { Article, createArticle, updateArticle } from "services/article/slice";
 import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
 import profile from "assets/obsidian.png";
-import settings from "assets/settings.svg";
+import { storeIpfs } from "lib/ipfs";
 
 const StyledLayout = styled(Layout)`
   grid-template:
@@ -65,16 +65,6 @@ const TitleContainer = styled.div`
   flex-direction: column;
 `;
 
-const StyledIconButton = styled(Button)`
-  padding: 0rem;
-  height: auto;
-`;
-
-const StyledIcon = styled(Icon)`
-  padding: 1rem;
-  height: auto;
-`;
-
 const StyledInput = styled(Input)`
   border: none;
   font-size: ${({ theme }) => theme.title.md.fontSize};
@@ -92,22 +82,95 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
 
 const MarkdownSave = ({
   title,
-  localStreamId,
-  setLocalStreamId,
+  description,
+  previewImg,
+  paid,
+  saveArticle,
 }: {
   title: string;
-  localStreamId: string | undefined;
-  setLocalStreamId: (arg0: string) => void;
+  description: string;
+  paid: boolean;
+  previewImg: File | null;
+  saveArticle: (
+    arg0: string,
+    arg1: string,
+    arg2: string,
+    arg3: File | null,
+    arg4: boolean
+  ) => void;
 }) => {
   const { getMarkdown } = useHelpers(true);
-  const { chainId } = useWallet();
-  const { streamId } = useParams();
-  const dispatch = useAppDispatch();
 
-  const saveArticle = (markdown: string, title: string) => {
+  const m = getMarkdown() || "";
+  const debouncedSaveArticle = useCallback(debounce(1000, saveArticle), []);
+  useEffect(() => {
+    debouncedSaveArticle(m, title, description, previewImg, paid);
+  }, [m, title]);
+
+  return <></>;
+};
+
+// auto save
+// Change saved to saving while saving
+// encrypt and store as a draft
+// should trigger save to publication
+const WritingPage = () => {
+  const { streamId } = useParams();
+  const { chainId } = useWallet();
+  const dispatch = useAppDispatch();
+  const [localStreamId, setLocalStreamId] = useState(streamId);
+  const { state, onChange } = useRemirror({});
+  const articleLoading = useAppSelector((state) => state.createArticle.loading);
+  const addRegistryLoading = useAppSelector(
+    (state) => state.addArticle.loading
+  );
+  const article = useAppSelector((state) =>
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
+  );
+  const [title, setTitle] = useState(article?.title || "Untitled");
+
+  console.log(article);
+
+  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setTitle(e.target.value);
+  };
+
+  const saveArticle = async (
+    markdown: string,
+    title: string,
+    description = "",
+    previewImg: File | string | null = null,
+    paid = false
+  ) => {
     if (!chainId) {
       return;
     }
+    const otherParams = {} as {
+      description?: string;
+      previewImg?: string | null;
+      paid?: boolean;
+    };
+    console.log("In save");
+    console.log(description);
+    if (description) {
+      otherParams["description"] = description;
+    }
+    if (previewImg) {
+      console.log("preview img");
+      console.log(previewImg);
+      if (typeof previewImg === "string") {
+        otherParams["previewImg"] = previewImg;
+      } else {
+        otherParams["previewImg"] = await storeIpfs(
+          await previewImg.arrayBuffer()
+        );
+      }
+    }
+    if (paid) {
+      otherParams["paid"] = paid;
+    }
+    console.log(otherParams);
     if (localStreamId) {
       dispatch(
         updateArticle({
@@ -115,6 +178,7 @@ const MarkdownSave = ({
             title: title,
             text: markdown,
             status: "draft",
+            ...otherParams,
           },
           streamId: localStreamId,
           encrypt: true, // TODO change to true
@@ -130,6 +194,7 @@ const MarkdownSave = ({
               text: markdown,
               createdAt: new Date().toISOString(),
               status: "draft",
+              ...otherParams,
             },
             encrypt: true, // TODO change to true
             chainName: networks[chainId].litName,
@@ -145,38 +210,6 @@ const MarkdownSave = ({
       };
       create();
     }
-  };
-  const m = getMarkdown() || "";
-  const debouncedSaveArticle = useCallback(debounce(1000, saveArticle), []);
-  useEffect(() => {
-    debouncedSaveArticle(m, title);
-  }, [m, title]);
-
-  return <></>;
-};
-
-// auto save
-// Change saved to saving while saving
-// encrypt and store as a draft
-// should trigger save to publication
-const WritingPage = () => {
-  const [title, setTitle] = useState("");
-  const { streamId } = useParams();
-  const [localStreamId, setLocalStreamId] = useState(streamId);
-  const { state, onChange } = useRemirror({});
-  const articleLoading = useAppSelector((state) => state.createArticle.loading);
-  const addRegistryLoading = useAppSelector(
-    (state) => state.addArticle.loading
-  );
-  const article = useAppSelector((state) =>
-    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
-  );
-
-  console.log(article);
-
-  const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    setTitle(e.target.value);
   };
 
   return (
@@ -198,22 +231,7 @@ const WritingPage = () => {
           <Text size="sm" color="helpText">
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
-          <Dialog
-            baseId="article-settings"
-            backdrop={true}
-            disclosure={
-              <StyledIconButton size="sm" color="primary" variant="outlined">
-                <StyledIcon size="md" src={settings} alt="settings button" />
-              </StyledIconButton>
-            }
-          >
-            <DialogContainer>
-              <ArticleSettings
-                streamId={localStreamId}
-                setStreamId={setLocalStreamId}
-              />
-            </DialogContainer>
-          </Dialog>
+          <ArticleSettings streamId={localStreamId} saveArticle={saveArticle} />
           <Button size="md" color="primary" variant="contained">
             Published
           </Button>
@@ -234,8 +252,11 @@ const WritingPage = () => {
         >
           <MarkdownSave
             title={title}
-            localStreamId={localStreamId}
+            description={article?.description || ""}
+            previewImg={article?.previewImg}
+            paid={article?.paid || false}
             setLocalStreamId={setLocalStreamId}
+            saveArticle={saveArticle}
           />
         </StyledMarkdownEditor>
       </StyledBody>

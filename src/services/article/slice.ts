@@ -22,6 +22,7 @@ export type CeramicArticle = {
   status: "draft" | "published";
   previewImg?: string;
   paid?: boolean;
+  description?: string;
 };
 export type Article = {
   text: string;
@@ -40,6 +41,7 @@ export const articleSlice = createSlice({
     loading: false,
     streamId: "",
     text: "",
+    description: "",
   },
   reducers: {
     create(state, action: PayloadAction<Article>) {
@@ -52,6 +54,7 @@ export const articleSlice = createSlice({
       state.previewImg = action.payload?.previewImg || "";
       state.streamId = action.payload?.streamId || "";
       state.text = action.payload?.text;
+      state.description = action.payload?.description || "";
     },
   },
 });
@@ -129,7 +132,7 @@ export const createArticle = createAsyncThunk<
         title: args.article.title || "",
         createdAt: args.article.createdAt,
         status: args.article.status,
-        // description: args.article.description || "",
+        description: args.article.description || "",
         paid: args.article.paid || false,
       };
 
@@ -140,6 +143,7 @@ export const createArticle = createAsyncThunk<
         streamId: streamId,
         text: args.article.text,
       };
+      console.log(args.article.previewImg);
       if (args.article.previewImg) {
         article = { ...article, previewImg: args.article.previewImg };
       }
@@ -209,20 +213,14 @@ export const updateArticle = createAsyncThunk(
         publicationUrl = `ipfs://${cid.path}`;
       }
 
-      const article = {
-        publicationUrl: publicationUrl,
-        title: args.article.title || "",
-        status: args.article.status,
-        // previewImg: args.article?.previewImg,
-        paid: args.article.paid || false,
-      };
       if (publicationUrl) {
         const baseArticle = {
           publicationUrl: publicationUrl,
           title: args.article.title || "",
           status: args.article.status,
-          // previewImg: args.article?.previewImg,
+          previewImg: args.article.previewImg,
           paid: args.article.paid || false,
+          description: args.article.description,
         };
 
         const doc = await TileDocument.load(client.ceramic, args.streamId);
