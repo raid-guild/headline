@@ -167,8 +167,8 @@ export const updateArticle = createAsyncThunk(
     let content = args.article.text || "";
     const { articleRegistry } = thunkAPI.getState() as RootState;
     const existingArticle = articleRegistry[args.streamId];
+    let publicationUrl;
     try {
-      let publicationUrl;
       if (args.encrypt) {
         if (!args.article.status) {
           throw Error("Missing encrypt type");
