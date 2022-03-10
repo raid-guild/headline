@@ -159,7 +159,6 @@ const WritingPage = () => {
       otherParams["paid"] = paid;
     }
     if (localStreamId) {
-      console.log("Updating");
       await dispatch(
         updateArticle({
           article: {

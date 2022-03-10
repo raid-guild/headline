@@ -151,8 +151,6 @@ export const ArticleSettings = ({
       previewImg || undefined,
       radio.state !== "free"
     );
-    console.log("Jp");
-    console.log(a);
     setHide(true);
   }, [description, article, previewImg, radio.state]);
 
