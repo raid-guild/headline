@@ -11,14 +11,12 @@ import { ArticleSettings } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Button from "components/Button";
-import { Dialog, DialogContainer } from "components/Dialog";
-import Icon from "components/Icon";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
-import { Article, createArticle, updateArticle } from "services/article/slice";
+import { createArticle, updateArticle } from "services/article/slice";
 import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
 import profile from "assets/obsidian.png";
@@ -90,12 +88,12 @@ const MarkdownSave = ({
   title: string;
   description: string;
   paid: boolean;
-  previewImg: File | null;
+  previewImg: string | null;
   saveArticle: (
     arg0: string,
     arg1: string,
     arg2: string,
-    arg3: File | null,
+    arg3: File | string | undefined,
     arg4: boolean
   ) => void;
 }) => {
@@ -104,7 +102,7 @@ const MarkdownSave = ({
   const m = getMarkdown() || "";
   const debouncedSaveArticle = useCallback(debounce(1000, saveArticle), []);
   useEffect(() => {
-    debouncedSaveArticle(m, title, description, previewImg, paid);
+    debouncedSaveArticle(m, title, description, previewImg || "", paid);
   }, [m, title]);
 
   return <></>;
@@ -140,7 +138,7 @@ const WritingPage = () => {
     markdown: string,
     title: string,
     description = "",
-    previewImg: File | string | null = null,
+    previewImg: File | string | undefined = undefined,
     paid = false
   ) => {
     if (!chainId) {
@@ -148,7 +146,7 @@ const WritingPage = () => {
     }
     const otherParams = {} as {
       description?: string;
-      previewImg?: string | null;
+      previewImg?: string | undefined;
       paid?: boolean;
     };
     console.log("In save");
@@ -253,9 +251,8 @@ const WritingPage = () => {
           <MarkdownSave
             title={title}
             description={article?.description || ""}
-            previewImg={article?.previewImg}
+            previewImg={article?.previewImg || ""}
             paid={article?.paid || false}
-            setLocalStreamId={setLocalStreamId}
             saveArticle={saveArticle}
           />
         </StyledMarkdownEditor>

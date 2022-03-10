@@ -89,7 +89,7 @@ export const ArticleSettings = ({
     arg0: string,
     arg1: string,
     arg2: string,
-    arg3: string,
+    arg3: string | File | undefined,
     arg4: boolean
   ) => void;
 }) => {
@@ -156,7 +156,7 @@ export const ArticleSettings = ({
       article?.text || "",
       article?.title || "",
       description,
-      previewImg,
+      previewImg || undefined,
       radio.state !== "free"
     );
     setHide(true);

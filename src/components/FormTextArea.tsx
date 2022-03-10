@@ -6,6 +6,7 @@ type LocalProps = {
   title: string;
   errorMsg: string;
   className?: string;
+  value?: string;
 };
 
 const StyledTextArea = styled.textarea`

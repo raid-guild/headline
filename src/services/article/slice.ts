@@ -142,7 +142,7 @@ export const createArticle = createAsyncThunk<
         ...baseArticle,
         streamId: streamId,
         text: args.article.text,
-      };
+      } as Article;
       console.log(args.article.previewImg);
       if (args.article.previewImg) {
         article = { ...article, previewImg: args.article.previewImg };
