@@ -178,7 +178,7 @@ export const fetchArticleRegistry = createAsyncThunk(
             uint8arrayFromString(articleText, "base64"),
             symmetricKey
           ).catch((e) => console.error(e));
-          articleText = a || "error";
+          articleText = a || "";
         }
         thunkAPI.dispatch(
           articleRegistryActions.add({

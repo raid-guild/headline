@@ -95,8 +95,8 @@ export const createArticle = createAsyncThunk<
     model: PUBLISHED_MODELS,
   });
   let content = args.article.text;
+  let publicationUrl;
   try {
-    let publicationUrl;
     if (args.encrypt) {
       if (!args.article.status) {
         throw Error("Missing encrypt type");
@@ -120,37 +120,34 @@ export const createArticle = createAsyncThunk<
         "base64"
       );
     }
-    if (args.article.text) {
-      publicationUrl = await storeIpfs({ content });
-    }
+    publicationUrl = await storeIpfs({ content });
 
-    if (publicationUrl) {
-      const baseArticle = {
-        publicationUrl: publicationUrl,
-        title: args.article.title || "",
-        createdAt: args.article.createdAt,
-        status: args.article.status,
-        description: args.article.description || "",
-        paid: args.article.paid || false,
-      };
+    const baseArticle = {
+      publicationUrl: publicationUrl,
+      title: args.article.title || "",
+      createdAt: args.article.createdAt,
+      status: args.article.status,
+      description: args.article.description || "",
+      paid: args.article.paid || false,
+    };
 
-      const doc = await model.createTile("Article", baseArticle);
-      const streamId = doc.id.toString();
-      let article = {
-        ...baseArticle,
-        streamId: streamId,
-        text: args.article.text,
-      } as Article;
-      if (args.article.previewImg) {
-        article = { ...article, previewImg: args.article.previewImg };
-      }
-      // TODO: Is this necessary with the article registry
-      thunkAPI.dispatch(articleActions.create(article));
-      thunkAPI.dispatch(addRegistryArticle(streamId));
-      // save to registry
-      return article;
+    const doc = await model.createTile("Article", baseArticle);
+    const streamId = doc.id.toString();
+    let article = {
+      ...baseArticle,
+      streamId: streamId,
+      text: args.article.text,
+    } as Article;
+    if (args.article.previewImg) {
+      article = { ...article, previewImg: args.article.previewImg };
     }
-    return null;
+    // TODO: Is this necessary with the article registry
+    thunkAPI.dispatch(articleActions.create(article));
+    thunkAPI.dispatch(addRegistryArticle(streamId));
+    console.log("Article");
+    console.log(article);
+    // save to registry
+    return article;
   } catch (err) {
     console.log(err);
     return thunkAPI.rejectWithValue(err as Error);
