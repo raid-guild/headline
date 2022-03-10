@@ -144,13 +144,15 @@ export const ArticleSettings = ({
   );
 
   const submitSettings = useCallback(async () => {
-    await saveArticle(
+    const a = await saveArticle(
       article?.text || "",
       article?.title || "",
       description,
       previewImg || undefined,
       radio.state !== "free"
     );
+    console.log("Jp");
+    console.log(a);
     setHide(true);
   }, [description, article, previewImg, radio.state]);
 

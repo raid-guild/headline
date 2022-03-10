@@ -144,8 +144,6 @@ export const createArticle = createAsyncThunk<
     // TODO: Is this necessary with the article registry
     thunkAPI.dispatch(articleActions.create(article));
     thunkAPI.dispatch(addRegistryArticle(streamId));
-    console.log("Article");
-    console.log(article);
     // save to registry
     return article;
   } catch (err) {
@@ -166,7 +164,7 @@ export const updateArticle = createAsyncThunk(
     thunkAPI
   ) => {
     const client = await getClient();
-    let content = args.article.text;
+    let content = args.article.text || "";
     const { articleRegistry } = thunkAPI.getState() as RootState;
     const existingArticle = articleRegistry[args.streamId];
     try {
@@ -195,38 +193,33 @@ export const updateArticle = createAsyncThunk(
         );
       }
       const ipfs = getIPFSClient();
-      if (args.article.text) {
-        const cid = await ipfs.add(
-          { content: content },
-          {
-            cidVersion: 1,
-            hashAlg: "sha2-256",
-          }
-        );
-        await ipfs.pin.add(CID.parse(cid.path));
-        publicationUrl = `ipfs://${cid.path}`;
-      }
+      const cid = await ipfs.add(
+        { content: content },
+        {
+          cidVersion: 1,
+          hashAlg: "sha2-256",
+        }
+      );
+      await ipfs.pin.add(CID.parse(cid.path));
+      publicationUrl = `ipfs://${cid.path}`;
 
-      if (publicationUrl) {
-        const baseArticle = {
-          publicationUrl: publicationUrl,
-          title: args.article.title || "",
-          status: args.article.status,
-          previewImg: args.article.previewImg,
-          paid: args.article.paid || false,
-          description: args.article.description,
-        };
+      const baseArticle = {
+        publicationUrl: publicationUrl,
+        title: args.article.title || "",
+        status: args.article.status,
+        previewImg: args.article.previewImg,
+        paid: args.article.paid || false,
+        description: args.article.description,
+      };
 
-        const doc = await TileDocument.load(client.ceramic, args.streamId);
-        const updatedArticle = {
-          ...existingArticle,
-          ...baseArticle,
-        };
-        await doc.update(updatedArticle);
-        thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
-        return baseArticle;
-      }
-      return;
+      const doc = await TileDocument.load(client.ceramic, args.streamId);
+      const updatedArticle = {
+        ...existingArticle,
+        ...baseArticle,
+      };
+      await doc.update(updatedArticle);
+      thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      return baseArticle;
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to update");

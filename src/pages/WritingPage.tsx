@@ -128,76 +128,74 @@ const WritingPage = () => {
     setTitle(e.target.value);
   };
 
-  const saveArticle = useCallback(
-    async (
-      markdown: string,
-      title: string,
-      description = "",
-      previewImg: File | string | undefined = undefined,
-      paid = false
-    ) => {
-      if (!chainId) {
-        return;
-      }
-      const otherParams = {} as {
-        description?: string;
-        previewImg?: string | undefined;
-        paid?: boolean;
-      };
-      if (description) {
-        otherParams["description"] = description;
-      }
-      if (previewImg) {
-        if (typeof previewImg === "string") {
-          otherParams["previewImg"] = previewImg;
-        } else {
-          otherParams["previewImg"] = await storeIpfs(
-            await previewImg.arrayBuffer()
-          );
-        }
-      }
-      if (paid) {
-        otherParams["paid"] = paid;
-      }
-      if (localStreamId) {
-        dispatch(
-          updateArticle({
-            article: {
-              title: title,
-              text: markdown,
-              status: "draft",
-              ...otherParams,
-            },
-            streamId: localStreamId,
-            encrypt: true, // TODO change to true
-            chainName: networks[chainId].litName,
-          })
-        );
+  const saveArticle = async (
+    markdown: string,
+    title: string,
+    description = "",
+    previewImg: File | string | undefined = undefined,
+    paid = false
+  ) => {
+    if (!chainId) {
+      return;
+    }
+    const otherParams = {} as {
+      description?: string;
+      previewImg?: string | undefined;
+      paid?: boolean;
+    };
+    if (description) {
+      otherParams["description"] = description;
+    }
+    if (previewImg) {
+      if (typeof previewImg === "string") {
+        otherParams["previewImg"] = previewImg;
       } else {
-        const createdArticle = await dispatch(
-          createArticle({
-            article: {
-              title: title,
-              text: markdown,
-              createdAt: new Date().toISOString(),
-              status: "draft",
-              ...otherParams,
-            },
-            encrypt: true, // TODO change to true
-            chainName: networks[chainId].litName,
-          })
+        otherParams["previewImg"] = await storeIpfs(
+          await previewImg.arrayBuffer()
         );
-        if (
-          createdArticle &&
-          createdArticle.payload &&
-          "streamId" in createdArticle.payload
-        ) {
-          setLocalStreamId(createdArticle.payload.streamId);
-        }
       }
-    },
-    [localStreamId]
-  );
+    }
+    if (paid) {
+      otherParams["paid"] = paid;
+    }
+    if (localStreamId) {
+      console.log("Updating");
+      await dispatch(
+        updateArticle({
+          article: {
+            title: title,
+            text: markdown,
+            status: "draft",
+            ...otherParams,
+          },
+          streamId: localStreamId,
+          encrypt: true, // TODO change to true
+          chainName: networks[chainId].litName,
+        })
+      );
+    } else {
+      const createdArticle = await dispatch(
+        createArticle({
+          article: {
+            title: title,
+            text: markdown,
+            createdAt: new Date().toISOString(),
+            status: "draft",
+            ...otherParams,
+          },
+          encrypt: true, // TODO change to true
+          chainName: networks[chainId].litName,
+        })
+      );
+      if (
+        createdArticle &&
+        createdArticle.payload &&
+        "streamId" in createdArticle.payload
+      ) {
+        setLocalStreamId(createdArticle.payload.streamId);
+      }
+    }
+  };
 
   return (
     <StyledLayout>
