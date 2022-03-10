@@ -99,10 +99,15 @@ export const fetchArticleRegistry = createAsyncThunk(
         // load streams
         const doc = await TileDocument.load(client.ceramic, streamId);
         const ceramicArticle = doc.content as CeramicArticle;
+        console.log("Article");
+        console.log(ceramicArticle);
         const resp = await fetch(
           `https://ipfs.infura.io:5001/api/v0/cat?arg=${ceramicArticle.publicationUrl
             .split("/")
-            .at(-1)}`
+            .at(-1)}`,
+          {
+            method: "post",
+          }
         );
         const readableStream = resp?.body?.getReader();
         if (!readableStream) {
@@ -110,6 +115,8 @@ export const fetchArticleRegistry = createAsyncThunk(
         }
         const encodedText = await readableStream.read();
         let articleText = new TextDecoder().decode(encodedText.value);
+        console.log(articleText);
+        console.log("article Test");
 
         // Having trouble decrypting Lit's docs bad
         // decrypt text

@@ -3,7 +3,7 @@ import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { getClient } from "lib/ceramic";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
-import { getIPFSClient } from "lib/ipfs";
+import { getIPFSClient, storeIpfs } from "lib/ipfs";
 import { CID } from "ipfs-http-client";
 import uint8arrayToString from "uint8arrays/to-string";
 
@@ -43,6 +43,8 @@ export const articleSlice = createSlice({
   },
   reducers: {
     create(state, action: PayloadAction<Article>) {
+      console.log("Payload");
+      console.log(action.payload);
       state.title = action.payload.title;
       state.createdAt = action.payload.createdAt;
       state.status = action.payload.status;
@@ -117,17 +119,8 @@ export const createArticle = createAsyncThunk<
         "base64"
       );
     }
-    const ipfs = getIPFSClient();
     if (args.article.text) {
-      const cid = await ipfs.add(
-        { content: content },
-        {
-          cidVersion: 1,
-          hashAlg: "sha2-256",
-        }
-      );
-      await ipfs.pin.add(CID.parse(cid.path));
-      publicationUrl = `ipfs://${cid.path}`;
+      publicationUrl = await storeIpfs({ content });
     }
 
     if (publicationUrl) {
@@ -136,17 +129,20 @@ export const createArticle = createAsyncThunk<
         title: args.article.title || "",
         createdAt: args.article.createdAt,
         status: args.article.status,
-        // previewImg: args.article?.previewImg,
+        // description: args.article.description || "",
         paid: args.article.paid || false,
       };
 
       const doc = await model.createTile("Article", baseArticle);
       const streamId = doc.id.toString();
-      const article = {
+      let article = {
         ...baseArticle,
         streamId: streamId,
         text: args.article.text,
       };
+      if (args.article.previewImg) {
+        article = { ...article, previewImg: args.article.previewImg };
+      }
       // TODO: Is this necessary with the article registry
       thunkAPI.dispatch(articleActions.create(article));
       thunkAPI.dispatch(addRegistryArticle(streamId));

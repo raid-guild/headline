@@ -1,5 +1,5 @@
-import React from "react";
-import { useRadioState, Radio, RadioGroup } from "reakit/Radio";
+import React, { ChangeEvent, useCallback, useRef, useState } from "react";
+import { useRadioState, Radio } from "reakit/Radio";
 import styled from "styled-components";
 
 import Button from "components/Button";
@@ -8,17 +8,22 @@ import Icon from "components/Icon";
 import FormTextArea from "components/FormTextArea";
 import Text from "components/Text";
 import Title from "components/Title";
+import { useAppDispatch } from "store";
 
 import portrait from "assets/portrait.svg";
 
 const ReceiverSettingContainer = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 1.6rem;
+  background: ${({ theme }) => theme.colors.almostWhite};
 `;
 
 const SocialPreviewContainer = styled.div`
   display: flex;
   flex-direction: column;
+  background: ${({ theme }) => theme.colors.almostWhite};
+  gap: 1.6rem;
 `;
 
 const ImagePreview = styled.div`
@@ -27,11 +32,18 @@ const ImagePreview = styled.div`
   max-width: 24rem;
   height: 100%;
   width: 100%;
+  height: 11rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
 `;
 
 const SendingTestEmailContainer = styled.div`
   display: flex;
   flex-direction: column;
+  background: ${({ theme }) => theme.colors.almostWhite};
+  gap: 1.6rem;
 `;
 
 const ButtonContainer = styled.div`
@@ -39,8 +51,59 @@ const ButtonContainer = styled.div`
   gap: 2.4rem;
 `;
 
-export const ArticleSettings = () => {
+const RadioButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const imgStyled = styled.img`
+  height: 11rem;
+`;
+
+export const ArticleSettings = ({
+  streamId,
+  setStreamId,
+}: {
+  streamId: string | undefined;
+  setStreamId: (arg0: string | undefined) => void;
+}) => {
+  const dispatch = useAppDispatch();
   const radio = useRadioState({ state: "everyone" });
+  const hiddenImageInput = useRef<HTMLInputElement>(null);
+  const [previewImg, setPreviewImg] = useState<File | null>(null);
+  const [description, setDescription] = useState("");
+  console.log(streamId);
+
+  const clickImageInput = () => {
+    hiddenImageInput?.current?.click();
+  };
+
+  const uploadImage = useCallback(
+    (e) => {
+      const input = hiddenImageInput.current || { files: null };
+      // const validImage = false;
+      if (input.files) {
+        const file = input.files[0];
+        if (!file) {
+          return;
+        }
+        console.log(file);
+        console.log(e.target);
+        // validImage =
+        //   file.type === "image/jpeg" ||
+        //   file.type === "image/png" ||
+        //   file.type === "image/svg+xml";
+        console.log("Upload image");
+        setPreviewImg(file);
+      }
+    },
+    [hiddenImageInput.current]
+  );
+
+  const submitSettings = useCallback(() => {
+    // dispatch();
+    console.log();
+  }, []);
 
   return (
     <>
@@ -49,12 +112,14 @@ export const ArticleSettings = () => {
         <Title size="sm" color="helpText">
           This post is for
         </Title>
-        <label>
-          <Radio {...radio} value="free" /> Everyone
-        </label>
-        <label>
-          <Radio {...radio} value="paid" disabled={true} /> Paid subscribers
-        </label>
+        <RadioButtonContainer>
+          <label>
+            <Radio {...radio} value="free" /> Everyone
+          </label>
+          <label>
+            <Radio {...radio} value="paid" disabled={true} /> Paid subscribers
+          </label>
+        </RadioButtonContainer>
       </ReceiverSettingContainer>
       <SocialPreviewContainer>
         <Title size="sm" color="helpText">
@@ -64,10 +129,32 @@ export const ArticleSettings = () => {
           Changing the preview text will only affect the social preview, not the
           post content itself
         </Text>
-        <ImagePreview>
-          <Icon size="lg" src={portrait} alt="portrait" />
-        </ImagePreview>
-        <FormTextArea title="Preview text" errorMsg="Description is too long" />
+        {previewImg ? (
+          <img
+            src={URL.createObjectURL(previewImg)}
+            onClick={clickImageInput}
+            style={{ height: "11rem", objectFit: "contain" }}
+          />
+        ) : (
+          <ImagePreview onClick={clickImageInput}>
+            <Icon size="lg" src={portrait} alt="portrait" />
+          </ImagePreview>
+        )}
+        <input
+          type="file"
+          ref={hiddenImageInput}
+          style={{ display: "none" }}
+          onClick={uploadImage}
+          onChange={uploadImage}
+        />
+        <FormTextArea
+          title="Preview text"
+          errorMsg=""
+          value={description}
+          onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+            setDescription(e.target?.value)
+          }
+        />
       </SocialPreviewContainer>
       <SendingTestEmailContainer>
         <Title size="sm" color="helpText">
@@ -84,8 +171,13 @@ export const ArticleSettings = () => {
         </ExternalLink>
       </SendingTestEmailContainer>
       <ButtonContainer>
-        <Button size="md" color="primary" variant="contained">
-          Unpublish
+        <Button
+          size="md"
+          color="primary"
+          variant="contained"
+          onClick={submitSettings}
+        >
+          Save
         </Button>
         <Button size="md" color="error" variant="contained">
           Delete this post

@@ -90,11 +90,18 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   height: 100%;
 `;
 
-const MarkdownSave = ({ title }: { title: string }) => {
+const MarkdownSave = ({
+  title,
+  localStreamId,
+  setLocalStreamId,
+}: {
+  title: string;
+  localStreamId: string | undefined;
+  setLocalStreamId: (arg0: string) => void;
+}) => {
   const { getMarkdown } = useHelpers(true);
   const { chainId } = useWallet();
   const { streamId } = useParams();
-  const [localStreamId, setLocalStreamId] = useState(streamId);
   const dispatch = useAppDispatch();
 
   const saveArticle = (markdown: string, title: string) => {
@@ -155,6 +162,7 @@ const MarkdownSave = ({ title }: { title: string }) => {
 const WritingPage = () => {
   const [title, setTitle] = useState("");
   const { streamId } = useParams();
+  const [localStreamId, setLocalStreamId] = useState(streamId);
   const { state, onChange } = useRemirror({});
   const articleLoading = useAppSelector((state) => state.createArticle.loading);
   const addRegistryLoading = useAppSelector(
@@ -200,7 +208,10 @@ const WritingPage = () => {
             }
           >
             <DialogContainer>
-              <ArticleSettings />
+              <ArticleSettings
+                streamId={localStreamId}
+                setStreamId={setLocalStreamId}
+              />
             </DialogContainer>
           </Dialog>
           <Button size="md" color="primary" variant="contained">
@@ -221,7 +232,11 @@ const WritingPage = () => {
           state={state}
           onChange={onChange}
         >
-          <MarkdownSave title={title} />
+          <MarkdownSave
+            title={title}
+            localStreamId={localStreamId}
+            setLocalStreamId={setLocalStreamId}
+          />
         </StyledMarkdownEditor>
       </StyledBody>
     </StyledLayout>

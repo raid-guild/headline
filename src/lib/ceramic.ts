@@ -7,7 +7,7 @@ export const getClient = async () => {
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
 
   const client = new WebClient({
-    ceramic: "testnet-clay",
+    ceramic: "http://0.0.0.0:7007",
     connectNetwork: "testnet-clay",
   });
 

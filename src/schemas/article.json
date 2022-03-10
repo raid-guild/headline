@@ -29,6 +29,9 @@
     },
     "paid": {
       "type": "boolean"
+    },
+    "description": {
+      "type": "string"
     }
   },
   "required": ["publicationUrl", "title", "createdAt", "status"]

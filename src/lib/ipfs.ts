@@ -1,4 +1,4 @@
-import { create } from "ipfs-http-client";
+import { create, CID } from "ipfs-http-client";
 import { Buffer } from "buffer";
 import { ImageSources } from "@datamodels/identity-profile-basic";
 
@@ -25,4 +25,18 @@ export const getProfileImg = ({ original }: ImageSources) => {
   const src = original.src.slice(7);
 
   return `https://dweb.link/ipfs/${src}`;
+};
+
+export const storeIpfs = async (content: {
+  content: string | ReadableStream;
+}) => {
+  const ipfs = getIPFSClient();
+  const cid = await ipfs.add(content, {
+    cidVersion: 1,
+    hashAlg: "sha2-256",
+  });
+  const resp = await ipfs.pin.add(CID.parse(cid.path));
+  console.log("Pin request");
+  console.log(resp);
+  return `ipfs://${cid.path}`;
 };
