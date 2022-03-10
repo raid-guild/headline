@@ -20,6 +20,7 @@ import SettingsInboxForm from "components/SettingsInboxForm";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import MobileNav from "components/MobileNav";
 import { fetchBasicProfile } from "services/profile/slice";
 import { useAppSelector, useAppDispatch } from "store";
 
