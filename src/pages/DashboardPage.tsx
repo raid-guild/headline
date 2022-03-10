@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
 import {
+  AppWrapper,
   Layout,
   BodyContainer,
   HeaderContainer,
@@ -15,6 +16,7 @@ import {
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import MobileNav from "components/MobileNav";
 
 import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
@@ -23,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
+import MobileHeader from "components/MobileHeader";
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -32,6 +35,9 @@ const DashboardContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
+  @media (min-width: 1200px) {
+    padding: 6.4rem;
+  }
 `;
 
 const BodyTitleContainer = styled.div`
@@ -109,16 +115,32 @@ const LoggedInContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 3.2rem;
-  padding: 6.4rem;
+  gap: 2.4rem;
+  padding: 2.4rem;
+  @media (max-width: 768px) {
+  }
 `;
 
 const PublicationContainer = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 3.2rem;
+  margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
+  @media (max-width: 720px) {
+    padding: 2.4rem 1.6rem;
+  }
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 720px) {
+    width: 100%;
+    padding: 2.4rem;
+  }
 `;
 
 const SubscriptionContainer = styled.div`
@@ -139,14 +161,53 @@ const PublicationCopyContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
+  margin-bottom: 4.8rem;
+  @media (min-width: 720px) {
+    margin-bottom: 0;
+  }
 `;
+
+// const LearnMoreContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   gap: 0.5rem;
+//   justify-content: space-between;
+//   background: ${({ theme }) => theme.colors.backgroundGrey};
+//   margin-bottom: 4.8rem;
+//   padding: 2.4rem;
+//   @media (min-width: 720px) {
+//     flex-direction: row;
+//     padding: 4rem;
+//     margin-bottom: 0;
+//   }
+// `;
 
 const LearnMoreContainer = styled.div`
   display: flex;
-  gap: 0.5rem;
+  flex-direction: column;
+  align-items: center;
   justify-content: space-between;
+  padding: 3.2rem;
+  margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
-  padding: 4rem;
+  @media (max-width: 720px) {
+    padding: 2.4rem 1.6rem;
+  }
+`;
+
+const LearnMoreCopyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 4.8rem;
+  @media (min-width: 720px) {
+    margin-bottom: 0;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  min-width: 295px;
 `;
 
 // in publication container
@@ -172,14 +233,14 @@ const LoggedInBody = () => {
           </Text>
         </ExternalLink>
       </PublicationCopyContainer>
-      <Button
+      <StyledButton
         color="primary"
         variant="contained"
         size="xl"
         onClick={goToCreatePublication}
       >
         Create my publication
-      </Button>
+      </StyledButton>
     </>
   );
   const hasPublication = (
@@ -205,15 +266,15 @@ const LoggedInBody = () => {
       </PublicationContainer>
       <SubscriptionContainer>
         <LearnMoreContainer>
-          <div>
+          <LearnMoreCopyContainer>
             <Text size="md" weight="semibold">
               Learn more from the pro
             </Text>
             <Title size="sm">Tips for you from the Unlock team</Title>
-          </div>
-          <Button size="xl" color="primary" variant="contained">
+          </LearnMoreCopyContainer>
+          <StyledButton size="xl" color="primary" variant="contained">
             Subscribe
-          </Button>
+          </StyledButton>
         </LearnMoreContainer>
       </SubscriptionContainer>
     </LoggedInContainer>
@@ -237,26 +298,32 @@ const DashboardPage = () => {
     dispatch(fetchBasicProfile(address || ""));
   }, [provider]);
   return (
-    <Layout>
-      <HeaderContainer>
-        <HeaderText size="md" weight="semibold" color="helpText">
-          Dashboard
-        </HeaderText>
-      </HeaderContainer>
-      <SidebarContainer>
-        <Sidebar />
-      </SidebarContainer>
-      <BodyContainer background={did ? "almostWhite" : "backgroundGrey"}>
-        {did ? (
-          <LoggedInBody />
-        ) : (
-          <LoggedOutBody
-            connect={connectToServices}
-            isConnecting={isConnecting || isCeramicConnecting}
-          />
-        )}
-      </BodyContainer>
-    </Layout>
+    <AppWrapper>
+      <Layout>
+        <HeaderContainer>
+          <MobileHeader />
+          <TitleContainer>
+            <HeaderText size="md" weight="semibold" color="helpText">
+              Dashboard
+            </HeaderText>
+          </TitleContainer>
+        </HeaderContainer>
+        <SidebarContainer>
+          <Sidebar />
+        </SidebarContainer>
+        <BodyContainer background={did ? "almostWhite" : "backgroundGrey"}>
+          {did ? (
+            <LoggedInBody />
+          ) : (
+            <LoggedOutBody
+              connect={connectToServices}
+              isConnecting={isConnecting || isCeramicConnecting}
+            />
+          )}
+        </BodyContainer>
+        <MobileNav />
+      </Layout>
+    </AppWrapper>
   );
 };
 

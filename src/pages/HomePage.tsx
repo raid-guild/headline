@@ -2,8 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "components/Button";
-import { Layout, BodyContainer } from "components/Layout";
+import { AppWrapper, Layout, BodyContainer } from "components/Layout";
 import FullLogo from "components/FullLogo";
+import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
 
 const StyledLayout = styled(Layout)`
@@ -12,11 +13,9 @@ const StyledLayout = styled(Layout)`
     "body" 1fr
     / 1fr;
   margin-top: 2rem;
-  /* background-color: red; */
 `;
 const StyledBodyContainer = styled(BodyContainer)`
   grid-area: body;
-  /* background-color: red; */
 `;
 
 const HomeHeaderContainer = styled.div`
@@ -92,36 +91,39 @@ const ActionContainer = styled.div`
 
 const HomePage = () => {
   return (
-    <StyledLayout>
-      <HomeHeaderContainer>
-        <LogoContainer>
-          <FullLogo />
-        </LogoContainer>
-        <ActionContainer>
-          <InternalLink as="a" href="#">
-            How it works
-          </InternalLink>
-          <Link to={DASHBOARD_URI}>
-            <Button color="primary" variant="contained" size="md">
-              Get Started
-            </Button>
-          </Link>
-        </ActionContainer>
-      </HomeHeaderContainer>
-      <StyledBodyContainer>
-        <HeroContainer>
-          <HeroCTAContainer>
-            <HeroHeading>The Decentralized Newsletter.</HeroHeading>
-            <HeroTagline>Your Content, Your Readers.</HeroTagline>
+    <AppWrapper>
+      <StyledLayout>
+        <HomeHeaderContainer>
+          <LogoContainer>
+            <FullLogo />
+          </LogoContainer>
+          <ActionContainer>
+            <InternalLink as="a" href="#">
+              How it works
+            </InternalLink>
             <Link to={DASHBOARD_URI}>
-              <HeroButton color="primary" variant="contained" size="xl">
+              <Button color="primary" variant="contained" size="md">
                 Get Started
-              </HeroButton>
+              </Button>
             </Link>
-          </HeroCTAContainer>
-        </HeroContainer>
-      </StyledBodyContainer>
-    </StyledLayout>
+          </ActionContainer>
+        </HomeHeaderContainer>
+        <StyledBodyContainer>
+          <HeroContainer>
+            <HeroCTAContainer>
+              <HeroHeading>The Decentralized Newsletter.</HeroHeading>
+              <HeroTagline>Your Content, Your Readers.</HeroTagline>
+              <Link to={DASHBOARD_URI}>
+                <HeroButton color="primary" variant="contained" size="xl">
+                  Get Started
+                </HeroButton>
+              </Link>
+            </HeroCTAContainer>
+          </HeroContainer>
+        </StyledBodyContainer>
+        <MobileNav />
+      </StyledLayout>
+    </AppWrapper>
   );
 };
 
