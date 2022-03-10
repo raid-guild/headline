@@ -15,7 +15,7 @@ jobs:
           node-version: 16.x
 
       - run: yarn
-      - run: yarn build
+      - run: VITE_INFURA_PROJECT_ID=${{secrets.INFURA_PROJECT_ID}} VITE_INFURA_PORJECT_SECRET=${{secrets.INFURA_PROJECT_SECRET}} yarn build
 
       - name: "Deploy to Skynet"
         uses: SkynetLabs/deploy-to-skynet-action@v2
