@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import { useRadioState, Radio } from "reakit/Radio";
 import styled from "styled-components";
 
@@ -15,8 +16,11 @@ import Icon from "components/Icon";
 import FormTextArea from "components/FormTextArea";
 import Text from "components/Text";
 import Title from "components/Title";
-import { articleRegistrySelectors } from "services/articleRegistry/slice";
-import { useAppSelector } from "store";
+import {
+  articleRegistrySelectors,
+  removeRegistryArticle,
+} from "services/articleRegistry/slice";
+import { useAppDispatch, useAppSelector } from "store";
 import { fetchIPFS } from "lib/ipfs";
 
 import portrait from "assets/portrait.svg";
@@ -89,9 +93,12 @@ export const ArticleSettings = ({
     arg4: boolean
   ) => void;
 }) => {
+  const dispatch = useAppDispatch();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
+  const loadingDelete = useAppSelector((state) => state.removeArticle.loading);
+  const navigate = useNavigate();
 
   const radio = useRadioState({
     state: `${article?.paid ? "paid" : "free"}`,
@@ -155,6 +162,14 @@ export const ArticleSettings = ({
     setHide(true);
     console.log(hide);
   }, [description, article, previewImg, radio.state]);
+
+  const deleteArticle = useCallback(async () => {
+    // dispatch delete
+    if (streamId) {
+      await dispatch(removeRegistryArticle(streamId));
+      navigate("/publish");
+    }
+  }, []);
 
   return (
     <Dialog
@@ -240,9 +255,18 @@ export const ArticleSettings = ({
           >
             Save
           </Button>
-          <Button size="md" color="error" variant="contained">
-            Delete this post
-          </Button>
+          {streamId && (
+            <Button
+              size="md"
+              color="error"
+              variant="contained"
+              onClick={deleteArticle}
+              loadingText="Deleting..."
+              isLoading={loadingDelete}
+            >
+              Delete this post
+            </Button>
+          )}
         </ButtonContainer>
       </DialogContainer>
     </Dialog>

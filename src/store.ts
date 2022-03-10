@@ -12,6 +12,7 @@ import {
 import {
   articleRegistrySlice,
   addArticleSlice,
+  removeArticleSlice,
 } from "services/articleRegistry/slice";
 
 export const store = configureStore({
@@ -28,6 +29,7 @@ export const store = configureStore({
     [fetchProfileSlice.name]: fetchProfileSlice.reducer,
     [lockSlice.name]: lockSlice.reducer,
     [verifyLockSlice.name]: verifyLockSlice.reducer,
+    [removeArticleSlice.name]: removeArticleSlice.reducer,
   },
 });
 

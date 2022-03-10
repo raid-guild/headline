@@ -30,6 +30,11 @@ export const articleRegistrySlice = createSlice({
         state[action.payload.streamId] = action.payload;
       }
     },
+    remove(state, action: PayloadAction<string>) {
+      if (action.payload) {
+        delete state[action.payload];
+      }
+    },
   },
 });
 
@@ -67,6 +72,26 @@ export const addArticleSlice = createSlice({
   },
 });
 
+export const removeArticleSlice = createSlice({
+  name: "removeArticle",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(removeRegistryArticle.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(removeRegistryArticle.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(removeRegistryArticle.rejected, (state, action) => {
+      console.error(action);
+      state.loading = false;
+    });
+  },
+});
+
 // async thunk that creates a publication
 export const addRegistryArticle = createAsyncThunk(
   "articleRegistry/add",
@@ -83,6 +108,28 @@ export const addRegistryArticle = createAsyncThunk(
       });
     } catch (err) {
       return thunkAPI.rejectWithValue("Failed to save");
+    }
+  }
+);
+
+// async thunk that creates a publication
+export const removeRegistryArticle = createAsyncThunk(
+  "articleRegistry/add",
+  async (streamId: string, thunkAPI) => {
+    const client = await getClient();
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLISHED_MODELS,
+    });
+    const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    try {
+      const registry = await store.get("articleRegistry");
+      delete registry[streamId];
+      await store.set("articleRegistry", registry);
+      thunkAPI.dispatch(articleRegistryActions.remove(streamId));
+      return true;
+    } catch (err) {
+      return thunkAPI.rejectWithValue("Failed to delete");
     }
   }
 );
