@@ -7,7 +7,7 @@ export const getClient = async () => {
   const authProvider = new EthereumAuthProvider(window.ethereum, address);
 
   const client = new WebClient({
-    ceramic: import.meta.env["VITE_CERAMIC_URL"] || "https://0.0.0.0:7007",
+    ceramic: import.meta.env?.VITE_CERAMIC_URL as ConnectNetwork,
     connectNetwork: "testnet-clay",
   });
 
