@@ -20,6 +20,7 @@ import SettingsInboxForm from "components/SettingsInboxForm";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
 import { fetchBasicProfile } from "services/profile/slice";
 import { useAppSelector, useAppDispatch } from "store";
@@ -34,6 +35,10 @@ const ProfilePageBodyContainer = styled(BodyContainer)`
   justify-content: flex-start;
   margin-right: 2rem;
   gap: 3.2rem;
+  @media (max-width: 768px) {
+    margin-right: 0;
+    justify-content: center;
+  }
 `;
 
 const BasicProfileCardContainer = styled.div`
@@ -43,7 +48,13 @@ const BasicProfileCardContainer = styled.div`
   gap: 3.2rem;
   padding: 4rem;
   width: 100%;
+
   max-length: 90rem;
+  @media (max-width: 768px) {
+    max-width: 100vw;
+
+    padding: 2.4rem;
+  }
 `;
 
 const GetStartedButton = styled(Button)`
@@ -60,6 +71,15 @@ const ProfileTextContainer = styled.div`
 const InboxContainer = styled.div`
   display: flex;
   flex-direction: column;
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 720px) {
+    width: 100%;
+    padding: 2.4rem 2.4rem 1.6rem;
+  }
 `;
 
 const EmptyProfileCard = () => {
@@ -208,9 +228,12 @@ const ProfilePage = () => {
   return (
     <Layout>
       <HeaderContainer>
-        <HeaderText size="md" weight="semibold" color="helpText">
-          My Profile
-        </HeaderText>
+        <MobileHeader />
+        <TitleContainer>
+          <HeaderText size="md" weight="semibold" color="helpText">
+            My Profile
+          </HeaderText>
+        </TitleContainer>
       </HeaderContainer>
       <SidebarContainer>
         <Sidebar />
@@ -219,6 +242,7 @@ const ProfilePage = () => {
         <BasicProfileCard />
         <SubscriptionInbox />
       </ProfilePageBodyContainer>
+      <MobileNav />
     </Layout>
   );
 };

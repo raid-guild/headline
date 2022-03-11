@@ -49,6 +49,9 @@ const DashboardContainer = styled.div`
   width: 100%;
   margin-bottom: 9.6rem;
   padding: 6.4rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyTitleContainer = styled.div`
@@ -66,6 +69,9 @@ const BodyButtonContainer = styled.div`
   background: ${({ theme }) => theme.colors.almostWhite};
   max-height: 20rem;
   height: 100%;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyFooterContainer = styled.div`
@@ -94,7 +100,7 @@ const LoggedOutBody = ({
           Please connect your wallet to access the dashboard
         </Text>
         <div>
-          <Button
+          <StyledButton
             color="primary"
             variant="contained"
             size="xl"
@@ -103,7 +109,7 @@ const LoggedOutBody = ({
             loadingText="Connecting..."
           >
             Connect wallet
-          </Button>
+          </StyledButton>
         </div>
       </BodyButtonContainer>
       <BodyFooterContainer>
@@ -133,9 +139,20 @@ const LoggedInContainer = styled.div`
   }
 `;
 
+const LoggedOutContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 2.4rem;
+  padding: 6.4rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
+`;
+
 const PublicationContainer = styled.div`
   display: flex;
-
   align-items: center;
   justify-content: space-between;
   padding: 3.2rem;

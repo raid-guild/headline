@@ -20,6 +20,7 @@ import Button from "components/Button";
 import BackButton from "components/BackButton";
 import Icon from "components/Icon";
 import Input from "components/Input";
+import MobileNav from "components/MobileNav";
 import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
 import PublicationForm from "components/PublicationForm";
 import Title from "components/Title";
@@ -38,6 +39,25 @@ const StyledLayout = styled(Layout)`
 `;
 const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
+  @media (max-width: 768px) {
+    padding: 0 2.4rem;
+  }
+`;
+
+const StyledTitle = styled(Title)`
+  @media (max-width: 768px) {
+    font-size: 2.8rem;
+    font-weight: 600;
+    line-height: 3.2rem;
+    text-align: center;
+    padding: 0 2.4rem 0.8rem;
+  }
+`;
+
+const StyledText = styled(Text)`
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const StyledHeaderContainer = styled(HeaderContainer)`
@@ -71,6 +91,11 @@ const BodyHeaderContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  @media (max-width: 768px) {
+    margin-top: 3.2rem;
+    margin-bottom: 4rem;
+    padding: 0 2.4rem;
+  }
 `;
 
 const StyledButton = styled(Button)`
@@ -141,12 +166,12 @@ const CreatePublicationForm = () => {
   return (
     <>
       <BodyHeaderContainer>
-        <Title size="md" color="label">
+        <StyledTitle size="md" color="label">
           Start writing & publishing
-        </Title>
-        <Text size="md" color="label">
+        </StyledTitle>
+        <StyledText size="md" color="label">
           Create the publication that is truly owned by you
-        </Text>
+        </StyledText>
       </BodyHeaderContainer>
       <PublicationForm onSubmit={onSubmit}>
         <StyledButton
@@ -197,6 +222,7 @@ const CreatePublicationPage = () => {
           )}
         </ContentContainer>
       </StyledBodyContainer>
+      <MobileNav />
     </StyledLayout>
   );
 };
