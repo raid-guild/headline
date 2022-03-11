@@ -67,7 +67,9 @@ export const HeaderContainer = styled.div`
   align-items: center;
   @media (max-width: 768px) {
     flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
+    padding: 2.4rem 0;
   }
 `;
 

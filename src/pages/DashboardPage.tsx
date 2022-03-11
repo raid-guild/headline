@@ -6,7 +6,6 @@ import styled from "styled-components";
 import Button from "components/Button";
 import ExternalLink from "components/ExternalLink";
 import {
-  AppWrapper,
   Layout,
   BodyContainer,
   HeaderContainer,
@@ -17,7 +16,7 @@ import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
 import MobileNav from "components/MobileNav";
-
+import MobileHeader from "components/MobileHeader";
 import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
 import { networks } from "lib/networks";
@@ -26,7 +25,21 @@ import { useAppDispatch, useAppSelector } from "store";
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
-import MobileHeader from "components/MobileHeader";
+
+const MobileHeaderContainer = styled(HeaderContainer)`
+  display: none;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0 2.4rem;
+    max-width: 100%;
+    border-bottom: 1px solid;
+    border-color: #f0efef;
+  }
+`;
 
 const DashboardContainer = styled.div`
   display: flex;
@@ -36,9 +49,7 @@ const DashboardContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
-  @media (min-width: 1200px) {
-    padding: 6.4rem;
-  }
+  padding: 6.4rem;
 `;
 
 const BodyTitleContainer = styled.div`
@@ -117,20 +128,23 @@ const LoggedInContainer = styled.div`
   width: 100%;
   height: 100%;
   gap: 2.4rem;
-  padding: 2.4rem;
+  padding: 6.4rem;
   @media (max-width: 768px) {
+    padding: 2.4rem;
   }
 `;
 
 const PublicationContainer = styled.div`
   display: flex;
-  flex-direction: column;
+
   align-items: center;
   justify-content: space-between;
   padding: 3.2rem;
   margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
   @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
     padding: 2.4rem 1.6rem;
   }
 `;
@@ -140,7 +154,7 @@ const TitleContainer = styled.div`
   align-items: center;
   @media (max-width: 720px) {
     width: 100%;
-    padding: 2.4rem;
+    padding: 2.4rem 2.4rem 1.6rem;
   }
 `;
 
@@ -183,15 +197,27 @@ const PublicationCopyContainer = styled.div`
 //   }
 // `;
 
+const LogoContainer = styled.div`
+  direction: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    padding: 1.2rem 0rem;
+  }
+`;
+
 const LearnMoreContainer = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 3.2rem;
   margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
   @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
     padding: 2.4rem 1.6rem;
   }
 `;
@@ -307,32 +333,30 @@ const DashboardPage = () => {
     dispatch(fetchBasicProfile(address || ""));
   }, [provider]);
   return (
-    <AppWrapper>
-      <Layout>
-        <HeaderContainer>
-          <MobileHeader />
-          <TitleContainer>
-            <HeaderText size="md" weight="semibold" color="helpText">
-              Dashboard
-            </HeaderText>
-          </TitleContainer>
-        </HeaderContainer>
-        <SidebarContainer>
-          <Sidebar />
-        </SidebarContainer>
-        <BodyContainer background={did ? "almostWhite" : "backgroundGrey"}>
-          {did ? (
-            <LoggedInBody />
-          ) : (
-            <LoggedOutBody
-              connect={connectToServices}
-              isConnecting={isConnecting || isCeramicConnecting}
-            />
-          )}
-        </BodyContainer>
-        <MobileNav />
-      </Layout>
-    </AppWrapper>
+    <Layout>
+      <HeaderContainer>
+        <MobileHeader />
+        <TitleContainer>
+          <HeaderText size="md" weight="semibold" color="helpText">
+            Dashboard
+          </HeaderText>
+        </TitleContainer>
+      </HeaderContainer>
+      <SidebarContainer>
+        <Sidebar />
+      </SidebarContainer>
+      <BodyContainer background={did ? "almostWhite" : "backgroundGrey"}>
+        {did ? (
+          <LoggedInBody />
+        ) : (
+          <LoggedOutBody
+            connect={connectToServices}
+            isConnecting={isConnecting || isCeramicConnecting}
+          />
+        )}
+      </BodyContainer>
+      <MobileNav />
+    </Layout>
   );
 };
 
