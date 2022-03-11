@@ -21,6 +21,10 @@
       "type": "string",
       "format": "date-time"
     },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
     "status": {
       "enum": ["draft", "published"]
     },

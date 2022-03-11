@@ -23,6 +23,7 @@ export type CeramicArticle = {
   previewImg?: string;
   paid?: boolean;
   description?: string;
+  publishedAt?: string;
 };
 export type Article = {
   text: string;
@@ -73,6 +74,25 @@ export const createArticleSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(createArticle.rejected, (state) => {
+      state.loading = false;
+    });
+  },
+});
+
+export const publishArticleSlice = createSlice({
+  name: "publishArticle",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(publishArticle.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(publishArticle.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(publishArticle.rejected, (state) => {
       state.loading = false;
     });
   },
@@ -210,6 +230,79 @@ export const updateArticle = createAsyncThunk(
         previewImg: args.article.previewImg,
         paid: args.article.paid || false,
         description: args.article.description,
+      };
+
+      const doc = await TileDocument.load(client.ceramic, args.streamId);
+      const updatedArticle = {
+        ...existingArticle,
+        ...baseArticle,
+      };
+      await doc.update(updatedArticle);
+      thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      return baseArticle;
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to update");
+    }
+  }
+);
+
+export const publishArticle = createAsyncThunk(
+  "article/publish",
+  async (
+    args: {
+      article: Omit<Article, "publicationUrl" | "createdAt">;
+      streamId: string;
+      encrypt?: boolean;
+      chainName?: ChainName;
+    },
+    thunkAPI
+  ) => {
+    const client = await getClient();
+    let content = args.article.text || "";
+    const { articleRegistry } = thunkAPI.getState() as RootState;
+    const existingArticle = articleRegistry[args.streamId];
+    let publicationUrl;
+    try {
+      if (args.encrypt) {
+        if (!args.article.status) {
+          throw Error("Missing encrypt type");
+        }
+        if (!args.chainName) {
+          throw Error("Missing chain name");
+        }
+        const { publication } = thunkAPI.getState() as RootState;
+        const access = publication.publishAccess;
+        const symmetricKey = await getEncryptionKey(
+          args.chainName,
+          access.encryptedSymmetricKey,
+          access.accessControlConditions
+        );
+        const blob = await encryptText(content, symmetricKey);
+        content = uint8arrayToString(
+          new Uint8Array(await blob.arrayBuffer()),
+          "base64"
+        );
+      }
+      const ipfs = getIPFSClient();
+      const cid = await ipfs.add(
+        { content: content },
+        {
+          cidVersion: 1,
+          hashAlg: "sha2-256",
+        }
+      );
+      await ipfs.pin.add(CID.parse(cid.path));
+      publicationUrl = `ipfs://${cid.path}`;
+
+      const baseArticle = {
+        publicationUrl: publicationUrl,
+        title: args.article.title || "",
+        previewImg: args.article.previewImg,
+        paid: args.article.paid || false,
+        description: args.article.description,
+        publishedAt: new Date().toISOString(),
+        status: "published",
       };
 
       const doc = await TileDocument.load(client.ceramic, args.streamId);
