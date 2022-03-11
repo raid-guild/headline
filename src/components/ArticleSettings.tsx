@@ -115,6 +115,12 @@ const SocialPreview = ({
   description,
   setDescription,
   articlePreviewLink,
+}: {
+  previewImg: File | null;
+  setPreviewImg: (arg0: File | null) => void;
+  description: string;
+  setDescription: (arg0: string) => void;
+  articlePreviewLink: string | undefined;
 }) => {
   const hiddenImageInput = useRef<HTMLInputElement>(null);
   const clickImageInput = () => {

@@ -302,7 +302,7 @@ export const publishArticle = createAsyncThunk(
         paid: args.article.paid || false,
         description: args.article.description,
         publishedAt: new Date().toISOString(),
-        status: "published",
+        status: "published" as const,
       };
 
       const doc = await TileDocument.load(client.ceramic, args.streamId);

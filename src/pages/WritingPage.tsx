@@ -215,7 +215,7 @@ const WritingPage = () => {
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
           <ArticleSettings streamId={localStreamId} saveArticle={saveArticle} />
-          <PublishModal streamId={localStreamId} />
+          <PublishModal streamId={localStreamId || ""} />
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>
