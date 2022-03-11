@@ -14,6 +14,7 @@ import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
 import { LockCards, LockData } from "components/LockCard";
+import MobileNav from "components/MobileNav";
 import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
 import {
@@ -503,6 +504,7 @@ const PublishPage = () => {
         <Sidebar />
       </SidebarContainer>
       {publication ? <PublishBody /> : <CreatePublicationView />}
+      <MobileNav />
     </Layout>
   );
 };
