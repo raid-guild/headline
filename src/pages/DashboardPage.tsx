@@ -36,7 +36,7 @@ const MobileHeaderContainer = styled(HeaderContainer)`
     padding: 0 2.4rem;
     max-width: 100%;
     border-bottom: 1px solid;
-    border-color: #f0efef;
+    border-color: ${({ theme }) => theme.colors.mediumGrey};
   }
 `;
 
@@ -59,6 +59,10 @@ const BodyTitleContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.8rem;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const BodyButtonContainer = styled.div`
@@ -69,6 +73,11 @@ const BodyButtonContainer = styled.div`
   background: ${({ theme }) => theme.colors.almostWhite};
   max-height: 20rem;
   height: 100%;
+  border-radius: 8px;
+  margin-top: 4rem;
+  gap: 4rem;
+  padding: 4rem;
+  border: 1px solid #f0efef;
   @media (max-width: 768px) {
     padding: 2.4rem;
   }
@@ -81,6 +90,7 @@ const BodyFooterContainer = styled.div`
   justify-content: flex-end;
   max-height: 4rem;
   height: 100%;
+  margin-top: 4rem;
 `;
 
 const LoggedOutBody = ({
@@ -158,6 +168,7 @@ const PublicationContainer = styled.div`
   padding: 3.2rem;
   margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
+  border-radius: 0.8rem;
   @media (max-width: 720px) {
     flex-direction: column;
     align-items: flex-start;
@@ -195,6 +206,7 @@ const PublicationCopyContainer = styled.div`
   margin-bottom: 4.8rem;
   @media (min-width: 720px) {
     margin-bottom: 0;
+    gap: 0.8rem;
   }
 `;
 

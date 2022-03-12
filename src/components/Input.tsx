@@ -26,6 +26,9 @@ const InputContainer = styled.div`
   flex-direction: column;
   max-height: 7rem;
   height: 100%;
+  @media (max-width: 768px) {
+    position: relative;
+  }
 `;
 
 const StyledLabel = styled.label`

@@ -6,7 +6,7 @@ import FullLogo from "components/FullLogo";
 
 const MobileHeaderContainer = styled(HeaderContainer)`
   display: none;
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     display: flex;
     width: 100%;
     align-items: flex-start;
