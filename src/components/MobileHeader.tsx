@@ -25,6 +25,7 @@ const LogoContainer = styled.div`
   align-items: center;
   @media (max-width: 768px) {
     justify-content: flex-start;
+    padding-bottom: 1.6rem;
   }
 `;
 

@@ -34,6 +34,7 @@ const theme = {
     label: "#3A3A3A",
     grey: "#A5A5A5",
     lightGrey: "#DEDEDE",
+    backgroundMediumGrey: "#F0EFEF",
     success: "#8ACA89",
     error: "#FF6771",
   },

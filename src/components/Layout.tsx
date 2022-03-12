@@ -17,19 +17,22 @@ export const AppWrapper = styled.div`
 export const Layout = styled.div`
   width: 100%;
   height: 100%;
+  min-height: 100%;
   min-width: 100%;
   overflow-x: hidden;
+  overflow-y: scroll;
+  padding-bottom: 10rem;
   gap: 0rem 0rem;
   display: grid;
   grid-template:
-    "header"
-    "body"
-    "mobileNav";
-  @media (min-width: 1200px) {
+    "sidebar header" 9.6rem
+    "sidebar body" 1fr
+    / 40rem 1fr;
+  @media (max-width: 768px) {
     grid-template:
-      "sidebar header" 9.6rem
-      "sidebar body" 1fr
-      / 40rem 1fr;
+      "header"
+      "body"
+      "mobileNav";
   }
 `;
 
@@ -40,12 +43,13 @@ export const MobileNavContainer = styled.div`
   align-items: center;
   justify-content: center;
   min-width: 100vw;
-  height: 8vh;
   position: fixed;
   bottom: 0;
   z-index: 10;
+  height: 5.6rem;
   border-top: 1px solid;
   border-color: #f0efef;
+  background: ${({ theme }) => theme.colors.almostWhite};
   @media (min-width: 1200px) {
     display: none;
   }

@@ -36,8 +36,10 @@ const ProfilePageBodyContainer = styled(BodyContainer)`
   margin-right: 2rem;
   gap: 3.2rem;
   @media (max-width: 768px) {
-    margin-right: 0;
-    justify-content: center;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0;
+    min-width: 0rem;
   }
 `;
 
@@ -47,13 +49,17 @@ const BasicProfileCardContainer = styled.div`
   background: ${({ theme }) => theme.colors.backgroundGrey};
   gap: 3.2rem;
   padding: 4rem;
-  width: 100%;
-
   max-length: 90rem;
   @media (max-width: 768px) {
-    max-width: 100vw;
-
+    gap: 1.6rem;
     padding: 2.4rem;
+    margin: 2.4rem;
+  }
+`;
+
+const ProfileCardTitle = styled(Title)`
+  @media (max-width: 768px) {
+    display: none;
   }
 `;
 
@@ -66,6 +72,9 @@ const ProfileTextContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const InboxContainer = styled.div`
@@ -79,7 +88,12 @@ const TitleContainer = styled.div`
   @media (max-width: 720px) {
     width: 100%;
     padding: 2.4rem 2.4rem 1.6rem;
+    border-bottom: 1px solid #f0efef;
   }
+`;
+
+const ProfileText = styled(HeaderText)`
+  margin-left: 0;
 `;
 
 const EmptyProfileCard = () => {
@@ -124,6 +138,9 @@ const SocialMediaContainer = styled.div`
 const ProfileContentContainer = styled.div`
   display: flex;
   gap: 3.2rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
@@ -136,9 +153,9 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
   }, []);
   return (
     <>
-      <Title size="sm" color="helpText">
+      <ProfileCardTitle size="sm" color="helpText">
         Basic
-      </Title>
+      </ProfileCardTitle>
       <ProfileContentContainer>
         <Avatar src={src || ""} alt="Profile picture" size="xxl" />
         <ProfileTextContainer>
@@ -230,9 +247,9 @@ const ProfilePage = () => {
       <HeaderContainer>
         <MobileHeader />
         <TitleContainer>
-          <HeaderText size="md" weight="semibold" color="helpText">
+          <ProfileText size="md" weight="semibold" color="helpText">
             My Profile
-          </HeaderText>
+          </ProfileText>
         </TitleContainer>
       </HeaderContainer>
       <SidebarContainer>
