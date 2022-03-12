@@ -18,6 +18,17 @@ const InboxContainer = styled.form`
   display: flex;
   gap: 2rem;
   align-items: flex-end;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6rem;
+  }
+`;
+
+const EmailInput = styled(Input)`
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const SettingsInboxForm = ({ onSubmit, children }: Props) => {
@@ -35,7 +46,7 @@ const SettingsInboxForm = ({ onSubmit, children }: Props) => {
         rules={{ required: true }}
         // defaultValue={publication.email}
         render={({ field }) => (
-          <Input title="Email" errorMsg={errors?.email} {...field} />
+          <EmailInput title="Email" errorMsg={errors?.email} {...field} />
         )}
       />
       {children}

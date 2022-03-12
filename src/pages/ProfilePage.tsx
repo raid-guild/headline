@@ -37,7 +37,7 @@ const ProfilePageBodyContainer = styled(BodyContainer)`
   gap: 3.2rem;
   @media (max-width: 768px) {
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     margin: 0;
     min-width: 0rem;
   }
@@ -50,10 +50,11 @@ const BasicProfileCardContainer = styled.div`
   gap: 3.2rem;
   padding: 4rem;
   max-length: 90rem;
+  border-radius: 0.8rem;
   @media (max-width: 768px) {
     gap: 1.6rem;
     padding: 2.4rem;
-    margin: 2.4rem;
+    margin: 0 2.4rem;
   }
 `;
 
@@ -80,6 +81,9 @@ const ProfileTextContainer = styled.div`
 const InboxContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+  }
 `;
 
 const TitleContainer = styled.div`
@@ -88,12 +92,22 @@ const TitleContainer = styled.div`
   @media (max-width: 720px) {
     width: 100%;
     padding: 2.4rem 2.4rem 1.6rem;
-    border-bottom: 1px solid #f0efef;
+    border-color: ${({ theme }) => theme.colors.mediumGrey};
   }
 `;
 
 const ProfileText = styled(HeaderText)`
   margin-left: 0;
+`;
+
+const InboxTitle = styled(Title)`
+  margin-bottom: 1.6rem;
+`;
+
+const UpdateEmailButton = styled(Button)`
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const EmptyProfileCard = () => {
@@ -140,6 +154,7 @@ const ProfileContentContainer = styled.div`
   gap: 3.2rem;
   @media (max-width: 768px) {
     flex-direction: column;
+    gap: 1.6rem;
   }
 `;
 
@@ -222,9 +237,9 @@ const BasicProfileCard = () => {
 const SubscriptionInbox = () => {
   return (
     <BasicProfileCardContainer>
-      <Title size="sm" color="helpText">
+      <InboxTitle size="sm" color="helpText">
         Subscription inbox
-      </Title>
+      </InboxTitle>
       <InboxContainer>
         <Text size="base">To receive the subscription right to your inbox</Text>
         <SettingsInboxForm
@@ -232,9 +247,9 @@ const SubscriptionInbox = () => {
             console.log("Being implemented");
           }}
         >
-          <Button size="md" color="primary" variant="contained">
+          <UpdateEmailButton size="md" color="primary" variant="contained">
             Update
-          </Button>
+          </UpdateEmailButton>
         </SettingsInboxForm>
       </InboxContainer>
     </BasicProfileCardContainer>

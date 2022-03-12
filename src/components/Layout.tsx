@@ -21,7 +21,6 @@ export const Layout = styled.div`
   min-width: 100%;
   overflow-x: hidden;
   overflow-y: scroll;
-  padding-bottom: 10rem;
   gap: 0rem 0rem;
   display: grid;
   grid-template:
@@ -29,6 +28,7 @@ export const Layout = styled.div`
     "sidebar body" 1fr
     / 40rem 1fr;
   @media (max-width: 768px) {
+    padding-bottom: 10rem;
     grid-template:
       "header"
       "body"
@@ -48,9 +48,9 @@ export const MobileNavContainer = styled.div`
   z-index: 10;
   height: 5.6rem;
   border-top: 1px solid;
-  border-color: #f0efef;
+  border-color: ${({ theme }) => theme.colors.mediumGrey};
   background: ${({ theme }) => theme.colors.almostWhite};
-  @media (min-width: 1200px) {
+  @media (min-width: 1440px) {
     display: none;
   }
 `;
@@ -60,7 +60,7 @@ export const SidebarContainer = styled.div`
   @media (min-width: 300px) {
     display: none;
   }
-  @media (min-width: 1200px) {
+  @media (min-width: 992px) {
     display: block;
   }
 `;
@@ -73,7 +73,7 @@ export const HeaderContainer = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
-    padding: 2.4rem 0;
+    padding: 2.4rem 0 0;
   }
 `;
 
