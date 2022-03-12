@@ -5,11 +5,13 @@ const GlobalStyle = createGlobalStyle`
         height: 100%;
 			  /* 1rem = 10px */
         font-size: 62.5%;
+
     }
     body {
        height: 100%;
        margin: 0px;
        padding: 0px;
+	   box-sizing: border-box;
        background-color: rgb(252, 253, 254);
 			 font-family: "Inter";
        font-size: 1.6rem;

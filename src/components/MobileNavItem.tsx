@@ -26,9 +26,7 @@ const SidebarItemContainer = styled.div<Pick<Props, "active">>`
   }
 `;
 
-const StyledCircleOutline = styled(Icon)`
-  margin-right: 1.8rem;
-`;
+const StyledCircleOutline = styled(Icon)``;
 
 const MobileNavItem = ({ text, icon, active }: Props) => {
   const getIcon = () => {
@@ -54,9 +52,6 @@ const MobileNavItem = ({ text, icon, active }: Props) => {
         src={getIcon()}
         alt="circle outline with cross"
       />
-      {/* <Text size="md" weight="semibold">
-        {text}
-      </Text> */}
     </SidebarItemContainer>
   );
 };
