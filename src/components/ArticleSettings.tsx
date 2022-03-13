@@ -5,8 +5,9 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useWallet } from "@raidguild/quiver";
 import { useNavigate } from "react-router-dom";
-import { useRadioState, Radio } from "reakit/Radio";
+import { useRadioState, Radio, RadioStateReturn } from "reakit/Radio";
 import styled from "styled-components";
 
 import Button from "components/Button";
@@ -20,8 +21,11 @@ import {
   articleRegistrySelectors,
   removeRegistryArticle,
 } from "services/articleRegistry/slice";
+import { publishArticle } from "services/article/slice";
+
 import { useAppDispatch, useAppSelector } from "store";
 import { fetchIPFS } from "lib/ipfs";
+import { networks } from "lib/networks";
 
 import portrait from "assets/portrait.svg";
 import settings from "assets/settings.svg";
@@ -80,49 +84,59 @@ const StyledIcon = styled(Icon)`
   height: auto;
 `;
 
-export const ArticleSettings = ({
-  streamId,
-  saveArticle,
+const ReceiverSettings = ({
+  radio,
+  allowPaid,
 }: {
-  streamId: string | undefined;
-  saveArticle: (
-    arg0: string,
-    arg1: string,
-    arg2: string,
-    arg3: string | File | undefined,
-    arg4: boolean
-  ) => void;
+  radio: RadioStateReturn;
+  allowPaid: boolean;
 }) => {
-  const dispatch = useAppDispatch();
-  const article = useAppSelector((state) =>
-    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
+  return (
+    <ReceiverSettingContainer>
+      <Title size="sm" color="helpText">
+        This post is for
+      </Title>
+      <RadioButtonContainer>
+        <label>
+          <Radio {...radio} value="free" /> Everyone
+        </label>
+        <label>
+          <Radio {...radio} value="paid" disabled={!allowPaid} /> Paid
+          subscribers
+        </label>
+      </RadioButtonContainer>
+    </ReceiverSettingContainer>
   );
-  const loadingDelete = useAppSelector((state) => state.removeArticle.loading);
-  const navigate = useNavigate();
+};
 
-  const radio = useRadioState({
-    state: `${article?.paid ? "paid" : "free"}`,
-  });
+const SocialPreview = ({
+  previewImg,
+  setPreviewImg,
+  description,
+  setDescription,
+  articlePreviewLink,
+}: {
+  previewImg: File | null;
+  setPreviewImg: (arg0: File | null) => void;
+  description: string;
+  setDescription: (arg0: string) => void;
+  articlePreviewLink: string | undefined;
+}) => {
   const hiddenImageInput = useRef<HTMLInputElement>(null);
-  const [previewImg, setPreviewImg] = useState<File | null>(null);
-  const [description, setDescription] = useState(article?.description || "");
-  const [hide, setHide] = useState(false);
-
+  const clickImageInput = () => {
+    hiddenImageInput?.current?.click();
+  };
   useEffect(() => {
     const x = async () => {
-      if (article?.previewImg) {
-        const b = await fetchIPFS(article.previewImg);
+      if (articlePreviewLink) {
+        const b = await fetchIPFS(articlePreviewLink);
         if (b) {
           setPreviewImg(new File([b], "previewImg.jpeg"));
         }
       }
     };
     x();
-  }, [article?.previewImg]);
-
-  const clickImageInput = () => {
-    hiddenImageInput?.current?.click();
-  };
+  }, [articlePreviewLink]);
 
   const uploadImage = useCallback(
     (e) => {
@@ -143,7 +157,76 @@ export const ArticleSettings = ({
     [hiddenImageInput.current]
   );
 
+  return (
+    <SocialPreviewContainer>
+      <Title size="sm" color="helpText">
+        Social Preview
+      </Title>
+      <Text size="base" color="grey">
+        Changing the preview text will only affect the social preview, not the
+        post content itself
+      </Text>
+      {previewImg ? (
+        <img
+          src={URL.createObjectURL(previewImg)}
+          onClick={clickImageInput}
+          style={{ height: "11rem", objectFit: "contain" }}
+        />
+      ) : (
+        <ImagePreview onClick={clickImageInput}>
+          <Icon size="lg" src={portrait} alt="portrait" />
+        </ImagePreview>
+      )}
+      <input
+        type="file"
+        ref={hiddenImageInput}
+        style={{ display: "none" }}
+        onClick={uploadImage}
+        onChange={uploadImage}
+      />
+      <FormTextArea
+        title="Preview text"
+        errorMsg=""
+        value={description}
+        onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+          setDescription(e.target?.value)
+        }
+      />
+    </SocialPreviewContainer>
+  );
+};
+
+export const ArticleSettings = ({
+  streamId,
+  saveArticle,
+}: {
+  streamId: string | undefined;
+  saveArticle: (
+    arg0: string,
+    arg1: string,
+    arg2: string,
+    arg3: string | File | undefined,
+    arg4: boolean
+  ) => void;
+}) => {
+  const dispatch = useAppDispatch();
+  const article = useAppSelector((state) =>
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
+  );
+  const [saving, setSaving] = useState(false);
+
+  const loadingDelete = useAppSelector((state) => state.removeArticle.loading);
+  const navigate = useNavigate();
+
+  const radio = useRadioState({
+    state: `${article?.paid ? "paid" : "free"}`,
+  });
+  const [previewImg, setPreviewImg] = useState<File | null>(null);
+  const [description, setDescription] = useState(article?.description || "");
+  const [hide, setHide] = useState(false);
+
   const submitSettings = useCallback(async () => {
+    setSaving(true);
     const a = await saveArticle(
       article?.text || "",
       article?.title || "",
@@ -152,6 +235,7 @@ export const ArticleSettings = ({
       radio.state !== "free"
     );
     setHide(true);
+    setSaving(false);
   }, [description, article, previewImg, radio.state]);
 
   const deleteArticle = useCallback(async () => {
@@ -168,61 +252,26 @@ export const ArticleSettings = ({
       backdrop={true}
       hideModal={hide}
       disclosure={
-        <StyledIconButton size="sm" color="primary" variant="outlined">
+        <StyledIconButton
+          size="sm"
+          color="primary"
+          variant="outlined"
+          onClick={() => setHide(false)}
+        >
           <StyledIcon size="md" src={settings} alt="settings button" />
         </StyledIconButton>
       }
     >
       <DialogContainer>
         <Text size="base">Post setting</Text>
-        <ReceiverSettingContainer>
-          <Title size="sm" color="helpText">
-            This post is for
-          </Title>
-          <RadioButtonContainer>
-            <label>
-              <Radio {...radio} value="free" /> Everyone
-            </label>
-            <label>
-              <Radio {...radio} value="paid" disabled={true} /> Paid subscribers
-            </label>
-          </RadioButtonContainer>
-        </ReceiverSettingContainer>
-        <SocialPreviewContainer>
-          <Title size="sm" color="helpText">
-            Social Preview
-          </Title>
-          <Text size="base" color="grey">
-            Changing the preview text will only affect the social preview, not
-            the post content itself
-          </Text>
-          {previewImg ? (
-            <img
-              src={URL.createObjectURL(previewImg)}
-              onClick={clickImageInput}
-              style={{ height: "11rem", objectFit: "contain" }}
-            />
-          ) : (
-            <ImagePreview onClick={clickImageInput}>
-              <Icon size="lg" src={portrait} alt="portrait" />
-            </ImagePreview>
-          )}
-          <input
-            type="file"
-            ref={hiddenImageInput}
-            style={{ display: "none" }}
-            onClick={uploadImage}
-            onChange={uploadImage}
-          />
-          <FormTextArea
-            title="Preview text"
-            errorMsg=""
-            value={description}
-            onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-              setDescription(e.target?.value)
-            }
-          />
-        </SocialPreviewContainer>
+        <ReceiverSettings radio={radio} allowPaid={false} />
+        <SocialPreview
+          description={description}
+          setDescription={setDescription}
+          previewImg={previewImg}
+          setPreviewImg={setPreviewImg}
+          articlePreviewLink={article?.previewImg}
+        />
         <SendingTestEmailContainer>
           <Title size="sm" color="helpText">
             Sending a test email
@@ -243,6 +292,8 @@ export const ArticleSettings = ({
             color="primary"
             variant="contained"
             onClick={submitSettings}
+            loadingText={"Saving..."}
+            isLoading={saving}
           >
             Save
           </Button>
@@ -258,6 +309,85 @@ export const ArticleSettings = ({
               Delete this post
             </Button>
           )}
+        </ButtonContainer>
+      </DialogContainer>
+    </Dialog>
+  );
+};
+
+export const PublishModal = ({ streamId }: { streamId: string }) => {
+  const dispatch = useAppDispatch();
+  const { chainId } = useWallet();
+  const article = useAppSelector((state) =>
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
+  );
+  const publishLoading = useAppSelector(
+    (state) => state.publishArticle.loading
+  );
+
+  const [hide, setHide] = useState(false);
+  const [previewImg, setPreviewImg] = useState<File | null>(null);
+  const [description, setDescription] = useState(article?.description || "");
+  const radio = useRadioState({
+    state: `${article?.paid ? "paid" : "free"}`,
+  });
+
+  const publish = async () => {
+    if (chainId) {
+      await dispatch(
+        publishArticle({
+          article,
+          streamId,
+          encrypt: article?.paid || false,
+          chainName: networks[chainId].litName,
+        })
+      );
+      setHide(true);
+    }
+  };
+
+  return (
+    <Dialog
+      baseId="publish"
+      backdrop={true}
+      hideModal={hide}
+      disclosure={
+        <Button
+          size="md"
+          color="primary"
+          variant="contained"
+          onClick={() => setHide(false)}
+        >
+          Published
+        </Button>
+      }
+    >
+      <DialogContainer>
+        <ReceiverSettings radio={radio} allowPaid={false} />
+        <SocialPreview
+          description={description}
+          setDescription={setDescription}
+          previewImg={previewImg}
+          setPreviewImg={setPreviewImg}
+          articlePreviewLink={article?.previewImg}
+        />
+        <SendingTestEmailContainer>
+          <Text size="sm" color="grey">
+            This post will only publish as a webpage/blog, since there is no
+            mailing service set up yet.
+          </Text>
+        </SendingTestEmailContainer>
+        <ButtonContainer>
+          <Button
+            size="md"
+            color="primary"
+            variant="contained"
+            onClick={publish}
+            loadingText={"Publishing..."}
+            isLoading={publishLoading}
+          >
+            Publish
+          </Button>
         </ButtonContainer>
       </DialogContainer>
     </Dialog>

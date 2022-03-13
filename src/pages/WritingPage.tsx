@@ -7,10 +7,9 @@ import { useWallet } from "@raidguild/quiver";
 import { useRemirror, useHelpers } from "@remirror/react";
 import { useAppSelector, useAppDispatch } from "store";
 
-import { ArticleSettings } from "components/ArticleSettings";
+import { ArticleSettings, PublishModal } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
-import Button from "components/Button";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
@@ -216,9 +215,7 @@ const WritingPage = () => {
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
           <ArticleSettings streamId={localStreamId} saveArticle={saveArticle} />
-          <Button size="md" color="primary" variant="contained">
-            Published
-          </Button>
+          <PublishModal streamId={localStreamId || ""} />
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>
