@@ -299,8 +299,6 @@ export const updatePublication = createAsyncThunk(
       if (pub.apiKey !== undefined) {
         updatedPublication["apiKey"] = pub.apiKey;
       }
-      console.log("UpdatedPub");
-      console.log(updatedPublication);
       await thunkAPI.dispatch(publicationActions.create(updatedPublication));
       return publication;
     } catch (err) {
