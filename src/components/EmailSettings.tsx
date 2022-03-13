@@ -43,9 +43,6 @@ const EmailSettings = () => {
     (state) => state.updatePublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
-    console.log("To do");
-    console.log(data);
-
     if (!chainId) {
       return;
     }

@@ -133,12 +133,16 @@ export const verifyLock = createAsyncThunk(
         );
         thunkAPI.dispatch(
           updatePublication({
-            description: publication.description,
-            name: publication.name,
-            locks: [
-              ...publication.locks,
-              { address: args.address, chainId: args.chainId },
-            ],
+            publication: {
+              description: publication.description || "",
+              name: publication.name,
+              locks: [
+                ...publication.locks,
+                { address: args.address, chainId: args.chainId },
+              ],
+            },
+
+            chainName: networks[args.chainId].litName,
           })
         );
       }
