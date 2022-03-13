@@ -96,6 +96,12 @@
       "items": {
         "$ref": "#/definitions/Lock"
       }
+    },
+    "apiKey": {
+      "type": "string"
+    },
+    "mailFrom": {
+      "type": "string"
     }
   },
   "required": ["draftAccess", "publishAccess"]

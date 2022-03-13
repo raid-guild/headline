@@ -6,6 +6,7 @@ import {
   Controller,
 } from "react-hook-form";
 import styled from "styled-components";
+import { useAppDispatch, useAppSelector } from "store";
 
 import Input from "components/Input";
 
@@ -28,6 +29,9 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
     handleSubmit,
     control,
   } = useForm();
+  const publication = useAppSelector((state) => state.publication);
+  console.log("Publication");
+  console.log(publication);
 
   return (
     <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -35,6 +39,7 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
         name="apiKey"
         control={control}
         rules={{ required: true }}
+        defaultValue={publication.apiKey}
         render={({ field }) => (
           <Input title="Api Key" errorMsg={errors?.apiKey} {...field} />
         )}
@@ -42,6 +47,7 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
       <Controller
         name="mailFrom"
         control={control}
+        defaultValue={publication.mailTo}
         render={({ field }) => (
           <Input title="Mail from" errorMsg={errors?.mailFrom} {...field} />
         )}

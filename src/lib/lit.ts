@@ -1,5 +1,7 @@
 import LitJsSdk from "@alexkeating/lit-js-sdk";
 import uint8arrayFromString from "uint8arrays/from-string";
+import uint8arrayToString from "uint8arrays/to-string";
+import { storeIpfs } from "lib/ipfs";
 
 import { ChainName } from "types";
 
@@ -138,4 +140,41 @@ export const getEncryptionKey = async (
     authSig,
   });
   return symmetricKey;
+};
+
+export const getKeyEncryptText = async (
+  chainName: ChainName,
+  encryptedSymmetricKey: string,
+  accessControlConditions: (AccessControl | Operator)[],
+  content: string
+) => {
+  const symmetricKey = await getEncryptionKey(
+    chainName,
+    encryptedSymmetricKey,
+    accessControlConditions
+  );
+  const blob = await encryptText(content, symmetricKey);
+  const encodedContent = uint8arrayToString(
+    new Uint8Array(await blob.arrayBuffer()),
+    "base64"
+  );
+  return encodedContent;
+};
+
+export const getKeyAndDecrypt = async (
+  chainName: ChainName,
+  encryptedSymmetricKey: string,
+  accessControlConditions: (AccessControl | Operator)[],
+  content: string
+) => {
+  const symmetricKey = await getEncryptionKey(
+    chainName,
+    encryptedSymmetricKey,
+    accessControlConditions
+  );
+  const a = await decryptText(
+    uint8arrayFromString(content, "base64"),
+    symmetricKey
+  ).catch((e) => console.error(e));
+  return a;
 };

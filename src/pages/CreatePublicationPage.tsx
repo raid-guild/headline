@@ -167,13 +167,19 @@ const CreatePublicationForm = () => {
 const CreatePublicationPage = () => {
   const dispatch = useAppDispatch();
   const { web3Service } = useUnlock();
-  const { provider } = useWallet();
+  const { provider, chainId } = useWallet();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
   useEffect(() => {
-    if (provider && web3Service) {
-      dispatch(fetchPublication({ provider, web3Service }));
+    if (provider && web3Service && chainId) {
+      dispatch(
+        fetchPublication({
+          provider,
+          web3Service,
+          chainName: networks[chainId].litName,
+        })
+      );
     }
   }, []);
 

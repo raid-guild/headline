@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { Web3Service } from "@unlock-protocol/unlock-js";
 
 import { getClient } from "lib/ceramic";
+import { getKeyEncryptText, getKeyAndDecrypt } from "lib/lit";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
@@ -17,6 +18,7 @@ import {
 } from "lib/lit";
 import { fetchLocks } from "services/lock/slice";
 import { RootState } from "store";
+import { ChainName } from "types";
 
 type PublicationLock = {
   chainId: string;
@@ -24,11 +26,13 @@ type PublicationLock = {
 };
 
 export type Publication = {
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   draftAccess: LitAccess;
   publishAccess: LitAccess;
   locks?: PublicationLock[];
+  mailTo?: string;
+  apiKey?: string;
 };
 
 export const publicationSlice = createSlice({
@@ -45,14 +49,18 @@ export const publicationSlice = createSlice({
       accessControlConditions: [] as (AccessControl | Operator)[],
     },
     locks: [] as PublicationLock[],
+    mailTo: "",
+    apiKey: "",
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
-      state.name = action.payload.name;
-      state.description = action.payload.description;
+      state.name = action.payload.name || "";
+      state.description = action.payload.description || "";
       state.draftAccess = action.payload.draftAccess;
       state.publishAccess = action.payload.publishAccess;
       state.locks = action.payload.locks || [];
+      state.mailTo = action.payload.mailTo || "";
+      state.apiKey = action.payload.apiKey || "";
     },
   },
 });
@@ -192,7 +200,11 @@ export const createPublication = createAsyncThunk(
 export const fetchPublication = createAsyncThunk(
   "publication/fetch",
   async (
-    args: { provider: ethers.providers.Provider; web3Service: Web3Service },
+    args: {
+      provider: ethers.providers.Provider;
+      web3Service: Web3Service;
+      chainName: ChainName;
+    },
     thunkAPI
   ) => {
     const client = await getClient();
@@ -202,7 +214,16 @@ export const fetchPublication = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
-      const publication = await store.get("publication");
+      let publication = await store.get("publication");
+      if (publication.apiKey) {
+        const apiKey = await getKeyAndDecrypt(
+          args.chainName,
+          publication.draftAccess.encryptedSymmetricKey,
+          publication.draftAccess.accessControlConditions,
+          publication.apiKey
+        );
+        publication = { ...publication, apiKey };
+      }
       if (publication) {
         thunkAPI.dispatch(publicationActions.create(publication));
         thunkAPI.dispatch(
@@ -225,10 +246,13 @@ export const fetchPublication = createAsyncThunk(
 export const updatePublication = createAsyncThunk(
   "publication/update",
   async (
-    publication: Omit<Publication, "draftAccess" | "publishAccess">,
+    args: {
+      publication: Omit<Publication, "draftAccess" | "publishAccess">;
+      chainName: ChainName;
+    },
     thunkAPI
   ) => {
-    const pub = publication;
+    const pub = args.publication;
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -237,14 +261,47 @@ export const updatePublication = createAsyncThunk(
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
       const { publication } = thunkAPI.getState() as RootState;
+      const updates = {} as {
+        name: string;
+        description: string;
+        locks: PublicationLock[];
+        mailTo: string;
+        apiKey: string;
+      };
+      if (pub.name !== undefined) {
+        updates["name"] = pub.name;
+      }
+      if (pub.description !== undefined) {
+        updates["description"] = pub.description;
+      }
+      if (pub.locks !== undefined) {
+        updates["locks"] = pub.locks;
+      }
+      if (pub.mailTo !== undefined) {
+        updates["mailTo"] = pub.mailTo;
+      }
+      if (pub.apiKey !== undefined) {
+        const content = await getKeyEncryptText(
+          args.chainName,
+          publication.draftAccess.encryptedSymmetricKey,
+          publication.draftAccess.accessControlConditions,
+          pub.apiKey
+        );
+
+        updates["apiKey"] = content;
+      }
+
       const updatedPublication = {
         ...publication,
-        name: pub.name,
-        description: pub.description,
-        locks: pub.locks,
+        ...updates,
       };
       await store.set("publication", updatedPublication);
-      thunkAPI.dispatch(publicationActions.create(updatedPublication));
+      if (pub.apiKey !== undefined) {
+        updatedPublication["apiKey"] = pub.apiKey;
+      }
+      console.log("UpdatedPub");
+      console.log(updatedPublication);
+      await thunkAPI.dispatch(publicationActions.create(updatedPublication));
       return publication;
     } catch (err) {
       console.error(err);

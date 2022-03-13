@@ -1,5 +1,6 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { SubmitHandler, FieldValues } from "react-hook-form";
+import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
 import Button from "components/Button";
@@ -8,6 +9,9 @@ import ExternalLink from "components/ExternalLink";
 import Text from "components/Text";
 import Title from "components/Title";
 import EmailCrendentialsForm from "./EmailCredentialsForm";
+import { updatePublication } from "services/publication/slice";
+import { networks } from "lib/networks";
+import { useAppDispatch, useAppSelector } from "store";
 
 const EmailSettingsContainer = styled.div`
   display: flex;
@@ -32,8 +36,30 @@ const SettingsContainer = styled.div`
 `;
 
 const EmailSettings = () => {
-  const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
+  const dispatch = useAppDispatch();
+  const [hide, setHide] = useState(false);
+  const { chainId } = useWallet();
+  const publicationLoading = useAppSelector(
+    (state) => state.updatePublication.loading
+  );
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
     console.log("To do");
+    console.log(data);
+
+    if (!chainId) {
+      return;
+    }
+    // dispatch update
+    await dispatch(
+      updatePublication({
+        publication: {
+          apiKey: data.apiKey || "",
+          mailTo: data.mailFrom || "",
+        },
+        chainName: networks[chainId].litName,
+      })
+    );
+    // setHide(true);
   }, []);
 
   return (
@@ -49,6 +75,7 @@ const EmailSettings = () => {
         <Dialog
           baseId="email-settings"
           backdrop={true}
+          hideModal={hide}
           disclosure={
             <Button color="primary" variant="contained" size="md">
               Email Settings
@@ -72,7 +99,15 @@ const EmailSettings = () => {
                 </ExternalLink>
               </Text>
               <EmailCrendentialsForm onSubmit={onSubmit}>
-                <Button size="md" color="primary" variant="contained">
+                <Button
+                  size="md"
+                  color="primary"
+                  variant="contained"
+                  isLoading={publicationLoading}
+                  loadingText="Saving..."
+                  type="submit"
+                  onClick={() => setHide(true)}
+                >
                   Save
                 </Button>
               </EmailCrendentialsForm>

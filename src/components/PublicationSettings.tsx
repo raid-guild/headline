@@ -49,8 +49,11 @@ const PublicationSettings = () => {
     }
     dispatch(
       updatePublication({
-        name: data.name || "",
-        description: data.description || "",
+        publication: {
+          name: data.name || "",
+          description: data.description || "",
+        },
+        chainName: networks[chainId]?.litName,
       })
     );
   }, []);
