@@ -50,7 +50,7 @@ export const MobileNavContainer = styled.div`
   border-top: 1px solid;
   border-color: ${({ theme }) => theme.colors.mediumGrey};
   background: ${({ theme }) => theme.colors.almostWhite};
-  @media (min-width: 1440px) {
+  @media (min-width: 1200px) {
     display: none;
   }
 `;
