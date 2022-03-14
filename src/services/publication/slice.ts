@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import LitJsSdk from "@alexkeating/lit-js-sdk";
 import { ethers } from "ethers";
+import { WebClient } from "@self.id/web";
 import { Web3Service } from "@unlock-protocol/unlock-js";
 
 import { getClient } from "lib/ceramic";
@@ -8,6 +9,7 @@ import { getKeyEncryptText, getKeyAndDecrypt } from "lib/lit";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
+import { TileLoader } from "@glazed/tile-loader";
 import {
   litClient,
   singleAddressAccessControl,
@@ -33,6 +35,7 @@ export type Publication = {
   locks?: PublicationLock[];
   mailTo?: string;
   apiKey?: string;
+  streamId?: string;
 };
 
 export const publicationSlice = createSlice({
@@ -214,8 +217,13 @@ export const fetchPublication = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
-      let publication = await store.get("publication");
-      if (publication.apiKey) {
+      const definitionId = await store.getDefinitionID("publication");
+      const doc = await store.getRecordDocument(
+        definitionId,
+        client.ceramic?.did?.id || ""
+      );
+      let publication = doc?.content;
+      if (publication && publication.apiKey) {
         const apiKey = await getKeyAndDecrypt(
           args.chainName,
           publication.draftAccess.encryptedSymmetricKey,
@@ -225,7 +233,12 @@ export const fetchPublication = createAsyncThunk(
         publication = { ...publication, apiKey };
       }
       if (publication) {
-        thunkAPI.dispatch(publicationActions.create(publication));
+        thunkAPI.dispatch(
+          publicationActions.create({
+            ...publication,
+            streamId: doc?.id.toString(),
+          })
+        );
         thunkAPI.dispatch(
           fetchLocks({
             provider: args.provider,
@@ -233,6 +246,47 @@ export const fetchPublication = createAsyncThunk(
             publication,
           })
         );
+      }
+      return publication;
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to fetch");
+    }
+  }
+);
+
+// async thunk that fetches a publication
+export const fetchPublicationByStream = createAsyncThunk(
+  "publication/fetchOne",
+  async (
+    args: {
+      streamId: string;
+    },
+    thunkAPI
+  ) => {
+    const client = new WebClient({
+      ceramic: "http://0.0.0.0:7007",
+      connectNetwork: "testnet-clay",
+    });
+
+    try {
+      const loader = new TileLoader({ ceramic: client.ceramic, cache: true });
+      const doc = await loader.load(args.streamId);
+      const publication = doc.content as Publication;
+      if (publication) {
+        thunkAPI.dispatch(
+          publicationActions.create({
+            ...publication,
+            streamId: doc?.id.toString(),
+          })
+        );
+        // thunkAPI.dispatch(
+        //   fetchLocks({
+        //     provider: args.provider,
+        //     web3Service: args.web3Service,
+        //     publication,
+        //   })
+        // );
       }
       return publication;
     } catch (err) {

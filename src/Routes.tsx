@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import { useCermaic } from "context/CeramicContext";
+import ArticlePage from "./pages/ArticlePage";
 import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
 import PublishPage from "./pages/PublishPage";
@@ -80,6 +81,10 @@ const Routes = () => {
               <ProfilePage />
             </RequireAuth>
           }
+        />
+        <Route
+          path="/article/:publicationId/:streamId"
+          element={<ArticlePage />}
         />
         <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>

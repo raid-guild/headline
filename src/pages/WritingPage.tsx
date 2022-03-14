@@ -158,12 +158,14 @@ const WritingPage = () => {
       otherParams["paid"] = paid;
     }
     if (localStreamId) {
+      console.log("Updateing");
+      console.log(article);
       await dispatch(
         updateArticle({
           article: {
             title: title,
             text: markdown,
-            status: "draft",
+            status: article?.status || "draft",
             ...otherParams,
           },
           streamId: localStreamId,
