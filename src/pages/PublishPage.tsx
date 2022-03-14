@@ -45,6 +45,7 @@ const PublishContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
+  background: ${({ theme }) => theme.colors.backgroundGrey};
   @media (max-width: 768px) {
     padding: 2.4rem;
   }
@@ -55,6 +56,15 @@ const BodyTitleContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`;
+
+const BodyTextContainer = styled.div`
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyButtonContainer = styled.div`
@@ -65,6 +75,17 @@ const BodyButtonContainer = styled.div`
   background: ${({ theme }) => theme.colors.almostWhite};
   max-height: 20rem;
   height: 100%;
+  border-radius: 8px;
+  margin-top: 4rem;
+  border: 1px solid #f0efef;
+  @media (max-width: 768px) {
+    padding-bottom: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  min-width: 295px;
 `;
 
 const BodyFooterContainer = styled.div`
@@ -94,20 +115,20 @@ const CreatePublicationView = () => {
           </Text>
         </BodyTitleContainer>
         <BodyButtonContainer>
-          <Text size="base">
-            Write as a blog or send it out as a newsletter, Websubstack covers
-            all.
-          </Text>
-          <div>
-            <Button
-              size="xl"
-              color="primary"
-              variant="contained"
-              onClick={goToCreatePublication}
-            >
-              Create my publication
-            </Button>
-          </div>
+          <BodyTextContainer>
+            <Text size="base">
+              Write as a blog or send it out as a newsletter, Websubstack covers
+              all.
+            </Text>
+          </BodyTextContainer>
+          <StyledButton
+            size="xl"
+            color="primary"
+            variant="contained"
+            onClick={goToCreatePublication}
+          >
+            Create my publication
+          </StyledButton>
         </BodyButtonContainer>
         <BodyFooterContainer>
           <Text size="base">

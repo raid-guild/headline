@@ -26,21 +26,6 @@ import { useCermaic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
 
-const MobileHeaderContainer = styled(HeaderContainer)`
-  display: none;
-  @media (max-width: 768px) {
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 0 2.4rem;
-    max-width: 100%;
-    border-bottom: 1px solid;
-    border-color: ${({ theme }) => theme.colors.mediumGrey};
-  }
-`;
-
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,11 +61,18 @@ const BodyButtonContainer = styled.div`
   height: 100%;
   border-radius: 8px;
   margin-top: 4rem;
-  gap: 4rem;
-  padding: 4rem;
   border: 1px solid #f0efef;
   @media (max-width: 768px) {
-    padding: 2.4rem;
+    padding-bottom: 1.6rem;
+    margin-bottom: 1.6rem;
+    gap: 4rem;
+  }
+`;
+
+const BodyTextContainer = styled.div`
+  @media (max-width: 768px) {
+    padding: 2.4rem 2.4rem 0;
+    text-align: center;
   }
 `;
 
@@ -107,9 +99,11 @@ const LoggedOutBody = ({
         </Text>
       </BodyTitleContainer>
       <BodyButtonContainer>
-        <Text size="base">
-          Please connect your wallet to access the dashboard
-        </Text>
+        <BodyTextContainer>
+          <Text size="base">
+            Please connect your wallet to access the dashboard
+          </Text>
+        </BodyTextContainer>
         <div>
           <StyledButton
             color="primary"
@@ -202,21 +196,6 @@ const PublicationCopyContainer = styled.div`
   }
 `;
 
-// const LearnMoreContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   gap: 0.5rem;
-//   justify-content: space-between;
-//   background: ${({ theme }) => theme.colors.backgroundGrey};
-//   margin-bottom: 4.8rem;
-//   padding: 2.4rem;
-//   @media (min-width: 720px) {
-//     flex-direction: row;
-//     padding: 4rem;
-//     margin-bottom: 0;
-//   }
-// `;
-
 const LogoContainer = styled.div`
   direction: flex;
   flex-direction: column;
@@ -255,6 +234,9 @@ const LearnMoreCopyContainer = styled.div`
 
 const StyledButton = styled(Button)`
   min-width: 295px;
+  @media (max-width: 768px) {
+    margin-bottom: 1.6rem;
+  }
 `;
 
 // in publication container

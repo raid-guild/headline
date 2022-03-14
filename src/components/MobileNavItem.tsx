@@ -15,7 +15,7 @@ type Props = {
   active?: boolean;
 };
 
-const SidebarItemContainer = styled.div<Pick<Props, "active">>`
+const MobileNavItemContainer = styled.div<Pick<Props, "active">>`
   display: flex;
   padding: 2.4rem 1.6rem;
   background: ${({ theme, active }) =>
@@ -46,13 +46,13 @@ const MobileNavItem = ({ text, icon, active }: Props) => {
     }
   };
   return (
-    <SidebarItemContainer active={active}>
+    <MobileNavItemContainer active={active}>
       <StyledCircleOutline
         size="sm"
         src={getIcon()}
         alt="circle outline with cross"
       />
-    </SidebarItemContainer>
+    </MobileNavItemContainer>
   );
 };
 

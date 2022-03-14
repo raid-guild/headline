@@ -14,10 +14,9 @@ type Props = {
 const MobileNavMenuContainer = styled.div<Pick<Props, "active">>`
   display: flex;
   flex-direction: row;
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.almostWhite};
   gap: 4.8rem;
+  height: 100%;
 `;
 
 const MobileNav = () => {
