@@ -13,6 +13,9 @@ const StyledToolbarItem = styled(ToolbarItemR)<Props>`
   padding: 2.3rem;
   cursor: pointer;
   border-bottom: ${({ active }) => (active ? `1px solid black` : "none")};
+  @media (max-width: 768px) {
+    padding: 1.6rem;
+  }
 `;
 
 const ToolbarItem = ({ active, children, ...rest }: Props) => {

@@ -28,6 +28,12 @@ const StyledDialog = styled(BaseDialog)`
   outline: 0;
   z-index: 1000;
   padding: 3.2rem;
+  @media (max-width: 768px) {
+    width: 80%;
+    height: 90%
+    max-height: 100vh;
+    padding: 1.6rem;
+  }
 `;
 
 const StyledDialogBackdrop = styled(DialogBackdrop)`

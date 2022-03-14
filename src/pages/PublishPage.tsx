@@ -13,6 +13,7 @@ import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
 import { LockCards, LockData } from "components/LockCard";
+import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
 import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
@@ -28,9 +29,6 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
-import MobileHeader from "components/MobileHeader";
-import MobileNav from "components/MobileNav";
-
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
@@ -138,6 +136,9 @@ const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
   margin-right: 6.4rem;
   margin-left: 4.4rem;
+  @media (max-width: 768px) {
+    margin: 0 2.4rem;
+  }
 `;
 
 const EntriesHeader = styled.div`
@@ -145,6 +146,9 @@ const EntriesHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-top: 2.5rem;
+  @media (max-width: 768px) {
+    align-items: center;
+  }
 `;
 
 const EntriesContainer = styled.div`
@@ -152,6 +156,8 @@ const EntriesContainer = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
+  @media (max-width: 768px) {
+  }
 `;
 
 const CardContainer = styled.div`
@@ -159,6 +165,9 @@ const CardContainer = styled.div`
   gap: 1.2rem;
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    margin-top: 2.4rem;
+  }
 `;
 
 const EmtptyCardContainer = styled.div`
@@ -168,6 +177,11 @@ const EmtptyCardContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 0.8rem;
+  @media (max-width: 768px) {
+    gap: 2.4rem;
+    padding: 2.4rem 1.6rem;
+  }
 `;
 
 const EmtptyEntriesMessage = () => {
@@ -512,7 +526,8 @@ const PublishPage = () => {
       <SidebarContainer>
         <Sidebar />
       </SidebarContainer>
-      {publication ? <PublishBody /> : <CreatePublicationView />}
+      <PublishBody />
+      {/* {publication ? <PublishBody /> : <CreatePublicationView />} */}
       <MobileNav />
     </Layout>
   );
