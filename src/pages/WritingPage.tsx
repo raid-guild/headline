@@ -34,8 +34,6 @@ const StyledLayout = styled(Layout)`
     "header" 9.6rem
     "body" 1fr
     / 1fr;
-  @media (max-width: 768px) {
-  }
 `;
 
 const StyledBody = styled(BodyContainer)`
@@ -48,7 +46,6 @@ const StyledBody = styled(BodyContainer)`
   margin-bottom: 7rem;
   @media (max-width: 768px) {
     margin: 2.4rem;
-    width: 100%;
   }
 `;
 
@@ -99,6 +96,8 @@ const StyledInput = styled(Input)`
   line-height: ${({ theme }) => theme.title.md.lineHeight};
   font-weight: ${({ theme }) => theme.title.md.fontWeight};
   color: ${({ theme }) => theme.colors.grey};
+  @media (max-width: 768px) {
+  }
 `;
 
 const StyledMarkdownEditor = styled(MarkdownEditor)`
@@ -106,6 +105,8 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   display: flex;
   margin-top: 3.2rem;
   height: 100%;
+  @media (max-width: 768px) {
+  }
 `;
 
 const MarkdownSave = ({
@@ -251,7 +252,7 @@ const WritingPage = () => {
           <PublishModal streamId={localStreamId || ""} />
         </RightHeaderContainer>
       </StyledHeaderContainer>
-      {/* <StyledBody>
+      <StyledBody>
         <StyledInput
           title=""
           defaultValue={article?.title || "Untitled"}
@@ -272,7 +273,7 @@ const WritingPage = () => {
             saveArticle={saveArticle}
           />
         </StyledMarkdownEditor>
-      </StyledBody> */}
+      </StyledBody>
       <MobileNav />
     </StyledLayout>
   );

@@ -12,7 +12,12 @@ const StyledLayout = styled(Layout)`
     "header" 9.6rem
     "body" 1fr
     / 1fr;
-  margin-top: 2rem;
+  @media (max-width: 768px) {
+    grid-template:
+      "header"
+      "body"
+      "mobileNav";
+  }
 `;
 const StyledBodyContainer = styled(BodyContainer)`
   grid-area: body;
@@ -39,6 +44,9 @@ const HeroCTAContainer = styled.div`
   margin: 0rem 15rem;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    margin: 0;
+  }
 `;
 
 const HeroHeading = styled.h2`
@@ -49,6 +57,10 @@ const HeroHeading = styled.h2`
   color: black;
   margin-bottom: 3.2rem;
   margin-top: 0px;
+  @media (max-width: 768px) {
+    font-size: 48px;
+    line-height: 60px;
+  }
 `;
 
 const HeroTagline = styled.span`
@@ -71,6 +83,9 @@ const LogoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+   padding: 2rem; 0
+  }
 `;
 
 const InternalLink = styled.a`
@@ -87,6 +102,9 @@ const ActionContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 2.4rem;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const HomePage = () => {
@@ -121,7 +139,6 @@ const HomePage = () => {
             </HeroCTAContainer>
           </HeroContainer>
         </StyledBodyContainer>
-        <MobileNav />
       </StyledLayout>
     </AppWrapper>
   );
