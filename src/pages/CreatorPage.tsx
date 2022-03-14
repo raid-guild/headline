@@ -1,25 +1,16 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
-import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import ToolbarItem from "components/ToolbarItem";
+import styled from "styled-components";
+import profile from "assets/obsidian.png";
 
-import { useAppDispatch, useAppSelector } from "store";
-import {
-  fetchArticle,
-  articleRegistrySelectors,
-} from "services/articleRegistry/slice";
 import { fetchPublicationByStream } from "services/publication/slice";
-
+import { useAppDispatch, useAppSelector } from "store";
+import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Avatar from "components/Avatar";
 import Button from "components/Button";
 import PublicToolbar from "components/PublicToolbar";
 import Title from "components/Title";
 import Text from "components/Text";
-import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
-import { networks } from "lib/networks";
-import profile from "assets/obsidian.png";
 import { checkoutRedirect } from "lib/unlock";
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -47,44 +38,11 @@ const ToolbarContainer = styled.div`
   height: 7.2rem;
 `;
 
-const DescriptionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.6rem;
-  margin-top: 1.6rem;
-`;
-
-const ArticlePage = () => {
-  const { publicationId, streamId } = useParams();
-  const [published, setPublished] = useState(false);
+const CreatorPage = () => {
+  const { publicationId } = useParams();
   const [active, setActive] = useState("content");
   const dispatch = useAppDispatch();
-  const article = useAppSelector((state) =>
-    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
-  );
-  const toolbar = useToolbarState();
   const publication = useAppSelector((state) => state.publication);
-  console.log(article);
-  console.log(published);
-  console.log(streamId);
-
-  useEffect(() => {
-    const f = async () => {
-      if (!streamId) {
-        return;
-      }
-      console.log("Fetching");
-      await dispatch(
-        fetchArticle({
-          streamId,
-          chainName: "",
-        })
-      );
-      console.log("Fetched");
-      setPublished(true);
-    };
-    f();
-  }, [streamId]);
 
   useEffect(() => {
     const f = async () => {
@@ -121,21 +79,9 @@ const ArticlePage = () => {
         <ToolbarContainer>
           <PublicToolbar active={active} setActive={setActive} />
         </ToolbarContainer>
-        {active === "content" ? (
-          <ReactMarkdown>{article?.text}</ReactMarkdown>
-        ) : (
-          <DescriptionContainer>
-            <Title size="sm" weight="semibold" color="label">
-              Description
-            </Title>
-            <Text size="base" color="label">
-              {publication?.description}
-            </Text>
-          </DescriptionContainer>
-        )}
       </StyledBodyContainer>
     </Layout>
   );
 };
 
-export default ArticlePage;
+export default CreatorPage;

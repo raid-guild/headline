@@ -9,6 +9,7 @@ import {
 
 import { useCermaic } from "context/CeramicContext";
 import ArticlePage from "./pages/ArticlePage";
+import CreatorPage from "./pages/CreatorPage";
 import HomePage from "./pages/HomePage";
 import DashboardPage from "./pages/DashboardPage";
 import PublishPage from "./pages/PublishPage";
@@ -82,10 +83,12 @@ const Routes = () => {
             </RequireAuth>
           }
         />
+        <Route path="/pub/:publicationId/" element={<CreatorPage />} />
         <Route
-          path="/article/:publicationId/:streamId"
+          path="/pub/:publicationId/article/:streamId"
           element={<ArticlePage />}
         />
+
         <Route path="*" element={<Navigate to="/" />} />
       </RouteContainer>
     </HashRouter>
