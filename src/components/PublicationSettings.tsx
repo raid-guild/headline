@@ -30,6 +30,12 @@ const PublicationSettingsContainer = styled.div`
   background: ${({ theme }) => theme.colors.backgroundGrey};
   width: 100%;
   padding: 2.4rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+  }
 `;
 
 const StyledButton = styled(Button)`

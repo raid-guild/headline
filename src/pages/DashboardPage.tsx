@@ -196,7 +196,7 @@ const PublicationCopyContainer = styled.div`
   justify-content: center;
   gap: 0.5rem;
   margin-bottom: 4.8rem;
-  @media (min-width: 720px) {
+  @media (min-width: 768px) {
     margin-bottom: 0;
     gap: 0.8rem;
   }

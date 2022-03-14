@@ -45,6 +45,9 @@ const PublishContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyTitleContainer = styled.div`
@@ -157,6 +160,7 @@ const EntriesContainer = styled.div`
   height: 100%;
   width: 100%;
   @media (max-width: 768px) {
+    min-height: 30rem;
   }
 `;
 
@@ -424,6 +428,11 @@ const SettingsContainer = styled.div`
   height: 100%;
   padding: 3.2rem;
   max-width: 90rem;
+  @media (max-width: 768px) {
+    margin: 0;
+    padding: 2.4rem;
+    width: auto;
+  }
 `;
 
 const PublishBody = () => {
@@ -522,12 +531,10 @@ const PublishPage = () => {
           </HeaderText>
         </TitleContainer>
       </HeaderContainer>
-
       <SidebarContainer>
         <Sidebar />
       </SidebarContainer>
-      <PublishBody />
-      {/* {publication ? <PublishBody /> : <CreatePublicationView />} */}
+      {publication ? <PublishBody /> : <CreatePublicationView />}
       <MobileNav />
     </Layout>
   );
