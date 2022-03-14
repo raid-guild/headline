@@ -222,6 +222,9 @@ export const fetchPublication = createAsyncThunk(
         definitionId,
         client.ceramic?.did?.id || ""
       );
+      console.log(`
+Pub jdoc ${doc.id.toString()}
+				`);
       let publication = doc?.content;
       if (publication && publication.apiKey) {
         const apiKey = await getKeyAndDecrypt(

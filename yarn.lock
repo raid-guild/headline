@@ -21,7 +21,7 @@
 
 "@3id/connect@^0.2.5":
   version "0.2.5"
-  resolved "https://registry.npmjs.org/@3id/connect/-/connect-0.2.5.tgz"
+  resolved "https://registry.yarnpkg.com/@3id/connect/-/connect-0.2.5.tgz#2331828cb6d2a079a61ae2c8e896654debba76be"
   integrity sha512-K3T9ExUjilYyHdQeRUnvd5H5Qanz/XseJTOkRVJyCeADrw2RGPH1gFEJ8XtP7UDqsZwrdcIilLNwSCi72ybGYA==
   dependencies:
     "@3id/common" "^0.2.1"

@@ -11,6 +11,8 @@ import {
   addRegistryArticle,
   articleRegistryActions,
 } from "services/articleRegistry/slice";
+import { addPublishRegistryArticle } from "services/publishRegistry/slice";
+
 import { getEncryptionKey, encryptText } from "lib/lit";
 import { RootState } from "store";
 import { ChainName } from "types";
@@ -315,6 +317,7 @@ export const publishArticle = createAsyncThunk(
       };
       await doc.update(updatedArticle);
       thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      thunkAPI.dispatch(addPublishRegistryArticle(args.streamId));
       return baseArticle;
     } catch (err) {
       console.error(err);

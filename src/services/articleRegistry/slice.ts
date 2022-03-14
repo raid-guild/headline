@@ -136,7 +136,7 @@ export const removeRegistryArticle = createAsyncThunk(
 
 export const fetchArticleRegistry = createAsyncThunk(
   "articleRegistry/fetch",
-  async (args: { chainName: ChainName }, thunkAPI) => {
+  async (args: { chainName: ChainName; registry?: string }, thunkAPI) => {
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -144,7 +144,9 @@ export const fetchArticleRegistry = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
-      const articleRegistry = await store.get("articleRegistry");
+      const articleRegistry = await store.get(
+        args.registry || "articleRegistry"
+      );
       for (const streamId in articleRegistry) {
         // load streams
         const doc = await TileDocument.load(client.ceramic, streamId);
