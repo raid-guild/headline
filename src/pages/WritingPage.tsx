@@ -12,6 +12,8 @@ import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
+import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
@@ -198,6 +200,7 @@ const WritingPage = () => {
   return (
     <StyledLayout>
       <StyledHeaderContainer>
+        <MobileHeader />
         <LeftHeaderContainer>
           <BackButton size="md" />
           <Avatar size="xl" src={profile} alt="newsletter profile picture" />
@@ -240,6 +243,7 @@ const WritingPage = () => {
           />
         </StyledMarkdownEditor>
       </StyledBody>
+      <MobileNav />
     </StyledLayout>
   );
 };

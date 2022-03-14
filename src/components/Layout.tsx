@@ -87,6 +87,15 @@ export const BodyContainer = styled.div<BodyContainerProps>`
     background ? theme.colors[background] : theme.colors.almostWhite};
 `;
 
+export const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 720px) {
+    width: 100%;
+    padding: 2.4rem 2.4rem 1.6rem;
+  }
+`;
+
 export const HeaderText = styled(Text)`
   margin-left: 0px;
   @media (min-width: 720px) {

@@ -11,17 +11,17 @@ import {
   HeaderContainer,
   HeaderText,
   SidebarContainer,
+  TitleContainer,
 } from "components/Layout";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
-import MobileNav from "components/MobileNav";
 import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
 import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
 import { networks } from "lib/networks";
 import { useAppDispatch, useAppSelector } from "store";
-
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
@@ -174,15 +174,6 @@ const PublicationContainer = styled.div`
     flex-direction: column;
     align-items: flex-start;
     padding: 2.4rem 1.6rem;
-  }
-`;
-
-const TitleContainer = styled.div`
-  display: flex;
-  align-items: center;
-  @media (max-width: 720px) {
-    width: 100%;
-    padding: 2.4rem 2.4rem 1.6rem;
   }
 `;
 

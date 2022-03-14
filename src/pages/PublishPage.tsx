@@ -4,7 +4,6 @@ import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
-
 import lock_example from "assets/lock_example.svg";
 import checkmark from "assets/checkmark.svg";
 import { useUnlock } from "context/UnlockContext";
@@ -14,7 +13,6 @@ import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
 import { LockCards, LockData } from "components/LockCard";
-import MobileNav from "components/MobileNav";
 import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
 import {
@@ -23,11 +21,15 @@ import {
   HeaderContainer,
   HeaderText,
   SidebarContainer,
+  TitleContainer,
 } from "components/Layout";
 import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
+
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
@@ -123,6 +125,9 @@ const CreatePublicationView = () => {
 
 const ToolbarContainer = styled.div`
   height: 7.2rem;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -495,9 +500,12 @@ const PublishPage = () => {
   return (
     <Layout>
       <HeaderContainer>
-        <HeaderText size="md" weight="semibold" color="helpText">
-          {publication ? publication : "Write"}
-        </HeaderText>
+        <MobileHeader />
+        <TitleContainer>
+          <HeaderText size="md" weight="semibold" color="helpText">
+            {publication ? publication : "Write"}
+          </HeaderText>
+        </TitleContainer>
       </HeaderContainer>
 
       <SidebarContainer>
