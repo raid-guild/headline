@@ -4,7 +4,6 @@ import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
-
 import lock_example from "assets/lock_example.svg";
 import checkmark from "assets/checkmark.svg";
 import { useUnlock } from "context/UnlockContext";
@@ -14,6 +13,8 @@ import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
 import EmailSettings from "components/EmailSettings";
 import { LockCards, LockData } from "components/LockCard";
+import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
 import LockVerificationForm from "components/LockVerificationForm";
 import PublicationSettings from "components/PublicationSettings";
 import {
@@ -22,6 +23,7 @@ import {
   HeaderContainer,
   HeaderText,
   SidebarContainer,
+  TitleContainer,
 } from "components/Layout";
 import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
@@ -43,6 +45,10 @@ const PublishContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
+  background: ${({ theme }) => theme.colors.backgroundGrey};
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyTitleContainer = styled.div`
@@ -50,6 +56,15 @@ const BodyTitleContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
+`;
+
+const BodyTextContainer = styled.div`
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyButtonContainer = styled.div`
@@ -60,6 +75,17 @@ const BodyButtonContainer = styled.div`
   background: ${({ theme }) => theme.colors.almostWhite};
   max-height: 20rem;
   height: 100%;
+  border-radius: 8px;
+  margin-top: 4rem;
+  border: 1px solid #f0efef;
+  @media (max-width: 768px) {
+    padding-bottom: 1.6rem;
+    margin-bottom: 1.6rem;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  min-width: 295px;
 `;
 
 const BodyFooterContainer = styled.div`
@@ -89,20 +115,20 @@ const CreatePublicationView = () => {
           </Text>
         </BodyTitleContainer>
         <BodyButtonContainer>
-          <Text size="base">
-            Write as a blog or send it out as a newsletter, Websubstack covers
-            all.
-          </Text>
-          <div>
-            <Button
-              size="xl"
-              color="primary"
-              variant="contained"
-              onClick={goToCreatePublication}
-            >
-              Create my publication
-            </Button>
-          </div>
+          <BodyTextContainer>
+            <Text size="base">
+              Write as a blog or send it out as a newsletter, Websubstack covers
+              all.
+            </Text>
+          </BodyTextContainer>
+          <StyledButton
+            size="xl"
+            color="primary"
+            variant="contained"
+            onClick={goToCreatePublication}
+          >
+            Create my publication
+          </StyledButton>
         </BodyButtonContainer>
         <BodyFooterContainer>
           <Text size="base">
@@ -122,6 +148,9 @@ const CreatePublicationView = () => {
 
 const ToolbarContainer = styled.div`
   height: 7.2rem;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -131,6 +160,9 @@ const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
   margin-right: 6.4rem;
   margin-left: 4.4rem;
+  @media (max-width: 768px) {
+    margin: 0 2.4rem;
+  }
 `;
 
 const EntriesHeader = styled.div`
@@ -138,6 +170,9 @@ const EntriesHeader = styled.div`
   justify-content: space-between;
   width: 100%;
   margin-top: 2.5rem;
+  @media (max-width: 768px) {
+    align-items: center;
+  }
 `;
 
 const EntriesContainer = styled.div`
@@ -145,20 +180,28 @@ const EntriesContainer = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
+  @media (max-width: 768px) {
+    min-height: 30rem;
+  }
 `;
 
-const EmtptyCardContainer = styled.div`
+const EmptyCardContainer = styled.div`
   padding: 4rem;
   border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
   gap: 1.6rem;
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 0.8rem;
+  @media (max-width: 768px) {
+    gap: 2.4rem;
+    padding: 2.4rem 1.6rem;
+  }
 `;
 
 const EmtptyEntriesMessage = () => {
   return (
-    <EmtptyCardContainer>
+    <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
@@ -167,13 +210,13 @@ const EmtptyEntriesMessage = () => {
           Write a new post
         </Text>
       </Link>
-    </EmtptyCardContainer>
+    </EmptyCardContainer>
   );
 };
 
 const EmtptyLocksMessage = () => {
   return (
-    <EmtptyCardContainer>
+    <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
@@ -185,7 +228,7 @@ const EmtptyLocksMessage = () => {
           Create Now
         </Text>
       </Link>
-    </EmtptyCardContainer>
+    </EmptyCardContainer>
   );
 };
 
@@ -382,6 +425,11 @@ const SettingsContainer = styled.div`
   height: 100%;
   padding: 3.2rem;
   max-width: 90rem;
+  @media (max-width: 768px) {
+    margin: 0;
+    padding: 2.4rem;
+    width: auto;
+  }
 `;
 
 const PublishBody = () => {
@@ -473,15 +521,18 @@ const PublishPage = () => {
   return (
     <Layout>
       <HeaderContainer>
-        <HeaderText size="md" weight="semibold" color="helpText">
-          {publication ? publication : "Write"}
-        </HeaderText>
+        <MobileHeader />
+        <TitleContainer>
+          <HeaderText size="md" weight="semibold" color="helpText">
+            {publication ? publication : "Write"}
+          </HeaderText>
+        </TitleContainer>
       </HeaderContainer>
-
       <SidebarContainer>
         <Sidebar />
       </SidebarContainer>
       {publication ? <PublishBody /> : <CreatePublicationView />}
+      <MobileNav />
     </Layout>
   );
 };

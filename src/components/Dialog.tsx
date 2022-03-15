@@ -28,6 +28,11 @@ const StyledDialog = styled(BaseDialog)`
   outline: 0;
   z-index: 1000;
   padding: 3.2rem;
+  @media (max-width: 768px) {
+    width: 75%;
+    padding: 1.6rem;
+    max-height: none;
+  }
 `;
 
 const StyledDialogBackdrop = styled(DialogBackdrop)`
@@ -78,4 +83,8 @@ export const DialogContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.colors.almostWhite};
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+    background: ${({ theme }) => theme.colors.almostWhite};
+  }
 `;

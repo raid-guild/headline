@@ -11,16 +11,17 @@ import {
   HeaderContainer,
   HeaderText,
   SidebarContainer,
+  TitleContainer,
 } from "components/Layout";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
-
+import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
 import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
 import { networks } from "lib/networks";
 import { useAppDispatch, useAppSelector } from "store";
-
 import { useCermaic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
@@ -33,6 +34,10 @@ const DashboardContainer = styled.div`
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
+  padding: 6.4rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const BodyTitleContainer = styled.div`
@@ -40,6 +45,10 @@ const BodyTitleContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 0.8rem;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const BodyButtonContainer = styled.div`
@@ -50,6 +59,21 @@ const BodyButtonContainer = styled.div`
   background: ${({ theme }) => theme.colors.almostWhite};
   max-height: 20rem;
   height: 100%;
+  border-radius: 8px;
+  margin-top: 4rem;
+  border: 1px solid #f0efef;
+  @media (max-width: 768px) {
+    padding-bottom: 1.6rem;
+    margin-bottom: 1.6rem;
+    gap: 4rem;
+  }
+`;
+
+const BodyTextContainer = styled.div`
+  @media (max-width: 768px) {
+    padding: 2.4rem 2.4rem 0;
+    text-align: center;
+  }
 `;
 
 const BodyFooterContainer = styled.div`
@@ -59,6 +83,7 @@ const BodyFooterContainer = styled.div`
   justify-content: flex-end;
   max-height: 4rem;
   height: 100%;
+  margin-top: 4rem;
 `;
 
 const LoggedOutBody = ({
@@ -74,11 +99,13 @@ const LoggedOutBody = ({
         </Text>
       </BodyTitleContainer>
       <BodyButtonContainer>
-        <Text size="base">
-          Please connect your wallet to access the dashboard
-        </Text>
+        <BodyTextContainer>
+          <Text size="base">
+            Please connect your wallet to access the dashboard
+          </Text>
+        </BodyTextContainer>
         <div>
-          <Button
+          <StyledButton
             color="primary"
             variant="contained"
             size="xl"
@@ -87,7 +114,7 @@ const LoggedOutBody = ({
             loadingText="Connecting..."
           >
             Connect wallet
-          </Button>
+          </StyledButton>
         </div>
       </BodyButtonContainer>
       <BodyFooterContainer>
@@ -110,8 +137,23 @@ const LoggedInContainer = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  gap: 3.2rem;
+  gap: 2.4rem;
   padding: 6.4rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
+`;
+
+const LoggedOutContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  gap: 2.4rem;
+  padding: 6.4rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const PublicationContainer = styled.div`
@@ -119,7 +161,14 @@ const PublicationContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 3.2rem;
+  margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
+  border-radius: 0.8rem;
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2.4rem 1.6rem;
+  }
 `;
 
 const SubscriptionContainer = styled.div`
@@ -140,14 +189,54 @@ const PublicationCopyContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 0.5rem;
+  margin-bottom: 4.8rem;
+  @media (min-width: 768px) {
+    margin-bottom: 0;
+    gap: 0.8rem;
+  }
+`;
+
+const LogoContainer = styled.div`
+  direction: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    padding: 1.2rem 0rem;
+  }
 `;
 
 const LearnMoreContainer = styled.div`
   display: flex;
-  gap: 0.5rem;
+  align-items: center;
   justify-content: space-between;
+  padding: 3.2rem;
+  margin-bottom: 0.8rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
-  padding: 4rem;
+  @media (max-width: 720px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2.4rem 1.6rem;
+  }
+`;
+
+const LearnMoreCopyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 4.8rem;
+  @media (min-width: 720px) {
+    margin-bottom: 0;
+  }
+`;
+
+const StyledButton = styled(Button)`
+  min-width: 295px;
+  @media (max-width: 768px) {
+    margin-bottom: 1.6rem;
+  }
 `;
 
 // in publication container
@@ -173,14 +262,14 @@ const LoggedInBody = () => {
           </Text>
         </ExternalLink>
       </PublicationCopyContainer>
-      <Button
+      <StyledButton
         color="primary"
         variant="contained"
         size="xl"
         onClick={goToCreatePublication}
       >
         Create my publication
-      </Button>
+      </StyledButton>
     </>
   );
   const hasPublication = (
@@ -206,15 +295,15 @@ const LoggedInBody = () => {
       </PublicationContainer>
       <SubscriptionContainer>
         <LearnMoreContainer>
-          <div>
+          <LearnMoreCopyContainer>
             <Text size="md" weight="semibold">
               Learn more from the pro
             </Text>
             <Title size="sm">Tips for you from the Unlock team</Title>
-          </div>
-          <Button size="xl" color="primary" variant="contained">
+          </LearnMoreCopyContainer>
+          <StyledButton size="xl" color="primary" variant="contained">
             Subscribe
-          </Button>
+          </StyledButton>
         </LearnMoreContainer>
       </SubscriptionContainer>
     </LoggedInContainer>
@@ -248,9 +337,12 @@ const DashboardPage = () => {
   return (
     <Layout>
       <HeaderContainer>
-        <HeaderText size="md" weight="semibold" color="helpText">
-          Dashboard
-        </HeaderText>
+        <MobileHeader />
+        <TitleContainer>
+          <HeaderText size="md" weight="semibold" color="helpText">
+            Dashboard
+          </HeaderText>
+        </TitleContainer>
       </HeaderContainer>
       <SidebarContainer>
         <Sidebar />
@@ -265,6 +357,7 @@ const DashboardPage = () => {
           />
         )}
       </BodyContainer>
+      <MobileNav />
     </Layout>
   );
 };

@@ -19,6 +19,12 @@ const theme = {
       },
     },
   },
+  devices: {
+    sm: `(min-width: '320px')`,
+    md: `(min-width: '768px')`,
+    lg: `(min-width: '1200px')`,
+    xl: `(min-width: '2560px')`,
+  },
   colors: {
     primary: "#6D9CF9",
     backgroundGrey: "#F7F7F7",
@@ -28,6 +34,7 @@ const theme = {
     label: "#3A3A3A",
     grey: "#A5A5A5",
     lightGrey: "#DEDEDE",
+    mediumGrey: "#F0EFEF",
     success: "#8ACA89",
     error: "#FF6771",
   },
@@ -114,6 +121,7 @@ const theme = {
 export type Theme = typeof theme;
 export type ThemeButtonSize = keyof Theme["buttons"]["size"];
 export type ThemeColors = keyof Theme["colors"];
+export type ThemeDevices = keyof Theme["devices"];
 export type ThemeIconSize = keyof Theme["icons"]["size"];
 export type ThemeTextSize = keyof Theme["text"]["size"];
 export type ThemeTextWeight = keyof Theme["text"]["weight"];

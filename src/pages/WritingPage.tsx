@@ -12,6 +12,8 @@ import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
+import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
@@ -21,18 +23,17 @@ import { articleRegistrySelectors } from "services/articleRegistry/slice";
 import profile from "assets/obsidian.png";
 import { storeIpfs } from "lib/ipfs";
 
+const AvatarContainer = styled.div`
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
 const StyledLayout = styled(Layout)`
   grid-template:
     "header" 9.6rem
     "body" 1fr
     / 1fr;
-`;
-
-const StyledHeaderContainer = styled(HeaderContainer)`
-  margin-left: 7rem;
-  margin-right: 7rem;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const StyledBody = styled(BodyContainer)`
@@ -43,23 +44,50 @@ const StyledBody = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
   margin-bottom: 7rem;
+  @media (max-width: 768px) {
+    margin: 2.4rem;
+  }
+`;
+
+const StyledHeaderContainer = styled(HeaderContainer)`
+  margin-left: 7rem;
+  margin-right: 7rem;
+  justify-content: space-between;
+  align-items: center;
+  @media (max-width: 768px) {
+    margin: 0;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    padding: 2.4rem 0 0;
+    border-bottom: 1px solid;
+    border-color: #f0efef;
+  }
 `;
 
 const LeftHeaderContainer = styled.div`
   display: flex;
   gap: 0.8rem;
   align-items: center;
+  @media (max-width: 768px) {
+  }
 `;
 
 const RightHeaderContainer = styled.div`
   display: flex;
   gap: 1.6rem;
   align-items: center;
+  @media (max-width: 768px) {
+    justify-content: space-between;
+  }
 `;
 
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const StyledInput = styled(Input)`
@@ -68,6 +96,8 @@ const StyledInput = styled(Input)`
   line-height: ${({ theme }) => theme.title.md.lineHeight};
   font-weight: ${({ theme }) => theme.title.md.fontWeight};
   color: ${({ theme }) => theme.colors.grey};
+  @media (max-width: 768px) {
+  }
 `;
 
 const StyledMarkdownEditor = styled(MarkdownEditor)`
@@ -75,6 +105,8 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   display: flex;
   margin-top: 3.2rem;
   height: 100%;
+  @media (max-width: 768px) {
+  }
 `;
 
 const MarkdownSave = ({
@@ -202,7 +234,9 @@ const WritingPage = () => {
       <StyledHeaderContainer>
         <LeftHeaderContainer>
           <BackButton size="md" />
-          <Avatar size="xl" src={profile} alt="newsletter profile picture" />
+          <AvatarContainer>
+            <Avatar size="xl" src={profile} alt="newsletter profile picture" />
+          </AvatarContainer>
           <TitleContainer>
             <Text size="md" weight="semibold" color="helpText">
               Name
@@ -242,6 +276,7 @@ const WritingPage = () => {
           />
         </StyledMarkdownEditor>
       </StyledBody>
+      <MobileNav />
     </StyledLayout>
   );
 };

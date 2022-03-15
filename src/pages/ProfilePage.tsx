@@ -20,6 +20,8 @@ import SettingsInboxForm from "components/SettingsInboxForm";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import MobileHeader from "components/MobileHeader";
+import MobileNav from "components/MobileNav";
 import { fetchBasicProfile } from "services/profile/slice";
 import { useAppSelector, useAppDispatch } from "store";
 
@@ -33,6 +35,12 @@ const ProfilePageBodyContainer = styled(BodyContainer)`
   justify-content: flex-start;
   margin-right: 2rem;
   gap: 3.2rem;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0;
+    min-width: 0rem;
+  }
 `;
 
 const BasicProfileCardContainer = styled.div`
@@ -41,8 +49,19 @@ const BasicProfileCardContainer = styled.div`
   background: ${({ theme }) => theme.colors.backgroundGrey};
   gap: 3.2rem;
   padding: 4rem;
-  width: 100%;
   max-length: 90rem;
+  border-radius: 0.8rem;
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+    padding: 2.4rem;
+    margin: 0 2.4rem;
+  }
+`;
+
+const ProfileCardTitle = styled(Title)`
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const GetStartedButton = styled(Button)`
@@ -54,11 +73,41 @@ const ProfileTextContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  @media (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const InboxContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+  }
+`;
+
+const TitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  @media (max-width: 720px) {
+    width: 100%;
+    padding: 2.4rem 2.4rem 1.6rem;
+    border-color: ${({ theme }) => theme.colors.mediumGrey};
+  }
+`;
+
+const ProfileText = styled(HeaderText)`
+  margin-left: 0;
+`;
+
+const InboxTitle = styled(Title)`
+  margin-bottom: 1.6rem;
+`;
+
+const UpdateEmailButton = styled(Button)`
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const EmptyProfileCard = () => {
@@ -103,6 +152,10 @@ const SocialMediaContainer = styled.div`
 const ProfileContentContainer = styled.div`
   display: flex;
   gap: 3.2rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1.6rem;
+  }
 `;
 
 const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
@@ -115,9 +168,9 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
   }, []);
   return (
     <>
-      <Title size="sm" color="helpText">
+      <ProfileCardTitle size="sm" color="helpText">
         Basic
-      </Title>
+      </ProfileCardTitle>
       <ProfileContentContainer>
         <Avatar src={src || ""} alt="Profile picture" size="xxl" />
         <ProfileTextContainer>
@@ -184,9 +237,9 @@ const BasicProfileCard = () => {
 const SubscriptionInbox = () => {
   return (
     <BasicProfileCardContainer>
-      <Title size="sm" color="helpText">
+      <InboxTitle size="sm" color="helpText">
         Subscription inbox
-      </Title>
+      </InboxTitle>
       <InboxContainer>
         <Text size="base">To receive the subscription right to your inbox</Text>
         <SettingsInboxForm
@@ -194,9 +247,9 @@ const SubscriptionInbox = () => {
             console.log("Being implemented");
           }}
         >
-          <Button size="md" color="primary" variant="contained">
+          <UpdateEmailButton size="md" color="primary" variant="contained">
             Update
-          </Button>
+          </UpdateEmailButton>
         </SettingsInboxForm>
       </InboxContainer>
     </BasicProfileCardContainer>
@@ -207,9 +260,12 @@ const ProfilePage = () => {
   return (
     <Layout>
       <HeaderContainer>
-        <HeaderText size="md" weight="semibold" color="helpText">
-          My Profile
-        </HeaderText>
+        <MobileHeader />
+        <TitleContainer>
+          <ProfileText size="md" weight="semibold" color="helpText">
+            My Profile
+          </ProfileText>
+        </TitleContainer>
       </HeaderContainer>
       <SidebarContainer>
         <Sidebar />
@@ -218,6 +274,7 @@ const ProfilePage = () => {
         <BasicProfileCard />
         <SubscriptionInbox />
       </ProfilePageBodyContainer>
+      <MobileNav />
     </Layout>
   );
 };
