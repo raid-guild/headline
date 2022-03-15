@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "schema": "node --experimental-json-modules publishModals.js",
+    "updateSchema": "node --experimental-json-modules updateModels.js",
     "test": "node --experimental-json-modules example.js"
   },
   "dependencies": {
@@ -53,6 +54,7 @@
     "vite-plugin-externals": "^0.3.3"
   },
   "devDependencies": {
+    "@3id/connect": "^0.2.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@glazed/devtools": "^0.1.3",

@@ -7,7 +7,7 @@ import styled from "styled-components";
 import lock_example from "assets/lock_example.svg";
 import checkmark from "assets/checkmark.svg";
 import { useUnlock } from "context/UnlockContext";
-import ArticleCard from "components/ArticleCard";
+import { CardContainer, ArticleEntries } from "components/ArticleCard";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -185,17 +185,7 @@ const EntriesContainer = styled.div`
   }
 `;
 
-const CardContainer = styled.div`
-  margin-top: 1.6rem;
-  gap: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  @media (max-width: 768px) {
-    margin-top: 2.4rem;
-  }
-`;
-
-const EmtptyCardContainer = styled.div`
+const EmptyCardContainer = styled.div`
   padding: 4rem;
   border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
   gap: 1.6rem;
@@ -211,7 +201,7 @@ const EmtptyCardContainer = styled.div`
 
 const EmtptyEntriesMessage = () => {
   return (
-    <EmtptyCardContainer>
+    <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
@@ -220,13 +210,13 @@ const EmtptyEntriesMessage = () => {
           Write a new post
         </Text>
       </Link>
-    </EmtptyCardContainer>
+    </EmptyCardContainer>
   );
 };
 
 const EmtptyLocksMessage = () => {
   return (
-    <EmtptyCardContainer>
+    <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
@@ -238,21 +228,7 @@ const EmtptyLocksMessage = () => {
           Create Now
         </Text>
       </Link>
-    </EmtptyCardContainer>
-  );
-};
-
-const ArticleEntries = ({
-  articleRegistry,
-}: {
-  articleRegistry: { [key: string]: Article };
-}) => {
-  return (
-    <>
-      {Object.values(articleRegistry).map((value) => {
-        return <ArticleCard key={value.streamId} article={value} />;
-      })}
-    </>
+    </EmptyCardContainer>
   );
 };
 

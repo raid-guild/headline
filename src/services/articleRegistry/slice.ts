@@ -1,11 +1,13 @@
 import { TileDocument } from "@ceramicnetwork/stream-tile";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { TileLoader } from "@glazed/tile-loader";
 import { DataModel } from "@glazed/datamodel";
+import { WebClient } from "@self.id/web";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { getClient } from "lib/ceramic";
 import { getEncryptionKey, decryptText } from "lib/lit";
 import { fetchIPFS } from "lib/ipfs";
-import { PUBLISHED_MODELS } from "../../constants";
+import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
@@ -134,7 +136,10 @@ export const removeRegistryArticle = createAsyncThunk(
 
 export const fetchArticleRegistry = createAsyncThunk(
   "articleRegistry/fetch",
-  async (args: { chainName: ChainName }, thunkAPI) => {
+  async (
+    args: { chainName?: ChainName; registry?: string; registryId?: string },
+    thunkAPI
+  ) => {
     const client = await getClient();
     const model = new DataModel({
       ceramic: client.ceramic,
@@ -142,7 +147,15 @@ export const fetchArticleRegistry = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
-      const articleRegistry = await store.get("articleRegistry");
+      let articleRegistry = {} as { [key: string]: string } | null;
+      if (args.registry === "publishRegistry" && args.registryId) {
+        const doc = await TileDocument.load(client.ceramic, args.registryId);
+        articleRegistry = doc?.content as { [key: string]: string };
+      } else {
+        articleRegistry = await store.get(args.registry || "articleRegistry");
+      }
+      console.log(articleRegistry);
+      console.log("ArticleRegistry");
       for (const streamId in articleRegistry) {
         // load streams
         const doc = await TileDocument.load(client.ceramic, streamId);
@@ -162,7 +175,10 @@ export const fetchArticleRegistry = createAsyncThunk(
         const encodedText = await readableStream.read();
         let articleText = new TextDecoder().decode(encodedText.value);
 
-        if (ceramicArticle.status === "draft" || ceramicArticle.paid) {
+        if (
+          (ceramicArticle.status === "draft" || ceramicArticle.paid) &&
+          args.chainName
+        ) {
           const { publication } = thunkAPI.getState() as RootState;
           const access =
             ceramicArticle.status === "draft"
@@ -188,6 +204,67 @@ export const fetchArticleRegistry = createAsyncThunk(
           })
         );
       }
+      return;
+    } catch (err) {
+      console.error(err);
+      return thunkAPI.rejectWithValue("Failed to save");
+    }
+  }
+);
+
+export const fetchArticle = createAsyncThunk(
+  "articleRegistry/fetchOne",
+  async (args: { streamId: string; chainName?: ChainName }, thunkAPI) => {
+    const client = new WebClient({
+      ceramic: (CERAMIC_URL as string) || "testnet-clay",
+      connectNetwork: "testnet-clay",
+    });
+    try {
+      const loader = new TileLoader({ ceramic: client.ceramic, cache: true });
+      const doc = await loader.load(args.streamId);
+      // load streams
+      const ceramicArticle = doc.content as CeramicArticle;
+      const resp = await fetch(
+        `https://ipfs.infura.io:5001/api/v0/cat?arg=${ceramicArticle.publicationUrl
+          .split("/")
+          .at(-1)}`,
+        {
+          method: "post",
+        }
+      );
+      const readableStream = resp?.body?.getReader();
+      if (!readableStream) {
+        return;
+      }
+      const encodedText = await readableStream.read();
+      let articleText = new TextDecoder().decode(encodedText.value);
+
+      if (
+        ceramicArticle.status === "published" &&
+        ceramicArticle.paid &&
+        args.chainName
+      ) {
+        const { publication } = thunkAPI.getState() as RootState;
+        const access = publication.publishAccess;
+
+        const symmetricKey = await getEncryptionKey(
+          args.chainName,
+          access.encryptedSymmetricKey,
+          access.accessControlConditions
+        );
+        const a = await decryptText(
+          uint8arrayFromString(articleText, "base64"),
+          symmetricKey
+        ).catch((e) => console.error(e));
+        articleText = a || "";
+      }
+      thunkAPI.dispatch(
+        articleRegistryActions.add({
+          ...ceramicArticle,
+          text: articleText,
+          streamId: args.streamId,
+        })
+      );
       return;
     } catch (err) {
       console.error(err);

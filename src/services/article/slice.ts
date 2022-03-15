@@ -11,6 +11,8 @@ import {
   addRegistryArticle,
   articleRegistryActions,
 } from "services/articleRegistry/slice";
+import { addPublishRegistryArticle } from "services/publishRegistry/slice";
+
 import { getEncryptionKey, encryptText } from "lib/lit";
 import { RootState } from "store";
 import { ChainName } from "types";
@@ -189,7 +191,7 @@ export const updateArticle = createAsyncThunk(
     const existingArticle = articleRegistry[args.streamId];
     let publicationUrl;
     try {
-      if (args.encrypt) {
+      if (args.encrypt && args.article.status !== "published") {
         if (!args.article.status) {
           throw Error("Missing encrypt type");
         }
@@ -284,6 +286,9 @@ export const publishArticle = createAsyncThunk(
           "base64"
         );
       }
+      console.log(args);
+      console.log("Content");
+      console.log(content);
       const ipfs = getIPFSClient();
       const cid = await ipfs.add(
         { content: content },
@@ -312,6 +317,7 @@ export const publishArticle = createAsyncThunk(
       };
       await doc.update(updatedArticle);
       thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      thunkAPI.dispatch(addPublishRegistryArticle(args.streamId));
       return baseArticle;
     } catch (err) {
       console.error(err);
