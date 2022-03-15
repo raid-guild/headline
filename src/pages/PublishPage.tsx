@@ -531,8 +531,7 @@ const PublishPage = () => {
       <SidebarContainer>
         <Sidebar />
       </SidebarContainer>
-      <PublishBody />
-      {/* {publication ? <PublishBody /> : <CreatePublicationView />} */}
+      {publication ? <PublishBody /> : <CreatePublicationView />}
       <MobileNav />
     </Layout>
   );
