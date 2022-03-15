@@ -6,7 +6,7 @@ import { Web3Service } from "@unlock-protocol/unlock-js";
 
 import { getClient } from "lib/ceramic";
 import { getKeyEncryptText, getKeyAndDecrypt } from "lib/lit";
-import { PUBLISHED_MODELS } from "../../constants";
+import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { TileLoader } from "@glazed/tile-loader";
@@ -22,7 +22,7 @@ import { fetchLocks } from "services/lock/slice";
 import { RootState } from "store";
 import { ChainName } from "types";
 
-type PublicationLock = {
+export type PublicationLock = {
   chainId: string;
   address: string;
 };
@@ -36,6 +36,7 @@ export type Publication = {
   mailTo?: string;
   apiKey?: string;
   streamId?: string;
+  registryId?: string;
 };
 
 export const publicationSlice = createSlice({
@@ -54,6 +55,8 @@ export const publicationSlice = createSlice({
     locks: [] as PublicationLock[],
     mailTo: "",
     apiKey: "",
+    streamId: "",
+    registryId: "",
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
@@ -64,6 +67,8 @@ export const publicationSlice = createSlice({
       state.locks = action.payload.locks || [];
       state.mailTo = action.payload.mailTo || "";
       state.apiKey = action.payload.apiKey || "";
+      state.streamId = action.payload.streamId || "";
+      state.registryId = action.payload.registryId || "";
     },
   },
 });
@@ -150,6 +155,17 @@ export const createPublication = createAsyncThunk(
       model: PUBLISHED_MODELS,
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
+    await store.set("publishRegistry", {});
+    const publishRegistryDefinitionId = await store.getDefinitionID(
+      "publishRegistry"
+    );
+    const registryDoc = await store.getRecordDocument(
+      publishRegistryDefinitionId,
+      client.ceramic?.did?.id || ""
+    );
+    console.log("RegistryDoc");
+    console.log(registryDoc?.id);
+
     try {
       const authSig = await LitJsSdk.checkAndSignAuthMessage({
         chain: args.chainName,
@@ -188,6 +204,7 @@ export const createPublication = createAsyncThunk(
           ),
           accessControlConditions: addressAccessControls,
         },
+        registryId: registryDoc?.id?.toString(),
       };
       await store.set("publication", publication);
       thunkAPI.dispatch(publicationActions.create(publication));
@@ -222,10 +239,18 @@ export const fetchPublication = createAsyncThunk(
         definitionId,
         client.ceramic?.did?.id || ""
       );
+      const publishRegistryDefinitionId = await store.getDefinitionID(
+        "publishRegistry"
+      );
+      const registryDoc = await store.getRecordDocument(
+        publishRegistryDefinitionId,
+        client.ceramic?.did?.id || ""
+      );
+
       console.log(`
-Pub jdoc ${doc.id.toString()}
+Pub jdoc ${doc?.id?.toString()}
 				`);
-      let publication = doc?.content;
+      let publication = doc?.content as Publication | null;
       if (publication && publication.apiKey) {
         const apiKey = await getKeyAndDecrypt(
           args.chainName,
@@ -239,7 +264,8 @@ Pub jdoc ${doc.id.toString()}
         thunkAPI.dispatch(
           publicationActions.create({
             ...publication,
-            streamId: doc?.id.toString(),
+            streamId: doc?.id?.toString(),
+            registryId: registryDoc?.id?.toString(),
           })
         );
         thunkAPI.dispatch(
@@ -268,8 +294,12 @@ export const fetchPublicationByStream = createAsyncThunk(
     thunkAPI
   ) => {
     const client = new WebClient({
-      ceramic: "http://0.0.0.0:7007",
+      ceramic: (CERAMIC_URL as string) || "testnet-clay",
       connectNetwork: "testnet-clay",
+    });
+    const model = new DataModel({
+      ceramic: client.ceramic,
+      model: PUBLISHED_MODELS,
     });
 
     try {
@@ -281,6 +311,7 @@ export const fetchPublicationByStream = createAsyncThunk(
           publicationActions.create({
             ...publication,
             streamId: doc?.id.toString(),
+            registryId: publication?.registryId,
           })
         );
         // thunkAPI.dispatch(

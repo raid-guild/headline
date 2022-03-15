@@ -14,7 +14,7 @@ export const addPublishRegistryArticle = createAsyncThunk(
     });
     const store = new DIDDataStore({ ceramic: client.ceramic, model: model });
     try {
-      await store.merge("publishArticleRegistry", {
+      await store.merge("publishRegistry", {
         [streamId]: streamId,
       });
     } catch (err) {

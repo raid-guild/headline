@@ -8,7 +8,7 @@ import styled from "styled-components";
 import lock_example from "assets/lock_example.svg";
 import checkmark from "assets/checkmark.svg";
 import { useUnlock } from "context/UnlockContext";
-import ArticleCard from "components/ArticleCard";
+import { CardContainer, ArticleEntries } from "components/ArticleCard";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -147,13 +147,6 @@ const EntriesContainer = styled.div`
   width: 100%;
 `;
 
-const CardContainer = styled.div`
-  margin-top: 1.6rem;
-  gap: 1.2rem;
-  display: flex;
-  flex-direction: column;
-`;
-
 const EmtptyCardContainer = styled.div`
   padding: 4rem;
   border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
@@ -193,20 +186,6 @@ const EmtptyLocksMessage = () => {
         </Text>
       </Link>
     </EmtptyCardContainer>
-  );
-};
-
-const ArticleEntries = ({
-  articleRegistry,
-}: {
-  articleRegistry: { [key: string]: Article };
-}) => {
-  return (
-    <>
-      {Object.values(articleRegistry).map((value) => {
-        return <ArticleCard key={value.streamId} article={value} />;
-      })}
-    </>
   );
 };
 

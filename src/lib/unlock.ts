@@ -1,6 +1,6 @@
-import { DOMAIN } from "constants";
+import { DOMAIN } from "../constants";
 import { networks } from "lib/networks";
-import { PublicationLock } from "services/lock/slice";
+import { PublicationLock } from "services/publication/slice";
 
 export const checkoutRedirect = (
   name: string | null,
@@ -28,8 +28,8 @@ export const checkoutRedirect = (
     pessimistic: true,
   };
   const prms = new URLSearchParams({
-    paywallConfig: JSON.stringify(checkoutParams),
-    redirctUri: DOMAIN,
+    paywallConfig: JSON.stringify(checkoutParams) || "",
+    redirctUri: DOMAIN as string,
   });
   return `${base}${prms.toString()}`;
 };

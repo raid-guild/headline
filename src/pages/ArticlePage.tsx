@@ -73,11 +73,9 @@ const ArticlePage = () => {
       if (!streamId) {
         return;
       }
-      console.log("Fetching");
       await dispatch(
         fetchArticle({
           streamId,
-          chainName: "",
         })
       );
       console.log("Fetched");
@@ -125,7 +123,7 @@ const ArticlePage = () => {
           <ReactMarkdown>{article?.text}</ReactMarkdown>
         ) : (
           <DescriptionContainer>
-            <Title size="sm" weight="semibold" color="label">
+            <Title size="sm" color="label">
               Description
             </Title>
             <Text size="base" color="label">
