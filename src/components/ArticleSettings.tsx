@@ -35,6 +35,13 @@ const ReceiverSettingContainer = styled.div`
   flex-direction: column;
   gap: 1.6rem;
   background: ${({ theme }) => theme.colors.almostWhite};
+  @media (max-width: 768px) {
+    padding: 2.4rem 1.6rem;
+    border-radius: 0.8rem;
+    background: "##F6F6F6";
+    max-width: content;
+    gap: 0.8rem;
+  }
 `;
 
 const SocialPreviewContainer = styled.div`
@@ -42,6 +49,13 @@ const SocialPreviewContainer = styled.div`
   flex-direction: column;
   background: ${({ theme }) => theme.colors.almostWhite};
   gap: 1.6rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem 1.6rem;
+    border-radius: 0.8rem;
+    background: "#f6f6f6";
+    max-width: content;
+    gap: 0.8rem;
+  }
 `;
 
 const ImagePreview = styled.div`
@@ -62,6 +76,13 @@ const SendingTestEmailContainer = styled.div`
   flex-direction: column;
   background: ${({ theme }) => theme.colors.almostWhite};
   gap: 1.6rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem 1.6rem;
+    border-radius: 0.8rem;
+    background: "#f6f6f6";
+    max-width: content;
+    gap: 0.8rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -72,6 +93,9 @@ const ButtonContainer = styled.div`
 const RadioButtonContainer = styled.div`
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    gap: 1.6rem;
+  }
 `;
 
 const StyledIconButton = styled(Button)`
@@ -276,7 +300,7 @@ export const ArticleSettings = ({
           <Title size="sm" color="helpText">
             Sending a test email
           </Title>
-          <Text size="base" color="grey">
+          <Text size="base" color="label">
             Please configure your SMTP credentials in the setting page in order
             to send out a test email
           </Text>
