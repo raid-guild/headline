@@ -102,6 +102,9 @@
     },
     "mailFrom": {
       "type": "string"
+    },
+    "publishRegistry": {
+      "type": "string"
     }
   },
   "required": ["draftAccess", "publishAccess"]

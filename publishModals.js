@@ -7,6 +7,7 @@ import { getResolver } from "key-did-resolver";
 import { fromString } from "uint8arrays";
 
 import publicationSchema from "./src/schemas/publication.json";
+import publishRegistrySchema from "./src/schemas/publishedRegistry.json";
 import articleSchema from "./src/schemas/article.json";
 import articleRegistrySchema from "./src/schemas/articleRegistry.json";
 
@@ -40,6 +41,11 @@ const articleRegistrySchemaID = await manager.createSchema(
   articleRegistrySchema
 );
 
+const publishRegistrySchemaID = await manager.createSchema(
+  "PublishRegistry",
+  publishRegistrySchema
+);
+
 // Create the definition using the created schema ID
 await manager.createDefinition("publication", {
   name: "My publication",
@@ -58,6 +64,12 @@ await manager.createDefinition("articleRegistry", {
   description: "A registry of all unstack articles for a given publication",
   schema: manager.getSchemaURL(articleRegistrySchemaID),
 });
+await manager.createDefinition("publishRegistry", {
+  name: "Publish registry",
+  description: "A registry of all published unstack articles",
+  schema: manager.getSchemaURL(publishRegistrySchemaID),
+});
+
 const accessControlConditions = [
   {
     contractAddress: "",
@@ -97,6 +109,15 @@ await manager.createTile(
 
 await manager.createTile(
   "exampleArticleRegistry",
+  {
+    k2t6wyfsu4pfxcjnx1gg5q37xywk5gihcjwrdrbohacqr25emxg4p05mpjvnkc:
+      "k2t6wyfsu4pfxcjnx1gg5q37xywk5gihcjwrdrbohacqr25emxg4p05mpjvnkc",
+  },
+  { schema: manager.getSchemaURL(articleRegistrySchemaID) }
+);
+
+await manager.createTile(
+  "examplePublishRegistry",
   {
     k2t6wyfsu4pfxcjnx1gg5q37xywk5gihcjwrdrbohacqr25emxg4p05mpjvnkc:
       "k2t6wyfsu4pfxcjnx1gg5q37xywk5gihcjwrdrbohacqr25emxg4p05mpjvnkc",

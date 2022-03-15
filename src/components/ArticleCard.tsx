@@ -27,7 +27,7 @@ const DetailsContainer = styled.div`
   gap: 1.6rem;
 `;
 
-const ArticleCard = ({ article }: { article: Article }) => {
+export const ArticleCard = ({ article }: { article: Article }) => {
   const date = new Date(article.createdAt);
   const [previewImg, setPreviewImg] = useState("");
   useEffect(() => {
@@ -60,6 +60,26 @@ const ArticleCard = ({ article }: { article: Article }) => {
         </DetailsContainer>
       </Container>
     </Link>
+  );
+};
+
+export const CardContainer = styled.div`
+  margin-top: 1.6rem;
+  gap: 1.2rem;
+  display: flex;
+  flex-direction: column;
+`;
+export const ArticleEntries = ({
+  articleRegistry,
+}: {
+  articleRegistry: { [key: string]: Article };
+}) => {
+  return (
+    <>
+      {Object.values(articleRegistry).map((value) => {
+        return <ArticleCard key={value.streamId} article={value} />;
+      })}
+    </>
   );
 };
 
