@@ -406,7 +406,7 @@ const Locks = () => {
           </DialogContainer>
         </Dialog>
       </EntriesHeader>
-      <CardContainer>
+      <CardContainer style={{ flexDirection: "row" }}>
         {Object.values(locks || {}).length ? (
           <LockCards locks={locks} />
         ) : (

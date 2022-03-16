@@ -10,6 +10,7 @@ import Avatar from "components/Avatar";
 import { CardContainer, ArticleEntries } from "components/ArticleCard";
 import Button from "components/Button";
 import PublicToolbar from "components/PublicToolbar";
+import Title from "components/Title";
 import Text from "components/Text";
 import { checkoutRedirect } from "lib/unlock";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
@@ -37,6 +38,13 @@ const TitleContainer = styled.div`
 
 const ToolbarContainer = styled.div`
   height: 7.2rem;
+`;
+
+const DescriptionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-top: 1.6rem;
 `;
 
 const CreatorPage = () => {
@@ -101,10 +109,24 @@ const CreatorPage = () => {
           <PublicToolbar active={active} setActive={setActive} />
         </ToolbarContainer>
         <CardContainer>
-          {Object.keys(articleRegistry).length ? (
-            <ArticleEntries articleRegistry={articleRegistry} />
+          {active === "content" ? (
+            Object.keys(articleRegistry).length ? (
+              <ArticleEntries
+                articleRegistry={articleRegistry}
+                publicationId={publication?.streamId || ""}
+              />
+            ) : (
+              <>Nothing to see here</>
+            )
           ) : (
-            <>Nothing to see here</>
+            <DescriptionContainer>
+              <Title size="sm" color="label">
+                Description
+              </Title>
+              <Text size="base" color="label">
+                {publication?.description || "No description"}
+              </Text>
+            </DescriptionContainer>
           )}
         </CardContainer>
       </StyledBodyContainer>

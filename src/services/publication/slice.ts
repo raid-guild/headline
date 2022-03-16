@@ -383,6 +383,8 @@ export const updatePublication = createAsyncThunk(
         ...publication,
         ...updates,
       };
+      console.log(updatedPublication);
+      console.log(updates);
       await store.set("publication", updatedPublication);
       if (pub.apiKey !== undefined) {
         updatedPublication["apiKey"] = pub.apiKey;

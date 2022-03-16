@@ -66,8 +66,7 @@ export async function getErc20TokenSymbol(
 const getBaseChainSymbolAndNumber = (chainId: string, num: string) => {
   switch (chainId) {
     default:
-      const readableNum = ethers.utils.parseUnits(num, 18);
-      return { symbol: "Eth", num: readableNum.toNumber() };
+      return { symbol: "Eth", num: num };
   }
 };
 
@@ -86,5 +85,5 @@ export const getTokenSymbolAndNumber = async (
   // Unlock extraReducers0
   const symbol = await getErc20TokenSymbol(contractAddress, provider);
   const decimals = await getErc20Decimals(contractAddress, provider);
-  return { symbol, num: BigNumber.from(num).div(decimals).toNumber() };
+  return { symbol, num: BigNumber.from(num).div(decimals).toString() };
 };
