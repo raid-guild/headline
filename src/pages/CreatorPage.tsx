@@ -144,7 +144,6 @@ const CreatorPage = () => {
     <Layout>
       <StyledHeaderContainer>
         <MobileHeader />
-
         <TitleContainer>
           <Avatar size="xl" src={profile} alt="newsletter profile picture" />
           <Text size="lg" weight="semibold" color="helpText">
