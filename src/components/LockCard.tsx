@@ -92,6 +92,8 @@ export const LockCard = ({ lock }: { lock: Lock }) => {
 };
 
 export const LockCards = ({ locks }: { locks: Lock[] }) => {
+  console.log("Locks");
+  console.log(locks);
   return (
     <>
       {locks.map((lock) => {

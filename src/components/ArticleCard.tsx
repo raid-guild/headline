@@ -27,8 +27,15 @@ const DetailsContainer = styled.div`
   gap: 1.6rem;
 `;
 
-export const ArticleCard = ({ article }: { article: Article }) => {
+export const ArticleCard = ({
+  article,
+  redirect,
+}: {
+  article: Article;
+  redirect?: string;
+}) => {
   const date = new Date(article.createdAt);
+  const link = redirect ? redirect : `/publish/write/${article.streamId}`;
   const [previewImg, setPreviewImg] = useState("");
   useEffect(() => {
     const x = async () => {
@@ -43,7 +50,7 @@ export const ArticleCard = ({ article }: { article: Article }) => {
   }, [article?.previewImg]);
 
   return (
-    <Link key={article.streamId} to={`/publish/write/${article.streamId}`}>
+    <Link key={article.streamId} to={link}>
       <Container>
         {article?.previewImg ? (
           <img
@@ -71,13 +78,24 @@ export const CardContainer = styled.div`
 `;
 export const ArticleEntries = ({
   articleRegistry,
+  publicationId,
 }: {
   articleRegistry: { [key: string]: Article };
+  publicationId: string;
 }) => {
   return (
     <>
       {Object.values(articleRegistry).map((value) => {
-        return <ArticleCard key={value.streamId} article={value} />;
+        const redirect = publicationId
+          ? `/pub/${publicationId}/article/${value.streamId}`
+          : "";
+        return (
+          <ArticleCard
+            key={value.streamId}
+            article={value}
+            redirect={redirect}
+          />
+        );
       })}
     </>
   );

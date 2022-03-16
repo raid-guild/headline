@@ -71,6 +71,8 @@ export const lockSelectors = {
   listLocks: createSelector(
     [(state: RootState) => state.lock],
     (lockRegistry: LockRegistry) => {
+      console.log("LockRegistry");
+      console.log(lockRegistry);
       return Object.values(lockRegistry).sort(
         (a, b) => a.keyPriceSimple - b.keyPriceSimple
       );
@@ -131,7 +133,7 @@ export const verifyLock = createAsyncThunk(
             keyTokenSymbol: symbol,
           })
         );
-        thunkAPI.dispatch(
+        await thunkAPI.dispatch(
           updatePublication({
             publication: {
               description: publication.description || "",
@@ -169,6 +171,8 @@ export const fetchLocks = createAsyncThunk(
       // then use unlock and create for each
       const publication = args.publication;
       for (const idx in publication.locks) {
+        console.log("Iterating");
+        console.log(idx);
         const lockMeta = publication.locks[parseInt(idx) || 0];
         const chain = networks[lockMeta.chainId].chainNumber;
 
@@ -190,8 +194,8 @@ export const fetchLocks = createAsyncThunk(
             })
           );
         }
-        return lock;
       }
+      return;
     } catch (err) {
       console.error(err);
       return thunkAPI.rejectWithValue("Failed to verify");
