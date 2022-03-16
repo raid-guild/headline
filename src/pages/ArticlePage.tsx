@@ -29,9 +29,6 @@ const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
   justify-content: flex-start;
   max-width: 85rem;
-  @max-width: 768px {
-    background: red;
-  }
 `;
 
 const StyledHeaderContainer = styled(HeaderContainer)`
