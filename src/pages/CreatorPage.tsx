@@ -36,11 +36,21 @@ const StyledHeaderContainer = styled(HeaderContainer)`
   @media (max-width: 768px) {
     grid-area: header;
     flex-direction: column;
-    background: red;
-    padding: 2.4rem 0 0;
-    align-items: flex-start;
-    justify-content: flex-start;
-    padding: 2.4rem 0 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+`;
+
+const PublicationInfoContainer = styled.div`
+  display: flex;
+  gap: 1.6rem;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 720px) {
+    flex-direction: column;
+    width: 100%;
+    padding: 2.4rem 2.4rem 1.6rem;
   }
 `;
 
@@ -50,20 +60,26 @@ const TitleContainer = styled.div`
   justify-content: center;
   align-items: center;
   @media (max-width: 720px) {
+    flex-direction: column;
     width: 100%;
-    padding: 2.4rem 2.4rem 1.6rem;
+    margin-top: 2.4rem;
   }
 `;
 
 export const HeaderText = styled(Text)`
   margin-left: 0px;
-  @media (min-width: 720px) {
+  @media (min-width: 768px) {
     margin-left: 6.4rem;
   }
 `;
 
 const StyledButton = styled(Button)`
   min-width: 295px;
+  @media (max-width: 720px) {
+    width: 100%;
+    margin-top: 1.6rem;
+    min-width: 327px;
+  }
 `;
 
 const ToolbarContainer = styled.div`
@@ -128,6 +144,7 @@ const CreatorPage = () => {
     <Layout>
       <StyledHeaderContainer>
         <MobileHeader />
+
         <TitleContainer>
           <Avatar size="xl" src={profile} alt="newsletter profile picture" />
           <Text size="lg" weight="semibold" color="helpText">

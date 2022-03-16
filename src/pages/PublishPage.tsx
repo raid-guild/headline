@@ -464,10 +464,9 @@ const SettingsContainer = styled.div`
   height: 100%;
   padding: 3.2rem;
   max-width: 90rem;
+  border-radius: 0.8rem;
   @media (max-width: 768px) {
     margin: 0;
-    padding: 2.4rem;
-    width: auto;
   }
 `;
 
