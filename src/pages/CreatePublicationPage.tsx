@@ -17,6 +17,7 @@ import {
 } from "services/publication/slice";
 
 import { useCeramic } from "context/CeramicContext";
+import { useLit } from "context/LitContext";
 import Button from "components/Button";
 import BackButton from "components/BackButton";
 import Icon from "components/Icon";
@@ -197,6 +198,7 @@ const CreatePublicationPage = () => {
   const { web3Service } = useUnlock();
   const { client } = useCeramic();
   const { provider, chainId } = useWallet();
+  const { litClient } = useLit();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
@@ -208,6 +210,7 @@ const CreatePublicationPage = () => {
           web3Service,
           client,
           chainName: networks[chainId].litName,
+          litClient,
         })
       );
     }

@@ -4,6 +4,7 @@ import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
 import { useCeramic } from "context/CeramicContext";
+import { useLit } from "context/LitContext";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -47,6 +48,7 @@ const EmailSettings = () => {
   const [hide, setHide] = useState(false);
   const { chainId } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
   );
@@ -63,6 +65,7 @@ const EmailSettings = () => {
         },
         chainName: networks[chainId].litName,
         client,
+        litClient,
       })
     );
     // setHide(true);

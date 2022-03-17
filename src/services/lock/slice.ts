@@ -10,7 +10,7 @@ import {
 import { RawLock, Web3Service } from "@unlock-protocol/unlock-js";
 
 import { networks } from "lib/networks";
-import { addNftAccessControl, litClient } from "lib/lit";
+import { addNftAccessControl, LitNodeClient } from "lib/lit";
 import { getTokenSymbolAndNumber } from "lib/token";
 import { updatePublication, Publication } from "services/publication/slice";
 import { RootState } from "store";
@@ -125,18 +125,20 @@ export const verifyLock = createAsyncThunk(
       web3Service: Web3Service;
       provider: ethers.providers.Provider;
       client: WebClient;
+      litClient: LitNodeClient;
     },
     thunkAPI
   ) => {
     try {
       const chainMeta = networks[args.chainId];
       const chain = chainMeta.chainNumber;
+      const litClient = args.litClient;
       const lock = await args.web3Service.getLock(args.address, chain);
       if (lock) {
         const { symbol, num } = await getTokenSymbolAndNumber(
           lock.keyPrice,
           lock.currencyContractAddress,
-          args.provider,
+          // args.provider,
           args.chainId
         );
         const { publication } = thunkAPI.getState() as RootState;
@@ -181,6 +183,7 @@ export const verifyLock = createAsyncThunk(
             },
             client: args.client,
             chainName: networks[args.chainId].litName,
+            litClient,
           })
         );
       }
@@ -197,7 +200,7 @@ export const fetchLocks = createAsyncThunk(
   async (
     args: {
       web3Service: Web3Service;
-      provider: ethers.providers.Provider;
+      // provider: ethers.providers.Provider;
       publication: Publication;
     },
     thunkAPI
@@ -217,7 +220,7 @@ export const fetchLocks = createAsyncThunk(
           const { symbol, num } = await getTokenSymbolAndNumber(
             lock.keyPrice,
             lock.currencyContractAddress,
-            args.provider,
+            // args.provider,
             lockMeta.chainId
           );
           const { publication } = thunkAPI.getState() as RootState;

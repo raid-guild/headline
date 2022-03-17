@@ -8,6 +8,7 @@ import WalletConnectProvider from "@walletconnect/ethereum-provider";
 import { IProviderOptions } from "web3modal";
 
 import { CeramicProvider } from "context/CeramicContext";
+import { LitProvider } from "context/LitContext";
 import { UnlockProvider } from "context/UnlockContext";
 import GlobalStyle from "GlobalStyle";
 import { networks } from "lib/networks";
@@ -41,28 +42,30 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <UnlockProvider>
-        <WalletProvider
-          web3modalOptions={web3modalOptions}
-          networks={networks}
-          defaultChainId={"0x1"}
-          // Optional but useful to handle events.
-          handleModalEvents={(eventName, error) => {
-            if (error) {
-              console.error(error.message);
-            }
+        <LitProvider>
+          <WalletProvider
+            web3modalOptions={web3modalOptions}
+            networks={networks}
+            defaultChainId={"0x1"}
+            // Optional but useful to handle events.
+            handleModalEvents={(eventName, error) => {
+              if (error) {
+                console.error(error.message);
+              }
 
-            console.log(eventName);
-          }}
-        >
-          <ThemeProvider theme={theme}>
-            <CeramicProvider>
-              <ReakitProvider>
-                <Routes />
-              </ReakitProvider>
-            </CeramicProvider>
-          </ThemeProvider>
-          <GlobalStyle />
-        </WalletProvider>
+              console.log(eventName);
+            }}
+          >
+            <ThemeProvider theme={theme}>
+              <CeramicProvider>
+                <ReakitProvider>
+                  <Routes />
+                </ReakitProvider>
+              </CeramicProvider>
+            </ThemeProvider>
+            <GlobalStyle />
+          </WalletProvider>
+        </LitProvider>
       </UnlockProvider>
     </Provider>
   </React.StrictMode>,
