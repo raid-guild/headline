@@ -29,6 +29,7 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { createArticle } from "services/article/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
@@ -205,11 +206,6 @@ const EmtptyEntriesMessage = () => {
       <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
-      <Link to="/publish/write">
-        <Text size="sm" color="primary" weight="semibold">
-          Write a new post
-        </Text>
-      </Link>
     </EmptyCardContainer>
   );
 };
@@ -236,10 +232,37 @@ const Articles = () => {
   const articleRegistry = useAppSelector(
     (state) => state.articleRegistry // Name is required in the schema
   );
+  const articleCreating = useAppSelector(
+    (state) => state.createArticle.loading // Name is required in the schema
+  );
+  const dispatch = useAppDispatch();
+  const { chainId } = useWallet();
   const navigate = useNavigate();
-  const goToWritingPage = () => {
-    navigate(WRITING_URI);
-  };
+  const createAndRedirect = useCallback(async () => {
+    if (!chainId) {
+      return;
+    }
+    const createdArticle = await dispatch(
+      createArticle({
+        article: {
+          title: "Untitled",
+          text: "",
+          createdAt: new Date().toISOString(),
+          status: "draft",
+        },
+        encrypt: true,
+        chainName: networks[chainId].litName,
+      })
+    );
+    if (
+      createdArticle &&
+      createdArticle.payload &&
+      "streamId" in createdArticle.payload
+    ) {
+      navigate(`/publish/write/${createdArticle.payload.streamId}`);
+    }
+  }, [chainId]);
+
   return (
     <EntriesContainer>
       <EntriesHeader>
@@ -250,7 +273,9 @@ const Articles = () => {
           size="lg"
           color="primary"
           variant="contained"
-          onClick={goToWritingPage}
+          onClick={createAndRedirect}
+          isLoading={articleCreating}
+          loadingText="Creating..."
         >
           Write a Post
         </Button>

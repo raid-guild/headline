@@ -29,6 +29,8 @@ const GlobalStyle = createGlobalStyle`
 		// remirror
 		.remirror-theme {
 		  width: 100%;
+			max-width: 100rem;
+
 		}
 
 		.remirror-editor-wrapper {

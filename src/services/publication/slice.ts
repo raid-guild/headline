@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import LitJsSdk from "@alexkeating/lit-js-sdk";
+import LitJsSdk from "lit-js-sdk";
 import { ethers } from "ethers";
 import { WebClient } from "@self.id/web";
 import { Web3Service } from "@unlock-protocol/unlock-js";

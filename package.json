@@ -14,7 +14,6 @@
     "test": "node --experimental-json-modules example.js"
   },
   "dependencies": {
-    "@alexkeating/lit-js-sdk": "1.1.143",
     "@ceramicnetwork/stream-caip10-link": "^1.2.9",
     "@datamodels/identity-accounts-crypto": "^0.1.2",
     "@datamodels/identity-accounts-web": "^0.1.2",
@@ -40,6 +39,7 @@
     "electron-fetch": "^1.7.4",
     "ipfs-http-client": "56.0.0",
     "js-base64": "^3.7.2",
+    "lit-js-sdk": "^1.1.149",
     "lodash": "^4.17.21",
     "near-api-js": "^0.44.2",
     "react": "^17.0.2",
@@ -54,7 +54,6 @@
     "vite-plugin-externals": "^0.3.3"
   },
   "devDependencies": {
-    "@3id/connect": "^0.2.5",
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.4",
     "@glazed/devtools": "^0.1.3",

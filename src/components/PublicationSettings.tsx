@@ -43,7 +43,7 @@ const StyledButton = styled(Button)`
 `;
 
 const PublicationSettings = () => {
-  const { address, chainId } = useWallet();
+  const { chainId } = useWallet();
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading

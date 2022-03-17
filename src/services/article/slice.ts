@@ -14,6 +14,7 @@ import {
 import { addPublishRegistryArticle } from "services/publishRegistry/slice";
 
 import { getEncryptionKey, encryptText } from "lib/lit";
+import { storeAndEncryptArticle } from "lib/headline";
 import { RootState } from "store";
 import { ChainName } from "types";
 
@@ -116,33 +117,16 @@ export const createArticle = createAsyncThunk<
     ceramic: client.ceramic,
     model: PUBLISHED_MODELS,
   });
-  let content = args.article.text;
-  let publicationUrl;
+  const content = args.article.text;
   try {
-    if (args.encrypt) {
-      if (!args.article.status) {
-        throw Error("Missing encrypt type");
-      }
-      if (!args.chainName) {
-        throw Error("Missing chain name");
-      }
-      const { publication } = thunkAPI.getState() as RootState;
-      const access =
-        args.article.status === "draft"
-          ? publication.draftAccess
-          : publication.publishAccess;
-      const symmetricKey = await getEncryptionKey(
-        args.chainName,
-        access.encryptedSymmetricKey,
-        access.accessControlConditions
-      );
-      const blob = await encryptText(content, symmetricKey);
-      content = uint8arrayToString(
-        new Uint8Array(await blob.arrayBuffer()),
-        "base64"
-      );
-    }
-    publicationUrl = await storeIpfs({ content });
+    const { publication } = thunkAPI.getState() as RootState;
+    const publicationUrl = await storeAndEncryptArticle(
+      args.chainName,
+      publication,
+      args.article.status,
+      content,
+      args.encrypt
+    );
 
     const baseArticle = {
       publicationUrl: publicationUrl,
@@ -166,6 +150,7 @@ export const createArticle = createAsyncThunk<
     // TODO: Is this necessary with the article registry
     thunkAPI.dispatch(articleActions.create(article));
     thunkAPI.dispatch(addRegistryArticle(streamId));
+    thunkAPI.dispatch(articleRegistryActions.add(article));
     // save to registry
     return article;
   } catch (err) {
@@ -186,44 +171,19 @@ export const updateArticle = createAsyncThunk(
     thunkAPI
   ) => {
     const client = await getClient();
-    let content = args.article.text || "";
+    const content = args.article.text || "";
     const { articleRegistry } = thunkAPI.getState() as RootState;
     const existingArticle = articleRegistry[args.streamId];
-    let publicationUrl;
     try {
-      if (args.encrypt && args.article.status !== "published") {
-        if (!args.article.status) {
-          throw Error("Missing encrypt type");
-        }
-        if (!args.chainName) {
-          throw Error("Missing chain name");
-        }
-        const { publication } = thunkAPI.getState() as RootState;
-        const access =
-          args.article.status === "draft"
-            ? publication.draftAccess
-            : publication.publishAccess;
-        const symmetricKey = await getEncryptionKey(
-          args.chainName,
-          access.encryptedSymmetricKey,
-          access.accessControlConditions
-        );
-        const blob = await encryptText(content, symmetricKey);
-        content = uint8arrayToString(
-          new Uint8Array(await blob.arrayBuffer()),
-          "base64"
-        );
-      }
-      const ipfs = getIPFSClient();
-      const cid = await ipfs.add(
-        { content: content },
-        {
-          cidVersion: 1,
-          hashAlg: "sha2-256",
-        }
+      // if (args.encrypt && args.article.status !== "published") {
+      const { publication } = thunkAPI.getState() as RootState;
+      const publicationUrl = await storeAndEncryptArticle(
+        args.chainName,
+        publication,
+        args.article.status,
+        content,
+        args.encrypt
       );
-      await ipfs.pin.add(CID.parse(cid.path));
-      publicationUrl = `ipfs://${cid.path}`;
 
       const baseArticle = {
         publicationUrl: publicationUrl,
@@ -261,44 +221,18 @@ export const publishArticle = createAsyncThunk(
     thunkAPI
   ) => {
     const client = await getClient();
-    let content = args.article.text || "";
+    const content = args.article.text || "";
     const { articleRegistry } = thunkAPI.getState() as RootState;
     const existingArticle = articleRegistry[args.streamId];
-    let publicationUrl;
     try {
-      if (args.encrypt) {
-        if (!args.article.status) {
-          throw Error("Missing encrypt type");
-        }
-        if (!args.chainName) {
-          throw Error("Missing chain name");
-        }
-        const { publication } = thunkAPI.getState() as RootState;
-        const access = publication.publishAccess;
-        const symmetricKey = await getEncryptionKey(
-          args.chainName,
-          access.encryptedSymmetricKey,
-          access.accessControlConditions
-        );
-        const blob = await encryptText(content, symmetricKey);
-        content = uint8arrayToString(
-          new Uint8Array(await blob.arrayBuffer()),
-          "base64"
-        );
-      }
-      console.log(args);
-      console.log("Content");
-      console.log(content);
-      const ipfs = getIPFSClient();
-      const cid = await ipfs.add(
-        { content: content },
-        {
-          cidVersion: 1,
-          hashAlg: "sha2-256",
-        }
+      const { publication } = thunkAPI.getState() as RootState;
+      const publicationUrl = await storeAndEncryptArticle(
+        args.chainName,
+        publication,
+        "published",
+        content,
+        args.encrypt
       );
-      await ipfs.pin.add(CID.parse(cid.path));
-      publicationUrl = `ipfs://${cid.path}`;
 
       const baseArticle = {
         publicationUrl: publicationUrl,

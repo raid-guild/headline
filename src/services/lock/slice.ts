@@ -71,11 +71,21 @@ export const lockSelectors = {
   listLocks: createSelector(
     [(state: RootState) => state.lock],
     (lockRegistry: LockRegistry) => {
-      console.log("LockRegistry");
-      console.log(lockRegistry);
       return Object.values(lockRegistry).sort(
         (a, b) => a.keyPriceSimple - b.keyPriceSimple
       );
+    }
+  ),
+  paidLocks: createSelector(
+    [(state: RootState) => state.lock],
+    (lockRegistry: LockRegistry) => {
+      const val = Object.values(lockRegistry).filter((lock) => {
+        console.log("Simple");
+        console.log(lock.keyPriceSimple);
+        return lock.keyPriceSimple > 0;
+      });
+      console.log(val);
+      return val;
     }
   ),
 };
@@ -133,6 +143,7 @@ export const verifyLock = createAsyncThunk(
             keyTokenSymbol: symbol,
           })
         );
+        // update lit rules
         await thunkAPI.dispatch(
           updatePublication({
             publication: {

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
@@ -12,7 +12,6 @@ import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
-import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
@@ -190,8 +189,6 @@ const WritingPage = () => {
       otherParams["paid"] = paid;
     }
     if (localStreamId) {
-      console.log("Updateing");
-      console.log(article);
       await dispatch(
         updateArticle({
           article: {
@@ -201,31 +198,10 @@ const WritingPage = () => {
             ...otherParams,
           },
           streamId: localStreamId,
-          encrypt: true, // TODO change to true
+          encrypt: article?.status !== "published" || article?.paid === true,
           chainName: networks[chainId].litName,
         })
       );
-    } else {
-      const createdArticle = await dispatch(
-        createArticle({
-          article: {
-            title: title,
-            text: markdown,
-            createdAt: new Date().toISOString(),
-            status: "draft",
-            ...otherParams,
-          },
-          encrypt: true, // TODO change to true
-          chainName: networks[chainId].litName,
-        })
-      );
-      if (
-        createdArticle &&
-        createdArticle.payload &&
-        "streamId" in createdArticle.payload
-      ) {
-        setLocalStreamId(createdArticle.payload.streamId);
-      }
     }
   };
 

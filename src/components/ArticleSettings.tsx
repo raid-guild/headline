@@ -21,6 +21,7 @@ import {
   articleRegistrySelectors,
   removeRegistryArticle,
 } from "services/articleRegistry/slice";
+import { lockSelectors } from "services/lock/slice";
 import { publishArticle } from "services/article/slice";
 
 import { useAppDispatch, useAppSelector } from "store";
@@ -240,6 +241,7 @@ export const ArticleSettings = ({
   const [saving, setSaving] = useState(false);
 
   const loadingDelete = useAppSelector((state) => state.removeArticle.loading);
+  const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
   const navigate = useNavigate();
 
   const radio = useRadioState({
@@ -270,6 +272,10 @@ export const ArticleSettings = ({
     }
   }, []);
 
+  console.log("Length");
+  console.log(locks);
+  console.log(locks.length);
+
   return (
     <Dialog
       baseId="article-settings"
@@ -288,7 +294,10 @@ export const ArticleSettings = ({
     >
       <DialogContainer>
         <Text size="base">Post setting</Text>
-        <ReceiverSettings radio={radio} allowPaid={false} />
+        <ReceiverSettings
+          radio={radio}
+          allowPaid={locks.length > 0 ? true : false}
+        />
         <SocialPreview
           description={description}
           setDescription={setDescription}
@@ -348,6 +357,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   const publishLoading = useAppSelector(
     (state) => state.publishArticle.loading
   );
+  const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
 
   const [hide, setHide] = useState(false);
   const [previewImg, setPreviewImg] = useState<File | null>(null);
@@ -382,12 +392,15 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           variant="contained"
           onClick={() => setHide(false)}
         >
-          Published
+          {article?.status === "published" ? "Published" : "Publish"}
         </Button>
       }
     >
       <DialogContainer>
-        <ReceiverSettings radio={radio} allowPaid={false} />
+        <ReceiverSettings
+          radio={radio}
+          allowPaid={locks.length > 0 ? true : false}
+        />
         <SocialPreview
           description={description}
           setDescription={setDescription}
