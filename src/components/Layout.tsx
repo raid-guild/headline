@@ -29,7 +29,6 @@ export const Layout = styled.div`
     / 40rem 1fr;
   @media (max-width: 768px) {
     padding-bottom: 10rem;
-
     grid-template:
       "header"
       "body"

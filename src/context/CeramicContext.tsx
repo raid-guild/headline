@@ -74,7 +74,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
         `${address}@eip155:1`,
         {}
       );
-      console.log("Link");
+      console.log("Link - Ceramic Context", link);
       console.log(link);
       if (!link.did || link.did !== did?.id) {
         await link.setDid(d, authProvider, {});

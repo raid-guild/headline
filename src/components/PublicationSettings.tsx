@@ -37,6 +37,7 @@ const PublicationSettingsContainer = styled.div`
     align-items: center;
     justify-content: center;
     width: auto;
+    min-height: 30rem;
   }
 `;
 

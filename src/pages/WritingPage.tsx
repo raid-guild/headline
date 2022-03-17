@@ -47,6 +47,20 @@ const StyledBody = styled(BodyContainer)`
   margin-bottom: 7rem;
   @media (max-width: 768px) {
     margin: 2.4rem;
+    min-width: 0;
+    padding-bottom: 4rem;
+    & #id-2.remirror-toolbar {
+      align-items: flex-start;
+      flex-wrap: wrap;
+      flex-basis: 40%;
+      background: #f8f8f8;
+      & .remirror-group {
+        margin: 0;
+      }
+    }
+    & .remirror-editor-wrapper {
+      padding-bottom: 4rem;
+    }
   }
 `;
 
@@ -98,6 +112,8 @@ const StyledInput = styled(Input)`
   font-weight: ${({ theme }) => theme.title.md.fontWeight};
   color: ${({ theme }) => theme.colors.grey};
   @media (max-width: 768px) {
+    width: 80%;
+    min-width: 0;
   }
 `;
 

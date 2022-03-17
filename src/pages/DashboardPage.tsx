@@ -244,7 +244,7 @@ const StyledButton = styled(Button)`
 `;
 
 // in publication container
-const LoggedInBody = () => {
+const LoggedInBody = (disconnect) => {
   const navigate = useNavigate();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
@@ -315,7 +315,11 @@ const LoggedInBody = () => {
 };
 
 const DashboardPage = () => {
+<<<<<<< HEAD
   const { connect, did, isCeramicConnecting } = useCeramic();
+=======
+  const { connect, did, disconnect, isCeramicConnecting } = useCermaic();
+>>>>>>> 3251a92 ((Squashed) Added mobile styles for WritingPage, PublicationSettings, and CreatorPage (no content view). Removed @3id/connect. Added border-box styles to global to prevent grid spilling over.)
   const { web3Service } = useUnlock();
   const { litClient } = useLit();
   const { connectWallet, isConnecting, provider, address, chainId } =
