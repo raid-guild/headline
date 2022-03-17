@@ -26,7 +26,7 @@ import { lockSelectors } from "services/lock/slice";
 import { publishArticle } from "services/article/slice";
 
 import { useAppDispatch, useAppSelector } from "store";
-import { fetchIPFS } from "lib/ipfs";
+import { fetchIPFS, storeIpfs } from "lib/ipfs";
 import { networks } from "lib/networks";
 
 import portrait from "assets/portrait.svg";
@@ -371,11 +371,26 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
 
   const publish = async () => {
     if (chainId && client) {
+      let previewUrl = "";
+      if (previewImg) {
+        previewUrl = await storeIpfs(await previewImg.arrayBuffer());
+      }
+
+      const readyArticle = {
+        ...article,
+        description: description || article?.description,
+        previewImg: previewUrl || article?.previewImg,
+        paid: radio.state !== "free",
+      };
+
+      console.log(radio);
+      console.log("Published article");
+      console.log(article);
       await dispatch(
         publishArticle({
-          article,
+          article: readyArticle,
           streamId,
-          encrypt: article?.paid || false,
+          encrypt: readyArticle?.paid || false,
           chainName: networks[chainId].litName,
           client,
         })

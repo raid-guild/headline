@@ -67,6 +67,7 @@ export const publicationSlice = createSlice({
       state.mailTo = action.payload.mailTo || "";
       state.apiKey = action.payload.apiKey || "";
       state.streamId = action.payload.streamId || "";
+      console.log(`publication id ${action.payload.streamId}`);
       state.registryId = action.payload.registryId || "";
     },
   },

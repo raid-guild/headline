@@ -18,7 +18,6 @@ import PublicToolbar from "components/PublicToolbar";
 import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
-import { networks } from "lib/networks";
 import profile from "assets/obsidian.png";
 import { checkoutRedirect } from "lib/unlock";
 
