@@ -4,8 +4,10 @@ import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
+
 import lock_example from "assets/lock_example.svg";
 import checkmark from "assets/checkmark.svg";
+import { useCeramic } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CardContainer, ArticleEntries } from "components/ArticleCard";
 import Button from "components/Button";
@@ -29,6 +31,7 @@ import ToolbarItem from "components/ToolbarItem";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
+import { createArticle } from "services/article/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 import { Article } from "services/article/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
@@ -205,11 +208,6 @@ const EmtptyEntriesMessage = () => {
       <Text size="base" color="helpText" weight="semibold">
         You havent written any posts yet
       </Text>
-      <Link to="/publish/write">
-        <Text size="sm" color="primary" weight="semibold">
-          Write a new post
-        </Text>
-      </Link>
     </EmptyCardContainer>
   );
 };
@@ -236,10 +234,39 @@ const Articles = () => {
   const articleRegistry = useAppSelector(
     (state) => state.articleRegistry // Name is required in the schema
   );
+  const articleCreating = useAppSelector(
+    (state) => state.createArticle.loading // Name is required in the schema
+  );
+  const dispatch = useAppDispatch();
+  const { chainId } = useWallet();
+  const { client } = useCeramic();
   const navigate = useNavigate();
-  const goToWritingPage = () => {
-    navigate(WRITING_URI);
-  };
+  const createAndRedirect = useCallback(async () => {
+    if (!chainId || !client) {
+      return;
+    }
+    const createdArticle = await dispatch(
+      createArticle({
+        article: {
+          title: "Untitled",
+          text: "",
+          createdAt: new Date().toISOString(),
+          status: "draft",
+        },
+        client,
+        encrypt: true,
+        chainName: networks[chainId].litName,
+      })
+    );
+    if (
+      createdArticle &&
+      createdArticle.payload &&
+      "streamId" in createdArticle.payload
+    ) {
+      navigate(`/publish/write/${createdArticle.payload.streamId}`);
+    }
+  }, [chainId]);
+
   return (
     <EntriesContainer>
       <EntriesHeader>
@@ -250,14 +277,19 @@ const Articles = () => {
           size="lg"
           color="primary"
           variant="contained"
-          onClick={goToWritingPage}
+          onClick={createAndRedirect}
+          isLoading={articleCreating}
+          loadingText="Creating..."
         >
           Write a Post
         </Button>
       </EntriesHeader>
       <CardContainer>
         {Object.keys(articleRegistry).length ? (
-          <ArticleEntries articleRegistry={articleRegistry} />
+          <ArticleEntries
+            articleRegistry={articleRegistry}
+            publicationId={null}
+          />
         ) : (
           <EmtptyEntriesMessage />
         )}
@@ -280,6 +312,7 @@ const SuccessCardContainer = styled.div`
 const Locks = () => {
   const dispatch = useAppDispatch();
   const { provider } = useWallet();
+  const { client } = useCeramic();
   const [submitted, setSubmitted] = useState(false);
   const [lockAddress, setLockAddress] = useState("");
   const [hideModal, setHideModal] = useState(false);
@@ -297,13 +330,14 @@ const Locks = () => {
   const locks = useAppSelector((state) => lockSelectors.listLocks(state));
   const { web3Service } = useUnlock();
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    if (web3Service && provider) {
+    if (web3Service && provider && client) {
       dispatch(
         verifyLock({
           address: data.lockAddress,
           chainId: data.lockChain,
           web3Service,
           provider,
+          client,
         })
       );
       setSubmitted(true);
@@ -435,6 +469,7 @@ const SettingsContainer = styled.div`
 const PublishBody = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const toolbar = useToolbarState();
   const params = useParams();
   const navigate = useNavigate();
@@ -446,10 +481,12 @@ const PublishBody = () => {
 
   // fetch registry display top 5
   useEffect(() => {
-    if (!chainId) {
+    if (!chainId || !client) {
       return;
     }
-    dispatch(fetchArticleRegistry({ chainName: networks[chainId]?.litName }));
+    dispatch(
+      fetchArticleRegistry({ chainName: networks[chainId]?.litName, client })
+    );
   }, []);
 
   const handleClick = useCallback(

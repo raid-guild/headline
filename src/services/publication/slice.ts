@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import LitJsSdk from "@alexkeating/lit-js-sdk";
+import LitJsSdk from "lit-js-sdk";
 import { ethers } from "ethers";
 import { WebClient } from "@self.id/web";
 import { Web3Service } from "@unlock-protocol/unlock-js";
 
-import { getClient } from "lib/ceramic";
 import { getKeyEncryptText, getKeyAndDecrypt } from "lib/lit";
 import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
@@ -140,6 +139,7 @@ export const createPublication = createAsyncThunk(
   async (
     args: {
       publication: Omit<Publication, "draftAccess" | "publishAccess">;
+      client: WebClient;
       address: string;
       chainName: string;
     },
@@ -149,7 +149,7 @@ export const createPublication = createAsyncThunk(
       return;
     }
     const pub = args.publication;
-    const client = await getClient();
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -177,6 +177,7 @@ export const createPublication = createAsyncThunk(
         symmetricKey: draftKey,
         authSig,
         chain: args.chainName,
+        permanant: false,
       });
 
       const publishKey = await generateSymmetricKey();
@@ -185,6 +186,7 @@ export const createPublication = createAsyncThunk(
         symmetricKey: publishKey,
         authSig,
         chain: args.chainName,
+        permanant: false,
       });
 
       const publication = {
@@ -224,10 +226,11 @@ export const fetchPublication = createAsyncThunk(
       provider: ethers.providers.Provider;
       web3Service: Web3Service;
       chainName: ChainName;
+      client: WebClient;
     },
     thunkAPI
   ) => {
-    const client = await getClient();
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -337,11 +340,12 @@ export const updatePublication = createAsyncThunk(
     args: {
       publication: Omit<Publication, "draftAccess" | "publishAccess">;
       chainName: ChainName;
+      client: WebClient;
     },
     thunkAPI
   ) => {
     const pub = args.publication;
-    const client = await getClient();
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,

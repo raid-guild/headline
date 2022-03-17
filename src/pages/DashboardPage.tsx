@@ -22,7 +22,7 @@ import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
 import { networks } from "lib/networks";
 import { useAppDispatch, useAppSelector } from "store";
-import { useCermaic, CeramicContextType } from "context/CeramicContext";
+import { useCeramic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
 
@@ -89,7 +89,10 @@ const BodyFooterContainer = styled.div`
 const LoggedOutBody = ({
   connect,
   isConnecting,
-}: Pick<CeramicContextType, "connect"> & { isConnecting: boolean }) => {
+}: {
+  connect: () => void;
+  isConnecting: boolean;
+}) => {
   return (
     <DashboardContainer>
       <BodyTitleContainer>
@@ -233,7 +236,7 @@ const LearnMoreCopyContainer = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-  min-width: 295px;
+  max-width: 19rem;
   @media (max-width: 768px) {
     margin-bottom: 1.6rem;
   }
@@ -311,7 +314,7 @@ const LoggedInBody = () => {
 };
 
 const DashboardPage = () => {
-  const { connect, did, isCeramicConnecting } = useCermaic();
+  const { connect, did, isCeramicConnecting } = useCeramic();
   const { web3Service } = useUnlock();
   const { connectWallet, isConnecting, provider, address, chainId } =
     useWallet();
@@ -319,21 +322,21 @@ const DashboardPage = () => {
 
   const connectToServices = useCallback(async () => {
     await connectWallet();
-    await connect();
+    const client = await connect();
 
-    // fetch key pieces of data
-    if (web3Service && provider && chainId) {
-      dispatch(
+    // fetch key pieces of data'
+    if (web3Service && provider && chainId && client) {
+      await dispatch(
         fetchPublication({
           provider,
           web3Service,
-
+          client,
           chainName: networks[chainId].litName,
         })
       );
     }
-    dispatch(fetchBasicProfile(address || ""));
-  }, [provider]);
+    await dispatch(fetchBasicProfile(address || ""));
+  }, [chainId, web3Service, provider]);
   return (
     <Layout>
       <HeaderContainer>

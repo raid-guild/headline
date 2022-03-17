@@ -66,3 +66,5 @@ export const getChainIdByName = (chainName: ChainLabel) => {
     return option.value === chainName;
   });
 };
+
+export const litChains = Object.values(networks).map((val) => val.litName);

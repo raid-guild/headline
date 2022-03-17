@@ -8,7 +8,7 @@ import { Caip10Link } from "@ceramicnetwork/stream-caip10-link";
 export type CeramicContextType = {
   did: DID | null;
   client: WebClient | null;
-  connect: () => Promise<void>;
+  connect: () => Promise<WebClient | undefined>;
   disconnect: () => Promise<void>;
   isCeramicConnecting: boolean;
 };
@@ -86,6 +86,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
     setDid(d);
     setClient(c);
     setIsConnecting(false);
+    return c;
   };
 
   const disconnect = async () => {
@@ -109,4 +110,4 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
   );
 };
 
-export const useCermaic = () => useContext(CeramicContext);
+export const useCeramic = () => useContext(CeramicContext);

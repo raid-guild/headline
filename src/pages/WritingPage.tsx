@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
@@ -7,17 +7,17 @@ import { useWallet } from "@raidguild/quiver";
 import { useRemirror, useHelpers } from "@remirror/react";
 import { useAppSelector, useAppDispatch } from "store";
 
+import { useCeramic } from "context/CeramicContext";
 import { ArticleSettings, PublishModal } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Input from "components/Input";
 import MarkdownEditor from "components/MarkdownEditor";
-import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
-import { createArticle, updateArticle } from "services/article/slice";
+import { updateArticle } from "services/article/slice";
 import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
 import profile from "assets/obsidian.png";
@@ -142,15 +142,15 @@ const MarkdownSave = ({
 const WritingPage = () => {
   const { streamId } = useParams();
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const dispatch = useAppDispatch();
-  const [localStreamId, setLocalStreamId] = useState(streamId);
   const { state, onChange } = useRemirror({});
   const articleLoading = useAppSelector((state) => state.createArticle.loading);
   const addRegistryLoading = useAppSelector(
     (state) => state.addArticle.loading
   );
   const article = useAppSelector((state) =>
-    articleRegistrySelectors.getArticleByStreamId(state, localStreamId || "")
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
   const [title, setTitle] = useState(article?.title || "Untitled");
 
@@ -189,9 +189,7 @@ const WritingPage = () => {
     if (paid) {
       otherParams["paid"] = paid;
     }
-    if (localStreamId) {
-      console.log("Updateing");
-      console.log(article);
+    if (streamId && client) {
       await dispatch(
         updateArticle({
           article: {
@@ -200,32 +198,12 @@ const WritingPage = () => {
             status: article?.status || "draft",
             ...otherParams,
           },
-          streamId: localStreamId,
-          encrypt: true, // TODO change to true
+          client,
+          streamId: streamId,
+          encrypt: article?.status !== "published" || article?.paid === true,
           chainName: networks[chainId].litName,
         })
       );
-    } else {
-      const createdArticle = await dispatch(
-        createArticle({
-          article: {
-            title: title,
-            text: markdown,
-            createdAt: new Date().toISOString(),
-            status: "draft",
-            ...otherParams,
-          },
-          encrypt: true, // TODO change to true
-          chainName: networks[chainId].litName,
-        })
-      );
-      if (
-        createdArticle &&
-        createdArticle.payload &&
-        "streamId" in createdArticle.payload
-      ) {
-        setLocalStreamId(createdArticle.payload.streamId);
-      }
     }
   };
 
@@ -250,8 +228,8 @@ const WritingPage = () => {
           <Text size="sm" color="helpText">
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
-          <ArticleSettings streamId={localStreamId} saveArticle={saveArticle} />
-          <PublishModal streamId={localStreamId || ""} />
+          <ArticleSettings streamId={streamId} saveArticle={saveArticle} />
+          <PublishModal streamId={streamId || ""} />
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>

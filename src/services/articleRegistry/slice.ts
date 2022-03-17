@@ -4,14 +4,11 @@ import { TileLoader } from "@glazed/tile-loader";
 import { DataModel } from "@glazed/datamodel";
 import { WebClient } from "@self.id/web";
 import { DIDDataStore } from "@glazed/did-datastore";
-import { getClient } from "lib/ceramic";
-import { getEncryptionKey, decryptText } from "lib/lit";
-import { fetchIPFS } from "lib/ipfs";
+import { fetchAndDecryptArticle } from "lib/headline";
 import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
-import uint8arrayFromString from "uint8arrays/from-string";
 import { createSelector } from "@reduxjs/toolkit";
 
 type ArticleRegistry = { [key: string]: Article };
@@ -95,8 +92,10 @@ export const removeArticleSlice = createSlice({
 // async thunk that creates a publication
 export const addRegistryArticle = createAsyncThunk(
   "articleRegistry/add",
-  async (streamId: string, thunkAPI) => {
-    const client = await getClient();
+  async (args: { streamId: string; client: WebClient }, thunkAPI) => {
+    const streamId = args.streamId;
+    const client = args.client;
+
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -114,9 +113,10 @@ export const addRegistryArticle = createAsyncThunk(
 
 // async thunk that creates a publication
 export const removeRegistryArticle = createAsyncThunk(
-  "articleRegistry/add",
-  async (streamId: string, thunkAPI) => {
-    const client = await getClient();
+  "articleRegistry/remove",
+  async (args: { streamId: string; client: WebClient }, thunkAPI) => {
+    const streamId = args.streamId;
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -137,10 +137,15 @@ export const removeRegistryArticle = createAsyncThunk(
 export const fetchArticleRegistry = createAsyncThunk(
   "articleRegistry/fetch",
   async (
-    args: { chainName?: ChainName; registry?: string; registryId?: string },
+    args: {
+      chainName?: ChainName;
+      registry?: string;
+      registryId?: string;
+      client: WebClient;
+    },
     thunkAPI
   ) => {
-    const client = await getClient();
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -154,48 +159,19 @@ export const fetchArticleRegistry = createAsyncThunk(
       } else {
         articleRegistry = await store.get(args.registry || "articleRegistry");
       }
-      console.log(articleRegistry);
-      console.log("ArticleRegistry");
       for (const streamId in articleRegistry) {
         // load streams
         const doc = await TileDocument.load(client.ceramic, streamId);
         const ceramicArticle = doc.content as CeramicArticle;
-        const resp = await fetch(
-          `https://ipfs.infura.io:5001/api/v0/cat?arg=${ceramicArticle.publicationUrl
-            .split("/")
-            .at(-1)}`,
-          {
-            method: "post",
-          }
-        );
-        const readableStream = resp?.body?.getReader();
-        if (!readableStream) {
-          return;
-        }
-        const encodedText = await readableStream.read();
-        let articleText = new TextDecoder().decode(encodedText.value);
-
-        if (
+        const { publication } = thunkAPI.getState() as RootState;
+        const articleText = await fetchAndDecryptArticle(
+          args.chainName,
+          publication,
+          ceramicArticle?.status,
+          ceramicArticle.publicationUrl,
           (ceramicArticle.status === "draft" || ceramicArticle.paid) &&
-          args.chainName
-        ) {
-          const { publication } = thunkAPI.getState() as RootState;
-          const access =
-            ceramicArticle.status === "draft"
-              ? publication.draftAccess
-              : publication.publishAccess;
-
-          const symmetricKey = await getEncryptionKey(
-            args.chainName,
-            access.encryptedSymmetricKey,
-            access.accessControlConditions
-          );
-          const a = await decryptText(
-            uint8arrayFromString(articleText, "base64"),
-            symmetricKey
-          ).catch((e) => console.error(e));
-          articleText = a || "";
-        }
+            !!args.chainName
+        );
         thunkAPI.dispatch(
           articleRegistryActions.add({
             ...ceramicArticle,
@@ -224,40 +200,17 @@ export const fetchArticle = createAsyncThunk(
       const doc = await loader.load(args.streamId);
       // load streams
       const ceramicArticle = doc.content as CeramicArticle;
-      const resp = await fetch(
-        `https://ipfs.infura.io:5001/api/v0/cat?arg=${ceramicArticle.publicationUrl
-          .split("/")
-          .at(-1)}`,
-        {
-          method: "post",
-        }
+      const { publication } = thunkAPI.getState() as RootState;
+      const articleText = await fetchAndDecryptArticle(
+        args.chainName,
+        publication,
+        ceramicArticle?.status,
+        ceramicArticle.publicationUrl,
+
+        (ceramicArticle.status === "draft" || ceramicArticle.paid) &&
+          !!args.chainName
       );
-      const readableStream = resp?.body?.getReader();
-      if (!readableStream) {
-        return;
-      }
-      const encodedText = await readableStream.read();
-      let articleText = new TextDecoder().decode(encodedText.value);
 
-      if (
-        ceramicArticle.status === "published" &&
-        ceramicArticle.paid &&
-        args.chainName
-      ) {
-        const { publication } = thunkAPI.getState() as RootState;
-        const access = publication.publishAccess;
-
-        const symmetricKey = await getEncryptionKey(
-          args.chainName,
-          access.encryptedSymmetricKey,
-          access.accessControlConditions
-        );
-        const a = await decryptText(
-          uint8arrayFromString(articleText, "base64"),
-          symmetricKey
-        ).catch((e) => console.error(e));
-        articleText = a || "";
-      }
       thunkAPI.dispatch(
         articleRegistryActions.add({
           ...ceramicArticle,

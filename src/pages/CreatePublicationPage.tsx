@@ -16,6 +16,7 @@ import {
   fetchPublication,
 } from "services/publication/slice";
 
+import { useCeramic } from "context/CeramicContext";
 import Button from "components/Button";
 import BackButton from "components/BackButton";
 import Icon from "components/Icon";
@@ -143,11 +144,12 @@ const CreatePublicationForm = () => {
   } = useForm();
   const dispatch = useAppDispatch();
   const { address, chainId } = useWallet();
+  const { client } = useCeramic();
   const publicationLoading = useAppSelector(
     (state) => state.createPublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    if (!chainId) {
+    if (!chainId || !client) {
       console.error("Chain Id is falsey");
       return;
     }
@@ -158,6 +160,7 @@ const CreatePublicationForm = () => {
           description: data.description || "",
         },
         address: address || "",
+        client,
         chainName: networks[chainId]?.litName,
       })
     );
@@ -192,16 +195,18 @@ const CreatePublicationForm = () => {
 const CreatePublicationPage = () => {
   const dispatch = useAppDispatch();
   const { web3Service } = useUnlock();
+  const { client } = useCeramic();
   const { provider, chainId } = useWallet();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema
   );
   useEffect(() => {
-    if (provider && web3Service && chainId) {
+    if (provider && web3Service && chainId && client) {
       dispatch(
         fetchPublication({
           provider,
           web3Service,
+          client,
           chainName: networks[chainId].litName,
         })
       );

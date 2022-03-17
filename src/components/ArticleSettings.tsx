@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useRadioState, Radio, RadioStateReturn } from "reakit/Radio";
 import styled from "styled-components";
 
+import { useCeramic } from "context/CeramicContext";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -21,6 +22,7 @@ import {
   articleRegistrySelectors,
   removeRegistryArticle,
 } from "services/articleRegistry/slice";
+import { lockSelectors } from "services/lock/slice";
 import { publishArticle } from "services/article/slice";
 
 import { useAppDispatch, useAppSelector } from "store";
@@ -234,12 +236,14 @@ export const ArticleSettings = ({
   ) => void;
 }) => {
   const dispatch = useAppDispatch();
+  const { client } = useCeramic();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
   const [saving, setSaving] = useState(false);
 
   const loadingDelete = useAppSelector((state) => state.removeArticle.loading);
+  const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
   const navigate = useNavigate();
 
   const radio = useRadioState({
@@ -264,11 +268,15 @@ export const ArticleSettings = ({
 
   const deleteArticle = useCallback(async () => {
     // dispatch delete
-    if (streamId) {
-      await dispatch(removeRegistryArticle(streamId));
+    if (streamId && client) {
+      await dispatch(removeRegistryArticle({ streamId, client }));
       navigate("/publish");
     }
   }, []);
+
+  console.log("Length");
+  console.log(locks);
+  console.log(locks.length);
 
   return (
     <Dialog
@@ -288,7 +296,10 @@ export const ArticleSettings = ({
     >
       <DialogContainer>
         <Text size="base">Post setting</Text>
-        <ReceiverSettings radio={radio} allowPaid={false} />
+        <ReceiverSettings
+          radio={radio}
+          allowPaid={locks.length > 0 ? true : false}
+        />
         <SocialPreview
           description={description}
           setDescription={setDescription}
@@ -342,12 +353,14 @@ export const ArticleSettings = ({
 export const PublishModal = ({ streamId }: { streamId: string }) => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
   const publishLoading = useAppSelector(
     (state) => state.publishArticle.loading
   );
+  const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
 
   const [hide, setHide] = useState(false);
   const [previewImg, setPreviewImg] = useState<File | null>(null);
@@ -357,13 +370,14 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   });
 
   const publish = async () => {
-    if (chainId) {
+    if (chainId && client) {
       await dispatch(
         publishArticle({
           article,
           streamId,
           encrypt: article?.paid || false,
           chainName: networks[chainId].litName,
+          client,
         })
       );
       setHide(true);
@@ -382,12 +396,15 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           variant="contained"
           onClick={() => setHide(false)}
         >
-          Published
+          {article?.status === "published" ? "Published" : "Publish"}
         </Button>
       }
     >
       <DialogContainer>
-        <ReceiverSettings radio={radio} allowPaid={false} />
+        <ReceiverSettings
+          radio={radio}
+          allowPaid={locks.length > 0 ? true : false}
+        />
         <SocialPreview
           description={description}
           setDescription={setDescription}

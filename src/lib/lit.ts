@@ -1,8 +1,6 @@
-import LitJsSdk from "@alexkeating/lit-js-sdk";
-import uint8arrayFromString from "uint8arrays/from-string";
-import uint8arrayToString from "uint8arrays/to-string";
-import { storeIpfs } from "lib/ipfs";
+import LitJsSdk from "lit-js-sdk";
 
+import { litChains } from "lib/networks";
 import { ChainName } from "types";
 
 const getClient = () => {
@@ -35,39 +33,49 @@ export type LitAccess = {
 
 export const litClient = getClient();
 
+export const addNftAccessControl = (
+  controls: (AccessControl | Operator)[],
+  chain: ChainName,
+  contractAddress: string
+) => {
+  return [
+    ...controls,
+    { operator: "or" },
+    {
+      contractAddress: contractAddress,
+      standardContractType: "ERC721",
+      chain,
+      method: "balanceOf",
+      parameters: [":userAddress"],
+      returnValueTest: {
+        comparator: ">",
+        value: "0",
+      },
+    },
+  ];
+};
+
 export const singleAddressAccessControl = (
   address: string
-): AccessControl[] => {
+): (AccessControl | Operator)[] => {
   const accessControls = [];
-  // for (const idx in chains) {
-  //   if (idx !== "0") {
-  //     accessControls.push({ operator: "or" });
-  //   }
-  //   accessControls.push({
-  //     contractAddress: "",
-  //     standardContractType: "",
-  //     chain: chains[idx],
-  //     method: "",
-  //     parameters: [":userAddress"],
-  //     returnValueTest: {
-  //       comparator: "=",
-  //       value: address,
-  //     },
-  //   });
-  // }
-  return [
-    {
+  for (const idx in litChains) {
+    if (idx !== "0") {
+      accessControls.push({ operator: "or" });
+    }
+    accessControls.push({
       contractAddress: "",
       standardContractType: "",
-      chain: "ethereum",
+      chain: litChains[idx],
       method: "",
       parameters: [":userAddress"],
       returnValueTest: {
         comparator: "=",
         value: address,
       },
-    },
-  ];
+    });
+  }
+  return accessControls;
 };
 
 // Pulled from Lit
@@ -91,7 +99,7 @@ export async function encryptStringWithKey(
   str: string,
   symmKey: Uint8Array
 ): Promise<Blob> {
-  const encodedString = uint8arrayFromString(str, "utf8");
+  const encodedString = LitJsSdk.uint8arrayFromString(str, "utf8");
   const SYMM_KEY_ALGO_PARAMS = {
     name: "AES-CBC",
     length: 256,
@@ -154,7 +162,7 @@ export const getKeyEncryptText = async (
     accessControlConditions
   );
   const blob = await encryptText(content, symmetricKey);
-  const encodedContent = uint8arrayToString(
+  const encodedContent = LitJsSdk.uint8arrayToString(
     new Uint8Array(await blob.arrayBuffer()),
     "base64"
   );
@@ -173,8 +181,25 @@ export const getKeyAndDecrypt = async (
     accessControlConditions
   );
   const a = await decryptText(
-    uint8arrayFromString(content, "base64"),
+    LitJsSdk.uint8arrayFromString(content, "base64"),
     symmetricKey
   ).catch((e) => console.error(e));
+  return a;
+};
+
+export const getKeyAndEncrypt = async (
+  chainName: ChainName,
+  encryptedSymmetricKey: string,
+  accessControlConditions: (AccessControl | Operator)[],
+  content: string
+) => {
+  const symmetricKey = await getEncryptionKey(
+    chainName,
+    encryptedSymmetricKey,
+    accessControlConditions
+  );
+  const a = await encryptText(content, symmetricKey).catch((e) =>
+    console.error(e)
+  );
   return a;
 };

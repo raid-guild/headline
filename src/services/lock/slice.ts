@@ -1,4 +1,6 @@
 import { ethers } from "ethers";
+import LitJsSdk from "lit-js-sdk";
+import { WebClient } from "@self.id/web";
 import {
   createSelector,
   createSlice,
@@ -8,6 +10,7 @@ import {
 import { RawLock, Web3Service } from "@unlock-protocol/unlock-js";
 
 import { networks } from "lib/networks";
+import { addNftAccessControl, litClient } from "lib/lit";
 import { getTokenSymbolAndNumber } from "lib/token";
 import { updatePublication, Publication } from "services/publication/slice";
 import { RootState } from "store";
@@ -71,11 +74,21 @@ export const lockSelectors = {
   listLocks: createSelector(
     [(state: RootState) => state.lock],
     (lockRegistry: LockRegistry) => {
-      console.log("LockRegistry");
-      console.log(lockRegistry);
       return Object.values(lockRegistry).sort(
         (a, b) => a.keyPriceSimple - b.keyPriceSimple
       );
+    }
+  ),
+  paidLocks: createSelector(
+    [(state: RootState) => state.lock],
+    (lockRegistry: LockRegistry) => {
+      const val = Object.values(lockRegistry).filter((lock) => {
+        console.log("Simple");
+        console.log(lock.keyPriceSimple);
+        return lock.keyPriceSimple > 0;
+      });
+      console.log(val);
+      return val;
     }
   ),
 };
@@ -111,11 +124,13 @@ export const verifyLock = createAsyncThunk(
       chainId: string;
       web3Service: Web3Service;
       provider: ethers.providers.Provider;
+      client: WebClient;
     },
     thunkAPI
   ) => {
     try {
-      const chain = networks[args.chainId].chainNumber;
+      const chainMeta = networks[args.chainId];
+      const chain = chainMeta.chainNumber;
       const lock = await args.web3Service.getLock(args.address, chain);
       if (lock) {
         const { symbol, num } = await getTokenSymbolAndNumber(
@@ -129,10 +144,31 @@ export const verifyLock = createAsyncThunk(
           lockActions.create({
             ...lock,
             lockAddress: args.address.toLowerCase(),
-            keyPriceSimple: num,
+            keyPriceSimple: parseFloat(num),
             keyTokenSymbol: symbol,
           })
         );
+        // update lit rules
+        if (parseFloat(num) > 0) {
+          const authSig = await LitJsSdk.checkAndSignAuthMessage({
+            chain: chainMeta.litName,
+          });
+
+          const controls = addNftAccessControl(
+            publication.publishAccess.accessControlConditions,
+            chainMeta.litName,
+            args.address
+          );
+          await litClient.saveEncryptionKey({
+            accessControlConditions: controls,
+            encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
+              publication.publishAccess.encryptedSymmetricKey
+            ),
+            authSig,
+            chain: chainMeta.litName,
+            permanant: false,
+          });
+        }
         await thunkAPI.dispatch(
           updatePublication({
             publication: {
@@ -143,7 +179,7 @@ export const verifyLock = createAsyncThunk(
                 { address: args.address, chainId: args.chainId },
               ],
             },
-
+            client: args.client,
             chainName: networks[args.chainId].litName,
           })
         );
@@ -189,7 +225,7 @@ export const fetchLocks = createAsyncThunk(
             lockActions.create({
               ...lock,
               lockAddress: lockMeta.address.toLowerCase(),
-              keyPriceSimple: num,
+              keyPriceSimple: parseFloat(num),
               keyTokenSymbol: symbol,
             })
           );
