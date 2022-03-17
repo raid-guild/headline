@@ -1,5 +1,6 @@
 import LitJsSdk from "lit-js-sdk";
 
+import { litChains } from "lib/networks";
 import { ChainName } from "types";
 
 const getClient = () => {
@@ -32,39 +33,62 @@ export type LitAccess = {
 
 export const litClient = getClient();
 
+export const addNftAccessControl = (
+  controls: (AccessControl | Operator)[],
+  chain: ChainName,
+  contractAddress: string
+) => {
+  return [
+    ...controls,
+    { operator: "or" },
+    {
+      contractAddress: contractAddress,
+      standardContractType: "ERC721",
+      chain,
+      method: "balanceOf",
+      parameters: [":userAddress"],
+      returnValueTest: {
+        comparator: ">",
+        value: "0",
+      },
+    },
+  ];
+};
+
 export const singleAddressAccessControl = (
   address: string
 ): AccessControl[] => {
   const accessControls = [];
-  // for (const idx in chains) {
-  //   if (idx !== "0") {
-  //     accessControls.push({ operator: "or" });
-  //   }
-  //   accessControls.push({
-  //     contractAddress: "",
-  //     standardContractType: "",
-  //     chain: chains[idx],
-  //     method: "",
-  //     parameters: [":userAddress"],
-  //     returnValueTest: {
-  //       comparator: "=",
-  //       value: address,
-  //     },
-  //   });
-  // }
-  return [
-    {
+  for (const idx in litChains) {
+    if (idx !== "0") {
+      accessControls.push({ operator: "or" });
+    }
+    accessControls.push({
       contractAddress: "",
       standardContractType: "",
-      chain: "ethereum",
+      chain: litChains[idx],
       method: "",
       parameters: [":userAddress"],
       returnValueTest: {
         comparator: "=",
         value: address,
       },
-    },
-  ];
+    });
+  }
+  return accessControls;
+  // return [
+  //   {
+  //     contractAddress: "",
+  //     standardContractType: "",
+  //     chain: "ethereum",
+  //     method: "",
+  //     parameters: [":userAddress"],
+  //     returnValueTest: {
+  //       comparator: "=",
+  //       value: address,
+  //     },
+  //   },
+  // ];
 };
 
 // Pulled from Lit

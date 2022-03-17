@@ -177,6 +177,7 @@ export const createPublication = createAsyncThunk(
         symmetricKey: draftKey,
         authSig,
         chain: args.chainName,
+        permanant: false,
       });
 
       const publishKey = await generateSymmetricKey();
@@ -185,6 +186,7 @@ export const createPublication = createAsyncThunk(
         symmetricKey: publishKey,
         authSig,
         chain: args.chainName,
+        permanant: false,
       });
 
       const publication = {

@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import LitJsSdk from "lit-js-sdk";
 import {
   createSelector,
   createSlice,
@@ -8,6 +9,7 @@ import {
 import { RawLock, Web3Service } from "@unlock-protocol/unlock-js";
 
 import { networks } from "lib/networks";
+import { addNftAccessControl, litClient } from "lib/lit";
 import { getTokenSymbolAndNumber } from "lib/token";
 import { updatePublication, Publication } from "services/publication/slice";
 import { RootState } from "store";
@@ -125,7 +127,8 @@ export const verifyLock = createAsyncThunk(
     thunkAPI
   ) => {
     try {
-      const chain = networks[args.chainId].chainNumber;
+      const chainMeta = networks[args.chainId];
+      const chain = chainMeta.chainNumber;
       const lock = await args.web3Service.getLock(args.address, chain);
       if (lock) {
         const { symbol, num } = await getTokenSymbolAndNumber(
@@ -144,6 +147,26 @@ export const verifyLock = createAsyncThunk(
           })
         );
         // update lit rules
+        if (parseFloat(num) > 0) {
+          const authSig = await LitJsSdk.checkAndSignAuthMessage({
+            chain: chainMeta.litName,
+          });
+
+          const controls = addNftAccessControl(
+            publication.publishAccess.accessControlConditions,
+            chainMeta.litName,
+            args.address
+          );
+          await litClient.saveEncryptionKey({
+            accessControlConditions: controls,
+            encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
+              publication.publishAccess.encryptedSymmetricKey
+            ),
+            authSig,
+            chain: chainMeta.litName,
+            permanant: false,
+          });
+        }
         await thunkAPI.dispatch(
           updatePublication({
             publication: {
