@@ -236,6 +236,7 @@ export const ArticleSettings = ({
   ) => void;
 }) => {
   const dispatch = useAppDispatch();
+  const { client } = useCeramic();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
@@ -267,7 +268,7 @@ export const ArticleSettings = ({
 
   const deleteArticle = useCallback(async () => {
     // dispatch delete
-    if (streamId) {
+    if (streamId && client) {
       await dispatch(removeRegistryArticle({ streamId, client }));
       navigate("/publish");
     }
@@ -369,7 +370,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   });
 
   const publish = async () => {
-    if (chainId) {
+    if (chainId && client) {
       await dispatch(
         publishArticle({
           article,

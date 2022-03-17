@@ -182,6 +182,10 @@ export const updateArticle = createAsyncThunk(
         content,
         args.encrypt
       );
+      if (!publicationUrl) {
+        console.error("No publication url");
+        return;
+      }
 
       const baseArticle = {
         publicationUrl: publicationUrl,
@@ -215,7 +219,7 @@ export const publishArticle = createAsyncThunk(
       streamId: string;
       encrypt?: boolean;
       chainName?: ChainName;
-			client: WebClient;
+      client: WebClient;
     },
     thunkAPI
   ) => {
@@ -232,6 +236,10 @@ export const publishArticle = createAsyncThunk(
         content,
         args.encrypt
       );
+      if (!publicationUrl) {
+        console.error("No publication url");
+        return;
+      }
 
       const baseArticle = {
         publicationUrl: publicationUrl,
@@ -250,7 +258,9 @@ export const publishArticle = createAsyncThunk(
       };
       await doc.update(updatedArticle);
       thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
-      thunkAPI.dispatch(addPublishRegistryArticle(args.streamId));
+      thunkAPI.dispatch(
+        addPublishRegistryArticle({ streamId: args.streamId, client })
+      );
       return baseArticle;
     } catch (err) {
       console.error(err);

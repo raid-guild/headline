@@ -55,7 +55,7 @@ const CreatorPage = () => {
   );
 
   const [active, setActive] = useState("content");
-  const { client } = useCeramic;
+  const { client } = useCeramic();
   const dispatch = useAppDispatch();
   const publication = useAppSelector((state) => state.publication);
 
@@ -75,7 +75,7 @@ const CreatorPage = () => {
 
   useEffect(() => {
     const f = async () => {
-      if (!publicationId) {
+      if (!publicationId || !client) {
         return;
       }
       console.log("PUblication");

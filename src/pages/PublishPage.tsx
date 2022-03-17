@@ -242,7 +242,7 @@ const Articles = () => {
   const { client } = useCeramic();
   const navigate = useNavigate();
   const createAndRedirect = useCallback(async () => {
-    if (!chainId) {
+    if (!chainId || !client) {
       return;
     }
     const createdArticle = await dispatch(
@@ -286,7 +286,10 @@ const Articles = () => {
       </EntriesHeader>
       <CardContainer>
         {Object.keys(articleRegistry).length ? (
-          <ArticleEntries articleRegistry={articleRegistry} />
+          <ArticleEntries
+            articleRegistry={articleRegistry}
+            publicationId={null}
+          />
         ) : (
           <EmtptyEntriesMessage />
         )}

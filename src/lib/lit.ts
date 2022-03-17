@@ -57,7 +57,7 @@ export const addNftAccessControl = (
 
 export const singleAddressAccessControl = (
   address: string
-): AccessControl[] => {
+): (AccessControl | Operator)[] => {
   const accessControls = [];
   for (const idx in litChains) {
     if (idx !== "0") {
@@ -76,19 +76,6 @@ export const singleAddressAccessControl = (
     });
   }
   return accessControls;
-  // return [
-  //   {
-  //     contractAddress: "",
-  //     standardContractType: "",
-  //     chain: "ethereum",
-  //     method: "",
-  //     parameters: [":userAddress"],
-  //     returnValueTest: {
-  //       comparator: "=",
-  //       value: address,
-  //     },
-  //   },
-  // ];
 };
 
 // Pulled from Lit

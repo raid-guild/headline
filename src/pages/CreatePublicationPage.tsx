@@ -149,7 +149,7 @@ const CreatePublicationForm = () => {
     (state) => state.createPublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    if (!chainId) {
+    if (!chainId || !client) {
       console.error("Chain Id is falsey");
       return;
     }
@@ -201,7 +201,7 @@ const CreatePublicationPage = () => {
     (state) => state.publication.name // Name is required in the schema
   );
   useEffect(() => {
-    if (provider && web3Service && chainId) {
+    if (provider && web3Service && chainId && client) {
       dispatch(
         fetchPublication({
           provider,

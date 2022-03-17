@@ -144,7 +144,7 @@ export const verifyLock = createAsyncThunk(
           lockActions.create({
             ...lock,
             lockAddress: args.address.toLowerCase(),
-            keyPriceSimple: num,
+            keyPriceSimple: parseFloat(num),
             keyTokenSymbol: symbol,
           })
         );
@@ -225,7 +225,7 @@ export const fetchLocks = createAsyncThunk(
             lockActions.create({
               ...lock,
               lockAddress: lockMeta.address.toLowerCase(),
-              keyPriceSimple: num,
+              keyPriceSimple: parseFloat(num),
               keyTokenSymbol: symbol,
             })
           );

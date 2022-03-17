@@ -86,6 +86,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
     setDid(d);
     setClient(c);
     setIsConnecting(false);
+    return c;
   };
 
   const disconnect = async () => {

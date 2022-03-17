@@ -78,10 +78,10 @@ export const CardContainer = styled.div`
 `;
 export const ArticleEntries = ({
   articleRegistry,
-  publicationId,
+  publicationId = null,
 }: {
   articleRegistry: { [key: string]: Article };
-  publicationId: string;
+  publicationId: string | null;
 }) => {
   return (
     <>

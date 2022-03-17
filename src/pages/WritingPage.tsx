@@ -17,7 +17,7 @@ import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
 import { networks } from "lib/networks";
-import { createArticle, updateArticle } from "services/article/slice";
+import { updateArticle } from "services/article/slice";
 import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
 import profile from "assets/obsidian.png";
@@ -144,14 +144,13 @@ const WritingPage = () => {
   const { chainId } = useWallet();
   const { client } = useCeramic();
   const dispatch = useAppDispatch();
-  const [localStreamId, setLocalStreamId] = useState(streamId);
   const { state, onChange } = useRemirror({});
   const articleLoading = useAppSelector((state) => state.createArticle.loading);
   const addRegistryLoading = useAppSelector(
     (state) => state.addArticle.loading
   );
   const article = useAppSelector((state) =>
-    articleRegistrySelectors.getArticleByStreamId(state, localStreamId || "")
+    articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
   const [title, setTitle] = useState(article?.title || "Untitled");
 
@@ -190,7 +189,7 @@ const WritingPage = () => {
     if (paid) {
       otherParams["paid"] = paid;
     }
-    if (localStreamId) {
+    if (streamId && client) {
       await dispatch(
         updateArticle({
           article: {
@@ -200,7 +199,7 @@ const WritingPage = () => {
             ...otherParams,
           },
           client,
-          streamId: localStreamId,
+          streamId: streamId,
           encrypt: article?.status !== "published" || article?.paid === true,
           chainName: networks[chainId].litName,
         })
@@ -229,8 +228,8 @@ const WritingPage = () => {
           <Text size="sm" color="helpText">
             {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
           </Text>
-          <ArticleSettings streamId={localStreamId} saveArticle={saveArticle} />
-          <PublishModal streamId={localStreamId || ""} />
+          <ArticleSettings streamId={streamId} saveArticle={saveArticle} />
+          <PublishModal streamId={streamId || ""} />
         </RightHeaderContainer>
       </StyledHeaderContainer>
       <StyledBody>

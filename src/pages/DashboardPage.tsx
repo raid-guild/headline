@@ -313,18 +313,17 @@ const LoggedInBody = () => {
 const DashboardPage = () => {
   const { connect, did, isCeramicConnecting } = useCeramic();
   const { web3Service } = useUnlock();
-  const { client } = useCeramic();
   const { connectWallet, isConnecting, provider, address, chainId } =
     useWallet();
   const dispatch = useAppDispatch();
 
   const connectToServices = useCallback(async () => {
     await connectWallet();
-    await connect();
+    const client = await connect();
 
-    // fetch key pieces of data
+    // fetch key pieces of data'
     if (web3Service && provider && chainId && client) {
-      dispatch(
+      await dispatch(
         fetchPublication({
           provider,
           web3Service,
@@ -333,8 +332,8 @@ const DashboardPage = () => {
         })
       );
     }
-    dispatch(fetchBasicProfile(address || ""));
-  }, [provider]);
+    await dispatch(fetchBasicProfile(address || ""));
+  }, [chainId, web3Service, provider]);
   return (
     <Layout>
       <HeaderContainer>

@@ -3,6 +3,7 @@ import { SubmitHandler, FieldValues } from "react-hook-form";
 import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
+import { useCeramic } from "context/CeramicContext";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -45,11 +46,12 @@ const EmailSettings = () => {
   const dispatch = useAppDispatch();
   const [hide, setHide] = useState(false);
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
-    if (!chainId) {
+    if (!chainId || !client) {
       return;
     }
     // dispatch update
@@ -60,6 +62,7 @@ const EmailSettings = () => {
           mailTo: data.mailFrom || "",
         },
         chainName: networks[chainId].litName,
+        client,
       })
     );
     // setHide(true);
