@@ -1,20 +1,5 @@
-import { EthereumAuthProvider, WebClient, ConnectNetwork } from "@self.id/web";
 import { Core } from "@self.id/core";
 import { Caip10Link } from "@ceramicnetwork/stream-caip10-link";
-import { CERAMIC_URL } from "../constants";
-
-export const getClient = async () => {
-  const address = window.ethereum.selectedAddress;
-  const authProvider = new EthereumAuthProvider(window.ethereum, address);
-
-  const client = new WebClient({
-    ceramic: (CERAMIC_URL as string) || "testnet-clay",
-    connectNetwork: "testnet-clay",
-  });
-
-  await client.authenticate(authProvider);
-  return client;
-};
 
 export const fetchProfile = async (address: string) => {
   const core = new Core({ ceramic: "testnet-clay" });

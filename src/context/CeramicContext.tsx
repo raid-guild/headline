@@ -109,4 +109,4 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
   );
 };
 
-export const useCermaic = () => useContext(CeramicContext);
+export const useCeramic = () => useContext(CeramicContext);

@@ -7,6 +7,7 @@ import { useWallet } from "@raidguild/quiver";
 import { useRemirror, useHelpers } from "@remirror/react";
 import { useAppSelector, useAppDispatch } from "store";
 
+import { useCeramic } from "context/CeramicContext";
 import { ArticleSettings, PublishModal } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
@@ -141,6 +142,7 @@ const MarkdownSave = ({
 const WritingPage = () => {
   const { streamId } = useParams();
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const dispatch = useAppDispatch();
   const [localStreamId, setLocalStreamId] = useState(streamId);
   const { state, onChange } = useRemirror({});
@@ -197,6 +199,7 @@ const WritingPage = () => {
             status: article?.status || "draft",
             ...otherParams,
           },
+          client,
           streamId: localStreamId,
           encrypt: article?.status !== "published" || article?.paid === true,
           chainName: networks[chainId].litName,

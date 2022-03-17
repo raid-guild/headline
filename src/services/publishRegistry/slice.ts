@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getClient } from "lib/ceramic";
+import { WebClient } from "@self.id/web";
 import { DataModel } from "@glazed/datamodel";
 import { PUBLISHED_MODELS } from "../../constants";
 import { DIDDataStore } from "@glazed/did-datastore";
 
 export const addPublishRegistryArticle = createAsyncThunk(
   "publishRegistry/add",
-  async (streamId: string, thunkAPI) => {
-    const client = await getClient();
+  async (args: { streamId: string; client: WebClient }, thunkAPI) => {
+    const client = args.client;
+    const streamId = args.streamId;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,

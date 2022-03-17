@@ -22,7 +22,7 @@ import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
 import { networks } from "lib/networks";
 import { useAppDispatch, useAppSelector } from "store";
-import { useCermaic, CeramicContextType } from "context/CeramicContext";
+import { useCeramic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
 
@@ -311,8 +311,9 @@ const LoggedInBody = () => {
 };
 
 const DashboardPage = () => {
-  const { connect, did, isCeramicConnecting } = useCermaic();
+  const { connect, did, isCeramicConnecting } = useCeramic();
   const { web3Service } = useUnlock();
+  const { client } = useCeramic();
   const { connectWallet, isConnecting, provider, address, chainId } =
     useWallet();
   const dispatch = useAppDispatch();
@@ -322,12 +323,12 @@ const DashboardPage = () => {
     await connect();
 
     // fetch key pieces of data
-    if (web3Service && provider && chainId) {
+    if (web3Service && provider && chainId && client) {
       dispatch(
         fetchPublication({
           provider,
           web3Service,
-
+          client,
           chainName: networks[chainId].litName,
         })
       );

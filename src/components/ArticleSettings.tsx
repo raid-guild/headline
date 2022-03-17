@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useRadioState, Radio, RadioStateReturn } from "reakit/Radio";
 import styled from "styled-components";
 
+import { useCeramic } from "context/CeramicContext";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -267,7 +268,7 @@ export const ArticleSettings = ({
   const deleteArticle = useCallback(async () => {
     // dispatch delete
     if (streamId) {
-      await dispatch(removeRegistryArticle(streamId));
+      await dispatch(removeRegistryArticle({ streamId, client }));
       navigate("/publish");
     }
   }, []);
@@ -351,6 +352,7 @@ export const ArticleSettings = ({
 export const PublishModal = ({ streamId }: { streamId: string }) => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
@@ -374,6 +376,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           streamId,
           encrypt: article?.paid || false,
           chainName: networks[chainId].litName,
+          client,
         })
       );
       setHide(true);

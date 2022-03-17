@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import LitJsSdk from "lit-js-sdk";
+import { WebClient } from "@self.id/web";
 import {
   createSelector,
   createSlice,
@@ -123,6 +124,7 @@ export const verifyLock = createAsyncThunk(
       chainId: string;
       web3Service: Web3Service;
       provider: ethers.providers.Provider;
+      client: WebClient;
     },
     thunkAPI
   ) => {
@@ -177,7 +179,7 @@ export const verifyLock = createAsyncThunk(
                 { address: args.address, chainId: args.chainId },
               ],
             },
-
+            client: args.client,
             chainName: networks[args.chainId].litName,
           })
         );

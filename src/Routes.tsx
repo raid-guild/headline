@@ -7,7 +7,7 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { useCermaic } from "context/CeramicContext";
+import { useCeramic } from "context/CeramicContext";
 import ArticlePage from "./pages/ArticlePage";
 import CreatorPage from "./pages/CreatorPage";
 import HomePage from "./pages/HomePage";
@@ -18,7 +18,7 @@ import CreatePublicationPage from "./pages/CreatePublicationPage";
 import WritingPage from "pages/WritingPage";
 
 const RequireAuth = ({ children }: { children: JSX.Element }) => {
-  const { did } = useCermaic();
+  const { did } = useCeramic();
   const location = useLocation();
 
   if (!did) {
@@ -56,14 +56,6 @@ const Routes = () => {
           element={
             <RequireAuth>
               <CreatePublicationPage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path="/publish/write"
-          element={
-            <RequireAuth>
-              <WritingPage />
             </RequireAuth>
           }
         />

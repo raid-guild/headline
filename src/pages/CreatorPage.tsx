@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import profile from "assets/obsidian.png";
 
+import { useCeramic } from "context/CeramicContext";
 import { fetchPublicationByStream } from "services/publication/slice";
 import { useAppDispatch, useAppSelector } from "store";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
@@ -54,6 +55,7 @@ const CreatorPage = () => {
   );
 
   const [active, setActive] = useState("content");
+  const { client } = useCeramic;
   const dispatch = useAppDispatch();
   const publication = useAppSelector((state) => state.publication);
 
@@ -82,6 +84,7 @@ const CreatorPage = () => {
         fetchArticleRegistry({
           registry: "publishRegistry",
           registryId: publication?.registryId,
+          client,
         })
       );
     };

@@ -4,7 +4,6 @@ import { TileLoader } from "@glazed/tile-loader";
 import { DataModel } from "@glazed/datamodel";
 import { WebClient } from "@self.id/web";
 import { DIDDataStore } from "@glazed/did-datastore";
-import { getClient } from "lib/ceramic";
 import { fetchAndDecryptArticle } from "lib/headline";
 import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
 import { RootState } from "store";
@@ -93,8 +92,10 @@ export const removeArticleSlice = createSlice({
 // async thunk that creates a publication
 export const addRegistryArticle = createAsyncThunk(
   "articleRegistry/add",
-  async (streamId: string, thunkAPI) => {
-    const client = await getClient();
+  async (args: { streamId: string; client: WebClient }, thunkAPI) => {
+    const streamId = args.streamId;
+    const client = args.client;
+
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -113,8 +114,9 @@ export const addRegistryArticle = createAsyncThunk(
 // async thunk that creates a publication
 export const removeRegistryArticle = createAsyncThunk(
   "articleRegistry/remove",
-  async (streamId: string, thunkAPI) => {
-    const client = await getClient();
+  async (args: { streamId: string; client: WebClient }, thunkAPI) => {
+    const streamId = args.streamId;
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -135,10 +137,15 @@ export const removeRegistryArticle = createAsyncThunk(
 export const fetchArticleRegistry = createAsyncThunk(
   "articleRegistry/fetch",
   async (
-    args: { chainName?: ChainName; registry?: string; registryId?: string },
+    args: {
+      chainName?: ChainName;
+      registry?: string;
+      registryId?: string;
+      client: WebClient;
+    },
     thunkAPI
   ) => {
-    const client = await getClient();
+    const client = args.client;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,

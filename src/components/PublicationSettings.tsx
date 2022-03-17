@@ -3,6 +3,7 @@ import { useWallet } from "@raidguild/quiver";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
+import { useCeramic } from "context/CeramicContext";
 import Avatar from "components/Avatar";
 import Button from "components/Button";
 import PublicationForm from "components/PublicationForm";
@@ -44,12 +45,13 @@ const StyledButton = styled(Button)`
 
 const PublicationSettings = () => {
   const { chainId } = useWallet();
+  const { client } = useCeramic();
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
   );
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    if (!chainId) {
+    if (!chainId || !client) {
       console.error("Chain Id is falsey");
       return;
     }
@@ -60,6 +62,7 @@ const PublicationSettings = () => {
           description: data.description || "",
         },
         chainName: networks[chainId]?.litName,
+        client,
       })
     );
   }, []);
