@@ -8,7 +8,7 @@ import { Caip10Link } from "@ceramicnetwork/stream-caip10-link";
 export type CeramicContextType = {
   did: DID | null;
   client: WebClient | null;
-  connect: () => Promise<void>;
+  connect: () => Promise<WebClient>;
   disconnect: () => Promise<void>;
   isCeramicConnecting: boolean;
 };
