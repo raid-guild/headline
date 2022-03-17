@@ -89,7 +89,10 @@ const BodyFooterContainer = styled.div`
 const LoggedOutBody = ({
   connect,
   isConnecting,
-}: Pick<CeramicContextType, "connect"> & { isConnecting: boolean }) => {
+}: {
+  connect: () => void;
+  isConnecting: boolean;
+}) => {
   return (
     <DashboardContainer>
       <BodyTitleContainer>
