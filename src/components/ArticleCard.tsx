@@ -44,6 +44,12 @@ const StyledDivider = styled.span`
   }
 `;
 
+const ImageContainer = styled.div`
+  border-radius: 0.4rem;
+  @media (max-width: 768px) {
+  }
+`;
+
 export const ArticleCard = ({
   article,
   redirect,
@@ -75,7 +81,9 @@ export const ArticleCard = ({
             src={previewImg}
           />
         ) : (
-          <MissingImg />
+          <ImageContainer>
+            <MissingImg />
+          </ImageContainer>
         )}
         <DetailsContainer>
           <Title size="md">{article.title}</Title>
@@ -95,7 +103,11 @@ export const CardContainer = styled.div`
   gap: 1.2rem;
   display: flex;
   flex-direction: column;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
+
 export const ArticleEntries = ({
   articleRegistry,
   publicationId = null,

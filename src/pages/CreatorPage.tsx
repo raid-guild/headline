@@ -96,6 +96,16 @@ const DescriptionContainer = styled.div`
   margin-top: 1.6rem;
 `;
 
+const EntriesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  @media (max-width: 768px) {
+    min-height: 30rem;
+  }
+`;
+
 const CreatorPage = () => {
   const { publicationId } = useParams();
   const articleRegistry = useAppSelector(
@@ -160,27 +170,29 @@ const CreatorPage = () => {
         <ToolbarContainer>
           <PublicToolbar active={active} setActive={setActive} />
         </ToolbarContainer>
-        <CardContainer>
-          {active === "content" ? (
-            Object.keys(articleRegistry).length ? (
-              <ArticleEntries
-                articleRegistry={articleRegistry}
-                publicationId={publication?.streamId || ""}
-              />
+        <EntriesContainer>
+          <CardContainer>
+            {active === "content" ? (
+              Object.keys(articleRegistry).length ? (
+                <ArticleEntries
+                  articleRegistry={articleRegistry}
+                  publicationId={publication?.streamId || ""}
+                />
+              ) : (
+                <>Nothing to see here</>
+              )
             ) : (
-              <>Nothing to see here</>
-            )
-          ) : (
-            <DescriptionContainer>
-              <Title size="sm" color="label">
-                Description
-              </Title>
-              <Text size="base" color="label">
-                {publication?.description || "No description"}
-              </Text>
-            </DescriptionContainer>
-          )}
-        </CardContainer>
+              <DescriptionContainer>
+                <Title size="sm" color="label">
+                  Description
+                </Title>
+                <Text size="base" color="label">
+                  {publication?.description || "No description"}
+                </Text>
+              </DescriptionContainer>
+            )}
+          </CardContainer>
+        </EntriesContainer>
       </StyledBodyContainer>
       <MobileNav />
     </Layout>
