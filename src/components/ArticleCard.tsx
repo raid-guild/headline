@@ -13,6 +13,10 @@ const Container = styled.div`
   padding: 2.4rem;
   display: flex;
   gap: 2.4rem;
+  border-radius: 0.4rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const MissingImg = styled.div`
@@ -25,6 +29,19 @@ const DetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.6rem;
+`;
+
+const DetailsMetadataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  justify-content: space-between;
+`;
+
+const StyledDivider = styled.span`
+  &:after {
+    content: "|";
+  }
 `;
 
 export const ArticleCard = ({
@@ -62,8 +79,11 @@ export const ArticleCard = ({
         )}
         <DetailsContainer>
           <Title size="md">{article.title}</Title>
-          <Text size="md">{article?.description || "None"}</Text>
-          <Text size="md">{`${date.toDateString()}`}</Text>
+          <DetailsMetadataContainer>
+            <Text size="md">{article?.description || "None"}</Text>
+            {/* <StyledDivider /> */}
+            <Text size="md">{`${date.toDateString()}`}</Text>
+          </DetailsMetadataContainer>
         </DetailsContainer>
       </Container>
     </Link>
