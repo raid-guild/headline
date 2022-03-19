@@ -31,6 +31,7 @@ const StyledDialog = styled(BaseDialog)`
   @media (max-width: 768px) {
     padding: 1.6rem;
     overflow-y: scroll;
+    width: 90%;
   }
 `;
 
