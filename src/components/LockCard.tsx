@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
+import Button from "components/Button";
 import Title from "components/Title";
 import Text from "components/Text";
 import { Lock } from "services/lock/slice";
+import { PublicationLock } from "services/publication/slice";
+
+import { useAppSelector } from "store";
+import { checkoutRedirect } from "lib/unlock";
 
 const CardContainer = styled.div`
   display: flex;
@@ -38,6 +43,9 @@ const LockMemberContainer = styled.div`
   border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
   border-top: none;
   padding: 2.4rem 1.6rem 2.4rem 2.4rem;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const LockData = ({ lock }: { lock: Lock }) => {
@@ -76,7 +84,27 @@ export const LockData = ({ lock }: { lock: Lock }) => {
   );
 };
 
-export const LockCard = ({ lock }: { lock: Lock }) => {
+export const LockCard = ({
+  lock,
+  showSubscribe,
+}: {
+  lock: Lock;
+  showSubscribe: boolean;
+}) => {
+  const [pubLock, setPubLock] = useState<PublicationLock | null | undefined>(
+    null
+  );
+  const publication = useAppSelector((state) => state.publication);
+  useEffect(() => {
+    setPubLock(
+      publication.locks.find(
+        (l) => l.address.toLowerCase() === lock.lockAddress
+      )
+    );
+  });
+  console.log("pubLock");
+  console.log(pubLock);
+  console.log(showSubscribe);
   return (
     <CardContainer>
       <LockDataContainer>
@@ -86,18 +114,39 @@ export const LockCard = ({ lock }: { lock: Lock }) => {
         <Text size="sm" color="primary">
           {lock.outstandingKeys} Members
         </Text>
+        {showSubscribe && pubLock ? (
+          <a href={checkoutRedirect(publication?.name, [pubLock])}>
+            <Button size="md" color="primary" variant="contained">
+              Subscribe
+            </Button>
+          </a>
+        ) : (
+          <></>
+        )}
       </LockMemberContainer>
     </CardContainer>
   );
 };
 
-export const LockCards = ({ locks }: { locks: Lock[] }) => {
+export const LockCards = ({
+  locks,
+  showSubscribe = false,
+}: {
+  locks: Lock[];
+  showSubscribe: boolean;
+}) => {
   console.log("Locks");
   console.log(locks);
   return (
     <>
       {locks.map((lock) => {
-        return <LockCard key={lock.lockAddress} lock={lock} />;
+        return (
+          <LockCard
+            key={lock.lockAddress}
+            lock={lock}
+            showSubscribe={showSubscribe}
+          />
+        );
       })}
     </>
   );

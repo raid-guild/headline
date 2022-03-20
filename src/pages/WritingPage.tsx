@@ -8,6 +8,7 @@ import { useRemirror, useHelpers } from "@remirror/react";
 import { useAppSelector, useAppDispatch } from "store";
 
 import { useCeramic } from "context/CeramicContext";
+import { useLit } from "context/LitContext";
 import { ArticleSettings, PublishModal } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
@@ -143,6 +144,7 @@ const WritingPage = () => {
   const { streamId } = useParams();
   const { chainId } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const dispatch = useAppDispatch();
   const { state, onChange } = useRemirror({});
   const articleLoading = useAppSelector((state) => state.createArticle.loading);
@@ -201,6 +203,7 @@ const WritingPage = () => {
           client,
           streamId: streamId,
           encrypt: article?.status !== "published" || article?.paid === true,
+          litClient,
           chainName: networks[chainId].litName,
         })
       );

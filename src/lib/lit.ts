@@ -3,9 +3,11 @@ import LitJsSdk from "lit-js-sdk";
 import { litChains } from "lib/networks";
 import { ChainName } from "types";
 
-const getClient = () => {
+export type LitNodeClient = typeof LitJsSdk.LitNodeClient;
+
+export const getClient = async (): Promise<typeof LitJsSdk.LitNodeClient> => {
   const client = new LitJsSdk.LitNodeClient();
-  client.connect();
+  await client.connect();
   return client;
 };
 
@@ -30,8 +32,6 @@ export type LitAccess = {
   encryptedSymmetricKey: string;
   accessControlConditions: (AccessControl | Operator)[];
 };
-
-export const litClient = getClient();
 
 export const addNftAccessControl = (
   controls: (AccessControl | Operator)[],
@@ -138,7 +138,8 @@ export const decryptText = async (text: Uint8Array, symmKey: Uint8Array) => {
 export const getEncryptionKey = async (
   chain: ChainName,
   encryptedSymmetricKey: string,
-  accessControlConditions: (AccessControl | Operator)[]
+  accessControlConditions: (AccessControl | Operator)[],
+  litClient: typeof LitJsSdk.LitNodeClient
 ): Promise<Uint8Array> => {
   const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain });
   const symmetricKey = await litClient.getEncryptionKey({
@@ -154,12 +155,14 @@ export const getKeyEncryptText = async (
   chainName: ChainName,
   encryptedSymmetricKey: string,
   accessControlConditions: (AccessControl | Operator)[],
-  content: string
+  content: string,
+  client: typeof LitJsSdk.LitNodeClient
 ) => {
   const symmetricKey = await getEncryptionKey(
     chainName,
     encryptedSymmetricKey,
-    accessControlConditions
+    accessControlConditions,
+    client
   );
   const blob = await encryptText(content, symmetricKey);
   const encodedContent = LitJsSdk.uint8arrayToString(
@@ -173,17 +176,21 @@ export const getKeyAndDecrypt = async (
   chainName: ChainName,
   encryptedSymmetricKey: string,
   accessControlConditions: (AccessControl | Operator)[],
-  content: string
+  content: string,
+  client: typeof LitJsSdk.LitNodeClient
 ) => {
   const symmetricKey = await getEncryptionKey(
     chainName,
     encryptedSymmetricKey,
-    accessControlConditions
+    accessControlConditions,
+    client
   );
   const a = await decryptText(
     LitJsSdk.uint8arrayFromString(content, "base64"),
     symmetricKey
-  ).catch((e) => console.error(e));
+  ).catch((e) => {
+    console.error(e);
+  });
   return a;
 };
 
@@ -191,12 +198,14 @@ export const getKeyAndEncrypt = async (
   chainName: ChainName,
   encryptedSymmetricKey: string,
   accessControlConditions: (AccessControl | Operator)[],
-  content: string
+  content: string,
+  client: typeof LitJsSdk.LitNodeClient
 ) => {
   const symmetricKey = await getEncryptionKey(
     chainName,
     encryptedSymmetricKey,
-    accessControlConditions
+    accessControlConditions,
+    client
   );
   const a = await encryptText(content, symmetricKey).catch((e) =>
     console.error(e)

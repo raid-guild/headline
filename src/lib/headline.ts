@@ -1,7 +1,7 @@
 import LitJsSdk from "lit-js-sdk";
 
 import { fetchIPFS, storeIpfs } from "lib/ipfs";
-import { getKeyAndEncrypt, getKeyAndDecrypt } from "lib/lit";
+import { getKeyAndEncrypt, getKeyAndDecrypt, LitNodeClient } from "lib/lit";
 import { Publication } from "services/publication/slice";
 import { ChainName } from "types";
 
@@ -10,6 +10,7 @@ export const storeAndEncryptArticle = async (
   publication: Publication,
   articleStatus: "draft" | "published" | undefined,
   content: string,
+  litClient: LitNodeClient,
   encrypt = false
 ) => {
   let encodedContent = content;
@@ -29,7 +30,8 @@ export const storeAndEncryptArticle = async (
       chainName,
       access.encryptedSymmetricKey,
       access.accessControlConditions,
-      content
+      content,
+      litClient
     );
     if (!encryptedText) {
       console.error("Missing encrypted");
@@ -49,6 +51,7 @@ export const fetchAndDecryptArticle = async (
   publication: Publication,
   articleStatus: "draft" | "published" | undefined,
   publicationUrl: string,
+  litClient: LitNodeClient,
   decrypt = false
 ) => {
   const articleBlob = await fetchIPFS(publicationUrl);
@@ -69,7 +72,8 @@ export const fetchAndDecryptArticle = async (
       chainName,
       access.encryptedSymmetricKey,
       access.accessControlConditions,
-      txt
+      txt,
+      litClient
     );
   }
   return content;

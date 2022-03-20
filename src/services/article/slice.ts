@@ -13,6 +13,7 @@ import { addPublishRegistryArticle } from "services/publishRegistry/slice";
 import { storeAndEncryptArticle } from "lib/headline";
 import { RootState } from "store";
 import { ChainName } from "types";
+import { LitNodeClient } from "lib/lit";
 
 export type CeramicArticle = {
   publicationUrl: string;
@@ -104,6 +105,7 @@ export const createArticle = createAsyncThunk<
     client: WebClient;
     encrypt?: boolean;
     chainName?: ChainName;
+    litClient: LitNodeClient;
   },
   {
     rejectValue: Error;
@@ -122,6 +124,7 @@ export const createArticle = createAsyncThunk<
       publication,
       args.article.status,
       content,
+      args.litClient,
       args.encrypt
     );
 
@@ -165,6 +168,7 @@ export const updateArticle = createAsyncThunk(
       encrypt?: boolean;
       chainName?: ChainName;
       client: WebClient;
+      litClient: LitNodeClient;
     },
     thunkAPI
   ) => {
@@ -180,6 +184,7 @@ export const updateArticle = createAsyncThunk(
         publication,
         args.article.status,
         content,
+        args.litClient,
         args.encrypt
       );
       if (!publicationUrl) {

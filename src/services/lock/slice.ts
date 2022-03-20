@@ -10,7 +10,7 @@ import {
 import { RawLock, Web3Service } from "@unlock-protocol/unlock-js";
 
 import { networks } from "lib/networks";
-import { addNftAccessControl, litClient } from "lib/lit";
+import { addNftAccessControl, LitNodeClient, LitAccess } from "lib/lit";
 import { getTokenSymbolAndNumber } from "lib/token";
 import { updatePublication, Publication } from "services/publication/slice";
 import { RootState } from "store";
@@ -83,11 +83,8 @@ export const lockSelectors = {
     [(state: RootState) => state.lock],
     (lockRegistry: LockRegistry) => {
       const val = Object.values(lockRegistry).filter((lock) => {
-        console.log("Simple");
-        console.log(lock.keyPriceSimple);
         return lock.keyPriceSimple > 0;
       });
-      console.log(val);
       return val;
     }
   ),
@@ -125,18 +122,20 @@ export const verifyLock = createAsyncThunk(
       web3Service: Web3Service;
       provider: ethers.providers.Provider;
       client: WebClient;
+      litClient: LitNodeClient;
     },
     thunkAPI
   ) => {
     try {
       const chainMeta = networks[args.chainId];
       const chain = chainMeta.chainNumber;
+      const litClient = args.litClient;
       const lock = await args.web3Service.getLock(args.address, chain);
       if (lock) {
         const { symbol, num } = await getTokenSymbolAndNumber(
           lock.keyPrice,
           lock.currencyContractAddress,
-          args.provider,
+          // args.provider,
           args.chainId
         );
         const { publication } = thunkAPI.getState() as RootState;
@@ -149,6 +148,7 @@ export const verifyLock = createAsyncThunk(
           })
         );
         // update lit rules
+        const additionalParams = {} as { publishAccess: LitAccess };
         if (parseFloat(num) > 0) {
           const authSig = await LitJsSdk.checkAndSignAuthMessage({
             chain: chainMeta.litName,
@@ -159,16 +159,22 @@ export const verifyLock = createAsyncThunk(
             chainMeta.litName,
             args.address
           );
-          await litClient.saveEncryptionKey({
-            accessControlConditions: controls,
-            encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
-              publication.publishAccess.encryptedSymmetricKey
-            ),
-            authSig,
-            chain: chainMeta.litName,
-            permanant: false,
-          });
+          // const key = await litClient.saveEncryptionKey({
+          //   accessControlConditions: controls,
+          //   encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
+          //     publication.publishAccess.encryptedSymmetricKey
+          //   ),
+          //   authSig,
+          //   chain: chainMeta.litName,
+          //   permanant: false,
+          // });
+          // Update access controls
+          // additionalParams["publishAccess"] = {
+          //   encryptedSymmetricKey: LitJsSdk.uint8arrayToString(key, "base16"),
+          //   accessControlConditions: controls,
+          // };
         }
+        console.log(additionalParams);
         await thunkAPI.dispatch(
           updatePublication({
             publication: {
@@ -178,9 +184,11 @@ export const verifyLock = createAsyncThunk(
                 ...publication.locks,
                 { address: args.address, chainId: args.chainId },
               ],
+              ...additionalParams,
             },
             client: args.client,
             chainName: networks[args.chainId].litName,
+            litClient,
           })
         );
       }
@@ -197,7 +205,7 @@ export const fetchLocks = createAsyncThunk(
   async (
     args: {
       web3Service: Web3Service;
-      provider: ethers.providers.Provider;
+      // provider: ethers.providers.Provider;
       publication: Publication;
     },
     thunkAPI
@@ -217,7 +225,7 @@ export const fetchLocks = createAsyncThunk(
           const { symbol, num } = await getTokenSymbolAndNumber(
             lock.keyPrice,
             lock.currencyContractAddress,
-            args.provider,
+            // args.provider,
             lockMeta.chainId
           );
           const { publication } = thunkAPI.getState() as RootState;

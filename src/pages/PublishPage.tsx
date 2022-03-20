@@ -8,6 +8,7 @@ import styled from "styled-components";
 import lock_example from "assets/lock_example.svg";
 import checkmark from "assets/checkmark.svg";
 import { useCeramic } from "context/CeramicContext";
+import { useLit } from "context/LitContext";
 import { useUnlock } from "context/UnlockContext";
 import { CardContainer, ArticleEntries } from "components/ArticleCard";
 import Button from "components/Button";
@@ -240,6 +241,7 @@ const Articles = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const navigate = useNavigate();
   const createAndRedirect = useCallback(async () => {
     if (!chainId || !client) {
@@ -255,6 +257,7 @@ const Articles = () => {
         },
         client,
         encrypt: true,
+        litClient,
         chainName: networks[chainId].litName,
       })
     );
@@ -329,6 +332,7 @@ const Locks = () => {
 
   const locks = useAppSelector((state) => lockSelectors.listLocks(state));
   const { web3Service } = useUnlock();
+  const { litClient } = useLit();
   const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
     if (web3Service && provider && client) {
       dispatch(
@@ -338,6 +342,7 @@ const Locks = () => {
           web3Service,
           provider,
           client,
+          litClient,
         })
       );
       setSubmitted(true);
@@ -442,7 +447,7 @@ const Locks = () => {
       </EntriesHeader>
       <CardContainer style={{ flexDirection: "row" }}>
         {Object.values(locks || {}).length ? (
-          <LockCards locks={locks} />
+          <LockCards locks={locks} showSubscribe={false} />
         ) : (
           <EmtptyLocksMessage />
         )}

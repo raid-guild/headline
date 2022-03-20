@@ -24,6 +24,7 @@ import { networks } from "lib/networks";
 import { useAppDispatch, useAppSelector } from "store";
 import { useCeramic, CeramicContextType } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
+import { useLit } from "context/LitContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
 
 const DashboardContainer = styled.div`
@@ -316,6 +317,7 @@ const LoggedInBody = () => {
 const DashboardPage = () => {
   const { connect, did, isCeramicConnecting } = useCeramic();
   const { web3Service } = useUnlock();
+  const { litClient } = useLit();
   const { connectWallet, isConnecting, provider, address, chainId } =
     useWallet();
   const dispatch = useAppDispatch();
@@ -332,6 +334,7 @@ const DashboardPage = () => {
           web3Service,
           client,
           chainName: networks[chainId].litName,
+          litClient,
         })
       );
     }

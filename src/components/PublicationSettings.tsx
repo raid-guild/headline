@@ -3,6 +3,7 @@ import { useWallet } from "@raidguild/quiver";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
+import { useLit } from "context/LitContext";
 import { useCeramic } from "context/CeramicContext";
 import Avatar from "components/Avatar";
 import Button from "components/Button";
@@ -46,6 +47,7 @@ const StyledButton = styled(Button)`
 const PublicationSettings = () => {
   const { chainId } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
@@ -63,6 +65,7 @@ const PublicationSettings = () => {
         },
         chainName: networks[chainId]?.litName,
         client,
+        litClient,
       })
     );
   }, []);

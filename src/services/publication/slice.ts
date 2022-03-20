@@ -10,13 +10,15 @@ import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { TileLoader } from "@glazed/tile-loader";
 import {
-  litClient,
+  getClient,
   singleAddressAccessControl,
   generateSymmetricKey,
   LitAccess,
   AccessControl,
   Operator,
+  LitNodeClient,
 } from "lib/lit";
+import { useLit } from "context/LitContext";
 import { fetchLocks } from "services/lock/slice";
 import { RootState } from "store";
 import { ChainName } from "types";
@@ -67,6 +69,7 @@ export const publicationSlice = createSlice({
       state.mailTo = action.payload.mailTo || "";
       state.apiKey = action.payload.apiKey || "";
       state.streamId = action.payload.streamId || "";
+      console.log(`publication id ${action.payload.streamId}`);
       state.registryId = action.payload.registryId || "";
     },
   },
@@ -172,6 +175,7 @@ export const createPublication = createAsyncThunk(
       });
       const draftKey = await generateSymmetricKey();
       const addressAccessControls = singleAddressAccessControl(args.address);
+      const litClient = await getClient();
       const draftEncryptedSymmetricKey = await litClient.saveEncryptionKey({
         accessControlConditions: addressAccessControls,
         symmetricKey: draftKey,
@@ -227,6 +231,7 @@ export const fetchPublication = createAsyncThunk(
       web3Service: Web3Service;
       chainName: ChainName;
       client: WebClient;
+      litClient: LitNodeClient;
     },
     thunkAPI
   ) => {
@@ -259,7 +264,8 @@ Pub jdoc ${doc?.id?.toString()}
           args.chainName,
           publication.draftAccess.encryptedSymmetricKey,
           publication.draftAccess.accessControlConditions,
-          publication.apiKey
+          publication.apiKey,
+          args.litClient
         );
         publication = { ...publication, apiKey };
       }
@@ -273,7 +279,7 @@ Pub jdoc ${doc?.id?.toString()}
         );
         thunkAPI.dispatch(
           fetchLocks({
-            provider: args.provider,
+            // provider: args.provider,
             web3Service: args.web3Service,
             publication,
           })
@@ -338,14 +344,19 @@ export const updatePublication = createAsyncThunk(
   "publication/update",
   async (
     args: {
-      publication: Omit<Publication, "draftAccess" | "publishAccess">;
+      publication: Omit<Publication, "draftAccess" | "publishAccess"> & {
+        publishAccess?: LitAccess;
+        draftAccess?: LitAccess;
+      };
       chainName: ChainName;
       client: WebClient;
+      litClient: LitNodeClient;
     },
     thunkAPI
   ) => {
     const pub = args.publication;
     const client = args.client;
+    const litClient = args.litClient;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -359,6 +370,7 @@ export const updatePublication = createAsyncThunk(
         locks: PublicationLock[];
         mailTo: string;
         apiKey: string;
+        publishAccess?: LitAccess;
       };
       if (pub.name !== undefined) {
         updates["name"] = pub.name;
@@ -372,12 +384,16 @@ export const updatePublication = createAsyncThunk(
       if (pub.mailTo !== undefined) {
         updates["mailTo"] = pub.mailTo;
       }
+      if (pub.publishAccess !== undefined) {
+        updates["publishAccess"] = pub.publishAccess;
+      }
       if (pub.apiKey !== undefined) {
         const content = await getKeyEncryptText(
           args.chainName,
           publication.draftAccess.encryptedSymmetricKey,
           publication.draftAccess.accessControlConditions,
-          pub.apiKey
+          pub.apiKey,
+          litClient
         );
 
         updates["apiKey"] = content;
