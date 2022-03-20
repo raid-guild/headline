@@ -188,7 +188,9 @@ export const getKeyAndDecrypt = async (
   const a = await decryptText(
     LitJsSdk.uint8arrayFromString(content, "base64"),
     symmetricKey
-  ).catch((e) => console.error(e));
+  ).catch((e) => {
+    console.error(e);
+  });
   return a;
 };
 

@@ -344,7 +344,10 @@ export const updatePublication = createAsyncThunk(
   "publication/update",
   async (
     args: {
-      publication: Omit<Publication, "draftAccess" | "publishAccess">;
+      publication: Omit<Publication, "draftAccess" | "publishAccess"> & {
+        publishAccess?: LitAccess;
+        draftAccess?: LitAccess;
+      };
       chainName: ChainName;
       client: WebClient;
       litClient: LitNodeClient;
@@ -353,7 +356,7 @@ export const updatePublication = createAsyncThunk(
   ) => {
     const pub = args.publication;
     const client = args.client;
-    const { litClient } = useLit();
+    const litClient = args.litClient;
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
@@ -367,6 +370,7 @@ export const updatePublication = createAsyncThunk(
         locks: PublicationLock[];
         mailTo: string;
         apiKey: string;
+        publishAccess?: LitAccess;
       };
       if (pub.name !== undefined) {
         updates["name"] = pub.name;
@@ -379,6 +383,9 @@ export const updatePublication = createAsyncThunk(
       }
       if (pub.mailTo !== undefined) {
         updates["mailTo"] = pub.mailTo;
+      }
+      if (pub.publishAccess !== undefined) {
+        updates["publishAccess"] = pub.publishAccess;
       }
       if (pub.apiKey !== undefined) {
         const content = await getKeyEncryptText(

@@ -241,6 +241,7 @@ const Articles = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const navigate = useNavigate();
   const createAndRedirect = useCallback(async () => {
     if (!chainId || !client) {
@@ -256,6 +257,7 @@ const Articles = () => {
         },
         client,
         encrypt: true,
+        litClient,
         chainName: networks[chainId].litName,
       })
     );

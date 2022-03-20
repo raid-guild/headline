@@ -20,7 +20,7 @@ import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import profile from "assets/obsidian.png";
-import { getKeyAndDecrypt, getClient } from "lib/lit";
+import { getKeyAndDecrypt, getClient, addNftAccessControl } from "lib/lit";
 import { checkoutRedirect } from "lib/unlock";
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -73,10 +73,7 @@ const CardContainer = styled.div`
 `;
 
 const GatedModal = ({ visible }: { visible: boolean | string }) => {
-  console.log("Visible");
-  console.log(visible);
   const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
-  console.log(locks);
   return (
     <StyledGatedModal hidden={!visible}>
       <Title size="md" color="helpText">
