@@ -2,8 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "components/Button";
+import Text from "components/Text";
 import { AppWrapper, Layout, BodyContainer } from "components/Layout";
 import LogoWordmark from "components/LogoWordmark";
+import FullLogo from "components/FullLogo";
 import HomeNav from "components/HomeNav";
 import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
@@ -11,7 +13,8 @@ import { DASHBOARD_URI } from "../constants";
 const StyledLayout = styled(Layout)`
   grid-template:
     "header"
-    "body";
+    "body"
+    "footer";
   @media (max-width: 768px) {
     grid-template:
       "header"
@@ -102,15 +105,32 @@ const InternalLink = styled.a`
   color: #000000;
 `;
 
-const ActionContainer = styled.div`
+const HomeFooterContainer = styled.div`
+  width: 100%;
+
+  grid-area: footer;
   display: flex;
-  flex-direction: row;
-  justify-content: center;
   align-items: center;
+  justify-content: space-bewteen;
+`;
+
+const FooterActionContainer = styled.div`
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
   gap: 2.4rem;
+  flex-basis: 32%;
   @media (max-width: 768px) {
     display: none;
   }
+`;
+
+const FooterButton = styled(Button)`
+  border-radius: 8px;
+  width: 26.5rem;
+  height: 6.2rem;
 `;
 
 const HomePage = () => {
@@ -120,20 +140,10 @@ const HomePage = () => {
         <LogoContainer>
           <LogoWordmark />
         </LogoContainer>
-        {/* <ActionContainer>
-          <InternalLink as="a" href="#">
-            How it works
-          </InternalLink>
-          <Link to={DASHBOARD_URI}>
-            <Button color="primary" variant="contained" size="md">
-              Get Started
-            </Button>
-          </Link>
-        </ActionContainer> */}
         <HomeNav />
       </HomeHeaderContainer>
       <StyledBodyContainer>
-        {/* <HeroContainer>
+        <HeroContainer>
           <HeroCTAContainer>
             <HeroHeading>The Decentralized Newsletter.</HeroHeading>
             <HeroTagline>Your Content, Your Readers.</HeroTagline>
@@ -143,8 +153,23 @@ const HomePage = () => {
               </HeroButton>
             </Link>
           </HeroCTAContainer>
-        </HeroContainer> */}
+        </HeroContainer>
       </StyledBodyContainer>
+      <HomeFooterContainer>
+        <LogoContainer>
+          <FullLogo />
+        </LogoContainer>
+        <FooterActionContainer>
+          <Text size="md" color="primary">
+            The Decentralized Publishing Platform
+          </Text>
+          <Link to={DASHBOARD_URI}>
+            <FooterButton color="primary" variant="contained" size="md">
+              Get Started
+            </FooterButton>
+          </Link>
+        </FooterActionContainer>
+      </HomeFooterContainer>
     </StyledAppWrapper>
   );
 };

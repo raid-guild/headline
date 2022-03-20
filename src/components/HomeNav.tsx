@@ -36,8 +36,8 @@ const navItems = [
 
 const HomeNav = () => (
   <NavContainer>
-    {navItems.map((navItem) => (
-      <Link to={navItem.link}>
+    {navItems.map((navItem, idx) => (
+      <Link to={navItem.link} key={idx}>
         <NavText size="md">{navItem.text}</NavText>
       </Link>
     ))}
