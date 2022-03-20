@@ -25,10 +25,7 @@ const StyledLayout = styled(Layout)`
 `;
 
 const StyledMainWrapper = styled(AppWrapper)`
-  padding: 4.8rem;
-  @media (max-width: 768px) {
-    padding: 2.4rem;
-  }
+  background: ${({ theme }) => `${theme.colors.almostWhite}`};
 `;
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -39,6 +36,10 @@ const HomeHeaderContainer = styled.div`
   grid-area: header;
   display: flex;
   flex-direction: column;
+  padding: 4.8rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const HeroContainer = styled(BodyContainer)`
@@ -114,6 +115,8 @@ const HomeFooterContainer = styled.div`
   justify-content: space-bewteen;
   margin: 4rem 0;
   padding: 0 4.8rem 4.8rem;
+  background: ${({ theme }) => `${theme.colors.almostWhite}`};
+
   @media (max-width: 768px) {
     padding: 2.4rem;
   }
@@ -133,6 +136,8 @@ const FooterActionContainer = styled.div`
   }
 `;
 
+const HeadlineTickerContainer = styled.div``;
+
 const StyledLink = styled.a`
   display: block;
   width: 100%;
@@ -144,16 +149,15 @@ const FooterButton = styled(Button)`
 
 const HomePage = () => {
   return (
-    <>
-      <StyledMainWrapper>
-        <HomeHeaderContainer>
-          <LogoContainer>
-            <LogoWordmark />
-          </LogoContainer>
-          <HomeNav />
-        </HomeHeaderContainer>
-        <StyledBodyContainer>
-          {/* <HeroContainer>
+    <StyledMainWrapper>
+      <HomeHeaderContainer>
+        <LogoContainer>
+          <LogoWordmark />
+        </LogoContainer>
+        <HomeNav />
+      </HomeHeaderContainer>
+      <StyledBodyContainer>
+        {/* <HeroContainer>
           <HeroCTAContainer>
             <HeroHeading>The Decentralized Newsletter.</HeroHeading>
             <HeroTagline>Your Content, Your Readers.</HeroTagline>
@@ -164,8 +168,7 @@ const HomePage = () => {
             </Link>
           </HeroCTAContainer>
         </HeroContainer> */}
-        </StyledBodyContainer>
-      </StyledMainWrapper>
+      </StyledBodyContainer>
       <FAQSection />
       <HomeFooterContainer>
         <LogoContainer>
@@ -182,7 +185,7 @@ const HomePage = () => {
           </StyledLink>
         </FooterActionContainer>
       </HomeFooterContainer>
-    </>
+    </StyledMainWrapper>
   );
 };
 
