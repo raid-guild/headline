@@ -7,6 +7,7 @@ import { AppWrapper, Layout, BodyContainer } from "components/Layout";
 import LogoWordmark from "components/LogoWordmark";
 import FullLogo from "components/FullLogo";
 import HomeNav from "components/HomeNav";
+import FAQSection from "components/FAQSection";
 import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
 
@@ -23,7 +24,7 @@ const StyledLayout = styled(Layout)`
   }
 `;
 
-const StyledAppWrapper = styled(AppWrapper)`
+const StyledMainWrapper = styled(AppWrapper)`
   padding: 4.8rem;
   @media (max-width: 768px) {
     padding: 2.4rem;
@@ -106,44 +107,53 @@ const InternalLink = styled.a`
 `;
 
 const HomeFooterContainer = styled.div`
-  width: 100%;
-
   grid-area: footer;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-bewteen;
+  margin: 4rem 0;
+  padding: 0 4.8rem 4.8rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
 `;
 
 const FooterActionContainer = styled.div`
   display: flex;
-
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   gap: 2.4rem;
   flex-basis: 32%;
+  flex-grow: 1;
+
   @media (max-width: 768px) {
     display: none;
   }
 `;
 
+const StyledLink = styled.a`
+  display: block;
+  width: 100%;
+`;
 const FooterButton = styled(Button)`
-  border-radius: 8px;
-  width: 26.5rem;
-  height: 6.2rem;
+  border-radius: 0.8rem;
+  width: 100%;
 `;
 
 const HomePage = () => {
   return (
-    <StyledAppWrapper>
-      <HomeHeaderContainer>
-        <LogoContainer>
-          <LogoWordmark />
-        </LogoContainer>
-        <HomeNav />
-      </HomeHeaderContainer>
-      <StyledBodyContainer>
-        <HeroContainer>
+    <>
+      <StyledMainWrapper>
+        <HomeHeaderContainer>
+          <LogoContainer>
+            <LogoWordmark />
+          </LogoContainer>
+          <HomeNav />
+        </HomeHeaderContainer>
+        <StyledBodyContainer>
+          {/* <HeroContainer>
           <HeroCTAContainer>
             <HeroHeading>The Decentralized Newsletter.</HeroHeading>
             <HeroTagline>Your Content, Your Readers.</HeroTagline>
@@ -153,8 +163,10 @@ const HomePage = () => {
               </HeroButton>
             </Link>
           </HeroCTAContainer>
-        </HeroContainer>
-      </StyledBodyContainer>
+        </HeroContainer> */}
+        </StyledBodyContainer>
+      </StyledMainWrapper>
+      <FAQSection />
       <HomeFooterContainer>
         <LogoContainer>
           <FullLogo />
@@ -163,14 +175,14 @@ const HomePage = () => {
           <Text size="md" color="primary">
             The Decentralized Publishing Platform
           </Text>
-          <Link to={DASHBOARD_URI}>
+          <StyledLink to={DASHBOARD_URI}>
             <FooterButton color="primary" variant="contained" size="md">
               Get Started
             </FooterButton>
-          </Link>
+          </StyledLink>
         </FooterActionContainer>
       </HomeFooterContainer>
-    </StyledAppWrapper>
+    </>
   );
 };
 
