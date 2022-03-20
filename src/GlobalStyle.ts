@@ -5,10 +5,16 @@ const GlobalStyle = createGlobalStyle`
         height: 100%;
 			  /* 1rem = 10px */
         font-size: 62.5%;
-
+		
     }
+
+	*, *::before, *::after {
+			box-sizing: border-box;
+	}
+		
     body {
        height: 100%;
+	   width: 100%;
        margin: 0px;
        padding: 0px;
 	   box-sizing: border-box;

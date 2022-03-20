@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-import logo from "assets/logo.svg";
+import logo from "assets/logo-full-new.svg";
 
 type Props = {
   className?: string;

@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Button from "components/Button";
 import { AppWrapper, Layout, BodyContainer } from "components/Layout";
-import FullLogo from "components/FullLogo";
+import LogoWordmark from "components/LogoWordmark";
 import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
 
 const StyledLayout = styled(Layout)`
   grid-template:
-    "header" 9.6rem
+    "header"
     "body" 1fr
     / 1fr;
   @media (max-width: 768px) {
@@ -29,7 +29,6 @@ const HomeHeaderContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: flex-start;
-  margin: 0 2rem;
 `;
 
 const HeroContainer = styled(BodyContainer)`
@@ -81,10 +80,11 @@ const HeroButton = styled(Button)`
 const LogoContainer = styled.div`
   direction: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100vw;
+  padding:0;
+  margin: 0;
   @media (max-width: 768px) {
-   padding: 2rem; 0
+p
   }
 `;
 
@@ -113,9 +113,9 @@ const HomePage = () => {
       <StyledLayout>
         <HomeHeaderContainer>
           <LogoContainer>
-            <FullLogo />
+            <LogoWordmark />
           </LogoContainer>
-          <ActionContainer>
+          {/* <ActionContainer>
             <InternalLink as="a" href="#">
               How it works
             </InternalLink>
@@ -124,7 +124,7 @@ const HomePage = () => {
                 Get Started
               </Button>
             </Link>
-          </ActionContainer>
+          </ActionContainer> */}
         </HomeHeaderContainer>
         <StyledBodyContainer>
           <HeroContainer>

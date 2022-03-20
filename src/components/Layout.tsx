@@ -12,6 +12,7 @@ export const AppWrapper = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
+  margin: 4.8rem;
 `;
 
 export const Layout = styled.div`
