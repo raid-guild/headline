@@ -4,14 +4,14 @@ import styled from "styled-components";
 import Button from "components/Button";
 import { AppWrapper, Layout, BodyContainer } from "components/Layout";
 import LogoWordmark from "components/LogoWordmark";
+import HomeNav from "components/HomeNav";
 import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
 
 const StyledLayout = styled(Layout)`
   grid-template:
     "header"
-    "body" 1fr
-    / 1fr;
+    "body";
   @media (max-width: 768px) {
     grid-template:
       "header"
@@ -19,6 +19,14 @@ const StyledLayout = styled(Layout)`
       "mobileNav";
   }
 `;
+
+const StyledAppWrapper = styled(AppWrapper)`
+  padding: 4.8rem;
+  @media (max-width: 768px) {
+    padding: 2.4rem;
+  }
+`;
+
 const StyledBodyContainer = styled(BodyContainer)`
   grid-area: body;
 `;
@@ -26,9 +34,7 @@ const StyledBodyContainer = styled(BodyContainer)`
 const HomeHeaderContainer = styled.div`
   grid-area: header;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
 `;
 
 const HeroContainer = styled(BodyContainer)`
@@ -80,7 +86,7 @@ const HeroButton = styled(Button)`
 const LogoContainer = styled.div`
   direction: flex;
   flex-direction: column;
-  width: 100vw;
+width:100%;
   padding:0;
   margin: 0;
   @media (max-width: 768px) {
@@ -109,38 +115,37 @@ const ActionContainer = styled.div`
 
 const HomePage = () => {
   return (
-    <AppWrapper>
-      <StyledLayout>
-        <HomeHeaderContainer>
-          <LogoContainer>
-            <LogoWordmark />
-          </LogoContainer>
-          {/* <ActionContainer>
-            <InternalLink as="a" href="#">
-              How it works
-            </InternalLink>
+    <StyledAppWrapper>
+      <HomeHeaderContainer>
+        <LogoContainer>
+          <LogoWordmark />
+        </LogoContainer>
+        {/* <ActionContainer>
+          <InternalLink as="a" href="#">
+            How it works
+          </InternalLink>
+          <Link to={DASHBOARD_URI}>
+            <Button color="primary" variant="contained" size="md">
+              Get Started
+            </Button>
+          </Link>
+        </ActionContainer> */}
+        <HomeNav />
+      </HomeHeaderContainer>
+      <StyledBodyContainer>
+        {/* <HeroContainer>
+          <HeroCTAContainer>
+            <HeroHeading>The Decentralized Newsletter.</HeroHeading>
+            <HeroTagline>Your Content, Your Readers.</HeroTagline>
             <Link to={DASHBOARD_URI}>
-              <Button color="primary" variant="contained" size="md">
+              <HeroButton color="primary" variant="contained" size="xl">
                 Get Started
-              </Button>
+              </HeroButton>
             </Link>
-          </ActionContainer> */}
-        </HomeHeaderContainer>
-        <StyledBodyContainer>
-          <HeroContainer>
-            <HeroCTAContainer>
-              <HeroHeading>The Decentralized Newsletter.</HeroHeading>
-              <HeroTagline>Your Content, Your Readers.</HeroTagline>
-              <Link to={DASHBOARD_URI}>
-                <HeroButton color="primary" variant="contained" size="xl">
-                  Get Started
-                </HeroButton>
-              </Link>
-            </HeroCTAContainer>
-          </HeroContainer>
-        </StyledBodyContainer>
-      </StyledLayout>
-    </AppWrapper>
+          </HeroCTAContainer>
+        </HeroContainer> */}
+      </StyledBodyContainer>
+    </StyledAppWrapper>
   );
 };
 
