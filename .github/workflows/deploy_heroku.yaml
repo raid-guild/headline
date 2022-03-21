@@ -1,0 +1,32 @@
+name: Deploy Api
+
+on:
+  push:
+    branches:
+      - "master"
+
+env:
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_TOKEN }}
+
+jobs:
+  # Run code tests before building the image, to ensure it is good to go
+  build:
+    name: Run code tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create env file
+        run: |
+          touch .env
+          echo VITE_CERAMIC_URL=ceramic.alexkeating.me >> .env
+          echo VITE_WEBSITE_DOMAIN=https://headline-unlock-test.herokuapp.com >> .env
+          echo VITE_INFURA_PROJECT_ID=24ZzrrBV9yd503XnmvCqXudjfYR
+          echo VITE_INFURA_PROJECT_SECRET=24ZzrrBV9yd503XnmvCqXudjfYR
+          cat .env
+      - name: Login
+        run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
+      - name: Publish
+        run: |
+          heroku container:push worker -a headline-unlock-test
+          heroku container:release worker -a headline-unlock-test
