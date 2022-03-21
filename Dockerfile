@@ -12,8 +12,10 @@ COPY ./src /app/src
 COPY ./.env /app/.env
 COPY ./tsconfig.json /app/tsconfig.json
 COPY ./server.js /app/server.js
+COPY ./index.html /app/index.html
+COPY ./vite.config.ts /app/vite.config.ts
 
 RUN  yarn run build
 EXPOSE 4000
 
-CMD npm run serve-dev
+CMD npm run serve
