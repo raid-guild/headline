@@ -14,6 +14,7 @@ import { DASHBOARD_URI } from "../constants";
 import heroImage from "assets/img-hero.svg";
 import heroImageMobile from "assets/img-hero-sm.svg";
 import aboutImage from "assets/img-about.svg";
+import visionImage from "assets/img-vision.svg";
 
 const StyledLayout = styled(Layout)`
   grid-template:
@@ -29,7 +30,8 @@ const StyledLayout = styled(Layout)`
 `;
 
 const StyledMainWrapper = styled(AppWrapper)`
-  background: ${({ theme }) => `${theme.colors.almostWhite}`};
+  /* background: ${({ theme }) => `${theme.colors.almostWhite}`}; */
+  background: #e5e5e5;
 `;
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -38,6 +40,7 @@ const StyledBodyContainer = styled(BodyContainer)`
   flex-direction: column;
   align-self: flex-start;
   width: 100%;
+  background: #e5e5e5;
 `;
 
 const HomeHeaderContainer = styled.div`
@@ -45,6 +48,8 @@ const HomeHeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 4.8rem;
+  background: #e5e5e5;
+
   @media (max-width: 768px) {
     padding: 2.4rem;
   }
@@ -59,6 +64,8 @@ const HeroContainer = styled(BodyContainer)`
   padding: 4.8rem;
   width: 100%;
   min-height: 80vh;
+  background-color: #e5e5e5;
+
   background-image: url(${heroImage});
   background-position: "top left";
   background-size: contain;
@@ -134,7 +141,7 @@ const AboutGrid = styled.div`
 const AboutImageContainer = styled.div`
   grid-area: about-image;
   flex-basis: 46%;
-  margin-top: 10rem;
+  align-self: flex-end;
   order: 1;
   @media (max-width: 768px) {
     order: 2;
@@ -154,6 +161,7 @@ const AboutCopyContainer = styled.div`
   justify-content: center;
   align-items: center;
   order: 2;
+  padding-bottom: 4rem;
   @media (max-width: 768px) {
     order: 1;
   }
@@ -194,6 +202,23 @@ const LogoContainer = styled.div`
   padding: 0;
   margin: 0;
   @media (max-width: 768px) {
+  }
+`;
+
+const FAQImageContainer = styled.div`
+  height: 80vh;
+  width: 100%;
+  background-image: url(${visionImage});
+  background-position: "center";
+  background-size: cover;
+  background-repeat: no-repeat;
+  @media (max-width: 768px) {
+    /* padding: 2.4rem;
+    height: 100%;
+    background-image: url(${heroImageMobile});
+    background-position-y: 20rem;
+    background-size: cover;
+    background-repeat: no-repeat; */
   }
 `;
 
@@ -344,6 +369,7 @@ const HomePage = () => {
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEA</TickerItem>
       </HeadlineTickerContainer> */}
+      <FAQImageContainer />
       <FAQSection />
       <HomeFooterContainer>
         <FooterLogoContainer>
