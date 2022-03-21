@@ -95,13 +95,16 @@ const HeroHeading = styled(Title)`
 const AboutSectionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   padding: 0 4.8rem;
   @media (max-width: 768px) {
+    flex-basis: 0;
     margin-top: 4.8rem;
     padding: 0 2.4rem;
     width: 100%;
     flex-wrap: wrap;
     word-wrap: break-word;
+    min-width: 0;
   }
 `;
 
@@ -109,6 +112,8 @@ const AboutHeading = styled.h2`
   font-size: 9.6rem;
   line-height: 10.2rem;
   color: ${({ theme }) => `${theme.colors.primary}`};
+  margin-bottom: 6.4rem;
+  margin-top: 0;
   @media (max-width: 768px) {
     font-size: 6.8rem;
     line-height: 7rem;
@@ -121,11 +126,19 @@ const AboutGrid = styled.div`
   justify-content: center;
   /* grid-template-columns: 50% 50%;
   grid-template: "about-image" "about-copy"; */
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const AboutImageContainer = styled.div`
   grid-area: about-image;
   flex-basis: 46%;
+  margin-top: 10rem;
+  order: 1;
+  @media (max-width: 768px) {
+    order: 2;
+  }
 `;
 
 const AboutImage = styled.img`
@@ -140,6 +153,10 @@ const AboutCopyContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  order: 2;
+  @media (max-width: 768px) {
+    order: 1;
+  }
 `;
 
 const AboutCopy = styled.p`
