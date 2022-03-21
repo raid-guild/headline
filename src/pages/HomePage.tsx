@@ -72,30 +72,26 @@ const HeroCTAContainer = styled.div`
   align-items: flex-start;
   @media (max-width: 768px) {
     margin: 0;
+    flex-basis: 80%;
   }
 `;
 
 const HeroHeading = styled(Title)`
-  /* font-size: 96px;
-  line-height: 102px;
-  font-weight: 900;
-  text-align: center;
-  color: black;
-  margin-bottom: 3.2rem;
-  margin-top: 0px; */
+  font-size: 3.2rem;
+  line-height: 3.8rem;
   @media (max-width: 768px) {
-    font-size: 48px;
-    line-height: 60px;
+    font-size: 2.8rem;
+    line-height: 3.2rem;
   }
 `;
 
 const HeroTagline = styled(Title)`
-  /* font-size: 32px;
-  line-height: 38px;
-  font-weight: 600;
-  text-align: center;
-  color: black;
-  margin-bottom: 5.6rem; */
+  font-size: 9.6rem;
+  line-height: 10.2rem;
+  @media (max-width: 768px) {
+    font-size: 6.4rem;
+    line-height: 7rem;
+  }
 `;
 
 const HeroButton = styled(Button)`
@@ -103,6 +99,16 @@ const HeroButton = styled(Button)`
 `;
 
 const LogoContainer = styled.div`
+  direction: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  @media (max-width: 768px) {
+  }
+`;
+
+const FooterLogoContainer = styled.div`
   direction: flex;
   flex-direction: column;
   width: 100%;
@@ -129,8 +135,10 @@ const HomeFooterContainer = styled.div`
   margin: 4rem 0;
   padding: 0 4.8rem 4.8rem;
   background: ${({ theme }) => `${theme.colors.almostWhite}`};
-
   @media (max-width: 768px) {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     padding: 2.4rem;
   }
 `;
@@ -143,9 +151,8 @@ const FooterActionContainer = styled.div`
   gap: 2.4rem;
   flex-basis: 32%;
   flex-grow: 1;
-
   @media (max-width: 768px) {
-    display: none;
+    margin-top: 8rem;
   }
 `;
 
@@ -156,10 +163,6 @@ const HeadlineTickerContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4.8rem;
-  /* background-image: url(${LogoWordmark});
-  background-position: "center";
-  background-size: contain;
-  background-repeat: repeat; */
 `;
 
 const TickerItem = styled(Title)`
@@ -167,7 +170,7 @@ const TickerItem = styled(Title)`
   font-weight: 900;
 `;
 
-const StyledLink = styled.a`
+const StyledLink = styled(Link)`
   display: block;
   width: 100%;
 `;
@@ -205,18 +208,18 @@ const HomePage = () => {
           </HeroCTAContainer>
         </HeroContainer>
       </StyledBodyContainer>
-      <HeadlineTickerContainer>
+      {/* <HeadlineTickerContainer>
         <TickerItem size="xxl">ADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEA</TickerItem>
-      </HeadlineTickerContainer>
-      {/* <FAQSection /> */}
+      </HeadlineTickerContainer> */}
+      <FAQSection />
       <HomeFooterContainer>
-        <LogoContainer>
+        <FooterLogoContainer>
           <FullLogo />
-        </LogoContainer>
+        </FooterLogoContainer>
         <FooterActionContainer>
           <Text size="md" color="primary">
             The Decentralized Publishing Platform
