@@ -10,8 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint \"./src/**/*.{js,jsx,ts,tsx}\"",
     "schema": "node --experimental-json-modules publishModals.js",
-    "updateSchema": "node --experimental-json-modules updateModels.js",
-    "test": "node --experimental-json-modules example.js"
+    "serve": "node ./server.js"
   },
   "dependencies": {
     "@ceramicnetwork/stream-caip10-link": "^1.2.9",
@@ -37,6 +36,7 @@
     "dids": "^2.4.3",
     "electron": "^17.0.0",
     "electron-fetch": "^1.7.4",
+    "express": "^4.17.3",
     "ipfs-http-client": "56.0.0",
     "js-base64": "^3.7.2",
     "lit-js-sdk": "^1.1.149",
