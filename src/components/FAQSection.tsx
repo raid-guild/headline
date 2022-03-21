@@ -1,19 +1,28 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Text from "components/Text";
+import Title from "components/Text";
+
 import styled from "styled-components";
 
 const FAQContainer = styled.div`
   display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
   background: ${({ theme }) => `${theme.colors.primary}`};
   min-height: 80vh;
   height: 80vh;
   width: 100%;
   @media (max-width: 768px) {
-
-width: 100vw;
+    width: 100vw;
+  }
 `;
-
+const FAQTitle = styled.h2`
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: ${({ theme }) => `${theme.colors.mediumGrey}`};
+`;
 // const NavText = styled(Text)`
 //   font-weight: 600;
 //   color: ${({ theme }) => `${theme.colors.primary}`};
@@ -34,6 +43,10 @@ const navItems = [
   },
 ];
 
-const FAQSection = () => <FAQContainer></FAQContainer>;
+const FAQSection = () => (
+  <FAQContainer>
+    <FAQTitle>FAQ</FAQTitle>
+  </FAQContainer>
+);
 
 export default FAQSection;

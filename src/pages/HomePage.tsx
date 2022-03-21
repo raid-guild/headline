@@ -248,8 +248,9 @@ const HomeFooterContainer = styled.div`
   justify-content: space-bewteen;
   margin: 4rem 0;
   padding: 0 4.8rem 4.8rem;
-  background: ${({ theme }) => `${theme.colors.almostWhite}`};
-  @media (max-width: 768px) {
+  /* background: ${({ theme }) => `${theme.colors.almostWhite}`}; */
+  background: transparent;
+  t @media (max-width: 768px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
