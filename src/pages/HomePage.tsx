@@ -13,6 +13,7 @@ import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
 import heroImage from "assets/img-hero.svg";
 import heroImageMobile from "assets/img-hero-sm.svg";
+import aboutImage from "assets/img-about.svg";
 
 const StyledLayout = styled(Layout)`
   grid-template:
@@ -33,6 +34,8 @@ const StyledMainWrapper = styled(AppWrapper)`
 
 const StyledBodyContainer = styled(BodyContainer)`
   grid-area: body;
+  display: flex;
+  flex-direction: column;
   align-self: flex-start;
   width: 100%;
 `;
@@ -62,6 +65,11 @@ const HeroContainer = styled(BodyContainer)`
   background-repeat: no-repeat;
   @media (max-width: 768px) {
     padding: 2.4rem;
+    height: 100%;
+    background-image: url(${heroImageMobile});
+    background-position-y: 20rem;
+    background-size: cover;
+    background-repeat: no-repeat;
   }
 `;
 
@@ -72,7 +80,6 @@ const HeroCTAContainer = styled.div`
   align-items: flex-start;
   @media (max-width: 768px) {
     margin: 0;
-    flex-basis: 80%;
   }
 `;
 
@@ -85,12 +92,77 @@ const HeroHeading = styled(Title)`
   }
 `;
 
+const AboutSectionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0 4.8rem;
+  @media (max-width: 768px) {
+    margin-top: 4.8rem;
+    padding: 0 2.4rem;
+    width: 100%;
+    flex-wrap: wrap;
+    word-wrap: break-word;
+  }
+`;
+
+const AboutHeading = styled.h2`
+  font-size: 9.6rem;
+  line-height: 10.2rem;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  @media (max-width: 768px) {
+    font-size: 6.8rem;
+    line-height: 7rem;
+    word-wrap: break-word;
+  }
+`;
+
+const AboutGrid = styled.div`
+  display: flex;
+  justify-content: center;
+  /* grid-template-columns: 50% 50%;
+  grid-template: "about-image" "about-copy"; */
+`;
+
+const AboutImageContainer = styled.div`
+  grid-area: about-image;
+  flex-basis: 46%;
+`;
+
+const AboutImage = styled.img`
+  height: 100%;
+  width: 100%;
+`;
+
+const AboutCopyContainer = styled.div`
+  display: flex;
+  grid-area: about-copy;
+  flex-basis: 46%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AboutCopy = styled.p`
+  font-size: 2rem;
+  line-height: 2.8rem;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  margin-bottom: 0;
+`;
+
+const AboutCallout = styled.span`
+  font-size: 4.8rem;
+  line-height: 5.2rem;
+  font-weight: 700;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  margin-top: 4rem;
+`;
+
 const HeroTagline = styled(Title)`
   font-size: 9.6rem;
   line-height: 10.2rem;
   @media (max-width: 768px) {
-    font-size: 6.4rem;
-    line-height: 7rem;
+    font-size: 4.8rem;
+    line-height: 5.2rem;
   }
 `;
 
@@ -163,6 +235,9 @@ const HeadlineTickerContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4.8rem;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const TickerItem = styled(Title)`
@@ -207,6 +282,43 @@ const HomePage = () => {
             </Link>
           </HeroCTAContainer>
         </HeroContainer>
+        <AboutSectionContainer>
+          <AboutHeading>
+            Publishing that&apos;s truly for creators and their communities.
+          </AboutHeading>
+          <AboutGrid>
+            <AboutImageContainer>
+              <AboutImage src={aboutImage} />
+            </AboutImageContainer>
+            <AboutCopyContainer>
+              <AboutCopy>
+                HEADLINE is a decentralized publishing platform where a
+                creator’s content is always their own. There’s no service fee,
+                no long form privacy agreement and your unpublished and token
+                gated content is encrypted, enabling access control.
+              </AboutCopy>
+              <AboutCopy>
+                Publish web content and send out newsletters. Build meaningful
+                connections with your community and followers. Feel confident
+                that the publishing platform you’re using respects what you
+                create and who you create it for.
+              </AboutCopy>
+              <AboutCallout>
+                Our excellence is in our collaborations.
+              </AboutCallout>
+              <AboutCopy>
+                Powered by Unlock Protocol and built by Raid Guild, with
+                integrations of Ceramic, Lit Protocol & IPFS, HEADLINE is truly
+                multi-player, built and maintained by collaboration.
+              </AboutCopy>
+              <AboutCopy>
+                HEADLINE operates as a DAO, decentralized autonomous
+                organization. That means that we are run by collective efforts
+                and innovation. Join us as we build together.
+              </AboutCopy>
+            </AboutCopyContainer>
+          </AboutGrid>
+        </AboutSectionContainer>
       </StyledBodyContainer>
       {/* <HeadlineTickerContainer>
         <TickerItem size="xxl">ADLINE</TickerItem>
