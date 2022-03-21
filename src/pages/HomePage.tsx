@@ -205,6 +205,96 @@ const LogoContainer = styled.div`
   }
 `;
 
+const HowSectionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 14.4rem;
+  padding: 0 4.8rem;
+  @media (max-width: 768px) {
+    flex-basis: 0;
+    margin-top: 4.8rem;
+    padding: 0 2.4rem;
+    width: 100%;
+    flex-wrap: wrap;
+    word-wrap: break-word;
+    min-width: 0;
+  }
+`;
+
+const HowHeading = styled.h2`
+  font-size: 7.2rem;
+  line-height: 8.8rem;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  margin-bottom: 2.4rem;
+  margin-top: 0;
+  @media (max-width: 768px) {
+    font-size: 5.2rem;
+    line-height: 6.2rem;
+    word-wrap: break-word;
+  }
+`;
+
+const HowFeatureGrid = styled.div`
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 2.4rem;
+  margin-top: 9.6rem;
+  /* grid-template-columns: 50% 50%;
+  grid-template: "about-image" "about-copy"; */
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const HowFeature = styled.div`
+  display: flex;
+  /* flex-basis: 46%; */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-top: 0.4rem solid ${({ theme }) => `${theme.colors.primary}`};
+  @media (max-width: 768px) {
+  }
+`;
+
+const HowFeatureTitle = styled.h2`
+  font-size: 5.6rem;
+  line-height: 6.2rem;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  margin: 2.4rem 0;
+  @media (max-width: 768px) {
+    font-size: 4rem;
+    line-height: 4.8rem;
+    word-wrap: break-word;
+  }
+`;
+
+const HowFeatureCopy = styled.p`
+  font-size: 2rem;
+  line-height: 2.8rem;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  margin-bottom: 0;
+  @media (max-width: 768px) {
+    font-size: 2.8rem;
+    line-height: 3.2rem;
+  }
+`;
+
+const HowCopy = styled.p`
+  font-size: 3.2rem;
+  line-height: 3.8rem;
+  text-align: center;
+  color: ${({ theme }) => `${theme.colors.primary}`};
+  margin-bottom: 0;
+  @media (max-width: 768px) {
+    font-size: 2.8rem;
+    line-height: 3.2rem;
+  }
+`;
+
 const FAQImageContainer = styled.div`
   height: 80vh;
   width: 100%;
@@ -370,6 +460,43 @@ const HomePage = () => {
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEA</TickerItem>
       </HeadlineTickerContainer> */}
+      <HowSectionContainer>
+        <HowHeading>How it works</HowHeading>
+        <HowCopy>
+          When creators own their content, publishing and subscribing
+          acknowledges the value of creativity and community.
+        </HowCopy>
+        <HowFeatureGrid>
+          <HowFeature>
+            <HowFeatureTitle>Your Publication</HowFeatureTitle>
+            <HowFeatureCopy>
+              Whether an independent creator, member of a DAO or part of a token
+              community, create your own publication with a HEADLINE newsletter
+              channel. When readers choose to subscribe, your content will
+              arrive conveniently in their inbox.
+            </HowFeatureCopy>
+          </HowFeature>
+          <HowFeature>
+            <HowFeatureTitle>Your Terms</HowFeatureTitle>
+            <HowFeatureCopy>
+              Creators choose whether their content is gated or free. Set up a
+              paywall and membership tiers.
+            </HowFeatureCopy>
+          </HowFeature>
+          <HowFeature>
+            <HowFeatureTitle>Your Place</HowFeatureTitle>
+            <HowFeatureCopy>
+              Read content from your favorite creators, and create content for
+              your own readers, all in one place. Receive freshly published
+              content in your inbox and revisit it, at a later date, if you ever
+              miss a post.
+            </HowFeatureCopy>
+            <HowFeatureCopy>
+              (Reader’s view will be released in v2)
+            </HowFeatureCopy>
+          </HowFeature>
+        </HowFeatureGrid>
+      </HowSectionContainer>
       <FAQImageContainer />
       <FAQSection />
       <HomeFooterContainer>

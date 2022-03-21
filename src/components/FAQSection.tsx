@@ -18,34 +18,23 @@ const FAQContainer = styled.div`
     width: 100vw;
   }
 `;
+
 const FAQTitle = styled.h2`
   font-size: 2.4rem;
   font-weight: 600;
   color: ${({ theme }) => `${theme.colors.mediumGrey}`};
 `;
-// const NavText = styled(Text)`
-//   font-weight: 600;
-//   color: ${({ theme }) => `${theme.colors.primary}`};
-// `;
 
-const navItems = [
-  {
-    text: "How it works",
-    link: "/#",
-  },
-  {
-    text: "FAQ",
-    link: "/#",
-  },
-  {
-    text: "Get started",
-    link: "/#",
-  },
-];
+const FAQItemsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
 
 const FAQSection = () => (
   <FAQContainer>
     <FAQTitle>FAQ</FAQTitle>
+    <FAQItemsContainer></FAQItemsContainer>
   </FAQContainer>
 );
 
