@@ -1,11 +1,11 @@
 import { CeramicClient } from "@ceramicnetwork/http-client";
-import { TileLoader } from "@glazed/tile-loader";
+import { TileDocument } from "@ceramicnetwork/stream-tile";
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
 import fs from "fs";
 
-const PORT = process.env.SERVER_PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 const app = express();
 
