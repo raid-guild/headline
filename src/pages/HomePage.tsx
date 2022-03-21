@@ -149,7 +149,23 @@ const FooterActionContainer = styled.div`
   }
 `;
 
-const HeadlineTickerContainer = styled.div``;
+const HeadlineTickerContainer = styled.div`
+  width: 100%;
+  height: 14rem;
+  background: ${({ theme }) => `${theme.colors.primary}`};
+  display: flex;
+  align-items: center;
+  gap: 4.8rem;
+  /* background-image: url(${LogoWordmark});
+  background-position: "center";
+  background-size: contain;
+  background-repeat: repeat; */
+`;
+
+const TickerItem = styled(Title)`
+  color: ${({ theme }) => `${theme.colors.almostWhite}`};
+  font-weight: 900;
+`;
 
 const StyledLink = styled.a`
   display: block;
@@ -189,7 +205,14 @@ const HomePage = () => {
           </HeroCTAContainer>
         </HeroContainer>
       </StyledBodyContainer>
-      <FAQSection />
+      <HeadlineTickerContainer>
+        <TickerItem size="xxl">ADLINE</TickerItem>
+        <TickerItem size="xxl">HEADLINE</TickerItem>
+        <TickerItem size="xxl">HEADLINE</TickerItem>
+        <TickerItem size="xxl">HEADLINE</TickerItem>
+        <TickerItem size="xxl">HEA</TickerItem>
+      </HeadlineTickerContainer>
+      {/* <FAQSection /> */}
       <HomeFooterContainer>
         <LogoContainer>
           <FullLogo />

@@ -9,6 +9,9 @@ const FAQContainer = styled.div`
   min-height: 80vh;
   height: 80vh;
   width: 100%;
+  @media (max-width: 768px) {
+
+width: 100vw;
 `;
 
 // const NavText = styled(Text)`
