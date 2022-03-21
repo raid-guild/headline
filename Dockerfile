@@ -16,6 +16,7 @@ COPY ./index.html /app/index.html
 COPY ./vite.config.ts /app/vite.config.ts
 
 RUN  yarn run build
-EXPOSE 4000
+EXPOSE 80
+ENV PORT 80
 
 CMD npm run serve
