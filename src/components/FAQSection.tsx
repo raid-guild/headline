@@ -12,10 +12,10 @@ const FAQContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20rem 0;
-
   background: ${({ theme }) => `${theme.colors.primary}`};
   @media (max-width: 768px) {
     width: 100vw;
+    padding: 0 2.4rem 6.4rem;
   }
 `;
 
@@ -30,6 +30,9 @@ const FAQItemsContainer = styled.div`
   flex-direction: column;
   align-items: flex-start;
   max-width: 40%;
+  @media (max-width: 768px) {
+    max-width: none;
+  }
 `;
 
 const FAQSection = () => (

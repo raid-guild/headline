@@ -1,6 +1,6 @@
 import React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { HiPlus, HiMinus } from "react-icons/hi";
+import { HiChevronDown } from "react-icons/hi";
 import styled from "styled-components";
 
 // tried to map this, but it broke the accordion since it wasnt recognizing the value
@@ -40,6 +40,9 @@ const StyledAccordionHeader = styled(AccordionPrimitive.Header)`
   line-height: 5.2rem;
   background: transparent;
   color: #f0efef;
+  @media (max-width: 768px) {
+    margin-bottom: 2.4rem;
+  }
 `;
 
 const StyledAccordionItem = styled(AccordionPrimitive.Item)`
@@ -58,6 +61,15 @@ const StyledAccordionTrigger = styled(AccordionPrimitive.Trigger)`
   background: transparent;
   color: #f0efef;
 `;
+
+// const AccordionChevron = styled(HiChevronDown)`
+//   background: red;
+//   transition: "transform 300ms";
+//   &: [data-state= "open" ] {
+//     transform: "rotate(180deg)";
+//     background: green;
+//   }
+// `;
 
 const StyledAccordionTitle = styled.span`
   align-self: flex-start;
@@ -85,6 +97,7 @@ const AccordionSection = () => {
             <StyledAccordionTitle>
               What does powered by Unlock mean?
             </StyledAccordionTitle>
+            {/* <AccordionChevron aria-hidden="true" /> */}
           </StyledAccordionTrigger>
         </StyledAccordionHeader>
         <StyledAccordionContent>
@@ -99,7 +112,7 @@ const AccordionSection = () => {
             <StyledAccordionTitle>
               How can this platform be free of charge?
             </StyledAccordionTitle>
-            {/* <HiPlus aria-hidden /> */}
+            {/* <AccordionChevron aria-hidden="true" /> */}
           </StyledAccordionTrigger>
         </StyledAccordionHeader>
         <StyledAccordionContent>
@@ -114,7 +127,7 @@ const AccordionSection = () => {
             <StyledAccordionTitle>
               How do I send my article as a newsletter?
             </StyledAccordionTitle>
-            {/* <HiPlus aria-hidden /> */}
+            {/* <AccordionChevron aria-hidden="true" /> */}
           </StyledAccordionTrigger>
         </StyledAccordionHeader>
         <StyledAccordionContent>
@@ -129,7 +142,7 @@ const AccordionSection = () => {
             <StyledAccordionTitle>
               Is HEADLINE an emailing service?
             </StyledAccordionTitle>
-            {/* <HiPlus aria-hidden /> */}
+            {/* <AccordionChevron aria-hidden="true" /> */}
           </StyledAccordionTrigger>
         </StyledAccordionHeader>
         <StyledAccordionContent>
@@ -145,7 +158,7 @@ const AccordionSection = () => {
             <StyledAccordionTitle>
               Can I move my newsletter from another platform to HEADLINE?
             </StyledAccordionTitle>
-            {/* <HiPlus aria-hidden /> */}
+            {/* <AccordionChevron aria-hidden="true" /> */}
           </StyledAccordionTrigger>
         </StyledAccordionHeader>
         <StyledAccordionContent>

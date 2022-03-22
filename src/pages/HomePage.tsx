@@ -126,6 +126,9 @@ const AboutHeading = styled.h2`
     font-size: 6.8rem;
     line-height: 7rem;
     word-wrap: break-word;
+
+    flex-wrap: wrap;
+    max-width: 90%;
   }
 `;
 
@@ -152,6 +155,8 @@ const AboutImageContainer = styled.div`
 const AboutImage = styled.img`
   height: 100%;
   width: 100%;
+  @media (max-width: 768px) {
+  }
 `;
 
 const AboutCopyContainer = styled.div`
@@ -173,6 +178,11 @@ const AboutCopy = styled.p`
   line-height: 2.8rem;
   color: ${({ theme }) => `${theme.colors.primary}`};
   margin-bottom: 0;
+  @media (max-width: 768px) {
+    word-wrap: break-word;
+    flex-wrap: wrap;
+    max-width: 90%;
+  }
 `;
 
 const AboutCallout = styled.span`
@@ -214,13 +224,13 @@ const HowSectionContainer = styled.div`
   margin-top: 14.4rem;
   padding: 0 4.8rem;
   @media (max-width: 768px) {
-    flex-basis: 0;
     margin-top: 4.8rem;
     padding: 0 2.4rem;
     width: 100%;
     flex-wrap: wrap;
     word-wrap: break-word;
     min-width: 0;
+    display: none;
   }
 `;
 
@@ -246,7 +256,7 @@ const HowFeatureThreeGrid = styled.div`
   /* grid-template-columns: 50% 50%;
   grid-template: "about-image" "about-copy"; */
   @media (max-width: 768px) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -260,6 +270,7 @@ const HowFeatureTwoGrid = styled.div`
   grid-template: "about-image" "about-copy"; */
   @media (max-width: 768px) {
     flex-direction: column;
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -424,7 +435,7 @@ const HomeFooterContainer = styled.div`
   padding: 0 4.8rem 4.8rem;
   /* background: ${({ theme }) => `${theme.colors.almostWhite}`}; */
   background: transparent;
-  t @media (max-width: 768px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -452,7 +463,20 @@ const HeadlineTickerContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 4.8rem;
-  @media (max-width: 768px) {
+  @media (max-width: 1440px) {
+    display: none;
+  }
+`;
+
+const HeadlineTickerContainerMobile = styled.div`
+  width: 100%;
+  height: 14rem;
+  background: ${({ theme }) => `${theme.colors.primary}`};
+  display: flex;
+  align-items: center;
+  gap: 4.8rem;
+  background: red;
+  @media (min-width: 1440px) {
     display: none;
   }
 `;
@@ -544,6 +568,9 @@ const HomePage = () => {
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEA</TickerItem>
       </HeadlineTickerContainer>
+      {/* <HeadlineTickerContainerMobile>
+        <TickerItem size="xxl">EADLINE</TickerItem>
+      </HeadlineTickerContainerMobile> */}
       <HowSectionContainer id="#howitworks">
         <HowHeading>How it works</HowHeading>
         <HowSubContainer>
