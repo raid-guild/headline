@@ -237,12 +237,25 @@ const HowHeading = styled.h2`
   }
 `;
 
-const HowFeatureGrid = styled.div`
+const HowFeatureThreeGrid = styled.div`
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 2.4rem;
   margin-top: 9.6rem;
+  /* grid-template-columns: 50% 50%;
+  grid-template: "about-image" "about-copy"; */
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+const HowFeatureTwoGrid = styled.div`
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2.4rem;
+  margin: 9.6rem 20rem 10rem;
   /* grid-template-columns: 50% 50%;
   grid-template: "about-image" "about-copy"; */
   @media (max-width: 768px) {
@@ -256,7 +269,33 @@ const HowFeature = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  & h2 {
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+  }
+`;
+
+const HowFeatureBorder = styled.div`
+  display: flex;
+  /* flex-basis: 46%; */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
   border-top: 0.4rem solid ${({ theme }) => `${theme.colors.primary}`};
+  @media (max-width: 768px) {
+  }
+`;
+
+const HowFeatureCenter = styled.div`
+  display: flex;
+  /* flex-basis: 46%; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  & h2 {
+    text-align: center;
+  }
   @media (max-width: 768px) {
   }
 `;
@@ -341,7 +380,7 @@ const HowSubContainerNarrow = styled.div`
 `;
 
 const FAQImageContainer = styled.div`
-  height: 80vh;
+  height: 60vh;
   width: 100%;
   background-image: url(${visionImage});
   background-position: "center";
@@ -513,8 +552,8 @@ const HomePage = () => {
             acknowledges the value of creativity and community.
           </HowCopy>
         </HowSubContainer>
-        <HowFeatureGrid>
-          <HowFeature>
+        <HowFeatureThreeGrid>
+          <HowFeatureBorder>
             <HowFeatureTitle>Your Publication</HowFeatureTitle>
             <HowFeatureCopy>
               Whether an independent creator, member of a DAO or part of a token
@@ -522,15 +561,15 @@ const HomePage = () => {
               channel. When readers choose to subscribe, your content will
               arrive conveniently in their inbox.
             </HowFeatureCopy>
-          </HowFeature>
-          <HowFeature>
+          </HowFeatureBorder>
+          <HowFeatureBorder>
             <HowFeatureTitle>Your Terms</HowFeatureTitle>
             <HowFeatureCopy>
               Creators choose whether their content is gated or free. Set up a
               paywall and membership tiers.
             </HowFeatureCopy>
-          </HowFeature>
-          <HowFeature>
+          </HowFeatureBorder>
+          <HowFeatureBorder>
             <HowFeatureTitle>Your Place</HowFeatureTitle>
             <HowFeatureCopy>
               Read content from your favorite creators, and create content for
@@ -541,8 +580,8 @@ const HomePage = () => {
             <HowFeatureCopy>
               (Reader’s view will be released in v2)
             </HowFeatureCopy>
-          </HowFeature>
-        </HowFeatureGrid>
+          </HowFeatureBorder>
+        </HowFeatureThreeGrid>
         <HowAnimationSection>
           <HowAnimationContainer>
             <HowAnimation src={getStartedAnimation} alt="" />
@@ -554,6 +593,35 @@ const HomePage = () => {
             Unlock and Raid Guild, the V1 release of HEADLINE includes the
             following:
           </HowCopy>
+        </HowSubContainerNarrow>
+        <HowFeatureTwoGrid>
+          <HowFeature>
+            <HowFeatureTitle>Decentralized Technology</HowFeatureTitle>
+            <HowFeatureCopy>
+              Membership is powered by Unlock; content is encrypted with Lit
+              Protocol; creator data is run on Ceramic, all of which is open and
+              collaborative.
+            </HowFeatureCopy>
+          </HowFeature>
+          <HowFeature>
+            <HowFeatureTitle>Multisig Wallet Supported</HowFeatureTitle>
+            <HowFeatureCopy>
+              For the teams that value decentralization, HEADLINE is built to
+              naturally support your multisig wallet, which requires two or more
+              signatures to confirm a transaction.
+            </HowFeatureCopy>
+            <HowFeatureCopy>Coming soon</HowFeatureCopy>
+          </HowFeature>
+        </HowFeatureTwoGrid>
+        <HowSubContainerNarrow>
+          <HowFeatureCenter>
+            <HowFeatureTitle>You decide HEADLINE’s future.</HowFeatureTitle>
+            <HowFeatureCopy>
+              Decentralized and open, HEADLINE’s future is in the hands of its
+              community. We have a solid feature list and welcome contributions
+              and innovations. Let’s shape this platform together.
+            </HowFeatureCopy>
+          </HowFeatureCenter>
         </HowSubContainerNarrow>
       </HowSectionContainer>
       <FAQImageContainer />
