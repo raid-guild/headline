@@ -2,18 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Text from "components/Text";
 import Title from "components/Text";
+import AccordionSection from "./AccordionSection";
 
 import styled from "styled-components";
 
 const FAQContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   background: ${({ theme }) => `${theme.colors.primary}`};
-  min-height: 80vh;
-  height: 80vh;
-  width: 100%;
   @media (max-width: 768px) {
     width: 100vw;
   }
@@ -33,8 +31,10 @@ const FAQItemsContainer = styled.div`
 
 const FAQSection = () => (
   <FAQContainer id="#faq">
-    <FAQTitle>FAQ</FAQTitle>
-    <FAQItemsContainer></FAQItemsContainer>
+    <FAQItemsContainer>
+      <FAQTitle>FAQ</FAQTitle>
+      <AccordionSection />
+    </FAQItemsContainer>
   </FAQContainer>
 );
 
