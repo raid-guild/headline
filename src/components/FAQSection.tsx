@@ -11,6 +11,7 @@ const FAQContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20rem 0;
   background: ${({ theme }) => `${theme.colors.primary}`};
   @media (max-width: 768px) {
     width: 100vw;

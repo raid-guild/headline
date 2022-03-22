@@ -12,6 +12,9 @@ const NavContainer = styled.div`
   padding: 1.6rem 0;
   border-top: 0.4rem solid ${({ theme }) => `${theme.colors.primary}`};
   border-bottom: 0.4rem solid ${({ theme }) => `${theme.colors.primary}`};
+  & a {
+    text-decoration: none;
+  }
 `;
 
 const NavText = styled(Text)`
