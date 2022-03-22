@@ -42,6 +42,8 @@ const StyledAccordionHeader = styled(AccordionPrimitive.Header)`
   color: #f0efef;
   @media (max-width: 768px) {
     margin-bottom: 2.4rem;
+    font-size: 3.6rem;
+    line-height: 4.2rem;
   }
 `;
 
@@ -60,6 +62,10 @@ const StyledAccordionTrigger = styled(AccordionPrimitive.Trigger)`
   line-height: 5.2rem;
   background: transparent;
   color: #f0efef;
+  @media (max-width: 768px) {
+    font-size: 3.6rem;
+    line-height: 4.2rem;
+  }
 `;
 
 // const AccordionChevron = styled(HiChevronDown)`

@@ -227,10 +227,9 @@ const HowSectionContainer = styled.div`
     margin-top: 4.8rem;
     padding: 0 2.4rem;
     width: 100%;
-    flex-wrap: wrap;
+
     word-wrap: break-word;
     min-width: 0;
-    display: none;
   }
 `;
 
@@ -244,6 +243,7 @@ const HowHeading = styled.h2`
     font-size: 5.2rem;
     line-height: 6.2rem;
     word-wrap: break-word;
+    text-align: center;
   }
 `;
 
@@ -295,6 +295,7 @@ const HowFeatureBorder = styled.div`
   align-items: flex-start;
   border-top: 0.4rem solid ${({ theme }) => `${theme.colors.primary}`};
   @media (max-width: 768px) {
+    padding-bottom: 3.2rem;
   }
 `;
 
@@ -320,6 +321,7 @@ const HowFeatureTitle = styled.h2`
     font-size: 4rem;
     line-height: 4.8rem;
     word-wrap: break-word;
+    margin-bottom: 0.8rem;
   }
 `;
 
@@ -331,6 +333,7 @@ const HowFeatureCopy = styled.p`
   @media (max-width: 768px) {
     font-size: 2.8rem;
     line-height: 3.2rem;
+    margin-top: 0;
   }
 `;
 
@@ -380,6 +383,9 @@ const HowSubContainer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 60%;
+  @media (max-width: 768px) {
+    max-width: none;
+  }
 `;
 
 const HowSubContainerNarrow = styled.div`
@@ -388,6 +394,9 @@ const HowSubContainerNarrow = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 40%;
+  @media (max-width: 768px) {
+    max-width: none;
+  }
 `;
 
 const FAQImageContainer = styled.div`
@@ -475,7 +484,7 @@ const HeadlineTickerContainerMobile = styled.div`
   display: flex;
   align-items: center;
   gap: 4.8rem;
-  background: red;
+
   @media (min-width: 1440px) {
     display: none;
   }
@@ -642,11 +651,12 @@ const HomePage = () => {
         </HowFeatureTwoGrid>
         <HowSubContainerNarrow>
           <HowFeatureCenter>
-            <HowFeatureTitle>You decide HEADLINE’s future.</HowFeatureTitle>
+            <HowFeatureTitle>You decide HEADLINE&pos;s future.</HowFeatureTitle>
             <HowFeatureCopy>
-              Decentralized and open, HEADLINE’s future is in the hands of its
-              community. We have a solid feature list and welcome contributions
-              and innovations. Let’s shape this platform together.
+              Decentralized and open, HEADLINE&pos;s future is in the hands of
+              its community. We have a solid feature list and welcome
+              contributions and innovations. Let&pos;s shape this platform
+              together.
             </HowFeatureCopy>
           </HowFeatureCenter>
         </HowSubContainerNarrow>
