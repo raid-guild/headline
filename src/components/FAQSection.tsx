@@ -13,7 +13,7 @@ const FAQContainer = styled.div`
   align-items: center;
   padding: 20rem 0;
   background: ${({ theme }) => `${theme.colors.primary}`};
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     width: 100vw;
     padding: 0 2.4rem 6.4rem;
   }
@@ -32,6 +32,9 @@ const FAQItemsContainer = styled.div`
   max-width: 40%;
   @media (max-width: 768px) {
     max-width: none;
+  }
+  @media (max-width: 990px) {
+    max-width: 80%;
   }
 `;
 

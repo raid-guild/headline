@@ -67,12 +67,11 @@ const HeroContainer = styled(BodyContainer)`
   width: 100%;
   min-height: 80vh;
   background-color: #e5e5e5;
-
   background-image: url(${heroImage});
   background-position: "top left";
   background-size: contain;
   background-repeat: no-repeat;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     padding: 2.4rem;
     height: 100%;
     background-image: url(${heroImageMobile});
@@ -95,7 +94,7 @@ const HeroCTAContainer = styled.div`
 const HeroHeading = styled(Title)`
   font-size: 3.2rem;
   line-height: 3.8rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     font-size: 2.8rem;
     line-height: 3.2rem;
   }
@@ -127,7 +126,6 @@ const AboutHeading = styled.h2`
     font-size: 6.8rem;
     line-height: 7rem;
     word-wrap: break-word;
-
     flex-wrap: wrap;
     max-width: 90%;
   }
@@ -138,7 +136,7 @@ const AboutGrid = styled.div`
   justify-content: center;
   /* grid-template-columns: 50% 50%;
   grid-template: "about-image" "about-copy"; */
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     flex-direction: column;
   }
 `;
@@ -179,7 +177,7 @@ const AboutCopy = styled.p`
   line-height: 2.8rem;
   color: ${({ theme }) => `${theme.colors.primary}`};
   margin-bottom: 0;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     word-wrap: break-word;
     flex-wrap: wrap;
     max-width: 90%;
@@ -228,7 +226,6 @@ const HowSectionContainer = styled.div`
     margin-top: 4.8rem;
     padding: 0 2.4rem;
     width: 100%;
-
     word-wrap: break-word;
     min-width: 0;
   }
@@ -256,7 +253,7 @@ const HowFeatureThreeGrid = styled.div`
   margin-top: 9.6rem;
   /* grid-template-columns: 50% 50%;
   grid-template: "about-image" "about-copy"; */
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -269,9 +266,10 @@ const HowFeatureTwoGrid = styled.div`
   margin: 9.6rem 20rem 10rem;
   /* grid-template-columns: 50% 50%;
   grid-template: "about-image" "about-copy"; */
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     flex-direction: column;
     grid-template-columns: 1fr;
+    margin: 9.6rem 0 10rem;
   }
 `;
 
@@ -284,7 +282,10 @@ const HowFeature = styled.div`
   & h2 {
     text-align: center;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
+    & h2 {
+      text-align: left;
+    }
   }
 `;
 
@@ -295,7 +296,7 @@ const HowFeatureBorder = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   border-top: 0.4rem solid ${({ theme }) => `${theme.colors.primary}`};
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     padding-bottom: 3.2rem;
   }
 `;
@@ -309,7 +310,11 @@ const HowFeatureCenter = styled.div`
   & h2 {
     text-align: center;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
+    margin: 0 0 10rem;
+    & h2 {
+      text-align: left;
+    }
   }
 `;
 
@@ -318,7 +323,7 @@ const HowFeatureTitle = styled.h2`
   line-height: 6.2rem;
   color: ${({ theme }) => `${theme.colors.primary}`};
   margin: 2.4rem 0;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     font-size: 4rem;
     line-height: 4.8rem;
     word-wrap: break-word;
@@ -331,7 +336,7 @@ const HowFeatureCopy = styled.p`
   line-height: 2.8rem;
   color: ${({ theme }) => `${theme.colors.primary}`};
   margin-bottom: 0;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     font-size: 2.8rem;
     line-height: 3.2rem;
     margin-top: 0;
@@ -345,7 +350,7 @@ const HowCopy = styled.p`
   text-align: center;
   color: ${({ theme }) => `${theme.colors.primary}`};
   margin-bottom: 0;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     font-size: 2.8rem;
     line-height: 3.2rem;
   }
@@ -368,7 +373,7 @@ const HowAnimationContainer = styled.div`
 const HowAnimation = styled.img`
   height: 100%;
   width: 100%;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     /* padding: 2.4rem;
     height: 100%;
     background-image: url(${heroImageMobile});
@@ -384,7 +389,7 @@ const HowSubContainer = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 60%;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     max-width: none;
   }
 `;
@@ -395,7 +400,7 @@ const HowSubContainerNarrow = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 40%;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     max-width: none;
   }
 `;
