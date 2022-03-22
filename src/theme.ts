@@ -26,7 +26,8 @@ const theme = {
     xl: `(min-width: '2560px')`,
   },
   colors: {
-    primary: "#6D9CF9",
+    // primary: "#6D9CF9",
+    primary: "#1579F2",
     backgroundGrey: "#F7F7F7",
     almostWhite: "#FCFCFC",
     text: "#000000",

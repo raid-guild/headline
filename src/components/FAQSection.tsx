@@ -1,0 +1,50 @@
+import React from "react";
+import { Link } from "react-router-dom";
+import Text from "components/Text";
+import Title from "components/Text";
+import AccordionSection from "./AccordionSection";
+
+import styled from "styled-components";
+
+const FAQContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20rem 0;
+  background: ${({ theme }) => `${theme.colors.primary}`};
+  @media (max-width: 990px) {
+    width: 100vw;
+    padding: 0 2.4rem 6.4rem;
+  }
+`;
+
+const FAQTitle = styled.h2`
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: ${({ theme }) => `${theme.colors.mediumGrey}`};
+`;
+
+const FAQItemsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 40%;
+  @media (max-width: 768px) {
+    max-width: none;
+  }
+  @media (max-width: 990px) {
+    max-width: 80%;
+  }
+`;
+
+const FAQSection = () => (
+  <FAQContainer id="#faq">
+    <FAQItemsContainer>
+      <FAQTitle>FAQ</FAQTitle>
+      <AccordionSection />
+    </FAQItemsContainer>
+  </FAQContainer>
+);
+
+export default FAQSection;
