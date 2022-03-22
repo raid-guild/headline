@@ -12,6 +12,7 @@ import Separator from "components/Separator";
 import Title from "components/Title";
 
 import { networks } from "lib/networks";
+import { fetchUserMetadata } from "lib/unlock";
 import { updatePublication } from "services/publication/slice";
 import { useAppSelector, useAppDispatch } from "store";
 
@@ -45,30 +46,35 @@ const StyledButton = styled(Button)`
 `;
 
 const PublicationSettings = () => {
-  const { chainId } = useWallet();
+  const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
   const { litClient } = useLit();
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
   );
-  const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
-    if (!chainId || !client) {
-      console.error("Chain Id is falsey");
-      return;
-    }
-    dispatch(
-      updatePublication({
-        publication: {
-          name: data.name || "",
-          description: data.description || "",
-        },
-        chainName: networks[chainId]?.litName,
-        client,
-        litClient,
-      })
-    );
-  }, []);
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(
+    async (data) => {
+      if (!chainId || !client || !provider) {
+        console.error("Chain Id is falsey");
+        return;
+      }
+      // Purely for testing
+      // await fetchUserMetadata(address || "", provider);
+      dispatch(
+        updatePublication({
+          publication: {
+            name: data.name || "",
+            description: data.description || "",
+          },
+          chainName: networks[chainId]?.litName,
+          client,
+          litClient,
+        })
+      );
+    },
+    [provider, address]
+  );
 
   return (
     <PublicationSettingsContainer>

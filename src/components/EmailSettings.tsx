@@ -56,12 +56,17 @@ const EmailSettings = () => {
     if (!chainId || !client) {
       return;
     }
+    console.log(data);
     // dispatch update
     await dispatch(
       updatePublication({
         publication: {
-          apiKey: data.apiKey || "",
-          mailTo: data.mailFrom || "",
+          emailSettings: {
+            apiKey: data.apiKey || "",
+            mailFrom: data.mailFrom || "",
+            infra: data.region.toLowerCase() || "",
+            domain: data.domain || "",
+          },
         },
         chainName: networks[chainId].litName,
         client,

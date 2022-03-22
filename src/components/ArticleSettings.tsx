@@ -27,6 +27,7 @@ import { publishArticle } from "services/article/slice";
 
 import { useAppDispatch, useAppSelector } from "store";
 import { fetchIPFS, storeIpfs } from "lib/ipfs";
+import { sendMessage } from "lib/mailgun";
 import { networks } from "lib/networks";
 
 import portrait from "assets/portrait.svg";
@@ -360,6 +361,9 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   const publishLoading = useAppSelector(
     (state) => state.publishArticle.loading
   );
+  const emailSettings = useAppSelector(
+    (state) => state.publication.emailSettings
+  );
   const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
 
   const [hide, setHide] = useState(false);
@@ -395,6 +399,16 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           client,
         })
       );
+      // email article
+      const params = {
+        from: emailSettings?.mailFrom || "",
+        to: ["keating.dev@protonmail.com", "alexander.keating@protonmail.com"],
+        subject: article.title,
+        text: article.text,
+        domain: emailSettings?.domain || "",
+        apiKey: emailSettings?.apiKey || "",
+      };
+      await sendMessage(params);
       setHide(true);
     }
   };
