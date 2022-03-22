@@ -15,6 +15,7 @@ import heroImage from "assets/img-hero.svg";
 import heroImageMobile from "assets/img-hero-sm.svg";
 import aboutImage from "assets/img-about.svg";
 import visionImage from "assets/img-vision.svg";
+import visionImageMobile from "assets/img-vision-sm.svg";
 import getStartedAnimation from "assets/get-started-animation.svg";
 
 const StyledLayout = styled(Layout)`
@@ -407,12 +408,12 @@ const FAQImageContainer = styled.div`
   background-size: cover;
   background-repeat: no-repeat;
   @media (max-width: 768px) {
-    /* padding: 2.4rem;
-    height: 100%;
-    background-image: url(${heroImageMobile});
-    background-position-y: 20rem;
+    padding: 2.4rem;
+    height: 100vh;
+    background-image: url(${visionImageMobile});
+    /* /* background-position-y: 20rem; */
     background-size: cover;
-    background-repeat: no-repeat; */
+    background-repeat: no-repeat;
   }
 `;
 
