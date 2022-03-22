@@ -15,6 +15,7 @@ import heroImage from "assets/img-hero.svg";
 import heroImageMobile from "assets/img-hero-sm.svg";
 import aboutImage from "assets/img-about.svg";
 import visionImage from "assets/img-vision.svg";
+import getStartedAnimation from "assets/get-started-animation.svg";
 
 const StyledLayout = styled(Layout)`
   grid-template:
@@ -286,6 +287,7 @@ const HowFeatureCopy = styled.p`
 const HowCopy = styled.p`
   font-size: 3.2rem;
   line-height: 3.8rem;
+  font-weight: 600;
   text-align: center;
   color: ${({ theme }) => `${theme.colors.primary}`};
   margin-bottom: 0;
@@ -293,6 +295,49 @@ const HowCopy = styled.p`
     font-size: 2.8rem;
     line-height: 3.2rem;
   }
+`;
+
+const HowAnimationSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 4rem;
+`;
+
+const HowAnimationContainer = styled.div`
+  width: 100%;
+  height: 30rem;
+`;
+
+const HowAnimation = styled.img`
+  height: 100%;
+  width: 100%;
+  @media (max-width: 768px) {
+    /* padding: 2.4rem;
+    height: 100%;
+    background-image: url(${heroImageMobile});
+    background-position-y: 20rem;
+    background-size: cover;
+    background-repeat: no-repeat; */
+  }
+`;
+
+const HowSubContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 60%;
+`;
+
+const HowSubContainerNarrow = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 40%;
 `;
 
 const FAQImageContainer = styled.div`
@@ -462,10 +507,12 @@ const HomePage = () => {
       </HeadlineTickerContainer> */}
       <HowSectionContainer>
         <HowHeading>How it works</HowHeading>
-        <HowCopy>
-          When creators own their content, publishing and subscribing
-          acknowledges the value of creativity and community.
-        </HowCopy>
+        <HowSubContainer>
+          <HowCopy>
+            When creators own their content, publishing and subscribing
+            acknowledges the value of creativity and community.
+          </HowCopy>
+        </HowSubContainer>
         <HowFeatureGrid>
           <HowFeature>
             <HowFeatureTitle>Your Publication</HowFeatureTitle>
@@ -496,6 +543,18 @@ const HomePage = () => {
             </HowFeatureCopy>
           </HowFeature>
         </HowFeatureGrid>
+        <HowAnimationSection>
+          <HowAnimationContainer>
+            <HowAnimation src={getStartedAnimation} alt="" />
+          </HowAnimationContainer>
+        </HowAnimationSection>
+        <HowSubContainerNarrow>
+          <HowCopy>
+            While we look forward to building more with you, and our friends at
+            Unlock and Raid Guild, the V1 release of HEADLINE includes the
+            following:
+          </HowCopy>
+        </HowSubContainerNarrow>
       </HowSectionContainer>
       <FAQImageContainer />
       <FAQSection />
