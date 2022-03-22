@@ -652,11 +652,13 @@ const HomePage = () => {
         </HowFeatureTwoGrid>
         <HowSubContainerNarrow>
           <HowFeatureCenter>
-            <HowFeatureTitle>You decide HEADLINE&pos;s future.</HowFeatureTitle>
+            <HowFeatureTitle>
+              You decide HEADLINE&apos;s future.
+            </HowFeatureTitle>
             <HowFeatureCopy>
-              Decentralized and open, HEADLINE&pos;s future is in the hands of
+              Decentralized and open, HEADLINE&apos;s future is in the hands of
               its community. We have a solid feature list and welcome
-              contributions and innovations. Let&pos;s shape this platform
+              contributions and innovations. Let&apos;s shape this platform
               together.
             </HowFeatureCopy>
           </HowFeatureCenter>
