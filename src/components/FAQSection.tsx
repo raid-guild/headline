@@ -12,6 +12,7 @@ const FAQContainer = styled.div`
   justify-content: center;
   align-items: center;
   padding: 20rem 0;
+
   background: ${({ theme }) => `${theme.colors.primary}`};
   @media (max-width: 768px) {
     width: 100vw;
@@ -28,6 +29,7 @@ const FAQItemsContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  max-width: 40%;
 `;
 
 const FAQSection = () => (

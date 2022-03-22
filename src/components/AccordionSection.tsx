@@ -53,6 +53,7 @@ const StyledAccordionTrigger = styled(AccordionPrimitive.Trigger)`
   flex-direction: row;
   align-items: center;
   font-size: 4.8rem;
+  font-weight: 700;
   line-height: 5.2rem;
   background: transparent;
   color: #f0efef;
@@ -71,13 +72,13 @@ const StyledAccordionContent = styled(AccordionPrimitive.Content)`
   line-height: 2.8rem;
   color: #f0efef;
   max-width: none;
-  flex-grow: 0;
   flex-wrap: wrap;
+  margin-bottom: 2.4rem;
 `;
 
 const AccordionSection = () => {
   return (
-    <StyledAccordionRoot type="single" collapsible>
+    <StyledAccordionRoot type="single" collapsible defaultValue="item-1">
       <StyledAccordionItem value="item-1">
         <StyledAccordionHeader>
           <StyledAccordionTrigger>
