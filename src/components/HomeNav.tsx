@@ -22,25 +22,24 @@ const NavText = styled(Text)`
 const navItems = [
   {
     text: "How it works",
-    link: "/#",
+    link: "/##howitworks",
   },
   {
     text: "FAQ",
-    link: "/#",
-  },
-  {
-    text: "Get started",
-    link: "/#",
+    link: "/##faq",
   },
 ];
 
 const HomeNav = () => (
   <NavContainer>
     {navItems.map((navItem, idx) => (
-      <Link to={navItem.link} key={idx}>
+      <a href={navItem.link} key={idx}>
         <NavText size="md">{navItem.text}</NavText>
-      </Link>
+      </a>
     ))}
+    <Link to="/dashboard">
+      <NavText size="md">Get Started</NavText>
+    </Link>
   </NavContainer>
 );
 

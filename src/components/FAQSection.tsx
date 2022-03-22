@@ -11,7 +11,7 @@ const FAQContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   background: ${({ theme }) => `${theme.colors.primary}`};
-
+  min-height: 80vh;
   height: 80vh;
   width: 100%;
   @media (max-width: 768px) {
@@ -32,7 +32,7 @@ const FAQItemsContainer = styled.div`
 `;
 
 const FAQSection = () => (
-  <FAQContainer>
+  <FAQContainer id="#faq">
     <FAQTitle>FAQ</FAQTitle>
     <FAQItemsContainer></FAQItemsContainer>
   </FAQContainer>

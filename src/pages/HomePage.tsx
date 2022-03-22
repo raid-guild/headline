@@ -544,7 +544,7 @@ const HomePage = () => {
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEA</TickerItem>
       </HeadlineTickerContainer> */}
-      <HowSectionContainer>
+      <HowSectionContainer id="#howitworks">
         <HowHeading>How it works</HowHeading>
         <HowSubContainer>
           <HowCopy>
