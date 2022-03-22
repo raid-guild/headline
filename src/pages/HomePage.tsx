@@ -537,13 +537,13 @@ const HomePage = () => {
           </AboutGrid>
         </AboutSectionContainer>
       </StyledBodyContainer>
-      {/* <HeadlineTickerContainer>
+      <HeadlineTickerContainer>
         <TickerItem size="xxl">ADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEA</TickerItem>
-      </HeadlineTickerContainer> */}
+      </HeadlineTickerContainer>
       <HowSectionContainer id="#howitworks">
         <HowHeading>How it works</HowHeading>
         <HowSubContainer>
