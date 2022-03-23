@@ -444,8 +444,8 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           apiKey: emailSettings?.apiKey || "",
         };
         const locks = readyArticle?.paid
-          ? [...freeLocks, ...paidLocks]
-          : freeLocks;
+          ? paidLocks
+          : [...freeLocks, ...paidLocks];
         await sendMessageFromLocks(settings, locks, address || "", provider);
         setHide(true);
       }

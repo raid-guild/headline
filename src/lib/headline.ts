@@ -6,7 +6,7 @@ import { sendMessage, EmailParams } from "lib/mailgun";
 import { getKeyAndEncrypt, getKeyAndDecrypt, LitNodeClient } from "lib/lit";
 import { fetchUserMetadata, UnlockUserMetadata } from "lib/unlock";
 import { Publication } from "services/publication/slice";
-import { Lock } from "services/publication/lock";
+import { Lock } from "services/lock/slice";
 import { ChainName } from "types";
 
 export const storeAndEncryptArticle = async (
