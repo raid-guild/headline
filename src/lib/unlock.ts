@@ -35,69 +35,86 @@ export const checkoutRedirect = (
   return `${base}${prms.toString()}`;
 };
 
+// [
+//     {
+//         "userAddress": "0xEAC5F0d4A9a45E1f9FdD0e7e2882e9f60E301156",
+//         "data": {
+//             "userMetadata": {
+//                 "protected": {
+//                     "Email": "keating.dev@protonmail.com"
+//                 },
+//                 "public": {}
+//             }
+//         }
+//     }
+// ]
+
+export type UnlockUserMetadata = {
+  userAddress: string;
+  data: {
+    userMetadata: {
+      protected: {
+        Email: string;
+      };
+    };
+  };
+};
+
 export const fetchUserMetadata = async (
-  address: string,
-  provider: ethers.providers.Web3Provider
+  lockAddress: string,
+  walletAddress: string,
+  provider: ethers.providers.Web3Provider,
+  page = 0
 ) => {
-  // const x = {
-  //   types: {
-  //     EIP712Domain: [
-  //       { name: "name", type: "string" },
-  //       { name: "version", type: "string" },
-  //       { name: "chainId", type: "uint256" },
-  //       { name: "verifyingContract", type: "address" },
-  //       { name: "salt", type: "bytes32" },
-  //     ],
-  //     KeyMetadata: [],
-  //   },
-  //   domain: { name: "Unlock", version: "1" },
-  //   primaryType: "KeyMetadata",
-  //   message: {
-  //     LockMetaData: {
-  //       address: "0xdcc16895396d619fff92921957124db83c260913",
-  //       owner: "0xEAC5F0d4A9a45E1f9FdD0e7e2882e9f60E301156",
-  //       timestamp: 1647915321724,
-  //       page: 0,
-  //     },
-  //   },
-  // };
-
-  const domain = {
-    name: "Unlock",
-    version: "1",
-  };
-  const types = {
-    LockMetaData: [
-      { name: "address", type: "address" },
-      { name: "owner", type: "address" },
-    ],
-  };
-
-  const value = {
-    address: "0xdcc16895396d619fff92921957124db83c260913",
-    owner: "0xEAC5F0d4A9a45E1f9FdD0e7e2882e9f60E301156",
+  const data = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+        { name: "salt", type: "bytes32" },
+      ],
+      KeyMetadata: [],
+    },
+    domain: { name: "Unlock", version: "1" },
+    primaryType: "KeyMetadata",
+    message: {
+      LockMetaData: {
+        address: lockAddress,
+        owner: walletAddress,
+        timestamp: 1647915321730,
+        page: page,
+      },
+    },
   };
 
   const signer = provider.getSigner();
-  const signature = await signer._signTypedData(domain, types, value);
-  const authorization = `Bearer ${btoa(signature)}`;
+  const signature = await signer.signMessage(
+    `I want to access member data for ${lockAddress}`
+  );
+  const authorization = `Bearer-Simple ${btoa(signature)}`;
   console.log(signature);
   console.log(authorization);
   const prms = new URLSearchParams({
-    data: JSON.stringify(value) || "",
-    chainId: "4",
+    chain: "4",
+    data: JSON.stringify(data) || "",
+    signature: signature,
   });
 
-  const resp = await fetch(
-    `https://locksmith.unlock-protocol.com/api/key/${address}/keyHolderMetadata?${prms.toString()}`,
-    {
-      headers: {
-        Authorization: authorization,
-      },
-    }
-  ).catch((e) => {
-    console.log("here");
+  try {
+    const resp = await fetch(
+      `https://locksmith.unlock-protocol.com/api/key/${lockAddress}/keyHolderMetadata?${prms.toString()}`,
+      {
+        headers: {
+          Authorization: authorization,
+        },
+      }
+    );
+    console.log(resp);
+
+    return (await resp.json()) as UnlockUserMetadata[];
+  } catch (e) {
     console.error(e);
-  });
-  console.log(resp);
+  }
 };

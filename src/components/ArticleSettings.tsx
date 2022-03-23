@@ -29,6 +29,7 @@ import { useAppDispatch, useAppSelector } from "store";
 import { fetchIPFS, storeIpfs } from "lib/ipfs";
 import { sendMessage } from "lib/mailgun";
 import { networks } from "lib/networks";
+import { sendMessageFromLocks } from "lib/headline";
 
 import portrait from "assets/portrait.svg";
 import settings from "assets/settings.svg";
@@ -275,10 +276,6 @@ export const ArticleSettings = ({
     }
   }, []);
 
-  console.log("Length");
-  console.log(locks);
-  console.log(locks.length);
-
   return (
     <Dialog
       baseId="article-settings"
@@ -353,7 +350,7 @@ export const ArticleSettings = ({
 
 export const PublishModal = ({ streamId }: { streamId: string }) => {
   const dispatch = useAppDispatch();
-  const { chainId } = useWallet();
+  const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
@@ -364,7 +361,8 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   const emailSettings = useAppSelector(
     (state) => state.publication.emailSettings
   );
-  const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
+  const paidLocks = useAppSelector((state) => lockSelectors.paidLocks(state));
+  const freeLocks = useAppSelector((state) => lockSelectors.freeLocks(state));
 
   const [hide, setHide] = useState(false);
   const [previewImg, setPreviewImg] = useState<File | null>(null);
@@ -373,8 +371,8 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     state: `${article?.paid ? "paid" : "free"}`,
   });
 
-  const publish = async () => {
-    if (chainId && client) {
+  const publish = useCallback(async () => {
+    if (chainId && client && provider) {
       let previewUrl = "";
       if (previewImg) {
         previewUrl = await storeIpfs(await previewImg.arrayBuffer());
@@ -400,18 +398,32 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
         })
       );
       // email article
-      const params = {
-        from: emailSettings?.mailFrom || "",
-        to: ["keating.dev@protonmail.com", "alexander.keating@protonmail.com"],
-        subject: article.title,
-        text: article.text,
-        domain: emailSettings?.domain || "",
-        apiKey: emailSettings?.apiKey || "",
-      };
-      await sendMessage(params);
-      setHide(true);
+      //
+      // Get all locks
+      // for each lock fetch all pages of metadata
+      // send message every 1000
+      if (
+        emailSettings?.mailFrom &&
+        emailSettings?.apiKey &&
+        emailSettings?.domain &&
+        emailSettings?.apiKey
+      ) {
+        const settings = {
+          from: emailSettings?.mailFrom || "",
+          subject: article.title,
+          text: article.text,
+          domain: emailSettings?.domain || "",
+          apiKey: emailSettings?.apiKey || "",
+        };
+        // await sendMessageFromLocks(params);
+        const locks = readyArticle?.paid
+          ? [...freeLocks, ...paidLocks]
+          : freeLocks;
+        await sendMessageFromLocks(settings, locks, address || "", provider);
+        setHide(true);
+      }
     }
-  };
+  }, [address, provider]);
 
   return (
     <Dialog
@@ -432,7 +444,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
       <DialogContainer>
         <ReceiverSettings
           radio={radio}
-          allowPaid={locks.length > 0 ? true : false}
+          allowPaid={paidLocks.length > 0 ? true : false}
         />
         <SocialPreview
           description={description}

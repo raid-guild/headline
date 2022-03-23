@@ -19,9 +19,9 @@
 // subject
 // text
 // html
-type EmailParams = {
+export type EmailParams = {
   from: string;
-  to: string;
+  to: string[];
   subject: string;
   text: string;
   domain: string;
@@ -46,18 +46,16 @@ export const sendMessage = async (emailParams: EmailParams) => {
   //     }
   //   )
   console.log(emailParams);
+  const recipientVars = emailParams.to.reduce(
+    (prev, val) => ({ ...prev, [val]: {} }),
+    {}
+  );
   const formData = new FormData();
   formData.append("from", emailParams.from);
-  formData.append("to", emailParams.to);
+  formData.append("to", emailParams.to.join(", "));
   formData.append("subject", emailParams.subject);
   formData.append("text", emailParams.text);
-  formData.append(
-    "recipient-variables",
-    JSON.stringify({
-      "keating@protonmail.com": {},
-      "alexander.keating@protonmail.com": {},
-    })
-  );
+  formData.append("recipient-variables", JSON.stringify(recipientVars));
   const sent = await fetch(
     `https://api.mailgun.net/v3/${emailParams.domain}/messages`,
     {

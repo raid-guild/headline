@@ -59,8 +59,6 @@ const PublicationSettings = () => {
         console.error("Chain Id is falsey");
         return;
       }
-      // Purely for testing
-      // await fetchUserMetadata(address || "", provider);
       dispatch(
         updatePublication({
           publication: {
