@@ -400,6 +400,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
       domain: emailSettings?.domain || "",
       apiKey: emailSettings?.apiKey || "",
       to: [testEmail],
+      infra: emailSettings?.infra?.toLowerCase() as "eu" | "main",
     };
     await sendMessage(settings);
   }, [testEmail]);
@@ -442,6 +443,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           html: await parseMarkdown(article.title, article.text),
           domain: emailSettings?.domain || "",
           apiKey: emailSettings?.apiKey || "",
+          infra: emailSettings?.infra?.toLowerCase() as "eu" | "main",
         };
         const locks = readyArticle?.paid
           ? paidLocks

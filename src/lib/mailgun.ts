@@ -1,16 +1,3 @@
-// need domain
-// need api key
-// need whether using us or EU infra
-
-// Base url https://api.mailgun.net
-// create message v3/<domain>/messages
-//
-// vars to set
-// from
-// to
-// subject
-// text
-// html
 export type EmailParams = {
   from: string;
   to: string[];
@@ -19,6 +6,7 @@ export type EmailParams = {
   domain: string;
   html: string;
   apiKey: string;
+  infra: "main" | "eu";
 };
 export const sendMessage = async (emailParams: EmailParams) => {
   console.log(emailParams);
@@ -26,6 +14,10 @@ export const sendMessage = async (emailParams: EmailParams) => {
     (prev, val) => ({ ...prev, [val]: {} }),
     {}
   );
+  const baseUri =
+    emailParams.infra === "eu"
+      ? "https://api.eu.mailgun.net/v3"
+      : "https://api.mailgun.net/v3";
   const formData = new FormData();
   formData.append("from", emailParams.from);
   formData.append("to", emailParams.to.join(", "));
@@ -33,15 +25,12 @@ export const sendMessage = async (emailParams: EmailParams) => {
   formData.append("text", emailParams.text);
   formData.append("html", emailParams.html);
   formData.append("recipient-variables", JSON.stringify(recipientVars));
-  const sent = await fetch(
-    `https://api.mailgun.net/v3/${emailParams.domain}/messages`,
-    {
-      method: "POST",
-      body: formData,
-      headers: {
-        Authorization: `Basic ${btoa(`api:${emailParams.apiKey}`)}`,
-      },
-    }
-  );
+  const sent = await fetch(`${baseUri}/${emailParams.domain}/messages`, {
+    method: "POST",
+    body: formData,
+    headers: {
+      Authorization: `Basic ${btoa(`api:${emailParams.apiKey}`)}`,
+    },
+  });
   console.log(sent);
 };
