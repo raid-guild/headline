@@ -25,7 +25,7 @@ const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
   justify-content: flex-start;
   max-width: 85rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     margin: 0 2.4rem;
   }
 `;
@@ -41,6 +41,12 @@ const StyledHeaderContainer = styled(HeaderContainer)`
     justify-content: center;
     padding: 0;
   }
+  @media (max-width: 990px) {
+    grid-area: header;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
 `;
 
 const PublicationInfoContainer = styled.div`
@@ -48,7 +54,7 @@ const PublicationInfoContainer = styled.div`
   gap: 1.6rem;
   justify-content: center;
   align-items: center;
-  @media (max-width: 720px) {
+  @media (max-width: 990px) {
     flex-direction: column;
     width: 100%;
     padding: 2.4rem 2.4rem 1.6rem;
@@ -60,23 +66,27 @@ const TitleContainer = styled.div`
   gap: 1.6rem;
   justify-content: center;
   align-items: center;
-  @media (max-width: 720px) {
+  @media (max-width: 990px) {
     flex-direction: column;
     width: 100%;
+    margin-top: 2.4rem;
+  }
+  @media (max-width: 990px) {
+    flex-direction: row;
     margin-top: 2.4rem;
   }
 `;
 
 export const HeaderText = styled(Text)`
   margin-left: 0px;
-  @media (min-width: 768px) {
+  @media (max-width: 990px) {
     margin-left: 6.4rem;
   }
 `;
 
 const StyledButton = styled(Button)`
   min-width: 295px;
-  @media (max-width: 720px) {
+  @media (max-width: 990px) {
     width: 100%;
     margin-top: 1.6rem;
     min-width: 327px;
@@ -85,7 +95,7 @@ const StyledButton = styled(Button)`
 
 const ToolbarContainer = styled.div`
   height: 7.2rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     width: 100%;
   }
 `;
@@ -102,7 +112,7 @@ const EntriesContainer = styled.div`
   flex-direction: column;
   height: 100%;
   width: 100%;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     min-height: 30rem;
   }
 `;

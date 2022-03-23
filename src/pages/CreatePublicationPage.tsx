@@ -62,6 +62,14 @@ const StyledText = styled(Text)`
   }
 `;
 
+const WritingActionsContainer = styled.div`
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+`;
+
 const StyledHeaderContainer = styled(HeaderContainer)`
   border-bottom: ${({ theme }) => `0.1rem solid ${theme.colors.lightGrey}`};
 `;
@@ -85,6 +93,10 @@ const LeftHeaderContainer = styled.div`
   gap: 1rem;
   margin-left: 6rem;
   align-items: center;
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    margin-left: 2.4rem;
+  }
 `;
 
 const BodyHeaderContainer = styled.div`
@@ -119,20 +131,22 @@ const SuccessfullyCreatedPublication = ({ name }: { name: string }) => {
           The {name} was successfully created.
         </Text>
       </BodyHeaderContainer>
-      <StyledIcon size="xl" src={celebrateIcon} alt="A celebration icon" />
-      <StyledButton
-        color="primary"
-        variant="contained"
-        size="xl"
-        onClick={goToPublish}
-      >
-        Start Writing
-      </StyledButton>
-      <Link to={"/dashboard"}>
-        <Text size="md" color="primary">
-          Return to dashboard
-        </Text>
-      </Link>
+      <WritingActionsContainer>
+        <StyledIcon size="xl" src={celebrateIcon} alt="A celebration icon" />
+        <StyledButton
+          color="primary"
+          variant="contained"
+          size="xl"
+          onClick={goToPublish}
+        >
+          Start Writing
+        </StyledButton>
+        <Link to={"/dashboard"}>
+          <Text size="md" color="primary">
+            Return to dashboard
+          </Text>
+        </Link>
+      </WritingActionsContainer>
     </>
   );
 };
@@ -221,7 +235,7 @@ const CreatePublicationPage = () => {
       <StyledHeaderContainer>
         <LeftHeaderContainer>
           <BackButton size="md" />
-          <Icon size="xl" src={small_logo} alt="Unlock logo" />
+          {/* <Icon size="xl" src={small_logo} alt="Unlock logo" /> */}
           <Text size="md" weight="semibold" color="helpText">
             Create Publication
           </Text>

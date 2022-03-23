@@ -36,7 +36,7 @@ const DashboardContainer = styled.div`
   width: 100%;
   margin-bottom: 9.6rem;
   padding: 6.4rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     padding: 2.4rem;
   }
 `;
@@ -47,7 +47,7 @@ const BodyTitleContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.8rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     text-align: center;
   }
 `;
@@ -63,7 +63,7 @@ const BodyButtonContainer = styled.div`
   border-radius: 8px;
   margin-top: 4rem;
   border: 1px solid #f0efef;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     padding-bottom: 1.6rem;
     margin-bottom: 1.6rem;
     gap: 4rem;
@@ -71,7 +71,7 @@ const BodyButtonContainer = styled.div`
 `;
 
 const BodyTextContainer = styled.div`
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     padding: 2.4rem 2.4rem 0;
     text-align: center;
   }
@@ -123,7 +123,7 @@ const LoggedOutBody = ({
       </BodyButtonContainer>
       <BodyFooterContainer>
         <Text size="base">
-          How does web3substack work? Check out our{" "}
+          How does Headline work? Check out our{" "}
           <ExternalLink href="www.google.com">
             <Text as="span" size="base" weight="bold" color="primary">
               Guide

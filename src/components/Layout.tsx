@@ -27,7 +27,7 @@ export const Layout = styled.div`
     "sidebar header" 9.6rem
     "sidebar body" 1fr
     / 40rem 1fr;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     padding-bottom: 10rem;
     grid-template:
       "header"
@@ -69,7 +69,7 @@ export const HeaderContainer = styled.div`
   grid-area: header;
   display: flex;
   align-items: center;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
@@ -90,9 +90,13 @@ export const BodyContainer = styled.div<BodyContainerProps>`
 export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  @media (max-width: 720px) {
+  @media (max-width: 768px) {
     width: 100%;
     padding: 2.4rem 2.4rem 1.6rem;
+  }
+  @media (max-width: 990px) {
+    align-items: flex-start;
+    padding: 2.4rem 0 1.6rem;
   }
 `;
 

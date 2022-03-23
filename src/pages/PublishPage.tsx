@@ -197,7 +197,7 @@ const EmptyCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 0.8rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     gap: 2.4rem;
     padding: 2.4rem 1.6rem;
   }
