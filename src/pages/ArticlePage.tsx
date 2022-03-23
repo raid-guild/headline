@@ -32,7 +32,7 @@ const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
   justify-content: flex-start;
   max-width: 85rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     margin: 0 2.4rem;
   }
 `;
@@ -41,7 +41,7 @@ const StyledHeaderContainer = styled(HeaderContainer)`
   max-width: 85rem;
   display: flex;
   justify-content: space-between;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     grid-area: header;
     flex-direction: column;
     align-items: center;
@@ -55,7 +55,7 @@ const TitleContainer = styled.div`
   gap: 1.6rem;
   justify-content: center;
   align-items: center;
-  @media (max-width: 720px) {
+  @media (max-width: 990px) {
     flex-direction: column;
     width: 100%;
     margin-top: 2.4rem;
@@ -64,7 +64,7 @@ const TitleContainer = styled.div`
 
 const StyledButton = styled(Button)`
   min-width: 295px;
-  @media (max-width: 720px) {
+  @media (max-width: 990px) {
     width: 100%;
     margin-top: 1.6rem;
     min-width: 327px;
@@ -73,7 +73,7 @@ const StyledButton = styled(Button)`
 
 const ToolbarContainer = styled.div`
   height: 7.2rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     width: 100%;
   }
 `;
@@ -87,15 +87,15 @@ const DescriptionContainer = styled.div`
 
 const StyledGatedModal = styled.div<{ hidden: boolean }>`
   z-index: 1000;
-	left: 10%;
-	bottom 5%;
-	padding: 3.2rem;
+  left: 10%;
+  bottom: 5%;
+  padding: 3.2rem;
   background: ${({ theme }) => theme.colors.backgroundGrey};
-	position: absolute;
-	gap: 1rem;
-	display: flex;
-	flex-direction: column;
-	visibility: ${({ hidden }) => (hidden ? `hidden` : `visible`)};
+  position: absolute;
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  visibility: ${({ hidden }) => (hidden ? `hidden` : `visible`)};
 `;
 
 const CardContainer = styled.div`
