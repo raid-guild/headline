@@ -10,6 +10,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
 	*, *::before, *::after {
+		box-sizing: border-box;
 		border-width: 0;
 		border-style: solid;
 		box-sizing: border-box;
@@ -23,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
        padding: 0px;
 	   box-sizing: border-box;
        background-color: rgb(252, 253, 254);
-			 font-family: "Inter";
+	   font-family: "Inter";
        font-size: 1.6rem;
 			 color: #000000;
     }

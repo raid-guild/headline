@@ -22,11 +22,11 @@ const EmailSettingsContainer = styled.div`
   padding: 3.2rem;
   gap: 1.6rem;
   width: 100%;
+  border-radius: 0.8rem;
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: auto;
   }
 `;
 

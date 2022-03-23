@@ -6,13 +6,14 @@ import FullLogo from "components/FullLogo";
 
 const MobileHeaderContainer = styled(HeaderContainer)`
   display: none;
-  @media (max-width: 992px) {
+  @media (max-width: 990px) {
     display: flex;
     width: 100%;
+    height: auto;
     align-items: flex-start;
     justify-content: flex-start;
     padding: 0 2.4rem;
-    max-width: 100%;
+    max-width: none;
     border-bottom: 1px solid;
     border-color: #f0efef;
   }
@@ -23,9 +24,9 @@ const LogoContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     justify-content: flex-start;
-    padding-bottom: 1.6rem;
+    padding: 1.6rem 0;
   }
 `;
 

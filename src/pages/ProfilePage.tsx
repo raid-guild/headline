@@ -35,7 +35,7 @@ const ProfilePageBodyContainer = styled(BodyContainer)`
   justify-content: flex-start;
   margin-right: 2rem;
   gap: 3.2rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     justify-content: flex-start;
     align-items: flex-start;
     margin: 0;
@@ -51,7 +51,7 @@ const BasicProfileCardContainer = styled.div`
   padding: 4rem;
   max-length: 90rem;
   border-radius: 0.8rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     gap: 1.6rem;
     padding: 2.4rem;
     margin: 0 2.4rem;
@@ -59,7 +59,7 @@ const BasicProfileCardContainer = styled.div`
 `;
 
 const ProfileCardTitle = styled(Title)`
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     display: none;
   }
 `;
@@ -73,7 +73,7 @@ const ProfileTextContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     flex-wrap: wrap;
   }
 `;
@@ -89,7 +89,7 @@ const InboxContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
-  @media (max-width: 720px) {
+  @media (max-width: 990px) {
     width: 100%;
     padding: 2.4rem 2.4rem 1.6rem;
     border-color: ${({ theme }) => theme.colors.mediumGrey};

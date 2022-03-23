@@ -29,9 +29,9 @@ const StyledDialog = styled(BaseDialog)`
   z-index: 1000;
   padding: 3.2rem;
   @media (max-width: 768px) {
-    width: 75%;
     padding: 1.6rem;
-    max-height: none;
+    overflow-y: scroll;
+    width: 90%;
   }
 `;
 

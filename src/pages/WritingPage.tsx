@@ -45,8 +45,22 @@ const StyledBody = styled(BodyContainer)`
   display: flex;
   flex-direction: column;
   margin-bottom: 7rem;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     margin: 2.4rem;
+    min-width: 0;
+    padding-bottom: 4rem;
+    & #id-2.remirror-toolbar {
+      align-items: flex-start;
+      flex-wrap: wrap;
+      flex-basis: 40%;
+      background: #f8f8f8;
+      & .remirror-group {
+        margin: 0;
+      }
+    }
+    & .remirror-editor-wrapper {
+      padding-bottom: 4rem;
+    }
   }
 `;
 
@@ -55,12 +69,12 @@ const StyledHeaderContainer = styled(HeaderContainer)`
   margin-right: 7rem;
   justify-content: space-between;
   align-items: center;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     margin: 0;
     flex-direction: row;
     width: 100%;
-    justify-content: space-evenly;
-    padding: 2.4rem 0 0;
+    justify-content: flex-start;
+    padding: 2.4rem 2.4rem 0;
     border-bottom: 1px solid;
     border-color: #f0efef;
   }
@@ -70,7 +84,7 @@ const LeftHeaderContainer = styled.div`
   display: flex;
   gap: 0.8rem;
   align-items: center;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
   }
 `;
 
@@ -78,7 +92,7 @@ const RightHeaderContainer = styled.div`
   display: flex;
   gap: 1.6rem;
   align-items: center;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     justify-content: space-between;
   }
 `;
@@ -86,7 +100,7 @@ const RightHeaderContainer = styled.div`
 const TitleContainer = styled.div`
   display: flex;
   flex-direction: column;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
     display: none;
   }
 `;
@@ -97,7 +111,9 @@ const StyledInput = styled(Input)`
   line-height: ${({ theme }) => theme.title.md.lineHeight};
   font-weight: ${({ theme }) => theme.title.md.fontWeight};
   color: ${({ theme }) => theme.colors.grey};
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
+    width: 80%;
+    min-width: 0;
   }
 `;
 
@@ -106,7 +122,7 @@ const StyledMarkdownEditor = styled(MarkdownEditor)`
   display: flex;
   margin-top: 3.2rem;
   height: 100%;
-  @media (max-width: 768px) {
+  @media (max-width: 990px) {
   }
 `;
 
