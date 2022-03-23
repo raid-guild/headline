@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-
-import logo from "assets/logo.svg";
+import logo from "assets/logo-full-new.svg";
 
 type Props = {
   className?: string;
@@ -9,6 +8,9 @@ type Props = {
 
 const Logo = styled.img`
   height: 4.8rem;
+  @media (max-width: 768px) {
+    height: 4rem;
+  }
 `;
 
 const FullLogo = ({ className }: Props) => {
