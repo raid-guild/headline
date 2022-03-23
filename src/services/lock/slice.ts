@@ -88,6 +88,15 @@ export const lockSelectors = {
       return val;
     }
   ),
+  freeLocks: createSelector(
+    [(state: RootState) => state.lock],
+    (lockRegistry: LockRegistry) => {
+      const val = Object.values(lockRegistry).filter((lock) => {
+        return lock.keyPriceSimple === 0;
+      });
+      return val;
+    }
+  ),
 };
 
 export const verifyLockSlice = createSlice({
@@ -131,6 +140,7 @@ export const verifyLock = createAsyncThunk(
       const chain = chainMeta.chainNumber;
       const litClient = args.litClient;
       const lock = await args.web3Service.getLock(args.address, chain);
+      // TODO make sure user owns the lock
       if (lock) {
         const { symbol, num } = await getTokenSymbolAndNumber(
           lock.keyPrice,

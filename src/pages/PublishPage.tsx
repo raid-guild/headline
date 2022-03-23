@@ -474,6 +474,7 @@ const PublishBody = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const toolbar = useToolbarState();
   const params = useParams();
   const navigate = useNavigate();
@@ -489,7 +490,11 @@ const PublishBody = () => {
       return;
     }
     dispatch(
-      fetchArticleRegistry({ chainName: networks[chainId]?.litName, client })
+      fetchArticleRegistry({
+        chainName: networks[chainId]?.litName,
+        client,
+        litClient,
+      })
     );
   }, []);
 

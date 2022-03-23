@@ -28,15 +28,21 @@ export type PublicationLock = {
   address: string;
 };
 
+export type MailGunSettings = {
+  domain: string;
+  apiKey: string;
+  infra: string;
+  mailFrom: string;
+};
+
 export type Publication = {
   name?: string;
   description?: string;
   draftAccess: LitAccess;
   publishAccess: LitAccess;
   locks?: PublicationLock[];
-  mailTo?: string;
-  apiKey?: string;
   streamId?: string;
+  emailSettings?: MailGunSettings;
   registryId?: string;
 };
 
@@ -58,6 +64,12 @@ export const publicationSlice = createSlice({
     apiKey: "",
     streamId: "",
     registryId: "",
+    emailSettings: {
+      domain: "",
+      apiKey: "",
+      infra: "",
+      mailFrom: "",
+    } as MailGunSettings | undefined,
   },
   reducers: {
     create(state, action: PayloadAction<Publication>) {
@@ -66,8 +78,7 @@ export const publicationSlice = createSlice({
       state.draftAccess = action.payload.draftAccess;
       state.publishAccess = action.payload.publishAccess;
       state.locks = action.payload.locks || [];
-      state.mailTo = action.payload.mailTo || "";
-      state.apiKey = action.payload.apiKey || "";
+      state.emailSettings = action.payload.emailSettings || undefined;
       state.streamId = action.payload.streamId || "";
       console.log(`publication id ${action.payload.streamId}`);
       state.registryId = action.payload.registryId || "";
@@ -259,15 +270,18 @@ export const fetchPublication = createAsyncThunk(
 Pub jdoc ${doc?.id?.toString()}
 				`);
       let publication = doc?.content as Publication | null;
-      if (publication && publication.apiKey) {
+      if (publication && publication?.emailSettings?.apiKey) {
         const apiKey = await getKeyAndDecrypt(
           args.chainName,
           publication.draftAccess.encryptedSymmetricKey,
           publication.draftAccess.accessControlConditions,
-          publication.apiKey,
+          publication.emailSettings.apiKey,
           args.litClient
         );
-        publication = { ...publication, apiKey };
+        publication = {
+          ...publication,
+          emailSettings: { ...publication.emailSettings, apiKey },
+        };
       }
       if (publication) {
         thunkAPI.dispatch(
@@ -368,8 +382,7 @@ export const updatePublication = createAsyncThunk(
         name: string;
         description: string;
         locks: PublicationLock[];
-        mailTo: string;
-        apiKey: string;
+        emailSettings: MailGunSettings;
         publishAccess?: LitAccess;
       };
       if (pub.name !== undefined) {
@@ -381,22 +394,23 @@ export const updatePublication = createAsyncThunk(
       if (pub.locks !== undefined) {
         updates["locks"] = pub.locks;
       }
-      if (pub.mailTo !== undefined) {
-        updates["mailTo"] = pub.mailTo;
+      if (pub.emailSettings !== undefined) {
+        let apiKey;
+        if (pub.emailSettings.apiKey !== undefined) {
+          const content = await getKeyEncryptText(
+            args.chainName,
+            publication.draftAccess.encryptedSymmetricKey,
+            publication.draftAccess.accessControlConditions,
+            pub.emailSettings.apiKey,
+            litClient
+          );
+
+          apiKey = content;
+        }
+        updates["emailSettings"] = { ...pub.emailSettings, apiKey: apiKey };
       }
       if (pub.publishAccess !== undefined) {
         updates["publishAccess"] = pub.publishAccess;
-      }
-      if (pub.apiKey !== undefined) {
-        const content = await getKeyEncryptText(
-          args.chainName,
-          publication.draftAccess.encryptedSymmetricKey,
-          publication.draftAccess.accessControlConditions,
-          pub.apiKey,
-          litClient
-        );
-
-        updates["apiKey"] = content;
       }
 
       const updatedPublication = {
@@ -406,8 +420,9 @@ export const updatePublication = createAsyncThunk(
       console.log(updatedPublication);
       console.log(updates);
       await store.set("publication", updatedPublication);
-      if (pub.apiKey !== undefined) {
-        updatedPublication["apiKey"] = pub.apiKey;
+      if (updatedPublication.emailSettings.apiKey !== undefined) {
+        updatedPublication["emailSettings"]["apiKey"] =
+          pub?.emailSettings?.apiKey || "";
       }
       await thunkAPI.dispatch(publicationActions.create(updatedPublication));
       return publication;

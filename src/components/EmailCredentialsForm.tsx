@@ -27,6 +27,7 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
   const {
     formState: { errors },
     handleSubmit,
+    register,
     control,
   } = useForm();
   const publication = useAppSelector((state) => state.publication);
@@ -36,10 +37,24 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
   return (
     <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
       <Controller
+        name="domain"
+        control={control}
+        rules={{ required: true }}
+        defaultValue={publication?.emailSettings?.domain || ""}
+        render={({ field }) => (
+          <Input title="Domain" errorMsg={errors?.domain} {...field} />
+        )}
+      />
+      <label>Infrastructure</label>
+      <select {...register("region")}>
+        <option>Main</option>
+        <option>EU</option>
+      </select>
+      <Controller
         name="apiKey"
         control={control}
         rules={{ required: true }}
-        defaultValue={publication.apiKey}
+        defaultValue={publication?.emailSettings?.apiKey}
         render={({ field }) => (
           <Input title="Api Key" errorMsg={errors?.apiKey} {...field} />
         )}
@@ -47,7 +62,7 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
       <Controller
         name="mailFrom"
         control={control}
-        defaultValue={publication.mailTo}
+        defaultValue={publication?.emailSettings?.mailFrom}
         render={({ field }) => (
           <Input title="Mail from" errorMsg={errors?.mailFrom} {...field} />
         )}

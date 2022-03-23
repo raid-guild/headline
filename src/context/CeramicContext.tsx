@@ -27,8 +27,10 @@ const initialContext = {
 
 const CeramicContext = createContext<CeramicContextType>(initialContext);
 
-const ceramicNetwork = (import.meta.env.REACT_APP_CERAMIC_NETWORK ||
+const ceramicNetwork = (import.meta.env.VITE_CERAMIC_URL ||
   "testnet-clay") as ConnectNetwork;
+const ceramicNode = (import.meta.env.VITE_CERAMIC_NODE ||
+  "testnet-clay") as string;
 
 export const CeramicProvider = ({ children }: ProviderProps) => {
   const [did, setDid] = useState<DID | null>(null);
@@ -56,7 +58,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
 
     console.log("Client");
     const c = new WebClient({
-      ceramic: ceramicNetwork,
+      ceramic: ceramicNode,
       connectNetwork: ceramicNetwork,
     });
     console.log(c);

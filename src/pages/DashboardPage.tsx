@@ -327,7 +327,7 @@ const DashboardPage = () => {
     const client = await connect();
 
     // fetch key pieces of data'
-    if (web3Service && provider && chainId && client) {
+    if (web3Service && provider && chainId && client && litClient) {
       await dispatch(
         fetchPublication({
           provider,
@@ -339,7 +339,7 @@ const DashboardPage = () => {
       );
     }
     await dispatch(fetchBasicProfile(address || ""));
-  }, [chainId, web3Service, provider]);
+  }, [chainId, web3Service, provider, litClient]);
   return (
     <Layout>
       <HeaderContainer>
