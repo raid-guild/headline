@@ -1,6 +1,5 @@
 import React, { HTMLAttributes } from "react";
 import styled from "styled-components";
-import { InputProps, Input as RInput } from "reakit/Input";
 import { FieldError } from "react-hook-form";
 import Text from "components/Text";
 
@@ -8,9 +7,11 @@ type LocalProps = {
   title: string;
   errorMsg?: FieldError;
   className?: string;
+  disabled?: boolean;
+  value?: string | number;
 };
 
-const StyledInput = styled(RInput)`
+const StyledInput = styled.input`
   border: none;
   flex-grow: 2;
   padding: 1rem;
@@ -33,7 +34,7 @@ const StyledLabel = styled.label`
   font-size: 1.2rem;
 `;
 
-type Props = LocalProps & InputProps & HTMLAttributes<HTMLInputElement>;
+type Props = LocalProps & HTMLAttributes<HTMLInputElement>;
 
 const ErrorText = styled(Text)`
   padding-left: 0.8rem;

@@ -72,6 +72,23 @@
           "type": "string"
         }
       }
+    },
+    "MailGunSettings": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "string"
+        },
+        "apiKey": {
+          "type": "string"
+        },
+        "infra": {
+          "enum": ["eu", "main"]
+        },
+        "mailFrom": {
+          "type": "string"
+        }
+      }
     }
   },
   "properties": {
@@ -97,11 +114,9 @@
         "$ref": "#/definitions/Lock"
       }
     },
-    "apiKey": {
-      "type": "string"
-    },
-    "mailFrom": {
-      "type": "string"
+    "emailSettings": {
+      "type": "object",
+      "anyOf": [{ "$ref": "#/definitions/MailGunSettings" }]
     },
     "publishRegistry": {
       "type": "string"

@@ -154,6 +154,8 @@ const WritingPage = () => {
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
+  console.log("Article");
+  console.log(article);
   const [title, setTitle] = useState(article?.title || "Untitled");
 
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {

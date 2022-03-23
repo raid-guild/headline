@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import { DOMAIN } from "../constants";
 import { networks } from "lib/networks";
 import { PublicationLock } from "services/publication/slice";
@@ -32,4 +33,74 @@ export const checkoutRedirect = (
     redirctUri: DOMAIN as string,
   });
   return `${base}${prms.toString()}`;
+};
+
+export type UnlockUserMetadata = {
+  userAddress: string;
+  data: {
+    userMetadata: {
+      protected: {
+        Email: string;
+      };
+    };
+  };
+};
+
+export const fetchUserMetadata = async (
+  lockAddress: string,
+  walletAddress: string,
+  provider: ethers.providers.Web3Provider,
+  page = 0
+) => {
+  const data = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+        { name: "salt", type: "bytes32" },
+      ],
+      KeyMetadata: [],
+    },
+    domain: { name: "Unlock", version: "1" },
+    primaryType: "KeyMetadata",
+    message: {
+      LockMetaData: {
+        address: lockAddress,
+        owner: walletAddress,
+        timestamp: 1647915321730,
+        page: page,
+      },
+    },
+  };
+
+  const signer = provider.getSigner();
+  const signature = await signer.signMessage(
+    `I want to access member data for ${lockAddress}`
+  );
+  const authorization = `Bearer-Simple ${btoa(signature)}`;
+  console.log(signature);
+  console.log(authorization);
+  const prms = new URLSearchParams({
+    chain: "4",
+    data: JSON.stringify(data) || "",
+    signature: signature,
+  });
+
+  try {
+    const resp = await fetch(
+      `https://locksmith.unlock-protocol.com/api/key/${lockAddress}/keyHolderMetadata?${prms.toString()}`,
+      {
+        headers: {
+          Authorization: authorization,
+        },
+      }
+    );
+    console.log(resp);
+
+    return (await resp.json()) as UnlockUserMetadata[];
+  } catch (e) {
+    console.error(e);
+  }
 };

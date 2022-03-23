@@ -10,6 +10,7 @@ import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
 import { createSelector } from "@reduxjs/toolkit";
+import { LitNodeClient } from "lib/lit";
 
 type ArticleRegistry = { [key: string]: Article };
 
@@ -141,6 +142,7 @@ export const fetchArticleRegistry = createAsyncThunk(
       chainName?: ChainName;
       registry?: string;
       registryId?: string;
+      litClient: LitNodeClient;
       client: WebClient;
     },
     thunkAPI
@@ -169,6 +171,7 @@ export const fetchArticleRegistry = createAsyncThunk(
           publication,
           ceramicArticle?.status,
           ceramicArticle.publicationUrl,
+          args.litClient,
           (ceramicArticle.status === "draft" || ceramicArticle.paid) &&
             !!args.chainName
         );

@@ -207,7 +207,9 @@ export const updateArticle = createAsyncThunk(
         ...baseArticle,
       };
       await doc.update(updatedArticle);
-      thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      thunkAPI.dispatch(
+        articleRegistryActions.update({ ...updatedArticle, text: content })
+      );
       return baseArticle;
     } catch (err) {
       console.error(err);
@@ -262,7 +264,9 @@ export const publishArticle = createAsyncThunk(
         ...baseArticle,
       };
       await doc.update(updatedArticle);
-      thunkAPI.dispatch(articleRegistryActions.update(updatedArticle));
+      thunkAPI.dispatch(
+        articleRegistryActions.update({ ...updatedArticle, text: content })
+      );
       thunkAPI.dispatch(
         addPublishRegistryArticle({ streamId: args.streamId, client })
       );

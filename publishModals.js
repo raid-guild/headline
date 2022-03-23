@@ -24,7 +24,7 @@ const did = new DID({
 await did.authenticate();
 
 // Connect to the local Ceramic node
-const ceramic = new CeramicClient("https://ceramic-clay.3boxlabs.com");
+const ceramic = new CeramicClient("https://ceramic.alexkeating.me");
 ceramic.did = did;
 
 // Create a manager for the model
