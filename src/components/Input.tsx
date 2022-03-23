@@ -7,6 +7,8 @@ type LocalProps = {
   title: string;
   errorMsg?: FieldError;
   className?: string;
+  disabled?: boolean;
+  value?: string | number;
 };
 
 const StyledInput = styled.input`

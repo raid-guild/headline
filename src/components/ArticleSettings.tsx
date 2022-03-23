@@ -15,6 +15,7 @@ import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
 import Icon from "components/Icon";
+import Input from "components/Input";
 import FormTextArea from "components/FormTextArea";
 import Text from "components/Text";
 import Title from "components/Title";
@@ -27,6 +28,7 @@ import { publishArticle } from "services/article/slice";
 
 import { useAppDispatch, useAppSelector } from "store";
 import { fetchIPFS, storeIpfs } from "lib/ipfs";
+import { parseMarkdown } from "lib/markdown";
 import { sendMessage } from "lib/mailgun";
 import { networks } from "lib/networks";
 import { sendMessageFromLocks } from "lib/headline";
@@ -348,7 +350,14 @@ export const ArticleSettings = ({
   );
 };
 
+const TestInputContainer = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+`;
+
 export const PublishModal = ({ streamId }: { streamId: string }) => {
+  const [testEmail, setTestEmail] = useState("");
   const dispatch = useAppDispatch();
   const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
@@ -371,6 +380,29 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     state: `${article?.paid ? "paid" : "free"}`,
   });
 
+  const configuredEmail =
+    emailSettings?.mailFrom &&
+    emailSettings?.apiKey &&
+    emailSettings?.domain &&
+    emailSettings?.apiKey;
+
+  const sendTestMessage = useCallback(async () => {
+    console.log("testEmail");
+    console.log(testEmail);
+    if (!testEmail) {
+      return;
+    }
+    const settings = {
+      from: emailSettings?.mailFrom || "",
+      subject: article.title,
+      text: article.text,
+      html: await parseMarkdown(article.title, article.text),
+      domain: emailSettings?.domain || "",
+      apiKey: emailSettings?.apiKey || "",
+      to: [testEmail],
+    };
+    await sendMessage(settings);
+  }, [testEmail]);
   const publish = useCallback(async () => {
     if (chainId && client && provider) {
       let previewUrl = "";
@@ -402,20 +434,15 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
       // Get all locks
       // for each lock fetch all pages of metadata
       // send message every 1000
-      if (
-        emailSettings?.mailFrom &&
-        emailSettings?.apiKey &&
-        emailSettings?.domain &&
-        emailSettings?.apiKey
-      ) {
+      if (configuredEmail) {
         const settings = {
           from: emailSettings?.mailFrom || "",
           subject: article.title,
           text: article.text,
+          html: await parseMarkdown(article.title, article.text),
           domain: emailSettings?.domain || "",
           apiKey: emailSettings?.apiKey || "",
         };
-        // await sendMessageFromLocks(params);
         const locks = readyArticle?.paid
           ? [...freeLocks, ...paidLocks]
           : freeLocks;
@@ -454,10 +481,35 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           articlePreviewLink={article?.previewImg}
         />
         <SendingTestEmailContainer>
-          <Text size="sm" color="grey">
-            This post will only publish as a webpage/blog, since there is no
-            mailing service set up yet.
-          </Text>
+          {configuredEmail ? (
+            <>
+              <Title size="sm" color="helpText">
+                Sending a test Email
+              </Title>
+              <TestInputContainer>
+                <Input
+                  title="Email Address"
+                  placeholder={emailSettings?.mailFrom}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setTestEmail(e.target?.value || "")
+                  }
+                />
+                <Button
+                  size="md"
+                  color="primary"
+                  variant="contained"
+                  onClick={sendTestMessage}
+                >
+                  Send
+                </Button>
+              </TestInputContainer>
+            </>
+          ) : (
+            <Text size="sm" color="grey">
+              This post will only publish as a webpage/blog, since there is no
+              mailing service set up yet.
+            </Text>
+          )}
         </SendingTestEmailContainer>
         <ButtonContainer>
           <Button

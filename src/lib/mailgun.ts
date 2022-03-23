@@ -1,11 +1,3 @@
-//import {unified} from 'unified'
-//import remarkParse from 'remark-parse'
-//import remarkRehype from 'remark-rehype'
-//import rehypeDocument from 'rehype-document'
-//import rehypeFormat from 'rehype-format'
-//import rehypeStringify from 'rehype-stringify'
-//import {reporter} from 'vfile-reporter'
-
 // need domain
 // need api key
 // need whether using us or EU infra
@@ -25,26 +17,10 @@ export type EmailParams = {
   subject: string;
   text: string;
   domain: string;
+  html: string;
   apiKey: string;
 };
 export const sendMessage = async (emailParams: EmailParams) => {
-  // unified()
-  //   .use(remarkParse)
-  //   .use(remarkRehype)
-  //   .use(rehypeDocument, {title: '👋🌍'})
-  //   .use(rehypeFormat)
-  //   .use(rehypeStringify)
-  //   .process('# Hello world!')
-  //   .then(
-  //     (file) => {
-  //       console.error(reporter(file))
-  //       console.log(String(file))
-  //     },
-  //     (error) => {
-  //       // Handle your error here!
-  //       throw error
-  //     }
-  //   )
   console.log(emailParams);
   const recipientVars = emailParams.to.reduce(
     (prev, val) => ({ ...prev, [val]: {} }),
@@ -55,6 +31,7 @@ export const sendMessage = async (emailParams: EmailParams) => {
   formData.append("to", emailParams.to.join(", "));
   formData.append("subject", emailParams.subject);
   formData.append("text", emailParams.text);
+  formData.append("html", emailParams.html);
   formData.append("recipient-variables", JSON.stringify(recipientVars));
   const sent = await fetch(
     `https://api.mailgun.net/v3/${emailParams.domain}/messages`,

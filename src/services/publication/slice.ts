@@ -271,7 +271,6 @@ Pub jdoc ${doc?.id?.toString()}
 				`);
       let publication = doc?.content as Publication | null;
       if (publication && publication?.emailSettings?.apiKey) {
-        // debugger;
         const apiKey = await getKeyAndDecrypt(
           args.chainName,
           publication.draftAccess.encryptedSymmetricKey,
