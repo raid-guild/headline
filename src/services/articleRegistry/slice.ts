@@ -144,6 +144,7 @@ export const fetchArticleRegistry = createAsyncThunk(
       registry?: string;
       registryId?: string;
       litClient: LitNodeClient;
+      did: string;
     },
     thunkAPI
   ) => {
@@ -159,7 +160,10 @@ export const fetchArticleRegistry = createAsyncThunk(
         const doc = await TileDocument.load(client.ceramic, args.registryId);
         articleRegistry = doc?.content as { [key: string]: string };
       } else {
-        articleRegistry = await store.get(args.registry || "articleRegistry");
+        articleRegistry = await store.get(
+          args.registry || "articleRegistry",
+          args.did
+        );
       }
       for (const streamId in articleRegistry) {
         // load streams

@@ -33,7 +33,7 @@ const providerOptions: IProviderOptions = {
   },
 };
 const web3modalOptions = {
-  cacheProvider: true,
+  cacheProvider: false,
   providerOptions,
   theme: "dark",
 };
@@ -41,21 +41,20 @@ const web3modalOptions = {
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <UnlockProvider>
-        <LitProvider>
-          <WalletProvider
-            web3modalOptions={web3modalOptions}
-            networks={networks}
-            defaultChainId={"0x1"}
-            // Optional but useful to handle events.
-            handleModalEvents={(eventName, error) => {
-              if (error) {
-                console.error(error.message);
-              }
-
-              console.log(eventName);
-            }}
-          >
+      <WalletProvider
+        web3modalOptions={web3modalOptions}
+        networks={networks}
+        defaultChainId={"0x1"}
+        // Optional but useful to handle events.
+        handleModalEvents={(eventName, error) => {
+          if (error) {
+            console.error(error.message);
+          }
+          console.log(eventName);
+        }}
+      >
+        <UnlockProvider>
+          <LitProvider>
             <ThemeProvider theme={theme}>
               <CeramicProvider>
                 <ReakitProvider>
@@ -64,9 +63,9 @@ ReactDOM.render(
               </CeramicProvider>
             </ThemeProvider>
             <GlobalStyle />
-          </WalletProvider>
-        </LitProvider>
-      </UnlockProvider>
+          </LitProvider>
+        </UnlockProvider>
+      </WalletProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById("root")

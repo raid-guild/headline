@@ -321,10 +321,17 @@ const DashboardPage = () => {
   const { connectWallet, isConnecting, provider, address, chainId } =
     useWallet();
   const dispatch = useAppDispatch();
+  console.log(isCeramicConnecting);
+  console.log(isConnecting);
 
   const connectToServices = useCallback(async () => {
-    await connectWallet();
-    const client = await connect();
+    if (!address) {
+      await connectWallet();
+    }
+    let client;
+    if (address) {
+      client = await connect(address || "");
+    }
 
     // fetch key pieces of data'
     if (web3Service && provider && chainId && client && litClient) {
@@ -338,7 +345,9 @@ const DashboardPage = () => {
         })
       );
     }
-    await dispatch(fetchBasicProfile(address || ""));
+    if (address) {
+      await dispatch(fetchBasicProfile(address));
+    }
   }, [chainId, web3Service, provider, litClient]);
   return (
     <Layout>

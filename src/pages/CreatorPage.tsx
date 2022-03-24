@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import profile from "assets/obsidian.png";
 
+import { useCeramic } from "context/CeramicContext";
 import { useLit } from "context/LitContext";
 import { fetchPublicationByStream } from "services/publication/slice";
 import { useAppDispatch, useAppSelector } from "store";
@@ -124,6 +125,7 @@ const CreatorPage = () => {
 
   const [active, setActive] = useState("content");
   const { litClient } = useLit();
+  const { did } = useCeramic();
   const dispatch = useAppDispatch();
   const publication = useAppSelector((state) => state.publication);
 
@@ -143,7 +145,7 @@ const CreatorPage = () => {
 
   useEffect(() => {
     const f = async () => {
-      if (!publicationId) {
+      if (!publicationId || !did) {
         return;
       }
       console.log("PUblication");
@@ -153,6 +155,7 @@ const CreatorPage = () => {
           registry: "publishRegistry",
           registryId: publication?.registryId,
           litClient,
+          did: did.id,
         })
       );
     };
