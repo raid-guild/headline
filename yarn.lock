@@ -40,6 +40,25 @@
     "@ceramicnetwork/rpc-window" "^0.1.1"
     caip "^0.9.2"
 
+"@alexkeating/quiver@0.9.13":
+  version "0.9.13"
+  resolved "https://registry.yarnpkg.com/@alexkeating/quiver/-/quiver-0.9.13.tgz#0d2fbc751dda2c1c8ad99e9a3f2d0fad6a431f48"
+  integrity sha512-KfjDczeANfpT90LuQ1xG78uIPv2L6mPjdJZZ7BTW0LjJyncpayowz8l8TKNjgERr4UOKEUUwTyRYXZIqOTIT8A==
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.5.0"
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/contracts" "^5.5.0"
+    "@ethersproject/providers" "^5.5.2"
+    "@ethersproject/units" "^5.5.0"
+    "@gnosis.pm/safe-apps-sdk" "^6.1.1"
+    "@gnosis.pm/safe-apps-web3modal" "^6.0.1"
+    ethers "^5.5.3"
+    lodash "^4.17.21"
+    lodash-es "^4.17.21"
+    react ">=16"
+    react-dom "^17.0.2"
+    web3modal "^1.9.4"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.16.7":
   version "7.16.7"
   resolved "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.16.7.tgz"
@@ -1827,25 +1846,6 @@
   integrity sha512-+wdeS51Y+E1q1Wmd+1xSSbesZkpVj4jsg0BojCbopWvgq5iBvixw5vgemscdh58ep98BwUbsFYnrywFhV9yrVg==
   dependencies:
     "@babel/runtime" "^7.13.10"
-
-"@raidguild/quiver@0.9.0":
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/@raidguild/quiver/-/quiver-0.9.0.tgz#4bed26e49d74ac4750c86ed8437bddff87c9d385"
-  integrity sha512-mTJ30KVN0QrZontRL4ffZnwU24QiBdLaAgcnFsrNOdsd+1vu/Ghh6gsu0EoWZNOqGI2ky8xovEfiATGoDtQSmw==
-  dependencies:
-    "@ethersproject/abstract-signer" "^5.5.0"
-    "@ethersproject/bignumber" "^5.5.0"
-    "@ethersproject/contracts" "^5.5.0"
-    "@ethersproject/providers" "^5.5.2"
-    "@ethersproject/units" "^5.5.0"
-    "@gnosis.pm/safe-apps-sdk" "^6.1.1"
-    "@gnosis.pm/safe-apps-web3modal" "^6.0.1"
-    ethers "^5.5.3"
-    lodash "^4.17.21"
-    lodash-es "^4.17.21"
-    react ">=16"
-    react-dom "^17.0.2"
-    web3modal "^1.9.4"
 
 "@reach/auto-id@^0.16.0":
   version "0.16.0"

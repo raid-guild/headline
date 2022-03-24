@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useWallet } from "@raidguild/quiver";
+import { useWallet } from "@alexkeating/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
@@ -482,6 +482,7 @@ const PublishBody = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
   const { litClient } = useLit();
+  const { did } = useCeramic();
   const toolbar = useToolbarState();
   const params = useParams();
   const navigate = useNavigate();
@@ -493,13 +494,14 @@ const PublishBody = () => {
 
   // fetch registry display top 5
   useEffect(() => {
-    if (!chainId) {
+    if (!chainId || !did) {
       return;
     }
     dispatch(
       fetchArticleRegistry({
         chainName: networks[chainId]?.litName,
         litClient,
+        did: did.id,
       })
     );
   }, []);
