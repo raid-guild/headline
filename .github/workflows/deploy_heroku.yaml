@@ -19,7 +19,7 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo VITE_CERAMIC_URL=ceramic.alexkeating.me >> .env
+          echo VITE_CERAMIC_NODE=https://ceramic.alexkeating.me >> .env
           echo VITE_WEBSITE_DOMAIN=https://headline-unlock-test.herokuapp.com >> .env
           echo VITE_INFURA_PROJECT_ID=24ZzrrBV9yd503XnmvCqXudjfYR
           echo VITE_INFURA_PROJECT_SECRET=24ZzrrBV9yd503XnmvCqXudjfYR
