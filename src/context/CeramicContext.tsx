@@ -44,7 +44,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const { address } = useWallet();
 
-  const connect = async (argAddress?: string) => {
+  const connect = async () => {
     // Always associate current chain with mainnet
     // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
     await window.ethereum.request({
@@ -52,7 +52,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
       params: [{ chainId: "0x1" }],
     });
     console.log("Address");
-    const connectAddress = argAddress || address;
+    const connectAddress = address;
 
     if (!connectAddress) {
       console.error("No address");

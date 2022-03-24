@@ -52,7 +52,6 @@ ReactDOM.render(
           }
           console.log(eventName);
         }}
-        autoconnect={false}
       >
         <UnlockProvider>
           <LitProvider>
