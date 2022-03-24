@@ -4,4 +4,5 @@ export type ChainName =
   | "polygon"
   | "bsc"
   | "kovan"
-  | "rinkeby";
+  | "rinkeby"
+  | "optimism";
