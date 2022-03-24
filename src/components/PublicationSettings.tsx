@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -325,12 +325,13 @@ const DashboardPage = () => {
   console.log(isConnecting);
 
   const connectToServices = useCallback(async () => {
-    const walletState = await connectWallet();
-    if (!walletState) {
-      console.error("Failed to connect wallet");
-      return;
+    if (!address) {
+      await connectWallet();
     }
-    const client = await connect(walletState.address || "");
+    let client;
+    if (address) {
+      client = await connect(address || "");
+    }
 
     // fetch key pieces of data'
     if (web3Service && provider && chainId && client && litClient) {

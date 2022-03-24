@@ -1,4 +1,4 @@
-import { WalletProvider } from "@alexkeating/quiver";
+import { WalletProvider } from "@raidguild/quiver";
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";

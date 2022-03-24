@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { SubmitHandler, FieldValues } from "react-hook-form";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
 import { useCeramic } from "context/CeramicContext";

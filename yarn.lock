@@ -1847,6 +1847,25 @@
   dependencies:
     "@babel/runtime" "^7.13.10"
 
+"@raidguild/quiver@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@raidguild/quiver/-/quiver-0.9.0.tgz#4bed26e49d74ac4750c86ed8437bddff87c9d385"
+  integrity sha512-mTJ30KVN0QrZontRL4ffZnwU24QiBdLaAgcnFsrNOdsd+1vu/Ghh6gsu0EoWZNOqGI2ky8xovEfiATGoDtQSmw==
+  dependencies:
+    "@ethersproject/abstract-signer" "^5.5.0"
+    "@ethersproject/bignumber" "^5.5.0"
+    "@ethersproject/contracts" "^5.5.0"
+    "@ethersproject/providers" "^5.5.2"
+    "@ethersproject/units" "^5.5.0"
+    "@gnosis.pm/safe-apps-sdk" "^6.1.1"
+    "@gnosis.pm/safe-apps-web3modal" "^6.0.1"
+    ethers "^5.5.3"
+    lodash "^4.17.21"
+    lodash-es "^4.17.21"
+    react ">=16"
+    react-dom "^17.0.2"
+    web3modal "^1.9.4"
+
 "@reach/auto-id@^0.16.0":
   version "0.16.0"
   resolved "https://registry.npmjs.org/@reach/auto-id/-/auto-id-0.16.0.tgz"

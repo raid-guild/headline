@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import { useUnlock } from "context/UnlockContext";
 import {
   useForm,

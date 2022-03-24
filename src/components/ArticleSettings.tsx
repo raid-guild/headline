@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import { useNavigate } from "react-router-dom";
 import { useRadioState, Radio, RadioStateReturn } from "reakit/Radio";
 import styled from "styled-components";

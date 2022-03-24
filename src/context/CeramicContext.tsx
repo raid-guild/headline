@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useState,
 } from "react";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import { EthereumAuthProvider, WebClient, ConnectNetwork } from "@self.id/web";
 import { DID } from "dids";
 

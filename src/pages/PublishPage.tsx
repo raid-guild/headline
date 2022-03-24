@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";

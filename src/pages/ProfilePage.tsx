@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { BasicProfile } from "@datamodels/identity-profile-basic";
-import { useWallet } from "@alexkeating/quiver";
+import { useWallet } from "@raidguild/quiver";
 import styled from "styled-components";
 
 import github from "assets/github.svg";
