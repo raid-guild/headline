@@ -7,7 +7,6 @@ import {
   FieldValues,
   Controller,
 } from "react-hook-form";
-import { useCeramic } from "context/CeramicContext";
 import { useLit } from "context/LitContext";
 import Input from "components/Input";
 import FormTextArea from "components/FormTextArea";
@@ -37,7 +36,6 @@ const PublicationForm = ({ onSubmit, children }: Props) => {
   console.log("Error");
   console.log(errors);
   const { chainId } = useWallet();
-  const { client } = useCeramic();
   const { litClient } = useLit();
   const dispatch = useAppDispatch();
   const publication = useAppSelector(
@@ -45,11 +43,10 @@ const PublicationForm = ({ onSubmit, children }: Props) => {
   );
 
   useEffect(() => {
-    if (!publication.name && chainId && client) {
+    if (!publication.name && chainId) {
       dispatch(
         fetchArticleRegistry({
           chainName: networks[chainId]?.litName,
-          client,
           litClient,
         })
       );

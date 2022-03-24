@@ -34,7 +34,6 @@ import Text from "components/Text";
 import Title from "components/Title";
 import { createArticle } from "services/article/slice";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
-import { Article } from "services/article/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
 import { networks } from "lib/networks";
 
@@ -482,7 +481,6 @@ const SettingsContainer = styled.div`
 const PublishBody = () => {
   const dispatch = useAppDispatch();
   const { chainId } = useWallet();
-  const { client } = useCeramic();
   const { litClient } = useLit();
   const toolbar = useToolbarState();
   const params = useParams();
@@ -495,13 +493,12 @@ const PublishBody = () => {
 
   // fetch registry display top 5
   useEffect(() => {
-    if (!chainId || !client) {
+    if (!chainId) {
       return;
     }
     dispatch(
       fetchArticleRegistry({
         chainName: networks[chainId]?.litName,
-        client,
         litClient,
       })
     );
