@@ -8471,17 +8471,17 @@ lines-and-columns@^1.1.6:
   resolved "https://registry.npmjs.org/lines-and-columns/-/lines-and-columns-1.2.4.tgz"
   integrity sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==
 
-lit-connect-modal@^0.1.7:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/lit-connect-modal/-/lit-connect-modal-0.1.7.tgz#ecea6a453f503f45b08cf51199f54fc2b04bff55"
-  integrity sha512-yB0OAqhStT3QMOfJV5b41fNDUoK1LjGFn2fHCCU0orFpUwBZmyO3CW0kghWvJ6FSLwUzBjhajr72k8L8C/FwGQ==
+lit-connect-modal@^0.1.8:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/lit-connect-modal/-/lit-connect-modal-0.1.9.tgz#280c1860afde932af1c398e845295887fad44280"
+  integrity sha512-jwJ6fgB5xcltwywc2ud50A/rEehAdcuIygXwPwICC4+D7Ngkx8u0GMnHhFuN6PFk4jI5y0qcQ7udg3yo4jOuNg==
   dependencies:
     micromodal "^0.4.10"
 
-lit-js-sdk@^1.1.149:
-  version "1.1.149"
-  resolved "https://registry.yarnpkg.com/lit-js-sdk/-/lit-js-sdk-1.1.149.tgz#526769878fbffbac541ced5eb5b420c6c5650143"
-  integrity sha512-byJh7J1T9pv5JwZ2Fo6dlcSqmdsJuNXjTmDP4u3J9bXj9581W/H3jsqMy6q8Cn8M4GlOxnlSX0Oopic3wB6tjQ==
+lit-js-sdk@^1.1.152:
+  version "1.1.152"
+  resolved "https://registry.yarnpkg.com/lit-js-sdk/-/lit-js-sdk-1.1.152.tgz#1ceffb1cc378756f15142b4eb22641c5c0c3cce4"
+  integrity sha512-w4wlwtzMmmiNnH2bchggDCK1Px+LWeKCIYVx/b1GBQ0cAIxdr3Ju6g/FUBSA/xStwexETpVZhtkjGFdABxal4Q==
   dependencies:
     "@ethersproject/abi" "^5.5.0"
     "@ethersproject/bytes" "^5.5.0"
@@ -8498,7 +8498,7 @@ lit-js-sdk@^1.1.149:
     bufferutil "^4.0.6"
     cross-blob "^3.0.1"
     jszip "^3.6.0"
-    lit-connect-modal "^0.1.7"
+    lit-connect-modal "^0.1.8"
     node-fetch "^3.2.3"
     pako "^2.0.4"
     tslib "^2.3.1"

@@ -244,7 +244,7 @@ const StyledButton = styled(Button)`
 `;
 
 // in publication container
-const LoggedInBody = (disconnect) => {
+const LoggedInBody = () => {
   const navigate = useNavigate();
   const publication = useAppSelector(
     (state) => state.publication.name // Name is required in the schema

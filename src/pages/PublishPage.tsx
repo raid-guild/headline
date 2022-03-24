@@ -314,7 +314,7 @@ const SuccessCardContainer = styled.div`
 
 const Locks = () => {
   const dispatch = useAppDispatch();
-  const { provider } = useWallet();
+  const { provider, address } = useWallet();
   const { client } = useCeramic();
   const [submitted, setSubmitted] = useState(false);
   const [lockAddress, setLockAddress] = useState("");
@@ -333,9 +333,9 @@ const Locks = () => {
   const locks = useAppSelector((state) => lockSelectors.listLocks(state));
   const { web3Service } = useUnlock();
   const { litClient } = useLit();
-  const onSubmit: SubmitHandler<FieldValues> = useCallback((data) => {
+  const onSubmit: SubmitHandler<FieldValues> = useCallback(async (data) => {
     if (web3Service && provider && client) {
-      dispatch(
+      const newLock = await dispatch(
         verifyLock({
           address: data.lockAddress,
           chainId: data.lockChain,
@@ -343,10 +343,15 @@ const Locks = () => {
           provider,
           client,
           litClient,
+          ownerAddress: address || "",
         })
       );
-      setSubmitted(true);
-      setLockAddress(data.lockAddress);
+      if (newLock !== undefined) {
+        console.log(newLock);
+        console.log("Submitted");
+        setSubmitted(true);
+        setLockAddress(data.lockAddress);
+      }
     }
   }, []);
 
@@ -388,6 +393,8 @@ const Locks = () => {
   };
 
   const successModal = useCallback(() => {
+    console.log("Lock");
+    console.log(lock);
     return (
       <>
         <SuccessMsgContainer>
@@ -441,7 +448,9 @@ const Locks = () => {
             <Text size="base" color="helpText">
               Create membership
             </Text>
-            {(!verifyLoading && submitted ? successModal : verificationModal)()}
+            {(!verifyLoading && submitted && lock
+              ? successModal
+              : verificationModal)()}
           </DialogContainer>
         </Dialog>
       </EntriesHeader>

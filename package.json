@@ -41,7 +41,7 @@
     "express": "^4.17.3",
     "ipfs-http-client": "56.0.0",
     "js-base64": "^3.7.2",
-    "lit-js-sdk": "^1.1.149",
+    "lit-js-sdk": "^1.1.152",
     "lodash": "^4.17.21",
     "near-api-js": "^0.44.2",
     "react": "^17.0.2",

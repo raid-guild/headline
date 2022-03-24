@@ -12,7 +12,6 @@ import Separator from "components/Separator";
 import Title from "components/Title";
 
 import { networks } from "lib/networks";
-import { fetchUserMetadata } from "lib/unlock";
 import { updatePublication } from "services/publication/slice";
 import { useAppSelector, useAppDispatch } from "store";
 
@@ -53,6 +52,8 @@ const PublicationSettings = () => {
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
   );
+  const publication = useAppSelector((state) => state.publication);
+
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async (data) => {
       if (!chainId || !client || !provider) {
