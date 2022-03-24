@@ -21,8 +21,8 @@ jobs:
           touch .env
           echo VITE_CERAMIC_NODE=https://ceramic.alexkeating.me >> .env
           echo VITE_WEBSITE_DOMAIN=https://headline-unlock-test.herokuapp.com >> .env
-          echo VITE_INFURA_PROJECT_ID=24ZzrrBV9yd503XnmvCqXudjfYR
-          echo VITE_INFURA_PROJECT_SECRET=24ZzrrBV9yd503XnmvCqXudjfYR
+          echo VITE_INFURA_PROJECT_ID=24ZzrrBV9yd503XnmvCqXudjfYR >> .env
+          echo VITE_INFURA_PROJECT_SECRET=24ZzrrBV9yd503XnmvCqXudjfYR >> .env
           cat .env
       - name: Login
         run: docker login --username=_ --password=$HEROKU_API_KEY registry.heroku.com
