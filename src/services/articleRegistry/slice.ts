@@ -10,6 +10,7 @@ import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
 import { createSelector } from "@reduxjs/toolkit";
+import { getWebClient } from "lib/ceramic";
 import { LitNodeClient } from "lib/lit";
 
 type ArticleRegistry = { [key: string]: Article };
@@ -143,11 +144,10 @@ export const fetchArticleRegistry = createAsyncThunk(
       registry?: string;
       registryId?: string;
       litClient: LitNodeClient;
-      client: WebClient;
     },
     thunkAPI
   ) => {
-    const client = args.client;
+    const client = getWebClient();
     const model = new DataModel({
       ceramic: client.ceramic,
       model: PUBLISHED_MODELS,
