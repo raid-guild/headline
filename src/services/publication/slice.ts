@@ -420,7 +420,7 @@ export const updatePublication = createAsyncThunk(
       console.log(updatedPublication);
       console.log(updates);
       await store.set("publication", updatedPublication);
-      if (updatedPublication.emailSettings.apiKey !== undefined) {
+      if (updatedPublication?.emailSettings?.apiKey !== undefined) {
         updatedPublication["emailSettings"]["apiKey"] =
           pub?.emailSettings?.apiKey || "";
       }

@@ -132,6 +132,7 @@ export const verifyLock = createAsyncThunk(
       provider: ethers.providers.Provider;
       client: WebClient;
       litClient: LitNodeClient;
+      ownerAddress: string;
     },
     thunkAPI
   ) => {
@@ -139,9 +140,16 @@ export const verifyLock = createAsyncThunk(
       const chainMeta = networks[args.chainId];
       const chain = chainMeta.chainNumber;
       const litClient = args.litClient;
-      const lock = await args.web3Service.getLock(args.address, chain);
-      // TODO make sure user owns the lock
+      const lock = (await args.web3Service.getLock(
+        args.address,
+        chain
+      )) as RawLock & { beneficiary: string };
       if (lock) {
+        if (
+          lock.beneficiary.toLowerCase() !== args.ownerAddress.toLowerCase()
+        ) {
+          return thunkAPI.rejectWithValue("You do not own that lock");
+        }
         const { symbol, num } = await getTokenSymbolAndNumber(
           lock.keyPrice,
           lock.currencyContractAddress,
@@ -169,38 +177,63 @@ export const verifyLock = createAsyncThunk(
             chainMeta.litName,
             args.address
           );
-          // const key = await litClient.saveEncryptionKey({
-          //   accessControlConditions: controls,
-          //   encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
-          //     publication.publishAccess.encryptedSymmetricKey
-          //   ),
-          //   authSig,
-          //   chain: chainMeta.litName,
-          //   permanant: false,
-          // });
+          const key = await litClient.saveEncryptionKey({
+            accessControlConditions: controls,
+            encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
+              publication.publishAccess.encryptedSymmetricKey,
+              "base16"
+            ),
+            authSig,
+            chain: chainMeta.litName,
+            permanant: false,
+          });
           // Update access controls
-          // additionalParams["publishAccess"] = {
-          //   encryptedSymmetricKey: LitJsSdk.uint8arrayToString(key, "base16"),
-          //   accessControlConditions: controls,
-          // };
+          additionalParams["publishAccess"] = {
+            encryptedSymmetricKey:
+              publication.publishAccess.encryptedSymmetricKey,
+            accessControlConditions: controls,
+          };
         }
         console.log(additionalParams);
-        await thunkAPI.dispatch(
-          updatePublication({
-            publication: {
-              description: publication.description || "",
-              name: publication.name,
-              locks: [
-                ...publication.locks,
-                { address: args.address, chainId: args.chainId },
-              ],
-              ...additionalParams,
-            },
-            client: args.client,
-            chainName: networks[args.chainId].litName,
-            litClient,
-          })
-        );
+        // We must update the publication if the key is updated
+        try {
+          await thunkAPI.dispatch(
+            updatePublication({
+              publication: {
+                description: publication.description || "",
+                name: publication.name,
+                locks: [
+                  ...new Set([
+                    ...publication.locks,
+                    { address: args.address, chainId: args.chainId },
+                  ]),
+                ],
+                ...additionalParams,
+              },
+              client: args.client,
+              chainName: networks[args.chainId].litName,
+              litClient,
+            })
+          );
+        } catch (err) {
+          const authSig = await LitJsSdk.checkAndSignAuthMessage({
+            chain: chainMeta.litName,
+          });
+          await litClient.saveEncryptionKey({
+            accessControlConditions:
+              publication.publishAccess.accessControlConditions,
+            encryptedSymmetricKey: LitJsSdk.uint8arrayToString(
+              publication.publishAccess.encryptedSymmetricKey,
+              "base16"
+            ),
+            authSig,
+            chain: chainMeta.litName,
+            permanant: false,
+          });
+
+          console.error(err);
+          return thunkAPI.rejectWithValue("Failed to update verified lock");
+        }
       }
       return lock;
     } catch (err) {

@@ -405,6 +405,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     await sendMessage(settings);
   }, [testEmail]);
   const publish = useCallback(async () => {
+    debugger;
     if (chainId && client && provider) {
       let previewUrl = "";
       if (previewImg) {
