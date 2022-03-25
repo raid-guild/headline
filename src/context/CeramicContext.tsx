@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useState,
 } from "react";
-import { useWallet } from "@raidguild/quiver";
+import { useWallet } from "@alexkeating/quiver";
 import { EthereumAuthProvider, WebClient, ConnectNetwork } from "@self.id/web";
 import { DID } from "dids";
 
@@ -44,7 +44,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
   const [isConnecting, setIsConnecting] = useState(false);
   const { address } = useWallet();
 
-  const connect = async () => {
+  const connect = async (argAddress?: string) => {
     // Always associate current chain with mainnet
     // https://developers.ceramic.network/streamtypes/caip-10-link/api/#set-did-to-caip10link
     await window.ethereum.request({
@@ -52,7 +52,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
       params: [{ chainId: "0x1" }],
     });
     console.log("Address");
-    const connectAddress = address;
+    const connectAddress = argAddress || address;
 
     if (!connectAddress) {
       console.error("No address");
@@ -77,17 +77,6 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
       console.log(authProvider);
       d = await c.authenticate(authProvider, true);
       console.log("authenticate");
-
-      const link = await Caip10Link.fromAccount(
-        c.ceramic,
-        `${connectAddress}@eip155:1`,
-        {}
-      );
-      console.log("Link - Ceramic Context", link);
-      console.log(link);
-      if (!link.did || link.did !== did?.id) {
-        await link.setDid(d, authProvider, {});
-      }
     } catch (err) {
       console.error(err);
     }
@@ -105,8 +94,9 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
   };
 
   useEffect(() => {
-    if (!address) {
-      disconnect();
+    if (!address && did) {
+      // disconnect();
+      window.location.reload();
     }
   }, [address]);
 

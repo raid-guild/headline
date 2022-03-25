@@ -1,6 +1,12 @@
 import { ChainName } from "types";
 
-type ChainLabel = "Mainnet" | "Rinkeby";
+type ChainLabel =
+  | "Mainnet"
+  | "Rinkeby"
+  | "Gnosis Chain"
+  | "Polygon"
+  | "Binance Smart Chain"
+  | "Optimism";
 
 type Network = {
   chainId: string;
@@ -38,6 +44,42 @@ export const networks: { [key: string]: Network } = {
     rpc: "https://rinkeby.infura.io/v3/f1dfa73f479840139441203fdf63bdce",
     unlockSubgraph:
       "https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock-rinkeby",
+  },
+  "0x64": {
+    chainId: "0x64",
+    chainNumber: 100,
+    name: "Gnosis Chain",
+    litName: "xdai",
+    symbol: "xDAI",
+    explorer: "https://blockscout.com/xdai/mainnet",
+    unlockAddress: "0x1bc53f4303c711cc693F6Ec3477B83703DcB317f",
+    rpc: "https://rpc.gnosischain.com/",
+    unlockSubgraph:
+      "https://api.thegraph.com/subgraphs/name/unlock-protocol/xdai",
+  },
+  "0x89": {
+    chainId: "0x89",
+    chainNumber: 137,
+    name: "Polygon",
+    litName: "polygon",
+    symbol: "Matic",
+    explorer: "https://polygonscan.com/",
+    unlockAddress: "0xE8E5cd156f89F7bdB267EabD5C43Af3d5AF2A78f",
+    rpc: "https://polygon-mainnet.infura.io/v3/f1dfa73f479840139441203fdf63bdce",
+    unlockSubgraph:
+      "https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon",
+  },
+  "0x38": {
+    chainId: "0x38",
+    chainNumber: 56,
+    name: "Binance Smart Chain",
+    litName: "bsc",
+    symbol: "BSC",
+    explorer: "https://bscscan.com/",
+    unlockAddress: "0xeC83410DbC48C7797D2f2AFe624881674c65c856",
+    rpc: "https://bsc-dataseed.binance.org/",
+    unlockSubgraph:
+      "https://api.thegraph.com/subgraphs/name/unlock-protocol/bsc",
   },
 };
 
