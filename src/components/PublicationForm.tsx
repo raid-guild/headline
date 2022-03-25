@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect } from "react";
-import { useWallet } from "@raidguild/quiver";
+import { useWallet } from "@alexkeating/quiver";
 import styled from "styled-components";
 import {
   useForm,

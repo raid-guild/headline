@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useWallet } from "@raidguild/quiver";
+import { useWallet } from "@alexkeating/quiver";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
@@ -325,28 +325,33 @@ const DashboardPage = () => {
   console.log(isConnecting);
 
   const connectToServices = useCallback(async () => {
-    if (!address) {
-      await connectWallet();
+    const state = await connectWallet();
+    if (!state) {
+      console.error("Failed to connect wallet");
+      return;
     }
-    let client;
-    if (address) {
-      client = await connect(address || "");
-    }
+    const client = await connect(state.address || "");
 
     // fetch key pieces of data'
-    if (web3Service && provider && chainId && client && litClient) {
+    if (
+      web3Service &&
+      state?.provider &&
+      state?.chainId &&
+      client &&
+      litClient
+    ) {
       await dispatch(
         fetchPublication({
-          provider,
+          provider: state.provider,
           web3Service,
           client,
-          chainName: networks[chainId].litName,
+          chainName: networks[state.chainId].litName,
           litClient,
         })
       );
     }
-    if (address) {
-      await dispatch(fetchBasicProfile(address));
+    if (state?.address) {
+      await dispatch(fetchBasicProfile(state?.address));
     }
   }, [chainId, web3Service, provider, litClient]);
   return (
