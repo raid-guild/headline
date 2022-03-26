@@ -1,7 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@alexkeating/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import {
+  useNavigate,
+  useParams,
+  useSearchParams,
+  Link,
+} from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
@@ -111,16 +116,19 @@ const CreatePublicationView = () => {
       <PublishContainer>
         <BodyTitleContainer>
           <Title size="md" color="label">
-          Your Content, Your Community
+            Your Content, Your Community
           </Title>
           <Text size="md" color="label">
-          Publish web content and send out newsletters on HEADLINE.
+            Publish web content and send out newsletters on HEADLINE.
           </Text>
         </BodyTitleContainer>
         <BodyButtonContainer>
           <BodyTextContainer>
             <Text size="base">
-            HEADLINE is a decentralized publishing platform where a creator’s content is always their own. There’s no service fee, no long form privacy agreement and your unpublished and token gated content is encrypted, enabling access control.
+              HEADLINE is a decentralized publishing platform where a creator’s
+              content is always their own. There’s no service fee, no long form
+              privacy agreement and your unpublished and token gated content is
+              encrypted, enabling access control.
             </Text>
           </BodyTextContainer>
           <StyledButton
@@ -215,19 +223,11 @@ const EmtptyLocksMessage = () => {
   return (
     <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
-      You haven’t created any membership tiers yet.
+        You haven’t created any membership tiers yet.
       </Text>
       <Text size="sm" color="helpText">
         Create different membership options for your readers
       </Text>
-      <Link to="/publish/write">
-        <Text size="sm" color="primary" weight="semibold" onClick={() => {
-                setHideModal(false);
-                setSubmitted(false);
-              }}>
-          Create Now
-        </Text>
-      </Link>
     </EmptyCardContainer>
   );
 };

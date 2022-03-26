@@ -99,7 +99,7 @@ const LoggedOutBody = ({
       <BodyTitleContainer>
         <Title size="md">Your Content, Your Community</Title>
         <Text size="md" color="label">
-        Publish web content and send out newsletters on HEADLINE
+          Publish web content and send out newsletters on HEADLINE
         </Text>
       </BodyTitleContainer>
       <BodyButtonContainer>
@@ -260,11 +260,6 @@ const LoggedInBody = () => {
           Your Content, Your Community.
         </Text>
         <Title size="sm">Publish web content and send out newsletters.</Title>
-        {/* <ExternalLink href="www.google.com">
-          <Text size="sm" weight="semibold" color="primary">
-            Dismiss
-          </Text>
-        </ExternalLink> */}
       </PublicationCopyContainer>
       <StyledButton
         color="primary"
@@ -305,7 +300,14 @@ const LoggedInBody = () => {
             </Text>
             <Title size="sm">Tips for you from the Unlock team</Title>
           </LearnMoreCopyContainer>
-          <StyledButton size="xl" color="primary" variant="contained" onClick="window.open('https://unlock-protocol.com/blog','_blank')">
+          <StyledButton
+            size="xl"
+            color="primary"
+            variant="contained"
+            onClick={() =>
+              window.open("https://unlock-protocol.com/blog", "_blank")
+            }
+          >
             View blog
           </StyledButton>
         </LearnMoreContainer>

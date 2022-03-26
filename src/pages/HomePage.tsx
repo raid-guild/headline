@@ -16,7 +16,7 @@ import heroImageMobile from "assets/img-hero-sm.png";
 import aboutImage from "assets/img-about.png";
 import visionImage from "assets/img-vision.png";
 import visionImageMobile from "assets/img-vision-sm.png";
-import getStartedAnimation from "assets/get-started-animation.png";
+import getStartedAnimation from "assets/get-started-animation.svg";
 
 const StyledLayout = styled(Layout)`
   grid-template:
