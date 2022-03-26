@@ -10,8 +10,10 @@ import {
   BulletListExtension,
   CodeBlockExtension,
   CodeExtension,
+  EmojiExtension,
   HardBreakExtension,
   HeadingExtension,
+  ImageExtension,
   ItalicExtension,
   LinkExtension,
   ListItemExtension,
@@ -68,6 +70,8 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
       new ItalicExtension(),
       new HeadingExtension(),
       new LinkExtension(),
+      new EmojiExtension({ supportedLanguages: [typescript, jsx] }),
+      new ImageExtension(),
       new BlockquoteExtension(),
       new BulletListExtension({ enableSpine: true }),
       new OrderedListExtension(),
@@ -93,6 +97,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
     extensions,
     stringHandler: "markdown",
   });
+  debugger;
 
   return (
     <AllStyledComponent className={className}>
