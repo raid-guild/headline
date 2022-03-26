@@ -111,17 +111,16 @@ const CreatePublicationView = () => {
       <PublishContainer>
         <BodyTitleContainer>
           <Title size="md" color="label">
-            Publishing your content is easy.
+          Your Content, Your Community
           </Title>
           <Text size="md" color="label">
-            Engage your community & fans.
+          Publish web content and send out newsletters on HEADLINE.
           </Text>
         </BodyTitleContainer>
         <BodyButtonContainer>
           <BodyTextContainer>
             <Text size="base">
-              Write as a blog or send it out as a newsletter, Websubstack covers
-              all.
+            HEADLINE is a decentralized publishing platform where a creator’s content is always their own. There’s no service fee, no long form privacy agreement and your unpublished and token gated content is encrypted, enabling access control.
             </Text>
           </BodyTextContainer>
           <StyledButton
@@ -135,7 +134,7 @@ const CreatePublicationView = () => {
         </BodyButtonContainer>
         <BodyFooterContainer>
           <Text size="base">
-            How does web3substack work? Check out our{" "}
+            How does HEADLINE work? Check out our{" "}
             <ExternalLink href="www.google.com">
               <Text as="span" size="base" weight="bold" color="primary">
                 Guide
@@ -206,7 +205,7 @@ const EmtptyEntriesMessage = () => {
   return (
     <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
-        You havent written any posts yet
+        You haven't written any posts yet
       </Text>
     </EmptyCardContainer>
   );
@@ -216,13 +215,16 @@ const EmtptyLocksMessage = () => {
   return (
     <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
-        You havent written any posts yet
+      You haven’t created any membership tiers yet.
       </Text>
       <Text size="sm" color="helpText">
         Create different membership options for your readers
       </Text>
       <Link to="/publish/write">
-        <Text size="sm" color="primary" weight="semibold">
+        <Text size="sm" color="primary" weight="semibold" onClick={() => {
+                setHideModal(false);
+                setSubmitted(false);
+              }}>
           Create Now
         </Text>
       </Link>

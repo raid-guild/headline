@@ -9,7 +9,7 @@ const accordionContent = [
   {
     text: "What does powered by Unlock mean?",
     content:
-      "The Unlock protocol provides the membership option for creators to set up a paywall. While the subscription feature is available, it's up to the creator whether to use it or not.",
+      "The Unlock Protocol provides the membership option for creators to set up a paywall. While the subscription feature is available, it's up to the creator whether to use it or not.",
   },
   {
     title: "How can this platform be free of charge?",
@@ -19,7 +19,7 @@ const accordionContent = [
   {
     title: "How do I send my article as a newsletter?",
     content:
-      "Go to Publish, then Settings, and enter your third party API keyof, under Email Service. After that's completed you can send your blog as a newsletter when you Publish the post.",
+      "Go to Publish, then Settings and enter your third party API key, under Email Service. After that’s completed, you can send your blog as a newsletter when you publish the post.",
   },
   {
     title: "Is HEADLINE an emailing service?",
