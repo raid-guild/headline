@@ -420,7 +420,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
 
       console.log(radio);
       console.log("Published article");
-      console.log(article);
+      console.log(readyArticle);
       await dispatch(
         publishArticle({
           article: readyArticle,
@@ -449,10 +449,10 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           ? paidLocks
           : [...freeLocks, ...paidLocks];
         await sendMessageFromLocks(settings, locks, address || "", provider);
-        setHide(true);
       }
+      setHide(true);
     }
-  }, [address, provider]);
+  }, [address, provider, article]);
 
   return (
     <Dialog
