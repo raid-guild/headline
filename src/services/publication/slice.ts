@@ -18,7 +18,6 @@ import {
   Operator,
   LitNodeClient,
 } from "lib/lit";
-import { useLit } from "context/LitContext";
 import { fetchLocks } from "services/lock/slice";
 import { RootState } from "store";
 import { ChainName } from "types";
@@ -95,13 +94,13 @@ export const fetchPublicationSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchPublication.fulfilled, (state, action) => {
+    builder.addCase(fetchPublication.fulfilled, (state) => {
       state.loading = false;
     });
     builder.addCase(fetchPublication.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(fetchPublication.rejected, (state, action) => {
+    builder.addCase(fetchPublication.rejected, (state) => {
       state.loading = false;
     });
   },
@@ -320,11 +319,6 @@ export const fetchPublicationByStream = createAsyncThunk(
       ceramic: (CERAMIC_URL as string) || "testnet-clay",
       connectNetwork: "testnet-clay",
     });
-    const model = new DataModel({
-      ceramic: client.ceramic,
-      model: PUBLISHED_MODELS,
-    });
-
     try {
       const loader = new TileLoader({ ceramic: client.ceramic, cache: true });
       const doc = await loader.load(args.streamId);

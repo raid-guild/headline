@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import { WebClient } from "@self.id/web";
 import { DataModel } from "@glazed/datamodel";
 import { PUBLISHED_MODELS } from "../../constants";

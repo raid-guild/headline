@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@alexkeating/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
@@ -38,7 +38,7 @@ import { verifyLock, lockSelectors } from "services/lock/slice";
 import { networks } from "lib/networks";
 
 import { useAppDispatch, useAppSelector } from "store";
-import { CREATE_PUBLICATION_URI, WRITING_URI } from "../constants";
+import { CREATE_PUBLICATION_URI } from "../constants";
 
 const PublishContainer = styled.div`
   display: flex;
@@ -111,17 +111,19 @@ const CreatePublicationView = () => {
       <PublishContainer>
         <BodyTitleContainer>
           <Title size="md" color="label">
-            Publishing your content is easy.
+            Your Content, Your Community
           </Title>
           <Text size="md" color="label">
-            Engage your community & fans.
+            Publish web content and send out newsletters on HEADLINE.
           </Text>
         </BodyTitleContainer>
         <BodyButtonContainer>
           <BodyTextContainer>
             <Text size="base">
-              Write as a blog or send it out as a newsletter, Websubstack covers
-              all.
+              HEADLINE is a decentralized publishing platform where a creator’s
+              content is always their own. There’s no service fee, no long form
+              privacy agreement and your unpublished and token gated content is
+              encrypted, enabling access control.
             </Text>
           </BodyTextContainer>
           <StyledButton
@@ -135,7 +137,7 @@ const CreatePublicationView = () => {
         </BodyButtonContainer>
         <BodyFooterContainer>
           <Text size="base">
-            How does web3substack work? Check out our{" "}
+            How does HEADLINE work? Check out our{" "}
             <ExternalLink href="www.google.com">
               <Text as="span" size="base" weight="bold" color="primary">
                 Guide
@@ -206,7 +208,7 @@ const EmtptyEntriesMessage = () => {
   return (
     <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
-        You havent written any posts yet
+        You haven&apos;t written any posts yet
       </Text>
     </EmptyCardContainer>
   );
@@ -216,16 +218,11 @@ const EmtptyLocksMessage = () => {
   return (
     <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
-        You havent written any posts yet
+        You haven’t created any membership tiers yet.
       </Text>
       <Text size="sm" color="helpText">
         Create different membership options for your readers
       </Text>
-      <Link to="/publish/write">
-        <Text size="sm" color="primary" weight="semibold">
-          Create Now
-        </Text>
-      </Link>
     </EmptyCardContainer>
   );
 };

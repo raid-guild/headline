@@ -97,9 +97,9 @@ const LoggedOutBody = ({
   return (
     <DashboardContainer>
       <BodyTitleContainer>
-        <Title size="md">Your content, your reader.</Title>
+        <Title size="md">Your Content, Your Community</Title>
         <Text size="md" color="label">
-          Writing & sending content right from here.
+          Publish web content and send out newsletters on HEADLINE
         </Text>
       </BodyTitleContainer>
       <BodyButtonContainer>
@@ -123,7 +123,7 @@ const LoggedOutBody = ({
       </BodyButtonContainer>
       <BodyFooterContainer>
         <Text size="base">
-          How does Headline work? Check out our{" "}
+          How does HEADLINE work? Check out our{" "}
           <ExternalLink href="www.google.com">
             <Text as="span" size="base" weight="bold" color="primary">
               Guide
@@ -257,14 +257,9 @@ const LoggedInBody = () => {
     <>
       <PublicationCopyContainer>
         <Text size="md" weight="semibold">
-          Your content, your reader.
+          Your Content, Your Community.
         </Text>
-        <Title size="sm">Start writing on webs3substack</Title>
-        <ExternalLink href="www.google.com">
-          <Text size="sm" weight="semibold" color="primary">
-            Dismiss
-          </Text>
-        </ExternalLink>
+        <Title size="sm">Publish web content and send out newsletters.</Title>
       </PublicationCopyContainer>
       <StyledButton
         color="primary"
@@ -281,7 +276,7 @@ const LoggedInBody = () => {
       <Text size="md" weight="semibold">
         Something very cool is coming here, join us to craft HEADLINE better.
       </Text>
-      <ExternalLink href="https://www.google.com">
+      <ExternalLink href="https://airtable.com/shr0fxAjKsDwTRfjd" open="_blank">
         <Text size="sm" color="primary" weight="semibold">
           Send feedback
         </Text>
@@ -305,8 +300,15 @@ const LoggedInBody = () => {
             </Text>
             <Title size="sm">Tips for you from the Unlock team</Title>
           </LearnMoreCopyContainer>
-          <StyledButton size="xl" color="primary" variant="contained">
-            Subscribe
+          <StyledButton
+            size="xl"
+            color="primary"
+            variant="contained"
+            onClick={() =>
+              window.open("https://unlock-protocol.com/blog", "_blank")
+            }
+          >
+            View blog
           </StyledButton>
         </LearnMoreContainer>
       </SubscriptionContainer>

@@ -82,8 +82,8 @@ const EmailSettings = () => {
         Email Service
       </Title>
       <Text size="base" color="label">
-        Currently we support sengrid to send emails and it&#39;s required to
-        have a sendgrid account in order to start mailing to your subscribers.
+        Currently we support Mailgun to send emails and it&#39;s required to
+        have a Mailgun account in order to start mailing to your subscribers.
       </Text>
       <ConfigureButtonContainer>
         <Dialog
@@ -102,7 +102,7 @@ const EmailSettings = () => {
             </Text>
             <SettingsContainer>
               <Title size="sm" color="grey">
-                Setting to send out a post to your subscribers
+                Send out posts to your subscribers
               </Title>
               <Text size="sm" color="label" as="span">
                 Having issues setting up?{" "}

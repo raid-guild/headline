@@ -11,11 +11,11 @@ import HomeNav from "components/HomeNav";
 import FAQSection from "components/FAQSection";
 import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
-import heroImage from "assets/img-hero.svg";
-import heroImageMobile from "assets/img-hero-sm.svg";
-import aboutImage from "assets/img-about.svg";
-import visionImage from "assets/img-vision.svg";
-import visionImageMobile from "assets/img-vision-sm.svg";
+import heroImage from "assets/img-hero.png";
+import heroImageMobile from "assets/img-hero-sm.png";
+import aboutImage from "assets/img-about.png";
+import visionImage from "assets/img-vision.png";
+import visionImageMobile from "assets/img-vision-sm.png";
 import getStartedAnimation from "assets/get-started-animation.svg";
 
 const StyledLayout = styled(Layout)`
