@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@alexkeating/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import {
-  useNavigate,
-  useParams,
-  useSearchParams,
-  Link,
-} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
@@ -43,7 +38,7 @@ import { verifyLock, lockSelectors } from "services/lock/slice";
 import { networks } from "lib/networks";
 
 import { useAppDispatch, useAppSelector } from "store";
-import { CREATE_PUBLICATION_URI, WRITING_URI } from "../constants";
+import { CREATE_PUBLICATION_URI } from "../constants";
 
 const PublishContainer = styled.div`
   display: flex;
@@ -213,7 +208,7 @@ const EmtptyEntriesMessage = () => {
   return (
     <EmptyCardContainer>
       <Text size="base" color="helpText" weight="semibold">
-        You haven't written any posts yet
+        You haven&apos;t written any posts yet
       </Text>
     </EmptyCardContainer>
   );

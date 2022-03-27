@@ -177,7 +177,7 @@ export const verifyLock = createAsyncThunk(
             chainMeta.litName,
             args.address
           );
-          const key = await litClient.saveEncryptionKey({
+          await litClient.saveEncryptionKey({
             accessControlConditions: controls,
             encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
               publication.publishAccess.encryptedSymmetricKey,
@@ -271,7 +271,6 @@ export const fetchLocks = createAsyncThunk(
             // args.provider,
             lockMeta.chainId
           );
-          const { publication } = thunkAPI.getState() as RootState;
           thunkAPI.dispatch(
             lockActions.create({
               ...lock,
