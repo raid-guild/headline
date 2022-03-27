@@ -49,6 +49,7 @@ const LockMemberContainer = styled.div`
 `;
 
 export const LockData = ({ lock }: { lock: Lock }) => {
+  debugger;
   return (
     <>
       <Title size="sm" color="label">
@@ -68,7 +69,7 @@ export const LockData = ({ lock }: { lock: Lock }) => {
             Duration
           </StyledText>
           <StyledText size="base" color="label">
-            {lock.expiration / 60 / 60} Days
+            {lock.expiration / 60 / 60 / 24} Days
           </StyledText>
         </LockDataRowContainer>
         <LockDataRowContainer>

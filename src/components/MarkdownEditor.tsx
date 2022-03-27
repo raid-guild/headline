@@ -73,7 +73,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
       new ItalicExtension(),
       new HeadingExtension(),
       new LinkExtension({ autoLink: true }),
-      new EmojiExtension({ supportedLanguages: [typescript, jsx] }),
+      new EmojiExtension(),
       new ImageExtension(),
       new IframeExtension(),
       new BlockquoteExtension(),
