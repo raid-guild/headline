@@ -10,8 +10,11 @@ import {
   BulletListExtension,
   CodeBlockExtension,
   CodeExtension,
+  EmojiExtension,
   HardBreakExtension,
   HeadingExtension,
+  IframeExtension,
+  ImageExtension,
   ItalicExtension,
   LinkExtension,
   ListItemExtension,
@@ -20,6 +23,7 @@ import {
   PlaceholderExtension,
   StrikeExtension,
   TableExtension,
+  TextColorExtension,
   TrailingNodeExtension,
 } from "remirror/extensions";
 import {
@@ -39,6 +43,7 @@ import {
 } from "@remirror/core";
 
 import { AllStyledComponent } from "@remirror/styles/emotion";
+import { FloatingLinkToolbar } from "components/EditorEditDialog";
 
 export interface MarkdownEditorProps {
   state: EditorState<GetSchema<Extension>>;
@@ -67,7 +72,10 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
       new StrikeExtension(),
       new ItalicExtension(),
       new HeadingExtension(),
-      new LinkExtension(),
+      new LinkExtension({ autoLink: true }),
+      new EmojiExtension({ supportedLanguages: [typescript, jsx] }),
+      new ImageExtension(),
+      new IframeExtension(),
       new BlockquoteExtension(),
       new BulletListExtension({ enableSpine: true }),
       new OrderedListExtension(),
@@ -85,6 +93,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
        * e.g. in a list item
        */
       new HardBreakExtension(),
+      new TextColorExtension(),
     ],
     [placeholder]
   );
@@ -100,6 +109,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
         <Remirror manager={manager} autoFocus initialContent={initialContent}>
           <Toolbar items={toolbarItems} refocusEditor label="Top Toolbar" />
           <EditorComponent />
+          <FloatingLinkToolbar />
           {children}
         </Remirror>
       </ThemeProvider>
