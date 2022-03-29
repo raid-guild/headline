@@ -22,7 +22,7 @@ const StyledButton = styled(Button)`
 const BackButton = ({ size, onClick }: Props) => {
   const navigate = useNavigate();
   const fallback = () => navigate(-1);
-  const click = onClick && fallback;
+  const click = onClick ? onClick : fallback;
   return (
     <StyledButton onClick={click}>
       <Icon size={size} src={arrow} alt="back button" />

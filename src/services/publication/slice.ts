@@ -65,7 +65,7 @@ export const publicationSlice = createSlice({
     apiKey: "",
     streamId: "",
     registryId: "",
-    image: "",
+    image: undefined as string | undefined,
     emailSettings: {
       domain: "",
       apiKey: "",
@@ -84,7 +84,7 @@ export const publicationSlice = createSlice({
       state.streamId = action.payload.streamId || "";
       console.log(`publication id ${action.payload.streamId}`);
       state.registryId = action.payload.registryId || "";
-      state.image = action.payload.image || "";
+      state.image = action.payload.image || undefined;
     },
   },
 });
