@@ -17,6 +17,7 @@ const StyledTextArea = styled.textarea`
   background: ${({ theme }) => theme.colors.almostWhite};
   border: ${({ theme }) => `solid 0.1rem ${theme.colors.lightGrey}`};
   border-radius: 0.8rem;
+  resize: none;
   font-size: 1.6rem;
 `;
 
