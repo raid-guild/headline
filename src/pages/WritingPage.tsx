@@ -17,11 +17,11 @@ import MarkdownEditor from "components/MarkdownEditor";
 import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
+import usePubImg from "hooks/usePubImg";
 import { networks } from "lib/networks";
 import { updateArticle } from "services/article/slice";
 import { articleRegistrySelectors } from "services/articleRegistry/slice";
 
-import profile from "assets/obsidian.png";
 import { storeIpfs } from "lib/ipfs";
 
 const AvatarContainer = styled.div`
@@ -163,6 +163,7 @@ const WritingPage = () => {
   const { litClient } = useLit();
   const dispatch = useAppDispatch();
   const { state, onChange } = useRemirror({});
+  const [pubImg] = usePubImg();
   const articleLoading = useAppSelector((state) => state.createArticle.loading);
   const addRegistryLoading = useAppSelector(
     (state) => state.addArticle.loading
@@ -170,6 +171,7 @@ const WritingPage = () => {
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
+
   console.log("Article");
   console.log(article);
   const [title, setTitle] = useState(article?.title || "Untitled");
@@ -234,7 +236,11 @@ const WritingPage = () => {
         <LeftHeaderContainer>
           <BackButton size="md" />
           <AvatarContainer>
-            <Avatar size="xl" src={profile} alt="newsletter profile picture" />
+            <Avatar
+              size="xl"
+              src={pubImg ? URL.createObjectURL(pubImg) : ""}
+              alt="newsletter profile picture"
+            />
           </AvatarContainer>
           <TitleContainer>
             <Text size="md" weight="semibold" color="helpText">

@@ -22,8 +22,8 @@ import { LockCards } from "components/LockCard";
 import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
-import profile from "assets/obsidian.png";
 import { getKeyAndDecrypt, getClient, addNftAccessControl } from "lib/lit";
+import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
 
 const StyledBodyContainer = styled(BodyContainer)`
@@ -122,6 +122,7 @@ const ArticlePage = () => {
   const [active, setActive] = useState("content");
   const { web3Service } = useUnlock();
   const dispatch = useAppDispatch();
+  const [pubImg] = usePubImg();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
@@ -196,7 +197,11 @@ const ArticlePage = () => {
       <StyledHeaderContainer>
         <MobileHeader />
         <TitleContainer>
-          <Avatar size="xl" src={profile} alt="newsletter profile picture" />
+          <Avatar
+            size="xl"
+            src={pubImg ? URL.createObjectURL(pubImg) : ""}
+            alt="newsletter profile picture"
+          />
           <Text size="lg" weight="semibold" color="helpText">
             {publication?.name}
           </Text>

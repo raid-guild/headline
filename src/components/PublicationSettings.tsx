@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useWallet } from "@alexkeating/quiver";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
@@ -11,6 +11,8 @@ import PublicationForm from "components/PublicationForm";
 import Separator from "components/Separator";
 import Title from "components/Title";
 
+import usePubImg from "hooks/usePubImg";
+import { fetchIPFS } from "lib/ipfs";
 import { networks } from "lib/networks";
 import { updatePublication } from "services/publication/slice";
 import { useAppSelector, useAppDispatch } from "store";
@@ -44,15 +46,47 @@ const StyledButton = styled(Button)`
   width: 100%;
 `;
 
+const StyledAvatar = styled(Avatar)`
+  &:hover {
+	  opacity: 0.5;
+		cursor: pointer;
+	}
+
+	}
+`;
+
 const PublicationSettings = () => {
   const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
   const { litClient } = useLit();
+  const hiddenImageInput = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
     (state) => state.updatePublication.loading
   );
-  const publication = useAppSelector((state) => state.publication);
+  const clickImageInput = () => {
+    hiddenImageInput?.current?.click();
+  };
+
+  const [pubImg, setPubImg] = usePubImg();
+  const uploadImage = useCallback(
+    (e) => {
+      const input = hiddenImageInput.current || { files: null };
+      // const validImage = false;
+      if (input.files) {
+        const file = input.files[0];
+        if (!file) {
+          return;
+        }
+        // validImage =
+        //   file.type === "image/jpeg" ||
+        //   file.type === "image/png" ||
+        //   file.type === "image/svg+xml";
+        setPubImg(file);
+      }
+    },
+    [hiddenImageInput.current]
+  );
 
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async (data) => {
@@ -65,6 +99,7 @@ const PublicationSettings = () => {
           publication: {
             name: data.name || "",
             description: data.description || "",
+            imgFile: pubImg,
           },
           chainName: networks[chainId]?.litName,
           client,
@@ -72,12 +107,24 @@ const PublicationSettings = () => {
         })
       );
     },
-    [provider, address]
+    [provider, address, pubImg]
   );
 
   return (
     <PublicationSettingsContainer>
-      <Avatar alt={"Publication profile picture"} size="xxl" />
+      <StyledAvatar
+        alt={"Publication profile picture"}
+        size="xxl"
+        src={pubImg ? URL.createObjectURL(pubImg) : ""}
+        onClick={clickImageInput}
+      />
+      <input
+        type="file"
+        ref={hiddenImageInput}
+        style={{ display: "none" }}
+        onClick={uploadImage}
+        onChange={uploadImage}
+      />
       <Separator orientation="vertical" />
       <PublicationInfoContainer>
         <Title size="md" color="helpText">

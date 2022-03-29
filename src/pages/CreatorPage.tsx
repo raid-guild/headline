@@ -16,6 +16,7 @@ import Title from "components/Title";
 import Text from "components/Text";
 import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
+import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
 import { fetchArticleRegistry } from "services/articleRegistry/slice";
 
@@ -126,6 +127,7 @@ const CreatorPage = () => {
   const [active, setActive] = useState("content");
   const { litClient } = useLit();
   const { did } = useCeramic();
+  const [pubImg] = usePubImg();
   const dispatch = useAppDispatch();
   const publication = useAppSelector((state) => state.publication);
 
@@ -168,7 +170,11 @@ const CreatorPage = () => {
       <StyledHeaderContainer>
         <MobileHeader />
         <TitleContainer>
-          <Avatar size="xl" src={profile} alt="newsletter profile picture" />
+          <Avatar
+            size="xl"
+            src={pubImg ? URL.createObjectURL(pubImg) : ""}
+            alt="newsletter profile picture"
+          />
           <Text size="lg" weight="semibold" color="helpText">
             {publication?.name}
           </Text>
