@@ -276,7 +276,7 @@ const LoggedInBody = () => {
       <Text size="md" weight="semibold">
         Something very cool is coming here, join us to craft HEADLINE better.
       </Text>
-      <ExternalLink href="https://airtable.com/shr0fxAjKsDwTRfjd" open="_blank">
+      <ExternalLink href="https://airtable.com/shr0fxAjKsDwTRfjd">
         <Text size="sm" color="primary" weight="semibold">
           Send feedback
         </Text>
