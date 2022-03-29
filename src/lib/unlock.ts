@@ -30,7 +30,7 @@ export const checkoutRedirect = (
   };
   const prms = new URLSearchParams({
     paywallConfig: JSON.stringify(checkoutParams) || "",
-    redirctUri: DOMAIN as string,
+    redirectUri: DOMAIN as string,
   });
   return `${base}${prms.toString()}`;
 };
