@@ -49,7 +49,6 @@ const LockMemberContainer = styled.div`
 `;
 
 export const LockData = ({ lock }: { lock: Lock }) => {
-  debugger;
   return (
     <>
       <Title size="sm" color="label">
