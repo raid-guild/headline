@@ -66,7 +66,9 @@ const LockVerificationForm = ({ onSubmit, children }: Props) => {
         <StyledLabel>Select the Chain where your lock exists</StyledLabel>
         <StyledSelect {...register("lockChain")}>
           <StyledOption value="0x1">Mainnet</StyledOption>
-          <StyledOption value="0x4">Rinkeby</StyledOption>
+          <StyledOption value="0x64">Gnosis Chain</StyledOption>
+          <StyledOption value="0x89">Polygon</StyledOption>
+          <StyledOption value="0x38">Binance Smart Chain</StyledOption>
         </StyledSelect>
         {errors?.lockChain && <p>{errors?.lockChain?.message}</p>}
       </SelectContainer>
