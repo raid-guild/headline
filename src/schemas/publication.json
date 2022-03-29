@@ -89,6 +89,11 @@
           "type": "string"
         }
       }
+    },
+    "IPFSUrl": {
+      "type": "string",
+      "pattern": "^ipfs://.+",
+      "maxLength": 150
     }
   },
   "properties": {
@@ -101,6 +106,9 @@
       "type": "string",
       "title": "description",
       "maxLength": 1000
+    },
+    "image": {
+      "$ref": "#/definitions/IPFSUrl"
     },
     "draftAccess": {
       "$ref": "#/definitions/LitAccess"

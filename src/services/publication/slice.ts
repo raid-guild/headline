@@ -4,6 +4,7 @@ import { ethers } from "ethers";
 import { WebClient } from "@self.id/web";
 import { Web3Service } from "@unlock-protocol/unlock-js";
 
+import { storeIpfs } from "lib/ipfs";
 import { getKeyEncryptText, getKeyAndDecrypt } from "lib/lit";
 import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
 import { DataModel } from "@glazed/datamodel";
@@ -43,6 +44,7 @@ export type Publication = {
   streamId?: string;
   emailSettings?: MailGunSettings;
   registryId?: string;
+  image?: string;
 };
 
 export const publicationSlice = createSlice({
@@ -63,6 +65,7 @@ export const publicationSlice = createSlice({
     apiKey: "",
     streamId: "",
     registryId: "",
+    image: "",
     emailSettings: {
       domain: "",
       apiKey: "",
@@ -81,6 +84,7 @@ export const publicationSlice = createSlice({
       state.streamId = action.payload.streamId || "";
       console.log(`publication id ${action.payload.streamId}`);
       state.registryId = action.payload.registryId || "";
+      state.image = action.payload.image || "";
     },
   },
 });
@@ -355,6 +359,7 @@ export const updatePublication = createAsyncThunk(
       publication: Omit<Publication, "draftAccess" | "publishAccess"> & {
         publishAccess?: LitAccess;
         draftAccess?: LitAccess;
+        imgFile?: File | null;
       };
       chainName: ChainName;
       client: WebClient;
@@ -378,6 +383,7 @@ export const updatePublication = createAsyncThunk(
         locks: PublicationLock[];
         emailSettings: MailGunSettings;
         publishAccess?: LitAccess;
+        image?: string;
       };
       if (pub.name !== undefined) {
         updates["name"] = pub.name;
@@ -388,6 +394,12 @@ export const updatePublication = createAsyncThunk(
       if (pub.locks !== undefined) {
         updates["locks"] = pub.locks;
       }
+      if (pub.imgFile !== undefined && pub.imgFile !== null) {
+        const arrBuff = await pub.imgFile.arrayBuffer();
+        const ipfsUri = await storeIpfs(arrBuff);
+        updates["image"] = ipfsUri;
+      }
+
       if (pub.emailSettings !== undefined) {
         let apiKey;
         if (pub.emailSettings.apiKey !== undefined) {

@@ -8,6 +8,7 @@ type AvatarProps = {
   alt: string;
   src?: string;
   className?: string;
+  onClick?: () => void;
 };
 
 type WrapperProps = {
@@ -30,16 +31,14 @@ const Wrapper = styled.div<WrapperProps>`
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  border: 0.2rem solid #ddd;
-  padding: 0.2rem;
   height: ${({ theme, size }) => theme.icons.size[size]};
   width: ${({ theme, size }) => theme.icons.size[size]};
   background-color: white;
 `;
 
-const Avatar = ({ size, alt, src, className }: AvatarProps) => {
+const Avatar = ({ size, alt, src, className, onClick }: AvatarProps) => {
   return (
-    <Wrapper size={size} className={className}>
+    <Wrapper size={size} className={className} onClick={onClick}>
       <Image
         src={src || avatarStock}
         size={size}
