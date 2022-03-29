@@ -264,10 +264,10 @@ export const publishArticle = createAsyncThunk(
         ...baseArticle,
       };
       await doc.update(updatedArticle);
-      thunkAPI.dispatch(
+      await thunkAPI.dispatch(
         articleRegistryActions.update({ ...updatedArticle, text: content })
       );
-      thunkAPI.dispatch(
+      await thunkAPI.dispatch(
         addPublishRegistryArticle({ streamId: args.streamId, client })
       );
       return baseArticle;

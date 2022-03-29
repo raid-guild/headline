@@ -453,7 +453,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
       }
       setHide(true);
     }
-  }, [address, provider, article]);
+  }, [address, provider, article, previewImg, description]);
 
   return (
     <Dialog
