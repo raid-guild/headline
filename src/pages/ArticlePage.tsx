@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { useToolbarState, Toolbar } from "reakit/Toolbar";
-import ToolbarItem from "components/ToolbarItem";
 import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
 import { useAppDispatch, useAppSelector } from "store";
@@ -22,7 +20,7 @@ import { LockCards } from "components/LockCard";
 import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
-import { getKeyAndDecrypt, getClient, addNftAccessControl } from "lib/lit";
+import { getKeyAndDecrypt, getClient } from "lib/lit";
 import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
 
@@ -173,15 +171,19 @@ const ArticlePage = () => {
 
   useEffect(() => {
     const f = async () => {
-      if (!article?.paid) {
+      if (!article?.paid && article?.status !== "draft") {
         return;
       }
+      const access =
+        article?.status === "draft"
+          ? publication.draftAccess
+          : publication.publishAccess;
       const litClient = await getClient();
       console.log("Decrypting");
       const txt = await getKeyAndDecrypt(
         "ethereum",
-        publication.publishAccess.encryptedSymmetricKey,
-        publication.publishAccess.accessControlConditions,
+        access.encryptedSymmetricKey,
+        access.accessControlConditions,
         article?.text,
         litClient
       );

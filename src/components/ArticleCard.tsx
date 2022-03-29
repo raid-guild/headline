@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
 
 import { Article } from "services/article/slice";
+import Share from "components/Share";
 import Text from "components/Text";
 import Title from "components/Title";
 import { fetchIPFS } from "lib/ipfs";
+import { useAppSelector } from "store";
 
 const Container = styled.div`
   border: ${({ theme }) => `.1rem solid ${theme.colors.lightGrey}`};
@@ -38,16 +39,15 @@ const DetailsMetadataContainer = styled.div`
   justify-content: space-between;
 `;
 
-const StyledDivider = styled.span`
-  &:after {
-    content: "|";
-  }
-`;
-
 const ImageContainer = styled.div`
   border-radius: 0.4rem;
   @media (max-width: 768px) {
   }
+`;
+
+const ShareContainer = styled.div`
+  display: flex;
+  gap: 1rem;
 `;
 
 export const ArticleCard = ({
@@ -59,6 +59,8 @@ export const ArticleCard = ({
 }) => {
   const date = new Date(article.createdAt);
   const link = redirect ? redirect : `/publish/write/${article.streamId}`;
+  const publicationId = useAppSelector((state) => state.publication.streamId);
+
   const [previewImg, setPreviewImg] = useState("");
   useEffect(() => {
     const x = async () => {
@@ -89,8 +91,10 @@ export const ArticleCard = ({
           <Title size="md">{article.title}</Title>
           <DetailsMetadataContainer>
             <Text size="md">{article?.description || "None"}</Text>
-            {/* <StyledDivider /> */}
-            <Text size="md">{`${date.toDateString()}`}</Text>
+            <ShareContainer>
+              <Text size="md">{`${date.toDateString()}`}</Text>
+              <Share to={`/pub/${publicationId}/article/${article.streamId}`} />
+            </ShareContainer>
           </DetailsMetadataContainer>
         </DetailsContainer>
       </Container>
