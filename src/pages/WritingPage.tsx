@@ -171,6 +171,7 @@ const WritingPage = () => {
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
+  const publicationName = useAppSelector((state) => state.publication.name);
 
   console.log("Article");
   console.log(article);
@@ -244,7 +245,7 @@ const WritingPage = () => {
           </AvatarContainer>
           <TitleContainer>
             <Text size="md" weight="semibold" color="helpText">
-              Name
+              {publicationName}
             </Text>
             <Text size="sm" color="helpText">
               Dashboard

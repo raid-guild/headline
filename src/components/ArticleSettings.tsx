@@ -379,6 +379,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   const radio = useRadioState({
     state: `${article?.paid ? "paid" : "free"}`,
   });
+  const published = article?.status === "published";
 
   const configuredEmail =
     emailSettings?.mailFrom &&
@@ -462,11 +463,11 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
       disclosure={
         <Button
           size="md"
-          color="primary"
+          color={published ? "secondary" : "primary"}
           variant="contained"
           onClick={() => setHide(false)}
         >
-          {article?.status === "published" ? "Published" : "Publish"}
+          {published ? "Published" : "Publish"}
         </Button>
       }
     >

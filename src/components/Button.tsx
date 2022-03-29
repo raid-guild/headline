@@ -46,7 +46,16 @@ const customStyles = {
     `,
   },
   secondary: {
-    contained: css``,
+    contained: css<Props>`
+      color: ${({ theme }) => theme.colors.almostWhite};
+      background: ${({ theme }) => theme.colors.grey};
+      border: ${({ theme }) => `.2rem solid ${theme.colors.grey}`};
+
+      &:hover {
+        background: none;
+        color: ${({ theme }) => theme.colors.grey};
+      }
+    `,
     outlined: css<Props>`
       color: ${({ theme }) => theme.colors.grey};
       background: none;
