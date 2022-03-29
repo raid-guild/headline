@@ -4,6 +4,7 @@ import {
   articleSlice,
   createArticleSlice,
   publishArticleSlice,
+  updateArticleSlice,
 } from "services/article/slice";
 import { fetchProfileSlice, profileSlice } from "services/profile/slice";
 import { verifyLockSlice, lockSlice } from "services/lock/slice";
@@ -24,6 +25,7 @@ export const store = configureStore({
     [publicationSlice.name]: publicationSlice.reducer,
     [articleSlice.name]: articleSlice.reducer,
     [createArticleSlice.name]: createArticleSlice.reducer,
+    [updateArticleSlice.name]: updateArticleSlice.reducer,
     [createPublicationSlice.name]: createPublicationSlice.reducer,
     [fetchPublicationSlice.name]: fetchPublicationSlice.reducer,
     [updatePublicationSlice.name]: updatePublicationSlice.reducer,

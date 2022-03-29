@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {
   size: ThemeIconSize;
+  onClick?: () => void;
 };
 
 const StyledButton = styled(Button)`
@@ -18,10 +19,12 @@ const StyledButton = styled(Button)`
   cursor: pointer;
 `;
 
-const BackButton = ({ size }: Props) => {
+const BackButton = ({ size, onClick }: Props) => {
   const navigate = useNavigate();
+  const fallback = () => navigate(-1);
+  const click = onClick && fallback;
   return (
-    <StyledButton onClick={() => navigate(-1)}>
+    <StyledButton onClick={click}>
       <Icon size={size} src={arrow} alt="back button" />
     </StyledButton>
   );

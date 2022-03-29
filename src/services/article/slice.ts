@@ -79,6 +79,27 @@ export const createArticleSlice = createSlice({
   },
 });
 
+export const updateArticleSlice = createSlice({
+  name: "updateArticle",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(updateArticle.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateArticle.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateArticle.rejected, (state) => {
+      state.loading = false;
+    });
+  },
+});
+
+
+
 export const publishArticleSlice = createSlice({
   name: "publishArticle",
   initialState: {
@@ -264,10 +285,10 @@ export const publishArticle = createAsyncThunk(
         ...baseArticle,
       };
       await doc.update(updatedArticle);
-      thunkAPI.dispatch(
+      await thunkAPI.dispatch(
         articleRegistryActions.update({ ...updatedArticle, text: content })
       );
-      thunkAPI.dispatch(
+      await thunkAPI.dispatch(
         addPublishRegistryArticle({ streamId: args.streamId, client })
       );
       return baseArticle;
