@@ -108,3 +108,7 @@ dist
 
 # TernJS port file
 .tern-port
+
+# kubernetes config
+*/kubernetes/kubernetes.yaml
+

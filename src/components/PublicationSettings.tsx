@@ -12,7 +12,6 @@ import Separator from "components/Separator";
 import Title from "components/Title";
 
 import usePubImg from "hooks/usePubImg";
-import { fetchIPFS } from "lib/ipfs";
 import { networks } from "lib/networks";
 import { updatePublication } from "services/publication/slice";
 import { useAppSelector, useAppDispatch } from "store";

@@ -13,6 +13,7 @@
     "serve": "node ./server.js"
   },
   "dependencies": {
+    "@alexkeating/quiver": "^0.10.2",
     "@ceramicnetwork/stream-caip10-link": "^1.2.9",
     "@datamodels/identity-accounts-crypto": "^0.1.2",
     "@datamodels/identity-accounts-web": "^0.1.2",
@@ -21,7 +22,7 @@
     "@emotion/styled": "^11.6.0",
     "@fontsource/inter": "^4.5.4",
     "@radix-ui/react-accordion": "^0.1.6",
-    "@alexkeating/quiver": "^0.10.2",
+    "@radix-ui/react-separator": "^0.1.4",
     "@reduxjs/toolkit": "^1.7.1",
     "@remirror/pm": "^1.0.11",
     "@remirror/react": "^1.0.21",
