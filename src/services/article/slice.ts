@@ -79,6 +79,27 @@ export const createArticleSlice = createSlice({
   },
 });
 
+export const updateArticleSlice = createSlice({
+  name: "updateArticle",
+  initialState: {
+    loading: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(updateArticle.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(updateArticle.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateArticle.rejected, (state) => {
+      state.loading = false;
+    });
+  },
+});
+
+
+
 export const publishArticleSlice = createSlice({
   name: "publishArticle",
   initialState: {

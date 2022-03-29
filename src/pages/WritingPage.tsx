@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import "@remirror/styles/all.css";
 import debounce from "lodash/fp/debounce";
@@ -161,10 +161,11 @@ const WritingPage = () => {
   const { chainId } = useWallet();
   const { client } = useCeramic();
   const { litClient } = useLit();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { state, onChange } = useRemirror({});
   const [pubImg] = usePubImg();
-  const articleLoading = useAppSelector((state) => state.createArticle.loading);
+  const articleLoading = useAppSelector((state) => state.updateArticle.loading);
   const addRegistryLoading = useAppSelector(
     (state) => state.addArticle.loading
   );
@@ -176,10 +177,21 @@ const WritingPage = () => {
   console.log("Article");
   console.log(article);
   const [title, setTitle] = useState(article?.title || "Untitled");
-
+  const saving = articleLoading || addRegistryLoading;
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setTitle(e.target.value);
+  };
+  const onClick = () => {
+    if (saving) {
+      const answer = confirm(
+        "Are you sure you want to leave the page while saving?"
+      );
+      if (!answer) {
+        return;
+      }
+      navigate(-1);
+    }
   };
 
   const saveArticle = async (
@@ -235,7 +247,7 @@ const WritingPage = () => {
     <StyledLayout>
       <StyledHeaderContainer>
         <LeftHeaderContainer>
-          <BackButton size="md" />
+          <BackButton size="md" onClick={onClick} />
           <AvatarContainer>
             <Avatar
               size="xl"
@@ -254,7 +266,7 @@ const WritingPage = () => {
         </LeftHeaderContainer>
         <RightHeaderContainer>
           <Text size="sm" color="helpText">
-            {articleLoading || addRegistryLoading ? "Saving..." : "Saved"}
+            {saving ? "Saving..." : "Saved"}
           </Text>
           <ArticleSettings streamId={streamId} saveArticle={saveArticle} />
           <PublishModal streamId={streamId || ""} />
