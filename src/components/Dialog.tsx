@@ -25,6 +25,7 @@ const StyledDialog = styled(BaseDialog)`
   border-radius: 0.8rem;
   padding: 1em;
   max-height: calc(100vh - 56px);
+  overflow: auto;
   outline: 0;
   z-index: 1000;
   padding: 3.2rem;
