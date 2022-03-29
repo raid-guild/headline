@@ -61,8 +61,6 @@ export const publicationSlice = createSlice({
       accessControlConditions: [] as (AccessControl | Operator)[],
     },
     locks: [] as PublicationLock[],
-    mailTo: "",
-    apiKey: "",
     streamId: "",
     registryId: "",
     image: undefined as string | undefined,
@@ -274,6 +272,7 @@ Pub jdoc ${doc?.id?.toString()}
 				`);
       let publication = doc?.content as Publication | null;
       if (publication && publication?.emailSettings?.apiKey) {
+        console.log(publication);
         const apiKey = await getKeyAndDecrypt(
           args.chainName,
           publication.draftAccess.encryptedSymmetricKey,

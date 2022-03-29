@@ -191,6 +191,8 @@ const WritingPage = () => {
         return;
       }
       navigate(-1);
+    } else {
+      navigate(-1);
     }
   };
 

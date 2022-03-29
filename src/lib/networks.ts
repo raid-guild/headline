@@ -29,7 +29,7 @@ export const networks: { [key: string]: Network } = {
     symbol: "ETH",
     explorer: "https://etherscan.io",
     unlockAddress: "0x3d5409cce1d45233de1d4ebdee74b8e004abdd13",
-    rpc: "https://mainnet.infura.io/v3/f1dfa73f479840139441203fdf63bdce",
+    rpc: "https://eth-mainnet.alchemyapi.io/v2/6idtzGwDtRbzil3s6QbYHr2Q_WBfn100",
     unlockSubgraph:
       "https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock",
   },
@@ -41,7 +41,7 @@ export const networks: { [key: string]: Network } = {
     symbol: "ETH",
     explorer: "https://rinkeby.etherscan.io",
     unlockAddress: "0xd8c88be5e8eb88e38e6ff5ce186d764676012b0b",
-    rpc: "https://rinkeby.infura.io/v3/f1dfa73f479840139441203fdf63bdce",
+    rpc: "https://eth-rinkeby.alchemyapi.io/v2/n0NXRSZ9olpkJUPDLBC00Es75jaqysyT",
     unlockSubgraph:
       "https://api.thegraph.com/subgraphs/name/unlock-protocol/unlock-rinkeby",
   },
@@ -53,9 +53,21 @@ export const networks: { [key: string]: Network } = {
     symbol: "xDAI",
     explorer: "https://blockscout.com/xdai/mainnet",
     unlockAddress: "0x1bc53f4303c711cc693F6Ec3477B83703DcB317f",
-    rpc: "https://rpc.gnosischain.com/",
+    rpc: "https://rpc.xdaichain.com/",
     unlockSubgraph:
       "https://api.thegraph.com/subgraphs/name/unlock-protocol/xdai",
+  },
+  "0xa": {
+    chainId: "0xa",
+    chainNumber: 100,
+    name: "Optimism",
+    litName: "optimism",
+    symbol: "Eth",
+    explorer: "https://optimistic.etherscan.io/address/",
+    unlockAddress: "0x99b1348a9129ac49c6de7F11245773dE2f51fB0c",
+    rpc: "https://mainnet.optimism.io",
+    unlockSubgraph:
+      "https://api.thegraph.com/subgraphs/name/unlock-protocol/optimism",
   },
   "0x89": {
     chainId: "0x89",
@@ -65,7 +77,7 @@ export const networks: { [key: string]: Network } = {
     symbol: "Matic",
     explorer: "https://polygonscan.com/",
     unlockAddress: "0xE8E5cd156f89F7bdB267EabD5C43Af3d5AF2A78f",
-    rpc: "https://polygon-mainnet.infura.io/v3/f1dfa73f479840139441203fdf63bdce",
+    rpc: "https://polygon-rpc.com/",
     unlockSubgraph:
       "https://api.thegraph.com/subgraphs/name/unlock-protocol/polygon",
   },
