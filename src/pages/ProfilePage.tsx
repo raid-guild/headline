@@ -16,7 +16,6 @@ import {
   SidebarContainer,
   BodyContainer,
 } from "components/Layout";
-import SettingsInboxForm from "components/SettingsInboxForm";
 import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
@@ -78,14 +77,6 @@ const ProfileTextContainer = styled.div`
   }
 `;
 
-const InboxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  @media (max-width: 768px) {
-    gap: 1.6rem;
-  }
-`;
-
 const TitleContainer = styled.div`
   display: flex;
   align-items: center;
@@ -98,16 +89,6 @@ const TitleContainer = styled.div`
 
 const ProfileText = styled(HeaderText)`
   margin-left: 0;
-`;
-
-const InboxTitle = styled(Title)`
-  margin-bottom: 1.6rem;
-`;
-
-const UpdateEmailButton = styled(Button)`
-  @media (max-width: 768px) {
-    width: 100%;
-  }
 `;
 
 const EmptyProfileCard = () => {
@@ -234,28 +215,6 @@ const BasicProfileCard = () => {
   );
 };
 
-const SubscriptionInbox = () => {
-  return (
-    <BasicProfileCardContainer>
-      <InboxTitle size="sm" color="helpText">
-        Subscription inbox
-      </InboxTitle>
-      <InboxContainer>
-        <Text size="base">To receive the subscription right to your inbox</Text>
-        <SettingsInboxForm
-          onSubmit={() => {
-            console.log("Being implemented");
-          }}
-        >
-          <UpdateEmailButton size="md" color="primary" variant="contained">
-            Update
-          </UpdateEmailButton>
-        </SettingsInboxForm>
-      </InboxContainer>
-    </BasicProfileCardContainer>
-  );
-};
-
 const ProfilePage = () => {
   return (
     <Layout>
@@ -272,7 +231,6 @@ const ProfilePage = () => {
       </SidebarContainer>
       <ProfilePageBodyContainer>
         <BasicProfileCard />
-        <SubscriptionInbox />
       </ProfilePageBodyContainer>
       <MobileNav />
     </Layout>
