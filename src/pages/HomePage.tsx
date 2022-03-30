@@ -626,7 +626,9 @@ const HomePage = () => {
         </HowFeatureThreeGrid>
         <HowAnimationSection>
           <HowAnimationContainer>
-            <HowAnimation src={getStartedAnimation} alt="" />
+            <Link to={DASHBOARD_URI}>
+              <HowAnimation src={getStartedAnimation} alt="" />
+            </Link>
           </HowAnimationContainer>
         </HowAnimationSection>
         <HowSubContainerNarrow>
