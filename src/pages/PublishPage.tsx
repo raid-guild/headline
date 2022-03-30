@@ -467,11 +467,10 @@ const SettingsContainer = styled.div`
   gap: 3.2rem;
   width: 100%;
   height: 100%;
-  padding: 3.2rem;
+  padding: 3.2rem 0 0;
   max-width: 90rem;
   @media (max-width: 768px) {
     margin: 0;
-    padding: 3.2rem 0 0;
   }
 `;
 
