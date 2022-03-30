@@ -63,11 +63,12 @@ const StyledText = styled(Text)`
 `;
 
 const WritingActionsContainer = styled.div`
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    gap: 1.6rem;
-  }
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  gap: 1.6rem;
 `;
 
 const StyledHeaderContainer = styled(HeaderContainer)`
@@ -76,6 +77,8 @@ const StyledHeaderContainer = styled(HeaderContainer)`
 
 const StyledIcon = styled(Icon)`
   height: 8rem;
+  width: 100%;
+  margin-bottom: 3.2rem;
 `;
 
 const ContentContainer = styled(BodyContainer)`
@@ -110,6 +113,7 @@ const BodyHeaderContainer = styled.div`
   width: 100%;
   margin-top: 6.4rem;
   margin-bottom: 4rem;
+  gap: 0.8rem;
   @media (max-width: 768px) {
     margin-top: 3.2rem;
     padding: 0 2.4rem;
