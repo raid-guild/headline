@@ -419,12 +419,33 @@ export const updatePublication = createAsyncThunk(
         }
         updates["emailSettings"] = { ...pub.emailSettings, apiKey: apiKey };
       }
+      const existingEmailSettings = {} as { emailSettings: MailGunSettings };
+      if (publication.emailSettings !== undefined) {
+        let apiKey;
+        if (publication.emailSettings.apiKey !== undefined) {
+          const content = await getKeyEncryptText(
+            args.chainName,
+            publication.draftAccess.encryptedSymmetricKey,
+            publication.draftAccess.accessControlConditions,
+            publication.emailSettings.apiKey,
+            litClient
+          );
+
+          apiKey = content;
+        }
+        existingEmailSettings["emailSettings"] = {
+          ...publication.emailSettings,
+          apiKey: apiKey,
+        };
+      }
+
       if (pub.publishAccess !== undefined) {
         updates["publishAccess"] = pub.publishAccess;
       }
 
       const updatedPublication = {
         ...publication,
+        ...existingEmailSettings,
         ...updates,
       };
       console.log(updatedPublication);

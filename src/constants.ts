@@ -9,6 +9,7 @@ export const PUBLISHED_MODELS = publishedModels;
 export const WRITING_URI = "/publish/write";
 export const DOMAIN = import.meta.env["VITE_WEBSITE_DOMAIN"];
 export const CERAMIC_URL = import.meta.env["VITE_CERAMIC_NODE"];
+export const SELF_ID_URL = import.meta.env["VITE_SELF_ID"] as string;
 
 export const chains = [
   "ethereum",

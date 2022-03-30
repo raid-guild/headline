@@ -25,6 +25,7 @@ import { fetchBasicProfile } from "services/profile/slice";
 import { useAppSelector, useAppDispatch } from "store";
 
 import { getProfileImg } from "lib/ipfs";
+import { SELF_ID_URL } from "../constants";
 
 const ProfilePageBodyContainer = styled(BodyContainer)`
   display: flex;
@@ -105,7 +106,7 @@ const EmptyProfileCard = () => {
           your profile on self.id
         </Text>
       </ProfileTextContainer>
-      <ExternalLink href="https://self.id/">
+      <ExternalLink href={SELF_ID_URL}>
         <GetStartedButton
           size="md"
           color="primary"
@@ -180,7 +181,7 @@ const FilledProfileCard = ({ profile }: { profile: BasicProfile }) => {
           </UrlContainer>
         </ProfileTextContainer>
       </ProfileContentContainer>
-      <ExternalLink href="https://self.id/">
+      <ExternalLink href={SELF_ID_URL}>
         <GetStartedButton
           size="md"
           color="primary"
