@@ -30,12 +30,12 @@ import { CREATE_PUBLICATION_URI } from "../constants";
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 44.5rem;
+  max-width: 50rem;
   max-height: 38rem;
   height: 100%;
   width: 100%;
   margin-bottom: 9.6rem;
-  padding: 6.4rem;
+  /* padding: 6.4rem; */
   @media (max-width: 990px) {
     padding: 2.4rem;
   }
@@ -47,7 +47,9 @@ const BodyTitleContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0.8rem;
+  padding: 0 1.6rem;
   @media (max-width: 990px) {
+    padding: 0;
     text-align: center;
   }
 `;
@@ -63,7 +65,15 @@ const BodyButtonContainer = styled.div`
   border-radius: 8px;
   margin-top: 4rem;
   border: 1px solid #f0efef;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  padding-left: 4rem;
+  padding-right: 4rem;
+  gap: 4rem;
   @media (max-width: 990px) {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
     padding-bottom: 1.6rem;
     margin-bottom: 1.6rem;
     gap: 4rem;
