@@ -266,6 +266,7 @@ export const fetchPublication = createAsyncThunk(
         publishRegistryDefinitionId,
         client.ceramic?.did?.id || ""
       );
+      console.log(doc);
 
       console.log(`
 Pub jdoc ${doc?.id?.toString()}
@@ -273,17 +274,21 @@ Pub jdoc ${doc?.id?.toString()}
       let publication = doc?.content as Publication | null;
       if (publication && publication?.emailSettings?.apiKey) {
         console.log(publication);
-        const apiKey = await getKeyAndDecrypt(
-          args.chainName,
-          publication.draftAccess.encryptedSymmetricKey,
-          publication.draftAccess.accessControlConditions,
-          publication.emailSettings.apiKey,
-          args.litClient
-        );
-        publication = {
-          ...publication,
-          emailSettings: { ...publication.emailSettings, apiKey },
-        };
+        try {
+          const apiKey = await getKeyAndDecrypt(
+            args.chainName,
+            publication.draftAccess.encryptedSymmetricKey,
+            publication.draftAccess.accessControlConditions,
+            publication.emailSettings.apiKey,
+            args.litClient
+          );
+          publication = {
+            ...publication,
+            emailSettings: { ...publication.emailSettings, apiKey },
+          };
+        } catch (e) {
+          console.error(e);
+        }
       }
       if (publication) {
         thunkAPI.dispatch(
