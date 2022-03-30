@@ -19,7 +19,7 @@ const accordionContent = [
   {
     title: "How do I send my article as a newsletter?",
     content:
-      "Go to Publish, then Settings and enter your third party API key, under Email Service. After that’s completed, you can send your blog as a newsletter when you publish the post.",
+      "You will have to set up a mailgun domain. Here is a tutorial on how you can do that. Once you have the domain and apiKey, you can enter that information in the Publish Settings, under Email Service. After that’s completed, you can send your blog as a newsletter when you publish.",
   },
   {
     title: "Is HEADLINE an emailing service?",

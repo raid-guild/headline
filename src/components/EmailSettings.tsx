@@ -113,7 +113,7 @@ const EmailSettings = () => {
               </Title>
               <Text size="sm" color="label" as="span">
                 Having issues setting up?{" "}
-                <ExternalLink href="www.google.com">
+                <ExternalLink href="https://docs.viaheadline.xyz/guides/connecting-your-email-service">
                   <Text size="sm" color="primary" as="span">
                     Read guide
                   </Text>
@@ -134,7 +134,7 @@ const EmailSettings = () => {
             </SettingsContainer>
           </DialogContainer>
         </Dialog>
-        <ExternalLink href="www.google.com">
+        <ExternalLink href="https://docs.viaheadline.xyz/guides/connecting-your-email-service">
           <Text size="md" color="primary">
             Learn more
           </Text>

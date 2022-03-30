@@ -138,7 +138,7 @@ const CreatePublicationView = () => {
         <BodyFooterContainer>
           <Text size="base">
             How does HEADLINE work? Check out our{" "}
-            <ExternalLink href="www.google.com">
+            <ExternalLink href="https://docs.viaheadline.xyz/">
               <Text as="span" size="base" weight="bold" color="primary">
                 Guide
               </Text>

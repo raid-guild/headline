@@ -324,7 +324,7 @@ export const ArticleSettings = ({
             Please configure your SMTP credentials in the setting page in order
             to send out a test email
           </Text>
-          <ExternalLink href="www.google.com">
+          <ExternalLink href="https://docs.viaheadline.xyz/guides/connecting-your-email-service">
             <Text size="base" color="primary" weight="semibold">
               Learn More
             </Text>
