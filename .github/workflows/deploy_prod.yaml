@@ -35,13 +35,13 @@ jobs:
       - name: Push image to DigitalOcean Container Registry
         run: docker push registry.digitalocean.com/headline/node:$(echo $GITHUB_SHA | head -c7)
       - name: Update deployment file
-        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/headline/node:'${TAG}'|' $GITHUB_WORKSPACE/kubernetes/node.yml
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/headline/node:'${TAG}'|' $GITHUB_WORKSPACE/kubernetes/node.yaml
 
       - name: Save DigitalOcean kubeconfig with short-lived credentials
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 headline-do-0-nyc3-1648599981756
 
       - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/kubernetes/node.yml
+        run: kubectl apply -f $GITHUB_WORKSPACE/kubernetes/node.yaml
 
       - name: Verify deployment
         run: kubectl rollout status deployment/headline-node
