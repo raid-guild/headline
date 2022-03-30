@@ -50,6 +50,13 @@ const StyledSnackbarProvider = styled(SnackbarProvider)`
     font-family: Inter;
     font-size: 1.6rem;
   }
+
+  &.SnackbarItem-variantError {
+    background-color: #ff6771;
+    color: #fcfcfc;
+    font-family: Inter;
+    font-size: 1.6rem;
+  }
 `;
 
 const Root = () => {

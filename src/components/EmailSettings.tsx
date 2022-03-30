@@ -58,7 +58,8 @@ const EmailSettings = () => {
     }
     console.log(data);
     // dispatch update
-    await dispatch(
+    console.log("updating");
+    const hi = await dispatch(
       updatePublication({
         publication: {
           emailSettings: {
@@ -73,7 +74,8 @@ const EmailSettings = () => {
         litClient,
       })
     );
-    // setHide(true);
+    console.log(hi);
+    setHide(true);
   }, []);
 
   return (
@@ -91,7 +93,12 @@ const EmailSettings = () => {
           backdrop={true}
           hideModal={hide}
           disclosure={
-            <Button color="primary" variant="contained" size="md">
+            <Button
+              color="primary"
+              variant="contained"
+              size="md"
+              onClick={() => setHide(false)}
+            >
               Email Settings
             </Button>
           }
@@ -120,7 +127,6 @@ const EmailSettings = () => {
                   isLoading={publicationLoading}
                   loadingText="Saving..."
                   type="submit"
-                  onClick={() => setHide(true)}
                 >
                   Save
                 </Button>

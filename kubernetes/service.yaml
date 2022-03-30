@@ -1,0 +1,29 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ceramic-ipfs
+spec:
+  type: ClusterIP
+  selector:
+    name: ceramic-ipfs
+  ports:
+    - name: public
+      port: 4012
+      targetPort: 4012
+    - name: api
+      port: 5011
+      targetPort: 5011
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ceramic-node
+spec:
+  type: ClusterIP
+  selector:
+    name: ceramic-node
+  ports:
+    - name: ceramic
+      port: 7007
+      targetPort: 7007

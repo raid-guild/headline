@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
@@ -121,6 +122,7 @@ const ArticlePage = () => {
   const { web3Service } = useUnlock();
   const dispatch = useAppDispatch();
   const [pubImg] = usePubImg();
+  const { enqueueSnackbar } = useSnackbar();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
@@ -180,16 +182,21 @@ const ArticlePage = () => {
           : publication.publishAccess;
       const litClient = await getClient();
       console.log("Decrypting");
-      const txt = await getKeyAndDecrypt(
-        "ethereum",
-        access.encryptedSymmetricKey,
-        access.accessControlConditions,
-        article?.text,
-        litClient
-      );
-      console.log("Text");
-      console.log(txt);
-      setDecryptedText(txt);
+      try {
+        const txt = await getKeyAndDecrypt(
+          "ethereum",
+          access.encryptedSymmetricKey,
+          access.accessControlConditions,
+          article?.text,
+          litClient
+        );
+        console.log("Text");
+        console.log(txt);
+        setDecryptedText(txt);
+      } catch (e) {
+        console.error(e);
+        enqueueSnackbar("Failed to decrypt text!", { variant: "error" });
+      }
     };
     f();
   }, [article?.paid]);

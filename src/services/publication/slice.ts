@@ -339,13 +339,6 @@ export const fetchPublicationByStream = createAsyncThunk(
             registryId: publication?.registryId,
           })
         );
-        // thunkAPI.dispatch(
-        //   fetchLocks({
-        //     provider: args.provider,
-        //     web3Service: args.web3Service,
-        //     publication,
-        //   })
-        // );
       }
       return publication;
     } catch (err) {
