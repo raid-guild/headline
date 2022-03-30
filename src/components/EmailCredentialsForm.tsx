@@ -39,7 +39,6 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
       <Controller
         name="domain"
         control={control}
-        rules={{ required: true }}
         defaultValue={publication?.emailSettings?.domain || ""}
         render={({ field }) => (
           <Input title="Domain" errorMsg={errors?.domain} {...field} />
@@ -53,7 +52,6 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
       <Controller
         name="apiKey"
         control={control}
-        rules={{ required: true }}
         defaultValue={publication?.emailSettings?.apiKey}
         render={({ field }) => (
           <Input title="Api Key" errorMsg={errors?.apiKey} {...field} />
