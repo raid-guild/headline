@@ -477,10 +477,31 @@ const HeadlineTickerContainer = styled.div`
   background: ${({ theme }) => `${theme.colors.primary}`};
   display: flex;
   align-items: center;
+  width: 100%;
+  overflow: hidden;
+  padding-left: 100%;
+  box-sizing: content-box;
   gap: 4.8rem;
-  @media (max-width: 1440px) {
+  @media (max-width: 768px) {
     display: none;
   }
+`;
+
+const HeadlineTicker = styled.div`
+  display: inline-block;
+  height: 4rem;
+  line-height: 4rem;
+  white-space: nowrap;
+  padding-right: 100%;
+  box-sizing: content-box;
+`;
+
+const TickerItem = styled(Title)`
+  color: ${({ theme }) => `${theme.colors.almostWhite}`};
+  font-weight: 900;
+  display: inline-block;
+  padding: 0 2rem;
+  font-size: 2rem;
 `;
 
 const HeadlineTickerContainerMobile = styled.div`
@@ -494,11 +515,6 @@ const HeadlineTickerContainerMobile = styled.div`
   @media (min-width: 1440px) {
     display: none;
   }
-`;
-
-const TickerItem = styled(Title)`
-  color: ${({ theme }) => `${theme.colors.almostWhite}`};
-  font-weight: 900;
 `;
 
 const StyledLink = styled(Link)`
@@ -577,11 +593,18 @@ const HomePage = () => {
         </AboutSectionContainer>
       </StyledBodyContainer>
       <HeadlineTickerContainer>
-        <TickerItem size="xxl">ADLINE</TickerItem>
+        <HeadlineTicker>
+          <TickerItem size="xxl">HEADLINE</TickerItem>
+          <TickerItem size="xxl">HEADLINE</TickerItem>
+          <TickerItem size="xxl">HEADLINE</TickerItem>
+          <TickerItem size="xxl">HEADLINE</TickerItem>
+          <TickerItem size="xxl">HEADLINE</TickerItem>
+        </HeadlineTicker>
+        {/* <TickerItem size="xxl">ADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
         <TickerItem size="xxl">HEADLINE</TickerItem>
-        <TickerItem size="xxl">HEA</TickerItem>
+        <TickerItem size="xxl">HEA</TickerItem> */}
       </HeadlineTickerContainer>
       {/* <HeadlineTickerContainerMobile>
         <TickerItem size="xxl">EADLINE</TickerItem>
