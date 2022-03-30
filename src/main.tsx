@@ -5,6 +5,8 @@ import { Provider } from "react-redux";
 import { Provider as ReakitProvider } from "reakit";
 import { ThemeProvider } from "styled-components";
 import WalletConnectProvider from "@walletconnect/ethereum-provider";
+import { SnackbarProvider } from "notistack";
+import { styled } from "@mui/material";
 import { IProviderOptions } from "web3modal";
 
 import { CeramicProvider } from "context/CeramicContext";
@@ -41,6 +43,28 @@ const web3modalOptions = {
   theme: "dark",
 };
 
+const StyledSnackbarProvider = styled(SnackbarProvider)`
+  &.SnackbarItem-variantSuccess {
+    background-color: #8aca89;
+    color: #fcfcfc;
+    font-family: Inter;
+    font-size: 1.6rem;
+  }
+`;
+
+const Root = () => {
+  return (
+    <StyledSnackbarProvider
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+    >
+      <Routes />
+    </StyledSnackbarProvider>
+  );
+};
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
@@ -61,7 +85,7 @@ ReactDOM.render(
             <ThemeProvider theme={theme}>
               <CeramicProvider>
                 <ReakitProvider>
-                  <Routes />
+                  <Root />
                 </ReakitProvider>
               </CeramicProvider>
             </ThemeProvider>
