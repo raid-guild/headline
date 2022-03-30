@@ -98,8 +98,6 @@ export const updateArticleSlice = createSlice({
   },
 });
 
-
-
 export const publishArticleSlice = createSlice({
   name: "publishArticle",
   initialState: {
