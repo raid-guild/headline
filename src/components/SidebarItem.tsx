@@ -22,6 +22,10 @@ const SidebarItemContainer = styled.div<Pick<Props, "active">>`
   background: ${({ theme, active }) =>
     active ? theme.colors.backgroundGrey : "none"};
 
+  & > p {
+    color: ${({ theme, active }) =>
+      active ? theme.colors.primary : "#000000"};
+  }
   &:hover {
     background: ${({ theme }) => theme.colors.backgroundGrey};
   }

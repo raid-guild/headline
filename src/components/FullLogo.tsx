@@ -8,6 +8,7 @@ type Props = {
 
 const Logo = styled.img`
   height: 4.8rem;
+  width: 100%;
   @media (max-width: 768px) {
     height: 4rem;
   }

@@ -15,6 +15,7 @@ const SidebarContainer = styled.div`
   flex-direction: column;
   margin-left: 2rem;
   margin-right: 2rem;
+  min-height: 100vh;
   height: 100%;
 `;
 

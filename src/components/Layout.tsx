@@ -57,6 +57,7 @@ export const MobileNavContainer = styled.div`
 
 export const SidebarContainer = styled.div`
   grid-area: sidebar;
+
   @media (min-width: 300px) {
     display: none;
   }
@@ -96,7 +97,7 @@ export const TitleContainer = styled.div`
   }
   @media (max-width: 990px) {
     align-items: flex-start;
-    padding: 2.4rem 0 1.6rem;
+    padding: 2.4rem 2.4rem; 1.6rem;
   }
 `;
 

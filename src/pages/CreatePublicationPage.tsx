@@ -47,12 +47,12 @@ const StyledBodyContainer = styled(BodyContainer)`
 `;
 
 const StyledTitle = styled(Title)`
+  padding: 0 2.4rem 0.8rem;
   @media (max-width: 768px) {
     font-size: 2.8rem;
     font-weight: 600;
     line-height: 3.2rem;
     text-align: center;
-    padding: 0 2.4rem 0.8rem;
   }
 `;
 
@@ -63,11 +63,12 @@ const StyledText = styled(Text)`
 `;
 
 const WritingActionsContainer = styled.div`
-  @media (max-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    gap: 1.6rem;
-  }
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  gap: 1.6rem;
 `;
 
 const StyledHeaderContainer = styled(HeaderContainer)`
@@ -76,6 +77,8 @@ const StyledHeaderContainer = styled(HeaderContainer)`
 
 const StyledIcon = styled(Icon)`
   height: 8rem;
+  width: 100%;
+  margin-bottom: 3.2rem;
 `;
 
 const ContentContainer = styled(BodyContainer)`
@@ -84,8 +87,11 @@ const ContentContainer = styled(BodyContainer)`
   max-width: 48rem;
   width: 100%;
   height: 100%;
-  max-height: 40rem;
+  /* max-height: 40rem; */
   justify-content: space-evenly;
+  @media (max-width: 990px) {
+    max-height: none;
+  }
 `;
 
 const LeftHeaderContainer = styled.div`
@@ -105,9 +111,11 @@ const BodyHeaderContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 6.4rem;
+  margin-bottom: 4rem;
+  gap: 0.8rem;
   @media (max-width: 768px) {
     margin-top: 3.2rem;
-    margin-bottom: 4rem;
     padding: 0 2.4rem;
   }
 `;
