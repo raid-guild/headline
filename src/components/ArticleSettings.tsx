@@ -266,7 +266,7 @@ export const ArticleSettings = ({
 
   const submitSettings = useCallback(async () => {
     setSaving(true);
-    const a = await saveArticle(
+    await saveArticle(
       article?.text || "",
       article?.title || "",
       description,

@@ -1,0 +1,49 @@
+name: Deploy Production
+
+on:
+  push:
+    branches:
+      - "master"
+
+env:
+
+jobs:
+  # Run code tests before building the image, to ensure it is good to go
+  build:
+    name: Run code tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Create env file
+        run: |
+          touch .env
+          echo VITE_CERAMIC_NODE=https://ceramic.viaheadline.xyz >> .env
+          echo VITE_WEBSITE_DOMAIN=https://viaheadline.xyz >> .env
+          echo VITE_INFURA_PROJECT_ID=274gpOkyT4A87tP3Yon1buyJreG >> .env
+          echo VITE_INFURA_PROJECT_SECRET=e91e506f1e99de3f73a1226c9d503723 >> .env
+          echo VITE_SELF_ID=https://self.id/ >> .env
+          cat .env
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Build container image
+        run: docker build -t registry.digitalocean.com/headline/node:$(echo $GITHUB_SHA | head -c7) .
+
+      - name: Log in to DigitalOcean Container Registry with short-lived credentials
+        run: doctl registry login --expiry-seconds 1200
+
+      - name: Push image to DigitalOcean Container Registry
+        run: docker push registry.digitalocean.com/headline/node:$(echo $GITHUB_SHA | head -c7)
+      - name: Update deployment file
+        run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|registry.digitalocean.com/headline/node:'${TAG}'|' $GITHUB_WORKSPACE/config/deployment.yml
+
+      - name: Save DigitalOcean kubeconfig with short-lived credentials
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 headline-do-0-nyc3-1648599981756
+
+      - name: Deploy to DigitalOcean Kubernetes
+        run: kubectl apply -f $GITHUB_WORKSPACE/kubernetes/node.yml
+
+      - name: Verify deployment
+        run: kubectl rollout status deployment/headline-node
