@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: alexkeating.azurecr.io/gnosis/node-server:17
+          image: registry.digitalocean.com/headline/headline-node:latest
           resources:
             requests:
               memory: 300Mi
@@ -32,8 +32,6 @@ spec:
             limits:
               memory: 500Mi
               cpu: 500m
-      imagePullSecrets:
-        - name: azure
 ---
 kind: Service
 apiVersion: v1
