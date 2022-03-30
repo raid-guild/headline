@@ -70,6 +70,7 @@ export const HeaderContainer = styled.div`
   grid-area: header;
   display: flex;
   align-items: center;
+
   @media (max-width: 990px) {
     flex-direction: column;
     align-items: flex-start;
