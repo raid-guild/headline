@@ -22,6 +22,7 @@ jobs:
           echo VITE_WEBSITE_DOMAIN=https://headline-unlock-test.herokuapp.com >> .env
           echo VITE_INFURA_PROJECT_ID=24ZzrrBV9yd503XnmvCqXudjfYR
           echo VITE_INFURA_PROJECT_SECRET=a853a769e6916d5eb2181529b4f98b7c
+          echo VITE_SELF_ID=https://clay.self.id/ >> .env
           cat .env
 
       - run: yarn build
