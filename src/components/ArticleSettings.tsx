@@ -36,13 +36,18 @@ import { sendMessageFromLocks } from "lib/headline";
 import portrait from "assets/portrait.svg";
 import settings from "assets/settings.svg";
 
+const DialogHeaderText = styled.div`
+  padding: 3.2rem;
+`;
+
 const ReceiverSettingContainer = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 2.4rem 1.6rem;
   gap: 1.6rem;
   background: ${({ theme }) => theme.colors.almostWhite};
+  border-radius: 0.8rem;
   @media (max-width: 768px) {
-    padding: 2.4rem 1.6rem;
     border-radius: 0.8rem;
     background: "##F6F6F6";
     max-width: content;
@@ -55,6 +60,7 @@ const SocialPreviewContainer = styled.div`
   flex-direction: column;
   background: ${({ theme }) => theme.colors.almostWhite};
   gap: 1.6rem;
+  padding: 2.4rem 1.6rem;
   @media (max-width: 768px) {
     padding: 2.4rem 1.6rem;
     border-radius: 0.8rem;
@@ -81,9 +87,9 @@ const SendingTestEmailContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.colors.almostWhite};
+  padding: 2.4rem 1.6rem;
   gap: 1.6rem;
   @media (max-width: 768px) {
-    padding: 2.4rem 1.6rem;
     border-radius: 0.8rem;
     background: "#f6f6f6";
     max-width: content;
@@ -94,6 +100,7 @@ const SendingTestEmailContainer = styled.div`
 const ButtonContainer = styled.div`
   display: flex;
   gap: 2.4rem;
+  padding: 2.4rem 1.6rem;
 `;
 
 const RadioButtonContainer = styled.div`
@@ -295,7 +302,9 @@ export const ArticleSettings = ({
       }
     >
       <DialogContainer>
-        <Text size="base">Post setting</Text>
+        <DialogHeaderText>
+          <Text size="base">Post setting</Text>
+        </DialogHeaderText>
         <ReceiverSettings
           radio={radio}
           allowPaid={locks.length > 0 ? true : false}
