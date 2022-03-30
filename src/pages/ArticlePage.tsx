@@ -30,8 +30,30 @@ const StyledBodyContainer = styled(BodyContainer)`
   align-items: flex-start;
   justify-content: flex-start;
   max-width: 85rem;
+  margin-bottom: 4rem;
+  & h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 1.6rem 0;
+  }
+  & p {
+    margin: 0.8rem 0;
+    font-size: 1.8rem;
+    line-height: 2.4rem;
+    &:nth-child(3) {
+      margin-top: 0;
+    }
+  }
+  & img {
+    width: 100%;
+    object-fit: cover;
+  }
   @media (max-width: 990px) {
     margin: 0 2.4rem;
+    min-width: 0;
   }
 `;
 
@@ -71,6 +93,7 @@ const StyledButton = styled(Button)`
 
 const ToolbarContainer = styled.div`
   height: 7.2rem;
+
   @media (max-width: 990px) {
     width: 100%;
   }
