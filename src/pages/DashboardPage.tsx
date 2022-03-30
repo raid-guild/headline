@@ -247,7 +247,7 @@ const LearnMoreCopyContainer = styled.div`
 `;
 
 const StyledButton = styled(Button)`
-  max-width: 19rem;
+  /* max-width: 24rem; */
   @media (max-width: 768px) {
     margin-bottom: 1.6rem;
   }
