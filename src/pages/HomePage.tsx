@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { keyframes } from "styled-components";
 import Button from "components/Button";
 import Title from "components/Title";
 import Text from "components/Text";
@@ -471,20 +472,25 @@ const FooterActionContainer = styled.div`
   }
 `;
 
+const tickerAnimation = keyframes`
+    from {
+        transform: translate3d(0, 0, 0);
+        visibility: visible;
+    }
+
+    to {
+        transform: translate3d(-100%, 0, 0);
+    }
+`;
+
 const HeadlineTickerContainer = styled.div`
   width: 100%;
   height: 14rem;
   background: ${({ theme }) => `${theme.colors.primary}`};
   display: flex;
   align-items: center;
-  width: 100%;
-  overflow: hidden;
   padding-left: 100%;
-  box-sizing: content-box;
-  gap: 4.8rem;
-  @media (max-width: 768px) {
-    display: none;
-  }
+  overflow: hidden;
 `;
 
 const HeadlineTicker = styled.div`
@@ -493,27 +499,17 @@ const HeadlineTicker = styled.div`
   line-height: 4rem;
   white-space: nowrap;
   padding-right: 100%;
-  box-sizing: content-box;
+  animation: ${tickerAnimation} 20s linear infinite;
 `;
 
-const TickerItem = styled(Title)`
+const TickerItem = styled.span`
   color: ${({ theme }) => `${theme.colors.almostWhite}`};
+  font-size: 5.6rem;
   font-weight: 900;
   display: inline-block;
   padding: 0 2rem;
-  font-size: 2rem;
-`;
-
-const HeadlineTickerContainerMobile = styled.div`
-  width: 100%;
-  height: 14rem;
-  background: ${({ theme }) => `${theme.colors.primary}`};
-  display: flex;
-  align-items: center;
-  gap: 4.8rem;
-
-  @media (min-width: 1440px) {
-    display: none;
+  @media (max-width: 768px) {
+    font-size: 3.2rem;
   }
 `;
 
@@ -594,21 +590,16 @@ const HomePage = () => {
       </StyledBodyContainer>
       <HeadlineTickerContainer>
         <HeadlineTicker>
-          <TickerItem size="xxl">HEADLINE</TickerItem>
-          <TickerItem size="xxl">HEADLINE</TickerItem>
-          <TickerItem size="xxl">HEADLINE</TickerItem>
-          <TickerItem size="xxl">HEADLINE</TickerItem>
-          <TickerItem size="xxl">HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
+          <TickerItem>HEADLINE</TickerItem>
         </HeadlineTicker>
-        {/* <TickerItem size="xxl">ADLINE</TickerItem>
-        <TickerItem size="xxl">HEADLINE</TickerItem>
-        <TickerItem size="xxl">HEADLINE</TickerItem>
-        <TickerItem size="xxl">HEADLINE</TickerItem>
-        <TickerItem size="xxl">HEA</TickerItem> */}
       </HeadlineTickerContainer>
-      {/* <HeadlineTickerContainerMobile>
-        <TickerItem size="xxl">EADLINE</TickerItem>
-      </HeadlineTickerContainerMobile> */}
       <HowSectionContainer id="#howitworks">
         <HowHeading>How it works</HowHeading>
         <HowSubContainer>
