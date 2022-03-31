@@ -22,7 +22,7 @@ const did = new DID({
 await did.authenticate();
 
 // Connect to the local Ceramic node
-const ceramic = new CeramicClient("https://ceramic.alexkeating.me");
+const ceramic = new CeramicClient("https://ceramic-test.viaheadline.xyz");
 ceramic.did = did;
 
 // Create a manager for the model
@@ -128,6 +128,6 @@ const model = await manager.toPublished();
 
 // Write published model to JSON file
 await writeFile(
-  "./src/schemas/published/models_mainnet.json",
+  "./src/schemas/published/models_testnet.json",
   JSON.stringify(model)
 );
