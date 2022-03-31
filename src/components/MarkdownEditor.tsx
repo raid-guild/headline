@@ -53,7 +53,37 @@ export interface MarkdownEditorProps {
   className?: string;
 }
 
-/**
+export const remirrorExtensions = () => [
+  new LinkExtension({ autoLink: true }),
+  new BoldExtension(),
+  new StrikeExtension(),
+  new ItalicExtension(),
+  new HeadingExtension(),
+  new LinkExtension({ autoLink: true }),
+  new EmojiExtension(),
+  new ImageExtension(),
+  new IframeExtension(),
+  new BlockquoteExtension(),
+  new BulletListExtension({ enableSpine: true }),
+  new OrderedListExtension(),
+  new ListItemExtension({
+    priority: ExtensionPriority.High,
+    enableCollapsible: true,
+  }),
+  new CodeExtension(),
+  new CodeBlockExtension({ supportedLanguages: [jsx, typescript] }),
+  new TrailingNodeExtension(),
+  new TableExtension(),
+  new MarkdownExtension({ copyAsMarkdown: false }),
+  /**
+   * `HardBreakExtension` allows us to create a newline inside paragraphs.
+   * e.g. in a list item
+   */
+  new HardBreakExtension(),
+  new TextColorExtension(),
+];
+
+/*
  * The editor which is used to create the annotation. Supports formatting.
  */
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
@@ -65,36 +95,7 @@ export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   children,
 }) => {
   const extensions = useCallback(
-    () => [
-      new PlaceholderExtension({ placeholder }),
-      new LinkExtension({ autoLink: true }),
-      new BoldExtension(),
-      new StrikeExtension(),
-      new ItalicExtension(),
-      new HeadingExtension(),
-      new LinkExtension({ autoLink: true }),
-      new EmojiExtension(),
-      new ImageExtension(),
-      new IframeExtension(),
-      new BlockquoteExtension(),
-      new BulletListExtension({ enableSpine: true }),
-      new OrderedListExtension(),
-      new ListItemExtension({
-        priority: ExtensionPriority.High,
-        enableCollapsible: true,
-      }),
-      new CodeExtension(),
-      new CodeBlockExtension({ supportedLanguages: [jsx, typescript] }),
-      new TrailingNodeExtension(),
-      new TableExtension(),
-      new MarkdownExtension({ copyAsMarkdown: false }),
-      /**
-       * `HardBreakExtension` allows us to create a newline inside paragraphs.
-       * e.g. in a list item
-       */
-      new HardBreakExtension(),
-      new TextColorExtension(),
-    ],
+    () => [new PlaceholderExtension({ placeholder }), ...remirrorExtensions()],
     [placeholder]
   );
 

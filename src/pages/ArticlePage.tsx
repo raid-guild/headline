@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useSnackbar } from "notistack";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
 import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
+import Renderer from "components/Renderer";
 import { useAppDispatch, useAppSelector } from "store";
 import {
   fetchArticle,
@@ -224,6 +224,19 @@ const ArticlePage = () => {
     f();
   }, [article?.paid]);
 
+  const content =
+    !article?.paid || decryptedText ? (
+      <Renderer
+        content={JSON.parse(
+          decryptedText ||
+            article?.text ||
+            JSON.stringify({ type: "doc", content: [] })
+        )}
+      />
+    ) : (
+      "This content is locked"
+    );
+
   return (
     <Layout>
       <StyledHeaderContainer>
@@ -249,11 +262,7 @@ const ArticlePage = () => {
           <PublicToolbar active={active} setActive={setActive} />
         </ToolbarContainer>
         {active === "content" ? (
-          <ReactMarkdown>
-            {!article?.paid || decryptedText
-              ? decryptedText || article?.text
-              : "This content is locked"}
-          </ReactMarkdown>
+          <>{content}</>
         ) : (
           <DescriptionContainer>
             <Title size="sm" color="label">

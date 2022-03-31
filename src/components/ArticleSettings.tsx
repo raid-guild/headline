@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { Remirror, useRemirror, useHelpers } from "@remirror/react";
 import { useWallet } from "@alexkeating/quiver";
 import { useNavigate } from "react-router-dom";
 import { useRadioState, Radio, RadioStateReturn } from "reakit/Radio";
@@ -14,6 +15,7 @@ import { useCeramic } from "context/CeramicContext";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
+import { remirrorExtensions } from "components/MarkdownEditor";
 import Icon from "components/Icon";
 import Input from "components/Input";
 import FormTextArea from "components/FormTextArea";
@@ -294,7 +296,7 @@ export const ArticleSettings = ({
   const submitSettings = useCallback(async () => {
     setSaving(true);
     await saveArticle(
-      article?.text || "",
+      article?.text || JSON.stringify({ type: "doc", content: [] }),
       article?.title || "",
       description,
       previewImg || undefined,
@@ -389,8 +391,16 @@ const TestInputContainer = styled.div`
   justify-content: space-between;
 `;
 
+const Test = ({ setMarkdown }: { setMarkdown: (arg0: string) => void }) => {
+  const helpers = useHelpers(true);
+  console.log(helpers.getMarkdown());
+  setMarkdown(helpers.getMarkdown());
+  return <></>;
+};
+
 export const PublishModal = ({ streamId }: { streamId: string }) => {
   const [testEmail, setTestEmail] = useState("");
+  const [markdown, setMarkdown] = useState("");
   const dispatch = useAppDispatch();
   const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
@@ -439,8 +449,8 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     const settings = {
       from: emailSettings?.mailFrom || "",
       subject: article.title,
-      text: article.text,
-      html: await parseMarkdown(article.title, article.text),
+      text: markdown,
+      html: await parseMarkdown(article.title, markdown),
       domain: emailSettings?.domain || "",
       apiKey: emailSettings?.apiKey || "",
       to: [testEmail],
@@ -498,6 +508,13 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     }
   }, [address, provider, article, previewImg, description, radio.state]);
 
+  console.log("Text here");
+  console.log(JSON.parse(article?.text || "{}"));
+  const { manager } = useRemirror({
+    extensions: remirrorExtensions,
+    stringHandler: "markdown",
+  });
+
   return (
     <Dialog
       baseId="publish"
@@ -549,12 +566,24 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
                   Send
                 </Button>
               </TestInputContainer>
+              <Remirror
+                autoFocus
+                editable={false}
+                manager={manager}
+                initialContent={JSON.parse(
+                  article?.text || JSON.stringify({ type: "doc", content: [] })
+                )}
+              >
+                <Test setMarkdown={setMarkdown} />
+              </Remirror>
             </>
           ) : (
-            <Text size="sm" color="grey">
-              This post will only publish as a webpage/blog, since there is no
-              mailing service set up yet.
-            </Text>
+            <>
+              <Text size="sm" color="grey">
+                This post will only publish as a webpage/blog, since there is no
+                mailing service set up yet.
+              </Text>
+            </>
           )}
         </SendingTestEmailContainer>
         <ButtonContainer>

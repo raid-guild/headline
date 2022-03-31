@@ -13,7 +13,7 @@ import { ArticleSettings, PublishModal } from "components/ArticleSettings";
 import Avatar from "components/Avatar";
 import BackButton from "components/BackButton";
 import Input from "components/Input";
-import MarkdownEditor from "components/MarkdownEditor";
+import { MarkdownEditor } from "components/MarkdownEditor";
 import MobileNav from "components/MobileNav";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import Text from "components/Text";
@@ -145,9 +145,9 @@ const MarkdownSave = ({
     arg4: boolean
   ) => void;
 }) => {
-  const { getMarkdown } = useHelpers(true);
+  const helpers = useHelpers(true);
 
-  const m = getMarkdown() || "";
+  const m = JSON.stringify(helpers.getJSON()) || "";
   const debouncedSaveArticle = useCallback(debounce(1000, saveArticle), []);
   useEffect(() => {
     debouncedSaveArticle(m, title, description, previewImg || "", paid);
@@ -244,6 +244,8 @@ const WritingPage = () => {
       );
     }
   };
+  console.log(article?.text);
+  console.log(JSON.parse(article?.text || "{}"));
 
   return (
     <StyledLayout>
@@ -283,7 +285,9 @@ const WritingPage = () => {
         />
         <StyledMarkdownEditor
           placeholder="Start typing..."
-          initialContent={article?.text || ""}
+          initialContent={JSON.parse(
+            article?.text || JSON.stringify({ type: "doc", content: [] })
+          )}
           state={state}
           onChange={onChange}
         >
