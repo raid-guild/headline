@@ -8,7 +8,7 @@ const ceramicNode = (import.meta.env.VITE_CERAMIC_NODE ||
   "testnet-clay") as string;
 
 export const fetchProfile = async (address: string) => {
-  const core = new Core({ ceramic: ceramicNode });
+  const core = new Core({ ceramic: ceramicNetwork });
   const link = await Caip10Link.fromAccount(
     core.ceramic,
     `${address.toLowerCase()}@eip155:1`
