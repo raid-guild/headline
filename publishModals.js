@@ -1,3 +1,4 @@
+import "dotenv/config"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 import { CeramicClient } from "@ceramicnetwork/http-client";
 import { writeFile } from "node:fs/promises";
 import { ModelManager } from "@glazed/devtools";
@@ -12,10 +13,7 @@ import articleSchema from "./src/schemas/article.json";
 import articleRegistrySchema from "./src/schemas/articleRegistry.json";
 
 // The key must be provided as an environment variable
-const key = fromString(
-  "08a0f978ef5c86190094a6ed9ca3f4a41443e94ab7c91b151a29e27089f6aeb6",
-  "base16"
-);
+const key = fromString(process.env["SEED"], "base16");
 // Create and authenticate the DID
 const did = new DID({
   provider: new Ed25519Provider(key),
@@ -129,4 +127,7 @@ await manager.createTile(
 const model = await manager.toPublished();
 
 // Write published model to JSON file
-await writeFile("./src/schemas/published/models.json", JSON.stringify(model));
+await writeFile(
+  "./src/schemas/published/models_mainnet.json",
+  JSON.stringify(model)
+);
