@@ -384,7 +384,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
 
   const [hide, setHide] = useState(false);
   const [previewImg, setPreviewImg] = useState<File | null>(null);
-  const [description, setDescription] = useState(article?.description || "");
+  const [description, setDescription] = useAppSelector((state) => articleRegistrySelectors.getArticleByStreamId(state, streamId || "").description || "")
   const radio = useRadioState({
     state: `${article?.paid ? "paid" : "free"}`,
   });
