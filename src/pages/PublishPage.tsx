@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useWallet } from "@alexkeating/quiver";
 import { useToolbarState, Toolbar } from "reakit/Toolbar";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSnackbar } from "notistack";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
@@ -315,6 +316,7 @@ const Locks = () => {
   const [submitted, setSubmitted] = useState(false);
   const [lockAddress, setLockAddress] = useState("");
   const [hideModal, setHideModal] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const verifyLoading = useAppSelector((state) => state.verifyLock.loading);
   const updatePublicationLoading = useAppSelector(
@@ -342,9 +344,15 @@ const Locks = () => {
           ownerAddress: address || "",
         })
       );
+
+      if (newLock?.meta?.requestStatus === "rejected") {
+        enqueueSnackbar(newLock?.payload, { variant: "error" });
+        return;
+      }
       if (newLock !== undefined) {
         console.log(newLock);
         console.log("Submitted");
+        enqueueSnackbar("Added!", { variant: "success" });
         setSubmitted(true);
         setLockAddress(data.lockAddress);
       }

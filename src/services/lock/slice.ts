@@ -14,6 +14,7 @@ import { addNftAccessControl, LitNodeClient, LitAccess } from "lib/lit";
 import { getTokenSymbolAndNumber } from "lib/token";
 import { updatePublication, Publication } from "services/publication/slice";
 import { RootState } from "store";
+import { unlockNetworks } from "lib/networks";
 
 export type Lock = {
   name: string;
@@ -122,126 +123,127 @@ export const verifyLockSlice = createSlice({
   },
 });
 
-export const verifyLock = createAsyncThunk(
-  "lock/verify",
-  async (
-    args: {
-      address: string;
-      chainId: string;
-      web3Service: Web3Service;
-      provider: ethers.providers.Provider;
-      client: WebClient;
-      litClient: LitNodeClient;
-      ownerAddress: string;
-    },
-    thunkAPI
-  ) => {
-    try {
-      const chainMeta = networks[args.chainId];
-      const chain = chainMeta.chainNumber;
-      const litClient = args.litClient;
-      const lock = (await args.web3Service.getLock(
-        args.address,
-        chain
-      )) as RawLock & { beneficiary: string };
-      if (lock) {
-        if (
-          lock.beneficiary.toLowerCase() !== args.ownerAddress.toLowerCase()
-        ) {
-          return thunkAPI.rejectWithValue("You do not own that lock");
-        }
-        const { symbol, num } = await getTokenSymbolAndNumber(
-          lock.keyPrice,
-          lock.currencyContractAddress,
-          // args.provider,
-          args.chainId
+export const verifyLock = createAsyncThunk<
+  // Return type of the payload creator
+  RawLock | undefined,
+  // First argument to the payload creator
+  {
+    address: string;
+    chainId: string;
+    web3Service: Web3Service;
+    provider: ethers.providers.Provider;
+    client: WebClient;
+    litClient: LitNodeClient;
+    ownerAddress: string;
+  },
+  // Types for ThunkAPI
+  {
+    rejectValue: string;
+  }
+>("lock/verify", async (args, thunkAPI) => {
+  try {
+    const chainMeta = networks[args.chainId];
+    const chain = chainMeta.chainNumber;
+    const litClient = args.litClient;
+    const web3Service = new Web3Service(unlockNetworks);
+    const lock = (await web3Service.getLock(args.address, chain)) as RawLock & {
+      beneficiary: string;
+    };
+    if (lock) {
+      if (lock.beneficiary.toLowerCase() !== args.ownerAddress.toLowerCase()) {
+        return thunkAPI.rejectWithValue("You do not own that lock");
+      }
+      const { symbol, num } = await getTokenSymbolAndNumber(
+        lock.keyPrice,
+        lock.currencyContractAddress,
+        // args.provider,
+        args.chainId
+      );
+      const { publication } = thunkAPI.getState() as RootState;
+      thunkAPI.dispatch(
+        lockActions.create({
+          ...lock,
+          lockAddress: args.address.toLowerCase(),
+          keyPriceSimple: parseFloat(num),
+          keyTokenSymbol: symbol,
+        })
+      );
+      // update lit rules
+      const additionalParams = {} as { publishAccess: LitAccess };
+      if (parseFloat(num) > 0) {
+        const authSig = await LitJsSdk.checkAndSignAuthMessage({
+          chain: chainMeta.litName,
+        });
+
+        const controls = addNftAccessControl(
+          publication.publishAccess.accessControlConditions,
+          chainMeta.litName,
+          args.address
         );
-        const { publication } = thunkAPI.getState() as RootState;
-        thunkAPI.dispatch(
-          lockActions.create({
-            ...lock,
-            lockAddress: args.address.toLowerCase(),
-            keyPriceSimple: parseFloat(num),
-            keyTokenSymbol: symbol,
+        await litClient.saveEncryptionKey({
+          accessControlConditions: controls,
+          encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
+            publication.publishAccess.encryptedSymmetricKey,
+            "base16"
+          ),
+          authSig,
+          chain: chainMeta.litName,
+          permanant: false,
+        });
+        // Update access controls
+        additionalParams["publishAccess"] = {
+          encryptedSymmetricKey:
+            publication.publishAccess.encryptedSymmetricKey,
+          accessControlConditions: controls,
+        };
+      }
+      console.log(additionalParams);
+      // We must update the publication if the key is updated
+      try {
+        await thunkAPI.dispatch(
+          updatePublication({
+            publication: {
+              description: publication.description || "",
+              name: publication.name,
+              locks: [
+                ...new Set([
+                  ...publication.locks,
+                  { address: args.address, chainId: args.chainId },
+                ]),
+              ],
+              ...additionalParams,
+            },
+            client: args.client,
+            chainName: networks[args.chainId].litName,
+            litClient,
           })
         );
-        // update lit rules
-        const additionalParams = {} as { publishAccess: LitAccess };
-        if (parseFloat(num) > 0) {
-          const authSig = await LitJsSdk.checkAndSignAuthMessage({
-            chain: chainMeta.litName,
-          });
-
-          const controls = addNftAccessControl(
+        return lock;
+      } catch (err) {
+        const authSig = await LitJsSdk.checkAndSignAuthMessage({
+          chain: chainMeta.litName,
+        });
+        await litClient.saveEncryptionKey({
+          accessControlConditions:
             publication.publishAccess.accessControlConditions,
-            chainMeta.litName,
-            args.address
-          );
-          await litClient.saveEncryptionKey({
-            accessControlConditions: controls,
-            encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
-              publication.publishAccess.encryptedSymmetricKey,
-              "base16"
-            ),
-            authSig,
-            chain: chainMeta.litName,
-            permanant: false,
-          });
-          // Update access controls
-          additionalParams["publishAccess"] = {
-            encryptedSymmetricKey:
-              publication.publishAccess.encryptedSymmetricKey,
-            accessControlConditions: controls,
-          };
-        }
-        console.log(additionalParams);
-        // We must update the publication if the key is updated
-        try {
-          await thunkAPI.dispatch(
-            updatePublication({
-              publication: {
-                description: publication.description || "",
-                name: publication.name,
-                locks: [
-                  ...new Set([
-                    ...publication.locks,
-                    { address: args.address, chainId: args.chainId },
-                  ]),
-                ],
-                ...additionalParams,
-              },
-              client: args.client,
-              chainName: networks[args.chainId].litName,
-              litClient,
-            })
-          );
-        } catch (err) {
-          const authSig = await LitJsSdk.checkAndSignAuthMessage({
-            chain: chainMeta.litName,
-          });
-          await litClient.saveEncryptionKey({
-            accessControlConditions:
-              publication.publishAccess.accessControlConditions,
-            encryptedSymmetricKey: LitJsSdk.uint8arrayToString(
-              publication.publishAccess.encryptedSymmetricKey,
-              "base16"
-            ),
-            authSig,
-            chain: chainMeta.litName,
-            permanant: false,
-          });
+          encryptedSymmetricKey: LitJsSdk.uint8arrayFromString(
+            publication.publishAccess.encryptedSymmetricKey,
+            "base16"
+          ),
+          authSig,
+          chain: chainMeta.litName,
+          permanant: false,
+        });
 
-          console.error(err);
-          return thunkAPI.rejectWithValue("Failed to update verified lock");
-        }
+        console.error(err);
+        return thunkAPI.rejectWithValue("Failed to update verified lock");
       }
-      return lock;
-    } catch (err) {
-      console.error(err);
-      return thunkAPI.rejectWithValue("Failed to verify");
     }
+  } catch (err) {
+    console.error(err);
+    return thunkAPI.rejectWithValue("Failed to verify");
   }
-);
+});
 
 export const fetchLocks = createAsyncThunk(
   "lock/verify",
