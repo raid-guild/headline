@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ceramic-node
+  labels:
+    environment: production
+    app: headline
+    tier: service
+spec:
+  replicas: 1
+  serviceName: ceramic-api-node
+  selector:
+    matchLabels:
+      name: ceramic-node
+  template:
+    metadata:
+      labels:
+        name: ceramic-node
+    spec:
+      containers:
+        - name: ceramic
+          image: ceramicnetwork/js-ceramic:latest
+          ports:
+            - containerPort: 7007
+          volumeMounts:
+            - mountPath: "/root/.ceramic/statestore"
+              name: ceramic-pvc
+            - name: daemon-config
+              mountPath: /root/.ceramic
+            - mountPath: "/root/.ceramic/logs"
+              name: ceramic-logs-pvc
+          resources:
+            requests:
+              memory: 512Mi
+              cpu: 512m
+            limits:
+              memory: 1024Mi
+              cpu: 1024m
+      volumes:
+        - name: daemon-config
+          configMap:
+            name: ceramic-node-configmap
+  volumeClaimTemplates:
+    - metadata:
+        name: ceramic-pvc
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: do-block-storage
+    - metadata:
+        name: ceramic-logs-pvc
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
+        storageClassName: do-block-storage

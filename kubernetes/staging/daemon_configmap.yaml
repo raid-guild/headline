@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "ceramic-node-configmap"
+data:
+  daemon.config.json: |
+    {
+      "anchor": {
+        "ethereum-rpc-url": "https://ropsten.infura.io/v3/f1dfa73f479840139441203fdf63bdce"
+      },
+      "http-api": {
+        "cors-allowed-origins": ["www.test.viaheadline.xyz", "test.viaheadline.xyz"]
+      },
+      "ipfs": {
+        "mode": "remote",
+        "host": "http://ceramic-ipfs:5011"
+      },
+      "logger": {
+        "log-level": 2,
+        "log-to-files": true
+      },
+      "network": {
+        "name": "testnet-clay"
+      },
+      "node": {},
+      "state-store": {
+        "mode": "fs",
+        "local-directory": "/root/.ceramic/statestore"
+      }
+    }

@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: headline-node
+  labels:
+    environment: production
+    app: headline
+    tier: service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: headline-node
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        name: headline-node
+    spec:
+      containers:
+        - name: web
+          image: registry.digitalocean.com/headline/node:
+          resources:
+            requests:
+              memory: 300Mi
+              cpu: 300m
+            limits:
+              memory: 500Mi
+              cpu: 500m
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: headline-node
+spec:
+  type: ClusterIP
+  selector:
+    name: headline-node
+  ports:
+    - name: ceramic
+      port: 80
+      targetPort: 80
