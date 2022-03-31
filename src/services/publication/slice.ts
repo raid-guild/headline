@@ -225,7 +225,20 @@ export const createPublication = createAsyncThunk(
         registryId: registryDoc?.id?.toString(),
       };
       await store.set("publication", publication);
-      thunkAPI.dispatch(publicationActions.create(publication));
+      const publicationDefinitionId = await store.getDefinitionID(
+        "publication"
+      );
+      const publicationDoc = await store.getRecordDocument(
+        publicationDefinitionId,
+        client.ceramic?.did?.id || ""
+      );
+
+      thunkAPI.dispatch(
+        publicationActions.create({
+          ...publication,
+          streamId: publicationDoc?.id.toString(),
+        })
+      );
       return publication;
     } catch (err) {
       console.error(err);
