@@ -21,6 +21,7 @@ jobs:
           echo VITE_INFURA_PROJECT_ID=274gpOkyT4A87tP3Yon1buyJreG >> .env
           echo VITE_INFURA_PROJECT_SECRET=e91e506f1e99de3f73a1226c9d503723 >> .env
           echo VITE_SELF_ID=https://self.id/ >> .env
+          echo VITE_CERAMIC_NETWORK=mainnet >> .env
           cat .env
       - name: Install doctl
         uses: digitalocean/action-doctl@v2

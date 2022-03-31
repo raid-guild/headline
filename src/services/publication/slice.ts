@@ -6,7 +6,11 @@ import { Web3Service } from "@unlock-protocol/unlock-js";
 
 import { storeIpfs } from "lib/ipfs";
 import { getKeyEncryptText, getKeyAndDecrypt } from "lib/lit";
-import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
+import {
+  PUBLISHED_MODELS,
+  CERAMIC_URL,
+  CERAMIC_NETWORK,
+} from "../../constants";
 import { DataModel } from "@glazed/datamodel";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { TileLoader } from "@glazed/tile-loader";
@@ -338,7 +342,7 @@ export const fetchPublicationByStream = createAsyncThunk(
   ) => {
     const client = new WebClient({
       ceramic: (CERAMIC_URL as string) || "testnet-clay",
-      connectNetwork: "testnet-clay",
+      connectNetwork: CERAMIC_NETWORK || "testnet-clay",
     });
     try {
       const loader = new TileLoader({ ceramic: client.ceramic, cache: true });

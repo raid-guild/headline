@@ -9,8 +9,6 @@ import { useWallet } from "@alexkeating/quiver";
 import { EthereumAuthProvider, WebClient, ConnectNetwork } from "@self.id/web";
 import { DID } from "dids";
 
-import { Caip10Link } from "@ceramicnetwork/stream-caip10-link";
-
 export type CeramicContextType = {
   did: DID | null;
   client: WebClient | null;
@@ -33,7 +31,7 @@ const initialContext = {
 
 const CeramicContext = createContext<CeramicContextType>(initialContext);
 
-const ceramicNetwork = (import.meta.env.VITE_CERAMIC_URL ||
+const ceramicNetwork = (import.meta.env.VITE_CERAMIC_NETWORK ||
   "testnet-clay") as ConnectNetwork;
 const ceramicNode = (import.meta.env.VITE_CERAMIC_NODE ||
   "testnet-clay") as string;

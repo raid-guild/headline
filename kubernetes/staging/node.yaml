@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: registry.digitalocean.com/headline/node_test:7edd8d1
+          image: registry.digitalocean.com/headline/node_test:e17714b
           resources:
             requests:
               memory: 300Mi
