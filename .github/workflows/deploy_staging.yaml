@@ -3,7 +3,7 @@ name: Deploy Staging
 on:
   push:
     branches:
-      - "master"
+      - "staging"
 
 jobs:
   # Run code tests before building the image, to ensure it is good to go
