@@ -18,11 +18,13 @@ jobs:
       - name: Create env file
         run: |
           touch .env
-          echo VITE_CERAMIC_NODE=https://ceramic.alexkeating.me >> .env
-          echo VITE_WEBSITE_DOMAIN=https://headline-unlock-test.herokuapp.com >> .env
-          echo VITE_INFURA_PROJECT_ID=24ZzrrBV9yd503XnmvCqXudjfYR
-          echo VITE_INFURA_PROJECT_SECRET=a853a769e6916d5eb2181529b4f98b7c
-          echo VITE_SELF_ID=https://clay.self.id/ >> .env
+          echo VITE_CERAMIC_NODE=https://ceramic.viaheadline.xyz >> .env
+          echo VITE_WEBSITE_DOMAIN=https://viaheadline.xyz >> .env
+          echo VITE_INFURA_PROJECT_ID=274gpOkyT4A87tP3Yon1buyJreG >> .env
+          echo VITE_INFURA_PROJECT_SECRET=e91e506f1e99de3f73a1226c9d503723 >> .env
+          echo VITE_SELF_ID=https://self.id/ >> .env
+          echo VITE_CERAMIC_NETWORK=mainnet >> .env
+
           cat .env
 
       - run: yarn build
