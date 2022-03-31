@@ -125,7 +125,6 @@ const ReceiverSettings = ({
   radio: RadioStateReturn;
   allowPaid: boolean;
 }) => {
-
   const paidLocks = useAppSelector((state) => lockSelectors.paidLocks(state));
   return (
     <ReceiverSettingContainer>
@@ -269,6 +268,12 @@ export const ArticleSettings = ({
   const [description, setDescription] = useState(article?.description || "");
   const [hide, setHide] = useState(false);
 
+  useEffect(() => {
+    if (!description) {
+      setDescription(article?.description || "");
+    }
+  }, [article?.description]);
+
   const submitSettings = useCallback(async () => {
     setSaving(true);
     await saveArticle(
@@ -386,15 +391,21 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
 
   const [hide, setHide] = useState(false);
   const [previewImg, setPreviewImg] = useState<File | null>(null);
-  const [description, setDescription] = useAppSelector(
+  const d = useAppSelector(
     (state) =>
       articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
         .description || ""
   );
+  const [description, setDescription] = useState(d);
   const radio = useRadioState({
     state: `${article?.paid ? "paid" : "free"}`,
   });
   const published = article?.status === "published";
+  useEffect(() => {
+    if (!description) {
+      setDescription(article?.description || "");
+    }
+  }, [article?.description]);
 
   const configuredEmail =
     emailSettings?.mailFrom &&
