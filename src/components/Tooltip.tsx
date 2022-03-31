@@ -14,7 +14,13 @@ type LocalProps = {
 
 type Props = LocalProps & TooltipProps;
 
-const StyledTooltip = styled(ReakitTooltip)``;
+const StyledTooltip = styled(ReakitTooltip)`
+  border: ${({ theme }) => `solid 0.1rem ${theme.colors.lightGrey}`};
+  border-radius: 0.8rem;
+  background: ${({ theme }) => theme.colors.lightGrey};
+  padding: 0.6rem;
+  font-size: 1rem;
+`;
 
 const Tooltip = ({ title, children, ...rest }: Props) => {
   const tooltip = useTooltipState();
@@ -23,7 +29,7 @@ const Tooltip = ({ title, children, ...rest }: Props) => {
       <TooltipReference {...tooltip} ref={children.ref} {...children.props}>
         {(referenceProps) => React.cloneElement(children, referenceProps)}
       </TooltipReference>
-      <StyledTooltip {...tooltip} {...rest}>
+      <StyledTooltip {...tooltip} {...rest} unstable_portal={false}>
         {title}
       </StyledTooltip>
     </>

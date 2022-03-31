@@ -17,6 +17,7 @@ import ExternalLink from "components/ExternalLink";
 import Icon from "components/Icon";
 import Input from "components/Input";
 import FormTextArea from "components/FormTextArea";
+import Tooltip from "components/Tooltip";
 import Text from "components/Text";
 import Title from "components/Title";
 import {
@@ -35,10 +36,6 @@ import { sendMessageFromLocks } from "lib/headline";
 
 import portrait from "assets/portrait.svg";
 import settings from "assets/settings.svg";
-
-const DialogHeaderText = styled.div`
-  padding: 3.2rem;
-`;
 
 const ReceiverSettingContainer = styled.div`
   display: flex;
@@ -128,6 +125,8 @@ const ReceiverSettings = ({
   radio: RadioStateReturn;
   allowPaid: boolean;
 }) => {
+
+  const paidLocks = useAppSelector((state) => lockSelectors.paidLocks(state));
   return (
     <ReceiverSettingContainer>
       <Title size="sm" color="helpText">
@@ -138,8 +137,14 @@ const ReceiverSettings = ({
           <Radio {...radio} value="free" /> Everyone
         </label>
         <label>
-          <Radio {...radio} value="paid" disabled={!allowPaid} /> Paid
-          subscribers
+          {paidLocks ? (
+            <Radio {...radio} value="paid" disabled={!allowPaid} />
+          ) : (
+            <Tooltip title="Must have a paid lock to select">
+              <Radio {...radio} value="paid" disabled={!allowPaid} />
+            </Tooltip>
+          )}{" "}
+          Paid subscribers
         </label>
       </RadioButtonContainer>
     </ReceiverSettingContainer>
@@ -302,9 +307,6 @@ export const ArticleSettings = ({
       }
     >
       <DialogContainer>
-        <DialogHeaderText>
-          <Text size="base">Post setting</Text>
-        </DialogHeaderText>
         <ReceiverSettings
           radio={radio}
           allowPaid={locks.length > 0 ? true : false}
