@@ -38,7 +38,7 @@ spec:
         - www.test.viaheadline.xyz
       secretName: headline-node-tls
   rules:
-    - host: viaheadline.xyz
+    - host: test.viaheadline.xyz
       http:
         paths:
           - path: /

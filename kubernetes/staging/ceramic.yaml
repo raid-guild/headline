@@ -32,10 +32,10 @@ spec:
               name: ceramic-logs-pvc
           resources:
             requests:
-              memory: 512Mi
+              memory: 1024Mi
               cpu: 512m
             limits:
-              memory: 1024Mi
+              memory: 2048Mi
               cpu: 1024m
       volumes:
         - name: daemon-config
