@@ -341,7 +341,6 @@ const Locks = () => {
           address: data.lockAddress,
           chainId: data.lockChain,
           web3Service,
-          provider,
           client,
           litClient,
           ownerAddress: address || "",
