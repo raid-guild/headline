@@ -147,17 +147,14 @@ const CreatorPage = () => {
 
   useEffect(() => {
     const f = async () => {
-      if (!publicationId || !did) {
+      if (!publicationId) {
         return;
       }
-      console.log("PUblication");
-      console.log(publication);
       await dispatch(
         fetchArticleRegistry({
           registry: "publishRegistry",
           registryId: publication?.registryId,
           litClient,
-          did: did.id,
         })
       );
     };
