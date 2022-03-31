@@ -17,6 +17,7 @@ import ExternalLink from "components/ExternalLink";
 import Icon from "components/Icon";
 import Input from "components/Input";
 import FormTextArea from "components/FormTextArea";
+import Tooltip from "components/Tooltip";
 import Text from "components/Text";
 import Title from "components/Title";
 import {
@@ -35,10 +36,7 @@ import { sendMessageFromLocks } from "lib/headline";
 
 import portrait from "assets/portrait.svg";
 import settings from "assets/settings.svg";
-
-const DialogHeaderText = styled.div`
-  padding: 3.2rem;
-`;
+import tooltip from "assets/tooltip.svg";
 
 const ReceiverSettingContainer = styled.div`
   display: flex;
@@ -121,6 +119,16 @@ const StyledIcon = styled(Icon)`
   height: auto;
 `;
 
+const StyledTooltipImg = styled.img`
+  height: 1.33rem;
+  margin-left: 0.2rem;
+  align-self: flex-start;
+`;
+
+const StyledLabel = styled.label`
+  display: flex;
+`;
+
 const ReceiverSettings = ({
   radio,
   allowPaid,
@@ -128,19 +136,32 @@ const ReceiverSettings = ({
   radio: RadioStateReturn;
   allowPaid: boolean;
 }) => {
+  const paidLocks = useAppSelector((state) => lockSelectors.paidLocks(state));
   return (
     <ReceiverSettingContainer>
       <Title size="sm" color="helpText">
         This post is for
       </Title>
       <RadioButtonContainer>
-        <label>
+        <StyledLabel>
           <Radio {...radio} value="free" /> Everyone
-        </label>
-        <label>
-          <Radio {...radio} value="paid" disabled={!allowPaid} /> Paid
-          subscribers
-        </label>
+        </StyledLabel>
+        <StyledLabel>
+          {paidLocks.length > 0 ? (
+            <>
+              <Radio {...radio} value="paid" disabled={!allowPaid} />
+              Paid subscribers
+            </>
+          ) : (
+            <>
+              <Radio {...radio} value="paid" disabled={!allowPaid} /> Paid
+              subscribers
+              <Tooltip title="Must have a paid lock to select">
+                <StyledTooltipImg src={tooltip} />
+              </Tooltip>
+            </>
+          )}{" "}
+        </StyledLabel>
       </RadioButtonContainer>
     </ReceiverSettingContainer>
   );
@@ -264,6 +285,12 @@ export const ArticleSettings = ({
   const [description, setDescription] = useState(article?.description || "");
   const [hide, setHide] = useState(false);
 
+  useEffect(() => {
+    if (!description) {
+      setDescription(article?.description || "");
+    }
+  }, [article?.description]);
+
   const submitSettings = useCallback(async () => {
     setSaving(true);
     await saveArticle(
@@ -302,9 +329,6 @@ export const ArticleSettings = ({
       }
     >
       <DialogContainer>
-        <DialogHeaderText>
-          <Text size="base">Post setting</Text>
-        </DialogHeaderText>
         <ReceiverSettings
           radio={radio}
           allowPaid={locks.length > 0 ? true : false}
@@ -384,15 +408,21 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
 
   const [hide, setHide] = useState(false);
   const [previewImg, setPreviewImg] = useState<File | null>(null);
-  const [description, setDescription] = useAppSelector(
+  const d = useAppSelector(
     (state) =>
       articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
         .description || ""
   );
+  const [description, setDescription] = useState(d);
   const radio = useRadioState({
     state: `${article?.paid ? "paid" : "free"}`,
   });
   const published = article?.status === "published";
+  useEffect(() => {
+    if (!description) {
+      setDescription(article?.description || "");
+    }
+  }, [article?.description]);
 
   const configuredEmail =
     emailSettings?.mailFrom &&
@@ -466,7 +496,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
       }
       setHide(true);
     }
-  }, [address, provider, article, previewImg, description]);
+  }, [address, provider, article, previewImg, description, radio.state]);
 
   return (
     <Dialog

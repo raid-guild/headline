@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import profile from "assets/obsidian.png";
 
-import { useCeramic } from "context/CeramicContext";
 import { useLit } from "context/LitContext";
 import { fetchPublicationByStream } from "services/publication/slice";
 import { useAppDispatch, useAppSelector } from "store";
@@ -18,7 +16,10 @@ import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
 import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
-import { fetchArticleRegistry } from "services/articleRegistry/slice";
+import {
+  fetchArticleRegistry,
+  articleRegistrySelectors,
+} from "services/articleRegistry/slice";
 
 const StyledBodyContainer = styled(BodyContainer)`
   display: flex;
@@ -121,12 +122,10 @@ const EntriesContainer = styled.div`
 const CreatorPage = () => {
   const { publicationId } = useParams();
   const articleRegistry = useAppSelector(
-    (state) => state.articleRegistry // Name is required in the schema
+    (state) => articleRegistrySelectors.getSortedCreate(state) // Name is required in the schema
   );
-
   const [active, setActive] = useState("content");
   const { litClient } = useLit();
-  const { did } = useCeramic();
   const [pubImg] = usePubImg();
   const dispatch = useAppDispatch();
   const publication = useAppSelector((state) => state.publication);
@@ -147,17 +146,14 @@ const CreatorPage = () => {
 
   useEffect(() => {
     const f = async () => {
-      if (!publicationId || !did) {
+      if (!publicationId) {
         return;
       }
-      console.log("PUblication");
-      console.log(publication);
       await dispatch(
         fetchArticleRegistry({
           registry: "publishRegistry",
           registryId: publication?.registryId,
           litClient,
-          did: did.id,
         })
       );
     };
