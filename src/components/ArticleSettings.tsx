@@ -421,7 +421,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   const d = useAppSelector(
     (state) =>
       articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
-        .description || ""
+        ?.description || ""
   );
   const [description, setDescription] = useState(d);
   const radio = useRadioState({
