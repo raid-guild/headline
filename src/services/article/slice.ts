@@ -135,7 +135,8 @@ export const createArticle = createAsyncThunk<
     ceramic: client.ceramic,
     model: PUBLISHED_MODELS,
   });
-  const content = args.article.text;
+  const content =
+    args.article.text || JSON.stringify({ type: "doc", content: [] });
   try {
     const { publication } = thunkAPI.getState() as RootState;
     const publicationUrl = await storeAndEncryptArticle(

@@ -296,7 +296,7 @@ export const ArticleSettings = ({
   const submitSettings = useCallback(async () => {
     setSaving(true);
     await saveArticle(
-      article?.text || "",
+      article?.text || JSON.stringify({ type: "doc", content: [] }),
       article?.title || "",
       description,
       previewImg || undefined,
@@ -570,7 +570,9 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
                 autoFocus
                 editable={false}
                 manager={manager}
-                initialContent={JSON.parse(article?.text || "{}")}
+                initialContent={JSON.parse(
+                  article?.text || JSON.stringify({ type: "doc", content: [] })
+                )}
               >
                 <Test setMarkdown={setMarkdown} />
               </Remirror>

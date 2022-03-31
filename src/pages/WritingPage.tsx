@@ -244,6 +244,8 @@ const WritingPage = () => {
       );
     }
   };
+  console.log(article?.text);
+  console.log(JSON.parse(article?.text || "{}"));
 
   return (
     <StyledLayout>
@@ -283,7 +285,9 @@ const WritingPage = () => {
         />
         <StyledMarkdownEditor
           placeholder="Start typing..."
-          initialContent={JSON.parse(article?.text || "")}
+          initialContent={JSON.parse(
+            article?.text || JSON.stringify({ type: "doc", content: [] })
+          )}
           state={state}
           onChange={onChange}
         >
