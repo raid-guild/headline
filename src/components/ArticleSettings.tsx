@@ -36,6 +36,7 @@ import { sendMessageFromLocks } from "lib/headline";
 
 import portrait from "assets/portrait.svg";
 import settings from "assets/settings.svg";
+import tooltip from "assets/tooltip.svg";
 
 const ReceiverSettingContainer = styled.div`
   display: flex;
@@ -118,6 +119,16 @@ const StyledIcon = styled(Icon)`
   height: auto;
 `;
 
+const StyledTooltipImg = styled.img`
+  height: 1.33rem;
+  margin-left: 0.2rem;
+  align-self: flex-start;
+`;
+
+const StyledLabel = styled.label`
+  display: flex;
+`;
+
 const ReceiverSettings = ({
   radio,
   allowPaid,
@@ -132,19 +143,25 @@ const ReceiverSettings = ({
         This post is for
       </Title>
       <RadioButtonContainer>
-        <label>
+        <StyledLabel>
           <Radio {...radio} value="free" /> Everyone
-        </label>
-        <label>
-          {paidLocks ? (
-            <Radio {...radio} value="paid" disabled={!allowPaid} />
-          ) : (
-            <Tooltip title="Must have a paid lock to select">
+        </StyledLabel>
+        <StyledLabel>
+          {paidLocks.length > 0 ? (
+            <>
               <Radio {...radio} value="paid" disabled={!allowPaid} />
-            </Tooltip>
+              Paid subscribers
+            </>
+          ) : (
+            <>
+              <Radio {...radio} value="paid" disabled={!allowPaid} /> Paid
+              subscribers
+              <Tooltip title="Must have a paid lock to select">
+                <StyledTooltipImg src={tooltip} />
+              </Tooltip>
+            </>
           )}{" "}
-          Paid subscribers
-        </label>
+        </StyledLabel>
       </RadioButtonContainer>
     </ReceiverSettingContainer>
   );
