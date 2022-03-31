@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: web
-          image: registry.digitalocean.com/headline/headline-node:latest
+          image: registry.digitalocean.com/headline/node:c85eb27
           resources:
             requests:
               memory: 300Mi
@@ -40,7 +40,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    name: ceramic-node
+    name: headline-node
   ports:
     - name: ceramic
       port: 80

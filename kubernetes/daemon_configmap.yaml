@@ -9,7 +9,7 @@ data:
         "ethereum-rpc-url": "https://eth-mainnet.alchemyapi.io/v2/6idtzGwDtRbzil3s6QbYHr2Q_WBfn100"
       },
       "http-api": {
-        "cors-allowed-origins": ["viaheadline.xyz", "www.viaheadline.xyz"]
+        "cors-allowed-origins": [".*"]
       },
       "ipfs": {
         "mode": "remote",
@@ -20,7 +20,7 @@ data:
         "log-to-files": true
       },
       "network": {
-        "name": "mainnet"
+        "name": "elp"
       },
       "node": {},
       "state-store": {
