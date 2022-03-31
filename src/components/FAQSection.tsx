@@ -25,6 +25,24 @@ const FAQTitle = styled.h2`
   color: ${({ theme }) => `${theme.colors.mediumGrey}`};
 `;
 
+const FAQText = styled.p`
+  font-size: 2.4rem;
+  line-height: 2.8rem;
+  font-weight: 600;
+  color: ${({ theme }) => `${theme.colors.mediumGrey}`};
+  @media (max-width: 990px) {
+    font-size: 2.2rem;
+    line-height: 2.6rem;
+  }
+`;
+
+const StyledLink = styled.a`
+  text-decoration: none;
+  & hover {
+    cursor: pointer;
+  }
+`;
+
 const FAQItemsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,6 +61,9 @@ const FAQSection = () => (
     <FAQItemsContainer>
       <FAQTitle>FAQ</FAQTitle>
       <AccordionSection />
+      <StyledLink href="https://discord.gg/R4ppmsC6bv" target="_blank">
+        <FAQText>More questions? Visit us on Discord</FAQText>
+      </StyledLink>
     </FAQItemsContainer>
   </FAQContainer>
 );
