@@ -1,5 +1,4 @@
 import { ethers } from "ethers";
-import { DOMAIN } from "../constants";
 import { networks } from "lib/networks";
 import { PublicationLock } from "services/publication/slice";
 

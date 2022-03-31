@@ -75,15 +75,15 @@ const getBaseChainSymbolAndNumber = (chainId: string, num: string) => {
 export const getTokenSymbolAndNumber = async (
   num: string,
   contractAddress: string | null,
-  // provider: ethers.providers.Provider,
+  provider: ethers.providers.Provider,
   chainId: string
 ) => {
-  // if (!contractAddress) {
-  return getBaseChainSymbolAndNumber(chainId, num);
-  // }
+  if (!contractAddress) {
+    return getBaseChainSymbolAndNumber(chainId, num);
+  }
   // TODO: Store chain Id in Ceramic
   // Unlock extraReducers0
-  // const symbol = await getErc20TokenSymbol(contractAddress, provider);
-  // const decimals = await getErc20Decimals(contractAddress, provider);
-  // return { symbol, num: BigNumber.from(num).div(decimals).toString() };
+  const symbol = await getErc20TokenSymbol(contractAddress, provider);
+  const decimals = await getErc20Decimals(contractAddress, provider);
+  return { symbol, num: BigNumber.from(num).div(decimals).toString() };
 };

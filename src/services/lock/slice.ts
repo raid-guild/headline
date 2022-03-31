@@ -131,7 +131,6 @@ export const verifyLock = createAsyncThunk<
     address: string;
     chainId: string;
     web3Service: Web3Service;
-    provider: ethers.providers.Provider;
     client: WebClient;
     litClient: LitNodeClient;
     ownerAddress: string;
@@ -153,10 +152,12 @@ export const verifyLock = createAsyncThunk<
       if (lock.beneficiary.toLowerCase() !== args.ownerAddress.toLowerCase()) {
         return thunkAPI.rejectWithValue("You do not own that lock");
       }
+      const provider = new ethers.providers.JsonRpcProvider(chainMeta.rpc);
+
       const { symbol, num } = await getTokenSymbolAndNumber(
         lock.keyPrice,
         lock.currencyContractAddress,
-        // args.provider,
+        provider,
         args.chainId
       );
       const { publication } = thunkAPI.getState() as RootState;
@@ -250,7 +251,6 @@ export const fetchLocks = createAsyncThunk(
   async (
     args: {
       web3Service: Web3Service;
-      // provider: ethers.providers.Provider;
       publication: Publication;
     },
     thunkAPI
@@ -263,14 +263,19 @@ export const fetchLocks = createAsyncThunk(
         console.log("Iterating");
         console.log(idx);
         const lockMeta = publication.locks[parseInt(idx) || 0];
-        const chain = networks[lockMeta.chainId].chainNumber;
+        const chain = networks[lockMeta.chainId];
+        const chainNumber = chain.chainNumber;
+        const provider = new ethers.providers.JsonRpcProvider(chain.rpc);
 
-        const lock = await args.web3Service.getLock(lockMeta.address, chain);
+        const lock = await args.web3Service.getLock(
+          lockMeta.address,
+          chainNumber
+        );
         if (lock) {
           const { symbol, num } = await getTokenSymbolAndNumber(
             lock.keyPrice,
             lock.currencyContractAddress,
-            // args.provider,
+            provider,
             lockMeta.chainId
           );
           thunkAPI.dispatch(
