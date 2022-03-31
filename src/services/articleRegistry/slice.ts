@@ -49,6 +49,29 @@ export const articleRegistrySelectors = {
       return articleRegistry[streamId];
     }
   ),
+  getSortedCreate: createSelector(
+    [(state: RootState) => state.articleRegistry],
+    (articleRegistry: ArticleRegistry) => {
+      return Object.values(articleRegistry)
+        .filter((el) => el?.createdAt)
+        .sort(
+          (a, b) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+    }
+  ),
+  getSortedPublish: createSelector(
+    [(state: RootState) => state.articleRegistry],
+    (articleRegistry: ArticleRegistry) => {
+      return Object.values(articleRegistry)
+        .filter((el) => el?.publishedAt && el?.status === "published")
+        .sort(
+          (a, b) =>
+            new Date(b?.publishedAt || "").getTime() -
+            new Date(a?.publishedAt || "").getTime()
+        );
+    }
+  ),
 };
 
 export const addArticleSlice = createSlice({
@@ -168,27 +191,37 @@ export const fetchArticleRegistry = createAsyncThunk(
           args.did
         );
       }
+      let error = null;
       for (const streamId in articleRegistry) {
         // load streams
         const doc = await TileDocument.load(client.ceramic, streamId);
         const ceramicArticle = doc.content as CeramicArticle;
         const { publication } = thunkAPI.getState() as RootState;
-        const articleText = await fetchAndDecryptArticle(
-          args.chainName,
-          publication,
-          ceramicArticle?.status,
-          ceramicArticle.publicationUrl,
-          args.litClient,
-          (ceramicArticle.status === "draft" || ceramicArticle.paid) &&
-            !!args.chainName
-        );
-        thunkAPI.dispatch(
-          articleRegistryActions.add({
-            ...ceramicArticle,
-            text: articleText,
-            streamId: streamId,
-          })
-        );
+        try {
+          const articleText = await fetchAndDecryptArticle(
+            args.chainName,
+            publication,
+            ceramicArticle?.status,
+            ceramicArticle.publicationUrl,
+            args.litClient,
+            (ceramicArticle.status === "draft" || ceramicArticle.paid) &&
+              !!args.chainName
+          );
+          thunkAPI.dispatch(
+            articleRegistryActions.add({
+              ...ceramicArticle,
+              text: articleText,
+              streamId: streamId,
+            })
+          );
+        } catch (err) {
+          console.log(ceramicArticle);
+          error = thunkAPI.rejectWithValue("Failed to fetch some articles");
+          console.error(err);
+        }
+      }
+      if (error) {
+        return error;
       }
       return;
     } catch (err) {

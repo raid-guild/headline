@@ -116,7 +116,7 @@ export const ArticleEntries = ({
   articleRegistry,
   publicationId = null,
 }: {
-  articleRegistry: { [key: string]: Article };
+  articleRegistry: { [key: string]: Article } | Article[];
   publicationId: string | null;
 }) => {
   return (

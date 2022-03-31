@@ -34,7 +34,10 @@ import Sidebar from "components/Sidebar";
 import Text from "components/Text";
 import Title from "components/Title";
 import { createArticle } from "services/article/slice";
-import { fetchArticleRegistry } from "services/articleRegistry/slice";
+import {
+  fetchArticleRegistry,
+  articleRegistrySelectors,
+} from "services/articleRegistry/slice";
 import { verifyLock, lockSelectors } from "services/lock/slice";
 import { networks } from "lib/networks";
 
@@ -230,7 +233,7 @@ const EmtptyLocksMessage = () => {
 
 const Articles = () => {
   const articleRegistry = useAppSelector(
-    (state) => state.articleRegistry // Name is required in the schema
+    (state) => articleRegistrySelectors.getSortedCreate(state) // Name is required in the schema
   );
   const articleCreating = useAppSelector(
     (state) => state.createArticle.loading // Name is required in the schema

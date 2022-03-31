@@ -277,9 +277,19 @@ export const publishArticle = createAsyncThunk(
         status: "published" as const,
       };
 
+      const cleanedExistingArticle = {
+        publicationUrl: existingArticle.publicationUrl,
+        title: existingArticle.title,
+        createdAt: existingArticle.createdAt,
+        status: existingArticle.status,
+        previewImg: existingArticle.previewImg,
+        paid: existingArticle.paid,
+        description: existingArticle.description,
+        publishedAt: existingArticle.publishedAt,
+      };
       const doc = await TileDocument.load(client.ceramic, args.streamId);
       const updatedArticle = {
-        ...existingArticle,
+        ...cleanedExistingArticle,
         ...baseArticle,
       };
       await doc.update(updatedArticle);
