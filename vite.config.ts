@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import strip from "@rollup/plugin-strip";
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { resolve } from "path";
@@ -14,7 +15,7 @@ const externalPlugin = viteExternalsPlugin({
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), externalPlugin],
+  plugins: [strip(), react(), tsconfigPaths(), externalPlugin],
   // build: {
   //   sourcemap: true,
   //   commonjsOptions: {
