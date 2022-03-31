@@ -5,7 +5,11 @@ import { DataModel } from "@glazed/datamodel";
 import { WebClient } from "@self.id/web";
 import { DIDDataStore } from "@glazed/did-datastore";
 import { fetchAndDecryptArticle } from "lib/headline";
-import { PUBLISHED_MODELS, CERAMIC_URL } from "../../constants";
+import {
+  PUBLISHED_MODELS,
+  CERAMIC_URL,
+  CERAMIC_NETWORK,
+} from "../../constants";
 import { RootState } from "store";
 import { Article, CeramicArticle } from "services/article/slice";
 import { ChainName } from "types";
@@ -236,7 +240,7 @@ export const fetchArticle = createAsyncThunk(
   async (args: { streamId: string; chainName?: ChainName }, thunkAPI) => {
     const client = new WebClient({
       ceramic: (CERAMIC_URL as string) || "testnet-clay",
-      connectNetwork: "testnet-clay",
+      connectNetwork: CERAMIC_NETWORK || "testnet-clay",
     });
     try {
       const loader = new TileLoader({ ceramic: client.ceramic, cache: true });
