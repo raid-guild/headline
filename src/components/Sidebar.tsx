@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import SidebarItem from "components/SidebarItem";
 import FullLogo from "components/FullLogo";
 import Icon from "components/Icon";
-
+import ExternalLink from "components/ExternalLink";
 import discord from "assets/discord.svg";
 import twitter from "assets/twitter.svg";
 import { TWITTER_URL, DISCORD_URL } from "../constants";
@@ -95,9 +95,9 @@ const Sidebar = () => {
         </MenuContainer>
       </TopContainer>
       <BottomContainer>
-        <Link to={"/guide"}>
+        <ExternalLink href={"https://docs.viaheadline.xyz/"}>
           <SidebarItem text="Guide" icon="library_book" />
-        </Link>
+        </ExternalLink>
         <SocialMediaContainer>
           <StyledLink
             href={TWITTER_URL}
