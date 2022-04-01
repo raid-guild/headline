@@ -42,7 +42,7 @@ jobs:
         run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 headline-do-0-nyc3-1648599981756
 
       - name: Deploy to DigitalOcean Kubernetes
-        run: kubectl apply -f $GITHUB_WORKSPACE/kubernetes/node.yaml
+        run: kubectl apply -f $GITHUB_WORKSPACE/kubernetes/prod/node.yaml
 
       - name: Verify deployment
         run: kubectl rollout status deployment/headline-node
