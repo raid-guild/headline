@@ -247,6 +247,7 @@ export const publishArticle = createAsyncThunk(
       encrypt?: boolean;
       chainName?: ChainName;
       client: WebClient;
+      litClient: LitNodeClient;
     },
     thunkAPI
   ) => {
@@ -261,6 +262,7 @@ export const publishArticle = createAsyncThunk(
         publication,
         "published",
         content,
+        litClient,
         args.encrypt
       );
       if (!publicationUrl) {

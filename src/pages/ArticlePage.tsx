@@ -224,7 +224,8 @@ const ArticlePage = () => {
     f();
   }, [article?.paid]);
 
-  const freeText = article?.paid ? article?.text : "";
+  const freeText =
+    !article?.paid && article?.status === "published" ? article?.text : "";
 
   const content =
     !article?.paid || decryptedText ? (
