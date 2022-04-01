@@ -262,7 +262,7 @@ export const publishArticle = createAsyncThunk(
         publication,
         "published",
         content,
-        litClient,
+        args.litClient,
         args.encrypt
       );
       if (!publicationUrl) {
