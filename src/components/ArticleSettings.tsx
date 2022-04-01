@@ -443,8 +443,6 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     emailSettings?.apiKey;
 
   const sendTestMessage = useCallback(async () => {
-    console.log("testEmail");
-    console.log(testEmail);
     if (!testEmail) {
       return;
     }
@@ -497,8 +495,8 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
         const settings = {
           from: emailSettings?.mailFrom || "",
           subject: article.title,
-          text: article.text,
-          html: await parseMarkdown(article.title, article.text),
+          text: markdown,
+          html: await parseMarkdown(article.title, markdown),
           domain: emailSettings?.domain || "",
           apiKey: emailSettings?.apiKey || "",
           infra: emailSettings?.infra?.toLowerCase() as "eu" | "main",
