@@ -240,8 +240,6 @@ const ArticlePage = () => {
       "This content is locked"
     );
 
-  console.log("Article");
-  console.log(article);
 
   return (
     <Layout>

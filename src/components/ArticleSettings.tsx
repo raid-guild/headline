@@ -296,9 +296,6 @@ export const ArticleSettings = ({
 
   const submitSettings = useCallback(async () => {
     setSaving(true);
-    console.log("Here");
-    console.log(radio.state);
-    console.log(article);
     await saveArticle(
       article?.text || JSON.stringify({ type: "doc", content: [] }),
       article?.title || "",
