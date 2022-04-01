@@ -240,7 +240,6 @@ const ArticlePage = () => {
       "This content is locked"
     );
 
-
   return (
     <Layout>
       <StyledHeaderContainer>
