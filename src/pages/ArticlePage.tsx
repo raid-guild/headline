@@ -150,6 +150,8 @@ const DecryptedText = ({
     stringHandler: "markdown",
   });
 
+  const txt = !paid || decryptedText;
+
   return (
     <>
       {(!paid || decryptedText) && (decryptedText || freeText) ? (
@@ -163,6 +165,8 @@ const DecryptedText = ({
             <Markdown />
           </Remirror>
         </>
+      ) : txt ? (
+        ""
       ) : (
         "This content is locked"
       )}
@@ -287,11 +291,13 @@ const ArticlePage = () => {
             {publication?.name}
           </Text>
         </TitleContainer>
-        <a href={checkoutRedirect(publication?.name, publication?.locks)}>
-          <StyledButton size="md" color="primary" variant="contained">
-            Subscribe
-          </StyledButton>
-        </a>
+        {!!publication?.locks?.length && (
+          <a href={checkoutRedirect(publication?.name, publication?.locks)}>
+            <StyledButton size="md" color="primary" variant="contained">
+              Subscribe
+            </StyledButton>
+          </a>
+        )}
       </StyledHeaderContainer>
       <StyledBodyContainer>
         <ToolbarContainer>
