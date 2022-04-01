@@ -300,7 +300,7 @@ const ArticlePage = () => {
         {active === "content" ? (
           <div>
             <DecryptedText
-              paid={article?.paid}
+              paid={article?.paid || false}
               decryptedText={decryptedText}
               freeText={freeText}
             />
