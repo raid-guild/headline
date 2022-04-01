@@ -62,6 +62,7 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
     );
 
     console.log("Client");
+
     const c = new WebClient({
       ceramic: ceramicNode,
       connectNetwork: ceramicNetwork,

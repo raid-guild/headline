@@ -12,6 +12,7 @@ import { useRadioState, Radio, RadioStateReturn } from "reakit/Radio";
 import styled from "styled-components";
 
 import { useCeramic } from "context/CeramicContext";
+import { useLit } from "context/LitContext";
 import Button from "components/Button";
 import { Dialog, DialogContainer } from "components/Dialog";
 import ExternalLink from "components/ExternalLink";
@@ -295,6 +296,9 @@ export const ArticleSettings = ({
 
   const submitSettings = useCallback(async () => {
     setSaving(true);
+    console.log("Here");
+    console.log(radio.state);
+    console.log(article);
     await saveArticle(
       article?.text || JSON.stringify({ type: "doc", content: [] }),
       article?.title || "",
@@ -404,6 +408,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
   const dispatch = useAppDispatch();
   const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
+  const { litClient } = useLit();
   const article = useAppSelector((state) =>
     articleRegistrySelectors.getArticleByStreamId(state, streamId || "")
   );
@@ -469,11 +474,12 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
         ...article,
         description: description || article?.description,
         previewImg: previewUrl || article?.previewImg,
-        paid: radio.state !== "free",
+        paid: radio.state === "paid",
       };
 
       console.log(radio);
       console.log("Published article");
+      console.log(article);
       console.log(readyArticle);
       await dispatch(
         publishArticle({
@@ -482,6 +488,7 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
           encrypt: readyArticle?.paid || false,
           chainName: networks[chainId].litName,
           client,
+          litClient,
         })
       );
       // email article
