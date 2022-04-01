@@ -45,7 +45,9 @@ export const storeIpfs = async (
 
 export const fetchIPFS = async (ipfsHash: string) => {
   const resp = await fetch(
-    `https://ipfs.infura.io:5001/api/v0/cat?arg=${ipfsHash.split("/").at(-1)}`,
+    `https://ipfs.infura.io:5001/api/v0/cat?arg=${ipfsHash
+      .split("/")
+      .slice(2)}`,
     {
       method: "post",
     }
