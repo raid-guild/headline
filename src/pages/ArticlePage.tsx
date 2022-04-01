@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Remirror, useRemirror, useHelpers } from "@remirror/react";
 import { useSnackbar } from "notistack";
+import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import MobileHeader from "components/MobileHeader";
 import MobileNav from "components/MobileNav";
-import Renderer from "components/Renderer";
 import { useAppDispatch, useAppSelector } from "store";
 import {
   fetchArticle,
@@ -18,10 +19,12 @@ import Avatar from "components/Avatar";
 import Button from "components/Button";
 import PublicToolbar from "components/PublicToolbar";
 import { LockCards } from "components/LockCard";
+import { remirrorExtensions } from "components/MarkdownEditor";
 import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import { getKeyAndDecrypt, getClient } from "lib/lit";
+import { parseMarkdown } from "lib/markdown";
 import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
 
@@ -123,6 +126,49 @@ const StyledGatedModal = styled.div<{ hidden: boolean }>`
 const CardContainer = styled.div`
   display: flex;
 `;
+
+const Markdown = ({}) => {
+  const helpers = useHelpers(true);
+  return (
+    <>
+      <ReactMarkdown>{helpers.getMarkdown()}</ReactMarkdown>
+    </>
+  );
+};
+
+const DecryptedText = ({
+  paid,
+  decryptedText,
+  freeText,
+}: {
+  paid: boolean;
+  decryptedText: string;
+  freeText: string;
+}) => {
+  const { manager } = useRemirror({
+    extensions: remirrorExtensions,
+    stringHandler: "markdown",
+  });
+
+  return (
+    <>
+      {(!paid || decryptedText) && (decryptedText || freeText) ? (
+        <>
+          <Remirror
+            autoFocus
+            editable={false}
+            manager={manager}
+            initialContent={JSON.parse(decryptedText || freeText)}
+          >
+            <Markdown />
+          </Remirror>
+        </>
+      ) : (
+        "This content is locked"
+      )}
+    </>
+  );
+};
 
 const GatedModal = ({ visible }: { visible: boolean | string }) => {
   const locks = useAppSelector((state) => lockSelectors.paidLocks(state));
@@ -227,19 +273,6 @@ const ArticlePage = () => {
   const freeText =
     !article?.paid && article?.status === "published" ? article?.text : "";
 
-  const content =
-    !article?.paid || decryptedText ? (
-      <Renderer
-        content={JSON.parse(
-          decryptedText ||
-            freeText ||
-            JSON.stringify({ type: "doc", content: [] })
-        )}
-      />
-    ) : (
-      "This content is locked"
-    );
-
   return (
     <Layout>
       <StyledHeaderContainer>
@@ -265,7 +298,13 @@ const ArticlePage = () => {
           <PublicToolbar active={active} setActive={setActive} />
         </ToolbarContainer>
         {active === "content" ? (
-          <>{content}</>
+          <div>
+            <DecryptedText
+              paid={article?.paid}
+              decryptedText={decryptedText}
+              freeText={freeText}
+            />
+          </div>
         ) : (
           <DescriptionContainer>
             <Title size="sm" color="label">
