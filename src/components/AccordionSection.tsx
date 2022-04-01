@@ -1,6 +1,6 @@
 import React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { HiChevronDown } from "react-icons/hi";
+import ExternalLink from "components/ExternalLink";
 import styled from "styled-components";
 
 // tried to map this, but it broke the accordion since it wasnt recognizing the value
@@ -51,6 +51,10 @@ const StyledAccordionItem = styled(AccordionPrimitive.Item)`
   display: flex;
   flex-direction: column;
   border-bottom: 0.2rem solid #f0efef;
+`;
+
+const StyledExternalLink = styled(ExternalLink)`
+  font-weight: 600;
 `;
 
 const StyledAccordionTrigger = styled(AccordionPrimitive.Trigger)`
@@ -137,9 +141,14 @@ const AccordionSection = () => {
           </StyledAccordionTrigger>
         </StyledAccordionHeader>
         <StyledAccordionContent>
-          Go to Publish, then Settings, and enter your third party API keyof,
-          under Email Service. After that&apos;s completed you can send your
-          blog as a newsletter when you Publish the post.
+          You will have to set up a Mailgun domain.{" "}
+          <StyledExternalLink href="https://mattharris.io/setting-up-mailgun/">
+            Here is a tutorial
+          </StyledExternalLink>{" "}
+          on how you can do that. Once you have the domain and apiKey, you can
+          enter that information in the Publish Settings, under Email Service.
+          After that&apos;s completed, you can send your blog as a newsletter
+          when you publish.
         </StyledAccordionContent>
       </StyledAccordionItem>
       <StyledAccordionItem value="item-4">
