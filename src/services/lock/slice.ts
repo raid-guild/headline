@@ -25,6 +25,7 @@ export type Lock = {
   maxNumber: number;
   keyPriceSimple: number;
   keyTokenSymbol: string;
+  chainNumber: number;
 };
 
 type LockRegistry = { [key: string]: Lock };
@@ -40,6 +41,7 @@ export const lockSlice = createSlice({
           lockAddress: string;
           keyPriceSimple: number;
           keyTokenSymbol: string;
+          chainNumber: number;
         }
       >
     ) {
@@ -53,6 +55,7 @@ export const lockSlice = createSlice({
           maxNumber: action.payload.maxNumberOfKeys || 0,
           keyPriceSimple: action.payload.keyPriceSimple,
           keyTokenSymbol: action.payload.keyTokenSymbol,
+          chainNumber: action.payload.chainNumber,
         };
         return state;
       }
@@ -167,6 +170,7 @@ export const verifyLock = createAsyncThunk<
           lockAddress: args.address.toLowerCase(),
           keyPriceSimple: parseFloat(num),
           keyTokenSymbol: symbol,
+          chainNumber: chain,
         })
       );
       // update lit rules
@@ -284,6 +288,7 @@ export const fetchLocks = createAsyncThunk(
               lockAddress: lockMeta.address.toLowerCase(),
               keyPriceSimple: parseFloat(num),
               keyTokenSymbol: symbol,
+              chainNumber: chainNumber,
             })
           );
         }

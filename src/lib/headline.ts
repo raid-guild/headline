@@ -99,6 +99,7 @@ export const sendMessageFromLocks = async (
         lock.lockAddress,
         walletAddress,
         provider,
+        lock.chainNumber,
         page
       );
       if (!metaResp) {
