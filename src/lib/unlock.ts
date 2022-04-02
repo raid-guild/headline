@@ -49,7 +49,7 @@ export const fetchUserMetadata = async (
   lockAddress: string,
   walletAddress: string,
   provider: ethers.providers.Web3Provider,
-  chainId: string,
+  chainId: number,
   page = 0
 ) => {
   const data = {
@@ -83,7 +83,7 @@ export const fetchUserMetadata = async (
   console.log(signature);
   console.log(authorization);
   const prms = new URLSearchParams({
-    chain: chainId,
+    chain: chainId.toString(),
     data: JSON.stringify(data) || "",
     signature: signature,
   });
