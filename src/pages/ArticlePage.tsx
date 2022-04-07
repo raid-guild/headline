@@ -125,6 +125,9 @@ const StyledGatedModal = styled.div<{ hidden: boolean }>`
 
 const CardContainer = styled.div`
   display: flex;
+  gap: 3.2rem;
+  align-items: center;
+  justify-content: center;
 `;
 
 const Markdown = ({}) => {
