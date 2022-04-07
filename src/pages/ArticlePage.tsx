@@ -111,10 +111,11 @@ const DescriptionContainer = styled.div`
 `;
 
 const StyledGatedModal = styled.div<{ hidden: boolean }>`
-  z-index: 1000;
-  left: 10%;
-  bottom: 5%;
+  z-index: 10;
+  align-self: center;
   padding: 3.2rem;
+  top: unset;
+  left: unset;
   background: ${({ theme }) => theme.colors.backgroundGrey};
   position: absolute;
   gap: 1rem;
