@@ -30,7 +30,7 @@ import { CREATE_PUBLICATION_URI } from "../constants";
 const DashboardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  max-width: 50rem;
+  max-width: 55rem;
   max-height: 38rem;
   height: 100%;
   width: 100%;
