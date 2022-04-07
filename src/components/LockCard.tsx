@@ -25,6 +25,7 @@ const LockDataContainer = styled.div`
   background: ${({ theme }) => theme.colors.backgroundGrey};
   padding: 3.2rem;
   gap: 1.6rem;
+  overflow-wrap: anywhere;
 `;
 
 const LockDataRowContainer = styled.div`

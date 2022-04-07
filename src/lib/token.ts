@@ -65,6 +65,12 @@ export async function getErc20TokenSymbol(
 
 const getBaseChainSymbolAndNumber = (chainId: string, num: string) => {
   switch (chainId) {
+    case "0x38":
+      return { symbol: "BSC", num: num };
+    case "0x89":
+      return { symbol: "Matic", num: num };
+    case "0x64":
+      return { symbol: "xDai", num: num };
     default:
       return { symbol: "Eth", num: num };
   }
