@@ -22,7 +22,7 @@ import { fetchPublication } from "services/publication/slice";
 import { fetchBasicProfile } from "services/profile/slice";
 import { networks } from "lib/networks";
 import { useAppDispatch, useAppSelector } from "store";
-import { useCeramic, CeramicContextType } from "context/CeramicContext";
+import { useCeramic } from "context/CeramicContext";
 import { useUnlock } from "context/UnlockContext";
 import { useLit } from "context/LitContext";
 import { CREATE_PUBLICATION_URI } from "../constants";
@@ -158,18 +158,6 @@ const LoggedInContainer = styled.div`
   }
 `;
 
-const LoggedOutContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  gap: 2.4rem;
-  padding: 6.4rem;
-  @media (max-width: 768px) {
-    padding: 2.4rem;
-  }
-`;
-
 const PublicationContainer = styled.div`
   display: flex;
   align-items: center;
@@ -207,17 +195,6 @@ const PublicationCopyContainer = styled.div`
   @media (min-width: 768px) {
     margin-bottom: 0;
     gap: 0.8rem;
-  }
-`;
-
-const LogoContainer = styled.div`
-  direction: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  @media (max-width: 768px) {
-    justify-content: flex-start;
-    padding: 1.2rem 0rem;
   }
 `;
 
@@ -330,8 +307,7 @@ const DashboardPage = () => {
   const { connect, did, isCeramicConnecting } = useCeramic();
   const { web3Service } = useUnlock();
   const { litClient } = useLit();
-  const { connectWallet, isConnecting, provider, address, chainId } =
-    useWallet();
+  const { connectWallet, isConnecting, provider, chainId } = useWallet();
   const dispatch = useAppDispatch();
   console.log(isCeramicConnecting);
   console.log(isConnecting);

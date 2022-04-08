@@ -199,24 +199,21 @@ const SocialPreview = ({
     x();
   }, [articlePreviewLink]);
 
-  const uploadImage = useCallback(
-    (e) => {
-      const input = hiddenImageInput.current || { files: null };
-      // const validImage = false;
-      if (input.files) {
-        const file = input.files[0];
-        if (!file) {
-          return;
-        }
-        // validImage =
-        //   file.type === "image/jpeg" ||
-        //   file.type === "image/png" ||
-        //   file.type === "image/svg+xml";
-        setPreviewImg(file);
+  const uploadImage = useCallback(() => {
+    const input = hiddenImageInput.current || { files: null };
+    // const validImage = false;
+    if (input.files) {
+      const file = input.files[0];
+      if (!file) {
+        return;
       }
-    },
-    [hiddenImageInput.current]
-  );
+      // validImage =
+      //   file.type === "image/jpeg" ||
+      //   file.type === "image/png" ||
+      //   file.type === "image/svg+xml";
+      setPreviewImg(file);
+    }
+  }, [hiddenImageInput.current]);
 
   return (
     <SocialPreviewContainer>

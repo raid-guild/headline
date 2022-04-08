@@ -6,7 +6,7 @@ import {
   Controller,
 } from "react-hook-form";
 import styled from "styled-components";
-import { useAppDispatch, useAppSelector } from "store";
+import { useAppSelector } from "store";
 
 import Input from "components/Input";
 

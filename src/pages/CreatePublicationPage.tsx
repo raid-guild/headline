@@ -2,12 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import styled from "styled-components";
 import { useWallet } from "@alexkeating/quiver";
 import { useUnlock } from "context/UnlockContext";
-import {
-  useForm,
-  SubmitHandler,
-  FieldValues,
-  Controller,
-} from "react-hook-form";
+import { SubmitHandler, FieldValues } from "react-hook-form";
 
 import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "store";
@@ -21,16 +16,13 @@ import { useLit } from "context/LitContext";
 import Button from "components/Button";
 import BackButton from "components/BackButton";
 import Icon from "components/Icon";
-import Input from "components/Input";
 import MobileNav from "components/MobileNav";
 import { Layout, HeaderContainer, BodyContainer } from "components/Layout";
 import PublicationForm from "components/PublicationForm";
 import Title from "components/Title";
 import Text from "components/Text";
-import FormTextArea from "components/FormTextArea";
 import { networks } from "lib/networks";
 
-import small_logo from "assets/small_logo.svg";
 import celebrateIcon from "assets/celebrate.svg";
 
 const StyledLayout = styled(Layout)`
@@ -160,11 +152,6 @@ const SuccessfullyCreatedPublication = ({ name }: { name: string }) => {
 };
 
 const CreatePublicationForm = () => {
-  const {
-    formState: { errors },
-    handleSubmit,
-    control,
-  } = useForm();
   const dispatch = useAppDispatch();
   const { address, chainId } = useWallet();
   const { client } = useCeramic();

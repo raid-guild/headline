@@ -5,12 +5,11 @@ import { keyframes } from "styled-components";
 import Button from "components/Button";
 import Title from "components/Title";
 import Text from "components/Text";
-import { AppWrapper, Layout, BodyContainer } from "components/Layout";
+import { AppWrapper, BodyContainer } from "components/Layout";
 import LogoWordmark from "components/LogoWordmark";
 import FullLogo from "components/FullLogo";
 import HomeNav from "components/HomeNav";
 import FAQSection from "components/FAQSection";
-import MobileNav from "components/MobileNav";
 import { DASHBOARD_URI } from "../constants";
 import heroImage from "assets/img-hero.png";
 import heroImageMobile from "assets/img-hero-sm.png";
@@ -18,19 +17,6 @@ import aboutImage from "assets/img-about.png";
 import visionImage from "assets/img-vision.png";
 import visionImageMobile from "assets/img-vision-sm.png";
 import getStartedAnimation from "assets/get-started-animation.svg";
-
-const StyledLayout = styled(Layout)`
-  grid-template:
-    "header"
-    "body"
-    "footer";
-  @media (max-width: 768px) {
-    grid-template:
-      "header"
-      "body"
-      "mobileNav";
-  }
-`;
 
 const StyledMainWrapper = styled(AppWrapper)`
   /* background: ${({ theme }) => `${theme.colors.almostWhite}`}; */
@@ -431,14 +417,6 @@ const FooterLogoContainer = styled.div`
   margin: 0;
   @media (max-width: 768px) {
   }
-`;
-
-const InternalLink = styled.a`
-  font-size: 16px;
-  line-height: 22px;
-  align: center;
-  background: transparent;
-  color: #000000;
 `;
 
 const HomeFooterContainer = styled.div`

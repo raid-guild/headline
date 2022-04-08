@@ -9,7 +9,7 @@ data:
         "ethereum-rpc-url": "https://ropsten.infura.io/v3/f1dfa73f479840139441203fdf63bdce"
       },
       "http-api": {
-        "cors-allowed-origins": [".*"]
+        "cors-allowed-origins": ["test.viaheadline.xyz", "www.test.viaheadline.xyz"]
       },
       "ipfs": {
         "mode": "remote",

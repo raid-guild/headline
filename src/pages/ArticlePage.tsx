@@ -24,7 +24,6 @@ import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import { getKeyAndDecrypt, getClient } from "lib/lit";
-import { parseMarkdown } from "lib/markdown";
 import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
 
