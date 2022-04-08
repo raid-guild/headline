@@ -309,8 +309,6 @@ const DashboardPage = () => {
   const { litClient } = useLit();
   const { connectWallet, isConnecting, provider, chainId } = useWallet();
   const dispatch = useAppDispatch();
-  console.log(isCeramicConnecting);
-  console.log(isConnecting);
 
   const connectToServices = useCallback(async () => {
     const state = await connectWallet();

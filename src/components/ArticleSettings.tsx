@@ -391,7 +391,6 @@ const TestInputContainer = styled.div`
 
 const Test = ({ setMarkdown }: { setMarkdown: (arg0: string) => void }) => {
   const helpers = useHelpers(true);
-  console.log(helpers.getMarkdown());
   setMarkdown(helpers.getMarkdown());
   return <></>;
 };
@@ -469,10 +468,6 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
         paid: radio.state === "paid",
       };
 
-      console.log(radio);
-      console.log("Published article");
-      console.log(article);
-      console.log(readyArticle);
       await dispatch(
         publishArticle({
           article: readyArticle,
@@ -507,8 +502,6 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     }
   }, [address, provider, article, previewImg, description, radio.state]);
 
-  console.log("Text here");
-  console.log(JSON.parse(article?.text || "{}"));
   const { manager } = useRemirror({
     extensions: remirrorExtensions,
     stringHandler: "markdown",

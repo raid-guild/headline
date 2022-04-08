@@ -147,7 +147,6 @@ const CreatorPage = () => {
     };
     f();
   }, [publicationId, publication?.registryId]);
-  console.log(`Registry page${JSON.stringify(articleRegistry)}`);
 
   return (
     <Layout>

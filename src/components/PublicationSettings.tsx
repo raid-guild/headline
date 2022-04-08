@@ -135,7 +135,6 @@ const PublicationSettings = () => {
               variant="contained"
               isLoading={publicationLoading}
               loadingText="Updating..."
-              onClick={() => console.log("Clicking")}
             >
               Save
             </StyledButton>

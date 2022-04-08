@@ -204,10 +204,6 @@ const ArticlePage = () => {
   );
   const [decryptedText, setDecryptedText] = useState("");
   const publication = useAppSelector((state) => state.publication);
-  console.log(article);
-  console.log(published);
-  console.log(streamId);
-  console.log(publication);
   useEffect(() => {
     if (!web3Service) {
       return;
@@ -225,7 +221,6 @@ const ArticlePage = () => {
           streamId,
         })
       );
-      console.log("Fetched");
       setPublished(true);
     };
     f();
@@ -236,13 +231,11 @@ const ArticlePage = () => {
       if (!publicationId) {
         return;
       }
-      console.log("Fetching");
       await dispatch(
         fetchPublicationByStream({
           streamId: publicationId,
         })
       );
-      console.log("Fetched");
     };
     f();
   }, [publicationId]);
@@ -257,7 +250,6 @@ const ArticlePage = () => {
           ? publication.draftAccess
           : publication.publishAccess;
       const litClient = await getClient();
-      console.log("Decrypting");
       try {
         const txt = await getKeyAndDecrypt(
           "ethereum",
@@ -266,8 +258,6 @@ const ArticlePage = () => {
           article?.text,
           litClient
         );
-        console.log("Text");
-        console.log(txt);
         setDecryptedText(txt);
       } catch (e) {
         console.error(e);

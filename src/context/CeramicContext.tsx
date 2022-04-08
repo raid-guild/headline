@@ -49,7 +49,6 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
       method: "wallet_switchEthereumChain",
       params: [{ chainId: "0x1" }],
     });
-    console.log("Address");
     const connectAddress = argAddress || address;
 
     if (!connectAddress) {
@@ -61,21 +60,15 @@ export const CeramicProvider = ({ children }: ProviderProps) => {
       connectAddress
     );
 
-    console.log("Client");
-
     const c = new WebClient({
       ceramic: ceramicNode,
       connectNetwork: ceramicNetwork,
     });
-    console.log(c);
 
     let d = null;
     setIsConnecting(true);
     try {
-      console.log("Here");
-      console.log(authProvider);
       d = await c.authenticate(authProvider, true);
-      console.log("authenticate");
     } catch (err) {
       console.error(err);
     }

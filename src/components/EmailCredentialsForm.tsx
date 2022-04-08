@@ -31,9 +31,6 @@ const EmailCrendentialsForm = ({ onSubmit, children }: Props) => {
     control,
   } = useForm();
   const publication = useAppSelector((state) => state.publication);
-  console.log("Publication");
-  console.log(publication);
-
   return (
     <CreateFormContainer onSubmit={handleSubmit(onSubmit)}>
       <Controller

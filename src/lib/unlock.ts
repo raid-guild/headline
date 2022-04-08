@@ -80,8 +80,6 @@ export const fetchUserMetadata = async (
     `I want to access member data for ${lockAddress}`
   );
   const authorization = `Bearer-Simple ${btoa(signature)}`;
-  console.log(signature);
-  console.log(authorization);
   const prms = new URLSearchParams({
     chain: chainId.toString(),
     data: JSON.stringify(data) || "",
@@ -97,7 +95,6 @@ export const fetchUserMetadata = async (
         },
       }
     );
-    console.log(resp);
 
     return (await resp.json()) as UnlockUserMetadata[];
   } catch (e) {

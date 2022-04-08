@@ -9,7 +9,6 @@ export type EmailParams = {
   infra: "main" | "eu";
 };
 export const sendMessage = async (emailParams: EmailParams) => {
-  console.log(emailParams);
   const recipientVars = emailParams.to.reduce(
     (prev, val) => ({ ...prev, [val]: {} }),
     {}
@@ -32,5 +31,4 @@ export const sendMessage = async (emailParams: EmailParams) => {
       Authorization: `Basic ${btoa(`api:${emailParams.apiKey}`)}`,
     },
   });
-  console.log(sent);
 };
