@@ -1,7 +1,5 @@
 # Headline
 
----
-
 This repository includes all the code deployed used to power Headline.
 
 ## Contributing
