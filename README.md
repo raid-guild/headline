@@ -1,4 +1,4 @@
-[Headline](/src/assets/img-hero.png)
+# Headline
 
 ---
 
