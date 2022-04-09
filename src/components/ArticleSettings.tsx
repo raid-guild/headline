@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useSnackbar } from "notistack";
 import { Remirror, useRemirror, useHelpers } from "@remirror/react";
 import { useWallet } from "@alexkeating/quiver";
 import { useNavigate } from "react-router-dom";
@@ -184,6 +185,7 @@ const SocialPreview = ({
   articlePreviewLink: string | undefined;
 }) => {
   const hiddenImageInput = useRef<HTMLInputElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
   const clickImageInput = () => {
     hiddenImageInput?.current?.click();
   };
@@ -211,7 +213,15 @@ const SocialPreview = ({
       //   file.type === "image/jpeg" ||
       //   file.type === "image/png" ||
       //   file.type === "image/svg+xml";
-      setPreviewImg(file);
+      const validImage =
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/svg+xml";
+      if (validImage) {
+        setPreviewImg(file);
+      } else {
+        enqueueSnackbar("Invalid image format", { variant: "error" });
+      }
     }
   }, [hiddenImageInput.current]);
 

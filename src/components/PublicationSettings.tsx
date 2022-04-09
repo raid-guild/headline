@@ -1,5 +1,6 @@
 import React, { useCallback, useRef } from "react";
 import { useWallet } from "@alexkeating/quiver";
+import { useSnackbar } from "notistack";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
@@ -58,6 +59,7 @@ const PublicationSettings = () => {
   const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
   const { litClient } = useLit();
+  const { enqueueSnackbar } = useSnackbar();
   const hiddenImageInput = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
@@ -76,11 +78,15 @@ const PublicationSettings = () => {
       if (!file) {
         return;
       }
-      // validImage =
-      //   file.type === "image/jpeg" ||
-      //   file.type === "image/png" ||
-      //   file.type === "image/svg+xml";
-      setPubImg(file);
+      const validImage =
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/svg+xml";
+      if (validImage) {
+        setPubImg(file);
+      } else {
+        enqueueSnackbar("Invalid image format", { variant: "error" });
+      }
     }
   }, [hiddenImageInput.current]);
 
