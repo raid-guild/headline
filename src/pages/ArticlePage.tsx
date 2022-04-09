@@ -24,7 +24,6 @@ import Title from "components/Title";
 import Text from "components/Text";
 import { Layout, BodyContainer, HeaderContainer } from "components/Layout";
 import { getKeyAndDecrypt, getClient } from "lib/lit";
-import { parseMarkdown } from "lib/markdown";
 import usePubImg from "hooks/usePubImg";
 import { checkoutRedirect } from "lib/unlock";
 
@@ -194,7 +193,6 @@ const GatedModal = ({ visible }: { visible: boolean | string }) => {
 
 const ArticlePage = () => {
   const { publicationId, streamId } = useParams();
-  const [published, setPublished] = useState(false);
   const [active, setActive] = useState("content");
   const { web3Service } = useUnlock();
   const dispatch = useAppDispatch();
@@ -205,10 +203,6 @@ const ArticlePage = () => {
   );
   const [decryptedText, setDecryptedText] = useState("");
   const publication = useAppSelector((state) => state.publication);
-  console.log(article);
-  console.log(published);
-  console.log(streamId);
-  console.log(publication);
   useEffect(() => {
     if (!web3Service) {
       return;
@@ -226,8 +220,6 @@ const ArticlePage = () => {
           streamId,
         })
       );
-      console.log("Fetched");
-      setPublished(true);
     };
     f();
   }, [streamId]);
@@ -237,13 +229,11 @@ const ArticlePage = () => {
       if (!publicationId) {
         return;
       }
-      console.log("Fetching");
       await dispatch(
         fetchPublicationByStream({
           streamId: publicationId,
         })
       );
-      console.log("Fetched");
     };
     f();
   }, [publicationId]);
@@ -258,7 +248,6 @@ const ArticlePage = () => {
           ? publication.draftAccess
           : publication.publishAccess;
       const litClient = await getClient();
-      console.log("Decrypting");
       try {
         const txt = await getKeyAndDecrypt(
           "ethereum",
@@ -267,8 +256,6 @@ const ArticlePage = () => {
           article?.text,
           litClient
         );
-        console.log("Text");
-        console.log(txt);
         setDecryptedText(txt);
       } catch (e) {
         console.error(e);

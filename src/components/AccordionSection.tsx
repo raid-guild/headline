@@ -5,34 +5,6 @@ import styled from "styled-components";
 
 // tried to map this, but it broke the accordion since it wasnt recognizing the value
 
-const accordionContent = [
-  {
-    text: "What does powered by Unlock mean?",
-    content:
-      "The Unlock Protocol provides the membership option for creators to set up a paywall. While the subscription feature is available, it&apos;s up to the creator whether to use it or not.",
-  },
-  {
-    title: "How can this platform be free of charge?",
-    content:
-      "Most of the technology used to build HEADLINE is free and open source. Maintenance and future builds are collaborative and we welcome your contribution.",
-  },
-  {
-    title: "How do I send my article as a newsletter?",
-    content:
-      "You will have to set up a mailgun domain. Here is a tutorial on how you can do that. Once you have the domain and apiKey, you can enter that information in the Publish Settings, under Email Service. After that’s completed, you can send your blog as a newsletter when you publish.",
-  },
-  {
-    title: "Is HEADLINE an emailing service?",
-    content:
-      "Currently, HEADLINE does not provide emailing services. For this first version, we focused on empowering creators to own their content. If you would like to help build an emailing service for a future iteration, please let us know.",
-  },
-  {
-    title: "Can I move my newsletter from another platform to HEADLINE?",
-    content:
-      "Yes. You can import your subscribers from another publishing platform into HEADLINE when you have their crypto wallet addresses. HEADLINE uses the transparency of blockchain technology and requires this information to add readers to your subscriber list.",
-  },
-];
-
 const StyledAccordionRoot = styled(AccordionPrimitive.Root)``;
 
 const StyledAccordionHeader = styled(AccordionPrimitive.Header)`

@@ -26,21 +26,18 @@ const MobileNav = () => {
       <MobileNavMenuContainer>
         <Link to={"/dashboard"}>
           <MobileNavItem
-            text="Dashboard"
             icon="dashboard"
             active={location.pathname.includes("dashboard")}
           />
         </Link>
         <Link to={"/publish"}>
           <MobileNavItem
-            text="Publish"
             icon="mail"
             active={location.pathname.includes("publish")}
           />
         </Link>
         <Link to={"/profile"}>
           <MobileNavItem
-            text="My Profile"
             icon="profile"
             active={location.pathname.includes("profile")}
           />

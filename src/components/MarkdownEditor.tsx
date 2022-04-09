@@ -89,8 +89,6 @@ export const remirrorExtensions = () => [
 export const MarkdownEditor: FC<MarkdownEditorProps> = ({
   placeholder,
   initialContent,
-  state,
-  onChange,
   className,
   children,
 }) => {

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Text from "components/Text";
 import styled from "styled-components";
-import { DASHBOARD_URI } from "../constants";
 
 const NavContainer = styled.div`
   display: flex;

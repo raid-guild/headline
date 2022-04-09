@@ -34,8 +34,6 @@ const PublicationForm = ({ onSubmit, children }: Props) => {
     handleSubmit,
     control,
   } = useForm();
-  console.log("Error");
-  console.log(errors);
   const { chainId } = useWallet();
   const { litClient } = useLit();
   const { did } = useCeramic();

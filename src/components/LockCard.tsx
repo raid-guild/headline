@@ -103,9 +103,6 @@ export const LockCard = ({
       )
     );
   });
-  console.log("pubLock");
-  console.log(pubLock);
-  console.log(showSubscribe);
   return (
     <CardContainer>
       <LockDataContainer>
@@ -136,8 +133,6 @@ export const LockCards = ({
   locks: Lock[];
   showSubscribe: boolean;
 }) => {
-  console.log("Locks");
-  console.log(locks);
   return (
     <>
       {locks.map((lock) => {

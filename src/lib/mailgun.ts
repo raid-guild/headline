@@ -9,7 +9,6 @@ export type EmailParams = {
   infra: "main" | "eu";
 };
 export const sendMessage = async (emailParams: EmailParams) => {
-  console.log(emailParams);
   const recipientVars = emailParams.to.reduce(
     (prev, val) => ({ ...prev, [val]: {} }),
     {}
@@ -25,12 +24,11 @@ export const sendMessage = async (emailParams: EmailParams) => {
   formData.append("text", emailParams.text);
   formData.append("html", emailParams.html);
   formData.append("recipient-variables", JSON.stringify(recipientVars));
-  const sent = await fetch(`${baseUri}/${emailParams.domain}/messages`, {
+  await fetch(`${baseUri}/${emailParams.domain}/messages`, {
     method: "POST",
     body: formData,
     headers: {
       Authorization: `Basic ${btoa(`api:${emailParams.apiKey}`)}`,
     },
   });
-  console.log(sent);
 };

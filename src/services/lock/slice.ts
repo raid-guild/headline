@@ -202,7 +202,6 @@ export const verifyLock = createAsyncThunk<
           accessControlConditions: controls,
         };
       }
-      console.log(additionalParams);
       // We must update the publication if the key is updated
       try {
         await thunkAPI.dispatch(
@@ -264,8 +263,6 @@ export const fetchLocks = createAsyncThunk(
       // then use unlock and create for each
       const publication = args.publication;
       for (const idx in publication.locks) {
-        console.log("Iterating");
-        console.log(idx);
         const lockMeta = publication.locks[parseInt(idx) || 0];
         const chain = networks[lockMeta.chainId];
         const chainNumber = chain.chainNumber;

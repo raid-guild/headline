@@ -174,8 +174,6 @@ const WritingPage = () => {
   );
   const publicationName = useAppSelector((state) => state.publication.name);
 
-  console.log("Article");
-  console.log(article);
   const [title, setTitle] = useState(article?.title || "Untitled");
   const saving = articleLoading || addRegistryLoading;
   const onTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -244,8 +242,6 @@ const WritingPage = () => {
       );
     }
   };
-  console.log(article?.text);
-  console.log(JSON.parse(article?.text || "{}"));
 
   return (
     <StyledLayout>
