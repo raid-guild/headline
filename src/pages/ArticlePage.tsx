@@ -193,7 +193,6 @@ const GatedModal = ({ visible }: { visible: boolean | string }) => {
 
 const ArticlePage = () => {
   const { publicationId, streamId } = useParams();
-  const [published, setPublished] = useState(false);
   const [active, setActive] = useState("content");
   const { web3Service } = useUnlock();
   const dispatch = useAppDispatch();
@@ -221,7 +220,6 @@ const ArticlePage = () => {
           streamId,
         })
       );
-      setPublished(true);
     };
     f();
   }, [streamId]);
