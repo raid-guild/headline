@@ -18,7 +18,6 @@ export const SELF_ID_URL = import.meta.env["VITE_SELF_ID"] as string;
 export const CERAMIC_NETWORK = import.meta.env[
   "VITE_CERAMIC_NETWORK"
 ] as ConnectNetwork;
-console.log(PUBLISHED_MODELS);
 
 export const chains = [
   "ethereum",

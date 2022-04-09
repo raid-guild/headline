@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef } from "react";
 import { useWallet } from "@alexkeating/quiver";
+import { useSnackbar } from "notistack";
 import { SubmitHandler, FieldValues } from "react-hook-form";
 import styled from "styled-components";
 
@@ -58,6 +59,7 @@ const PublicationSettings = () => {
   const { chainId, address, provider } = useWallet();
   const { client } = useCeramic();
   const { litClient } = useLit();
+  const { enqueueSnackbar } = useSnackbar();
   const hiddenImageInput = useRef<HTMLInputElement>(null);
   const dispatch = useAppDispatch();
   const publicationLoading = useAppSelector(
@@ -68,24 +70,25 @@ const PublicationSettings = () => {
   };
 
   const [pubImg, setPubImg] = usePubImg();
-  const uploadImage = useCallback(
-    (e) => {
-      const input = hiddenImageInput.current || { files: null };
-      // const validImage = false;
-      if (input.files) {
-        const file = input.files[0];
-        if (!file) {
-          return;
-        }
-        // validImage =
-        //   file.type === "image/jpeg" ||
-        //   file.type === "image/png" ||
-        //   file.type === "image/svg+xml";
-        setPubImg(file);
+  const uploadImage = useCallback(() => {
+    const input = hiddenImageInput.current || { files: null };
+    // const validImage = false;
+    if (input.files) {
+      const file = input.files[0];
+      if (!file) {
+        return;
       }
-    },
-    [hiddenImageInput.current]
-  );
+      const validImage =
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/svg+xml";
+      if (validImage) {
+        setPubImg(file);
+      } else {
+        enqueueSnackbar("Invalid image format", { variant: "error" });
+      }
+    }
+  }, [hiddenImageInput.current]);
 
   const onSubmit: SubmitHandler<FieldValues> = useCallback(
     async (data) => {
@@ -138,7 +141,6 @@ const PublicationSettings = () => {
               variant="contained"
               isLoading={publicationLoading}
               loadingText="Updating..."
-              onClick={() => console.log("Clicking")}
             >
               Save
             </StyledButton>

@@ -51,18 +51,6 @@ const StyledHeaderContainer = styled(HeaderContainer)`
   }
 `;
 
-const PublicationInfoContainer = styled.div`
-  display: flex;
-  gap: 1.6rem;
-  justify-content: center;
-  align-items: center;
-  @media (max-width: 990px) {
-    flex-direction: column;
-    width: 100%;
-    padding: 2.4rem 2.4rem 1.6rem;
-  }
-`;
-
 const TitleContainer = styled.div`
   display: flex;
   gap: 1.6rem;
@@ -159,7 +147,6 @@ const CreatorPage = () => {
     };
     f();
   }, [publicationId, publication?.registryId]);
-  console.log(`Registry page${JSON.stringify(articleRegistry)}`);
 
   return (
     <Layout>

@@ -84,7 +84,6 @@ export const publicationSlice = createSlice({
       state.locks = action.payload.locks || [];
       state.emailSettings = action.payload.emailSettings || undefined;
       state.streamId = action.payload.streamId || "";
-      console.log(`publication id ${action.payload.streamId}`);
       state.registryId = action.payload.registryId || "";
       state.image = action.payload.image || undefined;
     },
@@ -182,8 +181,6 @@ export const createPublication = createAsyncThunk(
       publishRegistryDefinitionId,
       client.ceramic?.did?.id || ""
     );
-    console.log("RegistryDoc");
-    console.log(registryDoc?.id);
 
     try {
       const authSig = await LitJsSdk.checkAndSignAuthMessage({
@@ -283,14 +280,9 @@ export const fetchPublication = createAsyncThunk(
         publishRegistryDefinitionId,
         client.ceramic?.did?.id || ""
       );
-      console.log(doc);
 
-      console.log(`
-Pub jdoc ${doc?.id?.toString()}
-				`);
       let publication = doc?.content as Publication | null;
       if (publication && publication?.emailSettings?.apiKey) {
-        console.log(publication);
         try {
           const apiKey = await getKeyAndDecrypt(
             args.chainName,
@@ -458,8 +450,6 @@ export const updatePublication = createAsyncThunk(
         ...existingEmailSettings,
         ...updates,
       };
-      console.log(updatedPublication);
-      console.log(updates);
       await store.set("publication", updatedPublication);
       if (updatedPublication?.emailSettings?.apiKey !== undefined) {
         updatedPublication["emailSettings"]["apiKey"] =

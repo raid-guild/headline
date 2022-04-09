@@ -203,8 +203,6 @@ const BasicProfileCard = () => {
   useEffect(() => {
     dispatch(fetchBasicProfile(address || ""));
   }, [address]);
-  console.log("Basic card");
-  console.log(profile);
   return (
     <BasicProfileCardContainer>
       {Object.keys(profile).length > 0 ? (

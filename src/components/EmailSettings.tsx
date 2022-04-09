@@ -56,10 +56,7 @@ const EmailSettings = () => {
     if (!chainId || !client) {
       return;
     }
-    console.log(data);
-    // dispatch update
-    console.log("updating");
-    const hi = await dispatch(
+    await dispatch(
       updatePublication({
         publication: {
           emailSettings: {
@@ -74,7 +71,6 @@ const EmailSettings = () => {
         litClient,
       })
     );
-    console.log(hi);
     setHide(true);
   }, []);
 

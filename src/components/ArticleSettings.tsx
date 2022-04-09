@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useSnackbar } from "notistack";
 import { Remirror, useRemirror, useHelpers } from "@remirror/react";
 import { useWallet } from "@alexkeating/quiver";
 import { useNavigate } from "react-router-dom";
@@ -184,6 +185,7 @@ const SocialPreview = ({
   articlePreviewLink: string | undefined;
 }) => {
   const hiddenImageInput = useRef<HTMLInputElement>(null);
+  const { enqueueSnackbar } = useSnackbar();
   const clickImageInput = () => {
     hiddenImageInput?.current?.click();
   };
@@ -199,24 +201,24 @@ const SocialPreview = ({
     x();
   }, [articlePreviewLink]);
 
-  const uploadImage = useCallback(
-    (e) => {
-      const input = hiddenImageInput.current || { files: null };
-      // const validImage = false;
-      if (input.files) {
-        const file = input.files[0];
-        if (!file) {
-          return;
-        }
-        // validImage =
-        //   file.type === "image/jpeg" ||
-        //   file.type === "image/png" ||
-        //   file.type === "image/svg+xml";
-        setPreviewImg(file);
+  const uploadImage = useCallback(() => {
+    const input = hiddenImageInput.current || { files: null };
+    if (input.files) {
+      const file = input.files[0];
+      if (!file) {
+        return;
       }
-    },
-    [hiddenImageInput.current]
-  );
+      const validImage =
+        file.type === "image/jpeg" ||
+        file.type === "image/png" ||
+        file.type === "image/svg+xml";
+      if (validImage) {
+        setPreviewImg(file);
+      } else {
+        enqueueSnackbar("Invalid image format", { variant: "error" });
+      }
+    }
+  }, [hiddenImageInput.current]);
 
   return (
     <SocialPreviewContainer>
@@ -394,7 +396,6 @@ const TestInputContainer = styled.div`
 
 const Test = ({ setMarkdown }: { setMarkdown: (arg0: string) => void }) => {
   const helpers = useHelpers(true);
-  console.log(helpers.getMarkdown());
   setMarkdown(helpers.getMarkdown());
   return <></>;
 };
@@ -472,10 +473,6 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
         paid: radio.state === "paid",
       };
 
-      console.log(radio);
-      console.log("Published article");
-      console.log(article);
-      console.log(readyArticle);
       await dispatch(
         publishArticle({
           article: readyArticle,
@@ -510,8 +507,6 @@ export const PublishModal = ({ streamId }: { streamId: string }) => {
     }
   }, [address, provider, article, previewImg, description, radio.state]);
 
-  console.log("Text here");
-  console.log(JSON.parse(article?.text || "{}"));
   const { manager } = useRemirror({
     extensions: remirrorExtensions,
     stringHandler: "markdown",

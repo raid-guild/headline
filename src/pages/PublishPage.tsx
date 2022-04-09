@@ -352,8 +352,6 @@ const Locks = () => {
         return;
       }
       if (newLock !== undefined) {
-        console.log(newLock);
-        console.log("Submitted");
         enqueueSnackbar("Added!", { variant: "success" });
         setSubmitted(true);
         setLockAddress(data.lockAddress);
@@ -399,8 +397,6 @@ const Locks = () => {
   };
 
   const successModal = useCallback(() => {
-    console.log("Lock");
-    console.log(lock);
     return (
       <>
         <SuccessMsgContainer>

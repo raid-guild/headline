@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import Icon from "components/Icon";
-import Text from "components/Text";
 import circle from "assets/add_circle_outline.svg";
 import dashboard from "assets/dashboard.svg";
 import create from "assets/create.svg";
@@ -10,7 +9,6 @@ import account_circle from "assets/account_circle.svg";
 import library_book from "assets/library_books.svg";
 
 type Props = {
-  text?: string;
   icon?: "dashboard" | "create" | "mail" | "profile" | "library_book";
   active?: boolean;
 };
@@ -28,7 +26,7 @@ const MobileNavItemContainer = styled.div<Pick<Props, "active">>`
 
 const StyledCircleOutline = styled(Icon)``;
 
-const MobileNavItem = ({ text, icon, active }: Props) => {
+const MobileNavItem = ({ icon, active }: Props) => {
   const getIcon = () => {
     switch (icon) {
       case "dashboard":

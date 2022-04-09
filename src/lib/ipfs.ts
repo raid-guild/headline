@@ -39,7 +39,7 @@ export const storeIpfs = async (
     cidVersion: 1,
     hashAlg: "sha2-256",
   });
-  const resp = await ipfs.pin.add(CID.parse(cid.path));
+  await ipfs.pin.add(CID.parse(cid.path));
   return `ipfs://${cid.path}`;
 };
 

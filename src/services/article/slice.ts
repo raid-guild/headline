@@ -174,7 +174,6 @@ export const createArticle = createAsyncThunk<
     // save to registry
     return article;
   } catch (err) {
-    console.log(err);
     return thunkAPI.rejectWithValue(err as Error);
   }
 });

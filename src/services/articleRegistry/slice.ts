@@ -219,7 +219,6 @@ export const fetchArticleRegistry = createAsyncThunk(
             })
           );
         } catch (err) {
-          console.log(ceramicArticle);
           error = thunkAPI.rejectWithValue("Failed to fetch some articles");
           console.error(err);
         }

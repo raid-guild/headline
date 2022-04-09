@@ -13,10 +13,8 @@ export const fetchProfile = async (address: string) => {
     core.ceramic,
     `${address.toLowerCase()}@eip155:1`
   );
-  console.log("link", link);
 
   const profile = await core.get("basicProfile", link.did || "");
-  console.log("profile", profile);
   return profile;
 };
 
