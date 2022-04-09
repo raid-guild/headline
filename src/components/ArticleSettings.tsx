@@ -203,16 +203,11 @@ const SocialPreview = ({
 
   const uploadImage = useCallback(() => {
     const input = hiddenImageInput.current || { files: null };
-    // const validImage = false;
     if (input.files) {
       const file = input.files[0];
       if (!file) {
         return;
       }
-      // validImage =
-      //   file.type === "image/jpeg" ||
-      //   file.type === "image/png" ||
-      //   file.type === "image/svg+xml";
       const validImage =
         file.type === "image/jpeg" ||
         file.type === "image/png" ||
