@@ -67,9 +67,10 @@ export const fetchUserMetadata = async (
     primaryType: "KeyMetadata",
     message: {
       LockMetaData: {
+        owners: [],
         address: lockAddress,
         owner: walletAddress,
-        timestamp: 1647915321730,
+        timestamp: Date.now(),
         page: page,
       },
     },
@@ -95,8 +96,9 @@ export const fetchUserMetadata = async (
         },
       }
     );
-
-    return (await resp.json()) as UnlockUserMetadata[];
+    const data = resp.json();
+    console.log(data);
+    return data as UnlockUserMetadata[];
   } catch (e) {
     console.error(e);
   }
