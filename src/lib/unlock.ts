@@ -67,10 +67,9 @@ export const fetchUserMetadata = async (
     primaryType: "KeyMetadata",
     message: {
       LockMetaData: {
-        owners: [],
         address: lockAddress,
         owner: walletAddress,
-        timestamp: Date.now(),
+        timestamp: 1651688764267,
         page: page,
       },
     },
