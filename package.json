@@ -30,7 +30,7 @@
     "@remirror/react": "^1.0.21",
     "@remirror/react-editors": "^0.1.51",
     "@rollup/plugin-strip": "^2.1.0",
-    "@self.id/web": "^0.2.0",
+    "@self.id/web": "0.4.0",
     "@types/react-redux": "^7.1.22",
     "@types/styled-components": "^5.1.20",
     "@unlock-protocol/unlock-js": "^0.21.2",
