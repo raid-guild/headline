@@ -38,7 +38,7 @@
     "authereum": "^0.1.14",
     "borsh": "^0.7.0",
     "caip": "^1.0.0",
-    "dids": "^2.4.3",
+    "dids": "3.1.0",
     "electron": "^17.0.0",
     "electron-fetch": "^1.7.4",
     "ethers": "5.6.1",
