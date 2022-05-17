@@ -33,6 +33,8 @@ spec:
               value: "mainnet"
             - name: IPFS_PATH
               value: "/data"
+            - name: ANNOUNCE_ADDRESS_LIST
+              value: "/dns4/ceramic-ipfs-test.viaheadline.xyz/tcp/4012/ws"
           resources:
             requests:
               memory: 1024Mi
